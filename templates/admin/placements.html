@@ -10,40 +10,136 @@
 {% block title %}Manage Placements{% endblock %}
 
 {% block content %}
-<div class="text-center mt-20">
-  <h1 class="text-3xl font-bold text-green-500">🏢 Total Companies</h1>
-  <p class="mt-4 text-gray-200">
-    Here the admin can view placement postings.  
-    Total: <span class="font-bold text-yellow-300">{{ placements|length }}</span>
-  </p>
+<div class="max-w-6xl mx-auto px-4 mt-20">
+  <div class="text-center">
+    <h1 class="text-3xl font-bold text-green-500">🏢 Total Companies</h1>
+    <p class="mt-4 text-gray-200">
+      Here the admin can view placement postings.
+      Total: <span class="font-bold text-yellow-300">{{ total_placements|default(placements|length) }}</span>
+    </p>
+  </div>
+
+  <!-- Controls: Search / Filter / Export -->
+  <form method="get" class="mt-6 flex flex-col md:flex-row gap-3 items-center justify-between">
+    <div class="flex gap-2 w-full md:w-2/3">
+      <input name="q" value="{{ request.args.get('q','') }}" type="text"
+             placeholder="Search by company, role or location"
+             class="w-full px-3 py-2 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none" />
+
+      <select name="sort" class="px-3 py-2 rounded-lg bg-white/5 text-white">
+        <option value="recent" {% if request.args.get('sort')=='recent' %}selected{% endif %}>Newest</option>
+        <option value="company" {% if request.args.get('sort')=='company' %}selected{% endif %}>Company (A–Z)</option>
+        <option value="deadline" {% if request.args.get('sort')=='deadline' %}selected{% endif %}>Deadline</option>
+      </select>
+
+      <button type="submit" class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition">🔎 Search</button>
+
+      <a href="{{ url_for('enhancements.export_placements_csv', q=request.args.get('q','')) }}"
+         class="px-3 py-2 rounded-lg bg-transparent border border-white/10 text-white hover:bg-white/5">
+        ⬇️ Export CSV
+      </a>
+    </div>
+
+    <div class="text-sm text-gray-300">
+      Showing <strong>{{ page_start|default(1) }}</strong>–<strong>{{ page_end|default(placements|length) }}</strong>
+      of <strong>{{ total_placements|default(placements|length) }}</strong>
+    </div>
+  </form>
 
   <!-- Placement Table -->
-  <div class="mt-8 overflow-x-auto">
-    <table class="min-w-full bg-white/10 rounded-lg shadow-lg text-left">
+  <div class="mt-6 overflow-x-auto">
+    {% if placements %}
+    <table class="min-w-full bg-white/5 rounded-lg shadow-lg text-left" aria-label="Placements table">
+      <caption class="sr-only">List of placement postings</caption>
       <thead>
-        <tr class="bg-green-600 text-white">
-          <th class="px-4 py-2">#</th>
-          <th class="px-4 py-2">Company</th>
-          <th class="px-4 py-2">Role</th>
+        <tr class="bg-green-600 text-white text-sm">
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">Company</th>
+          <th class="px-4 py-3">Role</th>
+          <th class="px-4 py-3">Location</th>
+          <th class="px-4 py-3">Eligibility</th>
+          <th class="px-4 py-3">Deadline</th>
+          <th class="px-4 py-3">Actions</th>
         </tr>
       </thead>
       <tbody class="text-gray-100">
         {% for placement in placements %}
-        <tr class="border-b border-gray-700 hover:bg-white/5">
-          <td class="px-4 py-2">{{ loop.index }}</td>
-          <td class="px-4 py-2">{{ placement['company'] }}</td>
-          <td class="px-4 py-2">{{ placement['role'] }}</td>
-         
-        </tr>
-        {% else %}
-        <tr>
-          <td colspan="4" class="px-4 py-6 text-center text-gray-400">
-            No placements found.
+        <tr class="border-b border-white/6 hover:bg-white/3 align-top">
+          <td class="px-4 py-3">{{ loop.index + ((page-1)*per_page) if (page and per_page) else loop.index }}</td>
+
+          <!-- Company + optional logo -->
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-3">
+              {% if placement.get('logo') %}
+                <img src="{{ url_for('enhancements.uploaded_profile_pic', filename=placement['logo']) }}"
+                     alt="{{ placement['company'] }} logo"
+                     class="w-10 h-10 rounded object-cover" />
+              {% else %}
+                <div class="w-10 h-10 rounded bg-white/5 flex items-center justify-center text-sm text-gray-300">🏢</div>
+              {% endif %}
+              <div>
+                <a href="{{ url_for('enhancements.view_placement', pid=placement['id']) }}" class="font-semibold text-white/90 underline">
+                  {{ placement['company'] }}
+                </a>
+                <div class="text-xs text-gray-400">{{ placement.get('short_description','') }}</div>
+              </div>
+            </div>
+          </td>
+
+          <td class="px-4 py-3">{{ placement['role'] }}</td>
+          <td class="px-4 py-3">{{ placement.get('location','—') }}</td>
+          <td class="px-4 py-3">{{ placement.get('eligibility','Any') }}</td>
+
+          <td class="px-4 py-3">
+            {% if placement.get('deadline') %}
+              <span class="px-2 py-1 rounded text-sm {% if placement.deadline and placement.deadline < now %} bg-rose-100 text-rose-800 {% else %} bg-amber-100 text-amber-800 {% endif %}">
+                {{ placement['deadline'] }}
+              </span>
+            {% else %}
+              <span class="text-gray-400">—</span>
+            {% endif %}
+          </td>
+
+          <!-- Actions: View Applicants / Edit / Delete -->
+          <td class="px-4 py-3">
+            <div class="flex gap-2 items-center">
+              <a href="{{ url_for('enhancements.view_applications', pid=placement['id']) }}" class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm">Applicants</a>
+
+              <a href="{{ url_for('enhancements.edit_placement', pid=placement['id']) }}" class="px-3 py-1 rounded bg-yellow-600 hover:bg-yellow-700 text-white text-sm">Edit</a>
+
+              <form method="post" action="{{ url_for('enhancements.delete_placement', pid=placement['id']) }}" onsubmit="return confirm('Delete this placement?');">
+                <button type="submit" class="px-3 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white text-sm">Delete</button>
+              </form>
+            </div>
           </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+
+    <!-- Pagination -->
+    <div class="mt-4 flex items-center justify-between text-sm text-gray-300">
+      <div>
+        Showing <strong>{{ page_start|default(1) }}</strong> - <strong>{{ page_end|default(total_placements|default(placements|length)) }}</strong>
+        of <strong>{{ total_placements|default(placements|length) }}</strong>
+      </div>
+
+      <div class="flex items-center gap-2">
+        {% if has_prev %}
+          <a href="{{ url_for('enhancements.manage_placements', page=page-1, q=request.args.get('q',''), sort=request.args.get('sort','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Prev</a>
+        {% endif %}
+        <span class="px-3 py-1 rounded bg-white/5">{{ page|default(1) }}</span>
+        {% if has_next %}
+          <a href="{{ url_for('enhancements.manage_placements', page=page+1, q=request.args.get('q',''), sort=request.args.get('sort','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Next</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% else %}
+    <div class="px-4 py-6 text-center text-gray-400 rounded-lg bg-white/3">
+      No placements found.
+    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
