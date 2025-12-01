@@ -6,39 +6,185 @@
   <a href="/logout" class="hover:text-yellow-300 transition">Logout</a>
 {% endblock %}
 
-{% block title %}Manage Applications{% endblock %}  
+{% block title %}Manage Applications{% endblock %}
 
 {% block content %}
-<div class="text-center mt-20">
-  <h1 class="text-3xl font-bold text-pink-500">📊 Total Applications You Have Applied</h1>
-  <p class="mt-4 text-gray-200">Here the admin can track student applications and monitor submissions.</p>
+<div class="max-w-7xl mx-auto px-4 mt-20">
 
-  <div class="mt-8 bg-white/10 p-6 rounded-lg shadow-lg overflow-x-auto">
+  <!-- Header -->
+  <div class="text-center">
+    <h1 class="text-4xl font-extrabold text-pink-500">📊 Applications Overview</h1>
+    <p class="mt-3 text-gray-300">Admin panel to view, filter and manage student applications.</p>
+  </div>
+
+  <!-- Summary badges -->
+  <div class="mt-6 flex flex-wrap justify-center gap-4">
+    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+      <div class="text-xs text-gray-300">Total Applications</div>
+      <div class="text-xl font-semibold">{{ total_applications|default(applications|length if applications else 0) }}</div>
+    </div>
+
+    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+      <div class="text-xs text-gray-300">Shortlisted</div>
+      <div class="text-xl font-semibold">{{ status_counts.Shortlisted|default(0) }}</div>
+    </div>
+
+    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+      <div class="text-xs text-gray-300">Selected</div>
+      <div class="text-xl font-semibold">{{ status_counts.Selected|default(0) }}</div>
+    </div>
+
+    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+      <div class="text-xs text-gray-300">Rejected</div>
+      <div class="text-xl font-semibold">{{ status_counts.Rejected|default(0) }}</div>
+    </div>
+
+    <!-- Export CSV -->
+    <div class="ml-auto">
+      <a href="{{ url_for('enhancements.export_applications_csv', q=request.args.get('q',''), status=request.args.get('status','')) }}"
+         class="inline-block px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 text-white text-sm transition">
+        ⬇️ Export CSV
+      </a>
+    </div>
+  </div>
+
+  <!-- Filter / Search -->
+  <form method="get" class="mt-6 flex flex-col md:flex-row gap-3 items-center justify-between">
+    <div class="flex gap-2 w-full md:w-2/3">
+      <input type="text" name="q" value="{{ request.args.get('q','') }}"
+             placeholder="Search by email, company or role"
+             class="w-full px-3 py-2 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none" />
+
+      <select name="status" class="px-3 py-2 rounded-lg bg-white/5 text-white">
+        <option value="">All statuses</option>
+        <option value="Applied" {% if request.args.get('status')=='Applied' %}selected{% endif %}>Applied</option>
+        <option value="Shortlisted" {% if request.args.get('status')=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
+        <option value="Selected" {% if request.args.get('status')=='Selected' %}selected{% endif %}>Selected</option>
+        <option value="Rejected" {% if request.args.get('status')=='Rejected' %}selected{% endif %}>Rejected</option>
+      </select>
+
+      <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition">
+        🔎 Filter
+      </button>
+
+      <a href="{{ url_for('enhancements.admin_applications') }}" class="px-3 py-2 rounded-lg bg-transparent border border-white/10 text-white hover:bg-white/5">
+        Reset
+      </a>
+    </div>
+
+    <!-- Quick stats on right (mobile stacked below) -->
+    <div class="text-sm text-gray-300">Showing
+      <strong>{{ page_start|default(1) }}–{{ page_end|default(total_applications|default(applications|length if applications else 0)) }}</strong>
+      of <strong>{{ total_applications|default(applications|length if applications else 0) }}</strong>
+    </div>
+  </form>
+
+  <!-- Table container -->
+  <div class="mt-8 bg-white/5 p-6 rounded-lg shadow-lg overflow-x-auto">
     {% if applications %}
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="bg-pink-600 text-white">
-          <th class="px-4 py-2">#</th>
-          <th class="px-4 py-2">Student Email</th>
-          <th class="px-4 py-2">Placement</th>
-          <th class="px-4 py-2">Status</th>
-          <th class="px-4 py-2">Applied At</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-100">
-        {% for app in applications %}
-        <tr class="border-b border-gray-700 hover:bg-white/5">
-          <td class="px-4 py-2">{{ loop.index }}</td>
-          <td class="px-4 py-2">{{ app['student_email'] }}</td>
-          <td class="px-4 py-2">{{ app['placement_name'] }}</td>
-          <td class="px-4 py-2">{{ app['status'] }}</td>
-          <td class="px-4 py-2">{{ app['applied_at'] }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <table class="min-w-full text-left">
+        <thead>
+          <tr class="text-sm text-gray-200 border-b border-white/10">
+            <th class="px-4 py-3">#</th>
+            <th class="px-4 py-3">Student Email</th>
+            <th class="px-4 py-3">Placement</th>
+            <th class="px-4 py-3">Resume</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3">Applied At</th>
+            <th class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-gray-100">
+          {% for app in applications %}
+          <tr class="border-b border-white/6 hover:bg-white/3">
+            <td class="px-4 py-3 align-top">{{ loop.index + ((page-1)*per_page) if (page and per_page) else loop.index }}</td>
+
+            <td class="px-4 py-3 align-top">
+              {% if app.get('student_profile_url') %}
+                <a href="{{ app.student_profile_url }}" class="underline text-white/90">{{ app['student_email'] }}</a>
+              {% else %}
+                {{ app['student_email'] }}
+              {% endif %}
+            </td>
+
+            <td class="px-4 py-3 align-top">{{ app['placement_name'] }}</td>
+
+            <!-- Resume column -->
+            <td class="px-4 py-3 align-top">
+              {% if app.get('resume') %}
+                <a href="{{ url_for('enhancements.uploaded_resume', filename=app['resume']) }}" target="_blank" rel="noopener" class="text-indigo-200 underline">View</a>
+              {% else %}
+                <span class="text-gray-400">—</span>
+              {% endif %}
+            </td>
+
+            <!-- Status badge -->
+            <td class="px-4 py-3 align-top">
+              {% set s = app.get('status', '') %}
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
+                {% if s == 'Applied' %} bg-yellow-100 text-yellow-800
+                {% elif s == 'Shortlisted' %} bg-sky-100 text-sky-800
+                {% elif s == 'Selected' %} bg-emerald-100 text-emerald-800
+                {% elif s == 'Rejected' %} bg-rose-100 text-rose-800
+                {% else %} bg-gray-100 text-gray-800
+                {% endif %}">
+                {{ s or '—' }}
+              </span>
+            </td>
+
+            <!-- Applied at -->
+            <td class="px-4 py-3 align-top">
+              {% if app.get('applied_at') %}
+                {{ app['applied_at'] }}
+              {% else %}
+                <span class="text-gray-400">—</span>
+              {% endif %}
+            </td>
+
+            <!-- Actions: change status -->
+            <td class="px-4 py-3 align-top">
+              <form method="post" action="{{ url_for('enhancements.update_status', app_id=app['id']) }}" class="flex gap-2 items-center">
+                <select name="status" class="px-2 py-1 rounded bg-white/5 text-white text-sm">
+                  <option value="Applied" {% if s=='Applied' %}selected{% endif %}>Applied</option>
+                  <option value="Shortlisted" {% if s=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                  <option value="Selected" {% if s=='Selected' %}selected{% endif %}>Selected</option>
+                  <option value="Rejected" {% if s=='Rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+                <button type="submit" class="px-3 py-1 rounded bg-pink-600 hover:bg-pink-700 text-white text-sm">Update</button>
+              </form>
+
+              <!-- Optional quick-action links -->
+              <div class="mt-2 text-xs text-gray-400">
+                <a href="{{ url_for('enhancements.uploaded_profile_pic', filename=app.get('profile_pic')) }}" class="mr-2">Pic</a>
+                <a href="{{ url_for('enhancements.student_resumes', student_id=app.get('user_id')) }}">All Resumes</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="mt-4 flex items-center justify-between text-sm text-gray-300">
+        <div>
+          Showing <strong>{{ page_start|default(1) }}</strong> - <strong>{{ page_end|default(total_applications|default(applications|length)) }}</strong>
+          of <strong>{{ total_applications|default(applications|length) }}</strong>
+        </div>
+
+        <div class="flex items-center gap-2">
+          {% if has_prev %}
+            <a href="{{ url_for('enhancements.admin_applications', page=page-1, q=request.args.get('q',''), status=request.args.get('status','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Prev</a>
+          {% endif %}
+          <span class="px-3 py-1 rounded bg-white/5">{{ page|default(1) }}</span>
+          {% if has_next %}
+            <a href="{{ url_for('enhancements.admin_applications', page=page+1, q=request.args.get('q',''), status=request.args.get('status','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Next</a>
+          {% endif %}
+        </div>
+      </div>
+
     {% else %}
-    <p class="text-gray-300">No applications submitted yet.</p>
+      <p class="text-gray-300">No applications submitted yet.</p>
     {% endif %}
   </div>
 </div>
