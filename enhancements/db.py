@@ -1,13 +1,35 @@
+import os
 import sqlite3
 from flask import g, current_app
 
 def get_db_conn():
+    """
+    Return a sqlite3 connection cached on flask.g.
+    If the configured DATABASE path is relative, place it inside the Flask instance folder
+    (so it remains stable across runs and working directories).
+    Also ensure the DB directory exists and enable foreign keys.
+    """
     if "db_conn" not in g:
-        g.db_conn = sqlite3.connect(
-            current_app.config.get("DATABASE", "placement.db"),
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db_conn.row_factory = sqlite3.Row
+        # Get configured path (may be absolute or relative)
+        db_path = current_app.config.get("DATABASE", "placement.db")
+
+        # If provided path is relative, store DB inside instance folder (stable)
+        if not os.path.isabs(db_path):
+            db_path = os.path.join(current_app.instance_path, db_path)
+
+        # Ensure directory exists
+        db_dir = os.path.dirname(db_path)
+        if db_dir:
+            os.makedirs(db_dir, exist_ok=True)
+
+        # Connect and configure
+        conn = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES, timeout=30)
+        conn.row_factory = sqlite3.Row
+
+        # Ensure foreign keys are enforced
+        conn.execute("PRAGMA foreign_keys = ON")
+
+        g.db_conn = conn
     return g.db_conn
 
 
