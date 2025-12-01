@@ -1,13 +1,14 @@
 # enhancements/routes.py
 import os
 import json
+import csv
 import sqlite3
 from datetime import datetime
 from openai import OpenAI 
 
-
+from datetime import datetime
 from flask import (
-    Blueprint, request, jsonify, render_template,
+    Blueprint, request, jsonify, render_template, make_response,
     redirect, url_for, session, flash, current_app, send_from_directory
 )
 from werkzeug.utils import secure_filename
@@ -150,23 +151,228 @@ def admin_placements():
     return render_template("admin/placements.html", placements=placements)
 @enhancements_bp.route("/admin/applications")
 def admin_applications():
+    """
+    Enhanced admin applications view:
+    - supports search (q), status filter
+    - supports pagination (page, per_page)
+    - computes total_applications and status_counts for badges
+    - returns applications as list of dicts with keys used by template
+    """
+    # read query params
+    q = (request.args.get("q") or "").strip()
+    status_filter = (request.args.get("status") or "").strip()
+    try:
+        page = max(1, int(request.args.get("page", 1)))
+    except ValueError:
+        page = 1
+    try:
+        per_page = max(1, int(request.args.get("per_page", 20)))
+    except ValueError:
+        per_page = 20
+
+    offset = (page - 1) * per_page
+
     conn = get_db_conn()
     cur = conn.cursor()
-    cur.execute("""
-        SELECT 
-            a.id,
-            u.email AS student_email,
-            p.company AS placement_name,
-            a.status,
-            a.applied_at
+
+    # Build base WHERE and params for both count and fetch queries
+    where_clauses = ["1=1"]
+    params = []
+
+    if q:
+        where_clauses.append("(u.email LIKE ? OR p.company LIKE ? OR p.role LIKE ?)")
+        q_like = f"%{q}%"
+        params.extend([q_like, q_like, q_like])
+
+    if status_filter:
+        where_clauses.append("a.status = ?")
+        params.append(status_filter)
+
+    where_sql = " AND ".join(where_clauses)
+
+    # Total count
+    count_sql = f"""
+        SELECT COUNT(*) AS cnt
         FROM applications a
         JOIN users u ON a.user_id = u.id
         JOIN placements p ON a.placement_id = p.id
+        WHERE {where_sql}
+    """
+    cur.execute(count_sql, params)
+    total_row = cur.fetchone()
+    total_applications = total_row[0] if total_row else 0
+
+    # Status counts (for badges)
+    status_counts_sql = f"""
+        SELECT a.status, COUNT(*) as cnt
+        FROM applications a
+        JOIN users u ON a.user_id = u.id
+        JOIN placements p ON a.placement_id = p.id
+        WHERE {where_sql}
+        GROUP BY a.status
+    """
+    cur.execute(status_counts_sql, params)
+    status_counts_rows = cur.fetchall()
+    status_counts = {}
+    for r in status_counts_rows:
+        # r[0] is status, r[1] is count
+        status_counts[r[0]] = r[1]
+
+    # Fetch paginated application rows, include resume filename and user/profile info
+    fetch_sql = f"""
+        SELECT 
+            a.id,
+            u.id AS user_id,
+            u.email AS student_email,
+            u.profile_pic AS profile_pic,
+            p.company || ' - ' || p.role AS placement_name,
+            COALESCE(a.status, 'Applied') AS status,
+            a.applied_at,
+            r.filename AS resume
+        FROM applications a
+        JOIN users u ON a.user_id = u.id
+        JOIN placements p ON a.placement_id = p.id
+        LEFT JOIN resumes r ON r.user_id = u.id
+        WHERE {where_sql}
         ORDER BY a.applied_at DESC
-    """)
-    applications = cur.fetchall()
-    conn.close()
-    return render_template("admin/applications.html", applications=applications)
+        LIMIT ? OFFSET ?
+    """
+    fetch_params = params + [per_page, offset]
+    cur.execute(fetch_sql, fetch_params)
+    rows = cur.fetchall()
+
+    # Convert rows to list of dicts the template expects
+    applications = []
+    for row in rows:
+        # row could be sqlite3.Row (supports both dict-style and index)
+        applied_at = row["applied_at"] if "applied_at" in row.keys() else row[5]
+        # Format applied_at if it's a datetime-like string or object
+        applied_str = ""
+        if applied_at:
+            try:
+                # if it's stored as ISO string, try parse
+                if isinstance(applied_at, str):
+                    # try common formats, else show raw string
+                    try:
+                        dt = datetime.fromisoformat(applied_at)
+                        applied_str = dt.strftime("%Y-%m-%d %H:%M")
+                    except Exception:
+                        applied_str = applied_at
+                else:
+                    # assume datetime-like object
+                    applied_str = applied_at.strftime("%Y-%m-%d %H:%M")
+            except Exception:
+                applied_str = str(applied_at)
+
+        # build optional student_profile_url if you have such a route (replace name if different)
+        try:
+            profile_url = url_for("enhancements.view_student", student_id=row["user_id"])
+        except Exception:
+            profile_url = None
+
+        applications.append({
+            "id": row["id"],
+            "user_id": row["user_id"],
+            "student_email": row["student_email"],
+            "placement_name": row["placement_name"],
+            "status": row["status"],
+            "applied_at": applied_str,
+            "resume": row["resume"],
+            "profile_pic": row["profile_pic"],
+            "student_profile_url": profile_url
+        })
+
+    # compute pagination helpers
+    page_start = offset + 1 if total_applications > 0 else 0
+    page_end = min(offset + len(applications), total_applications)
+
+    has_prev = page > 1
+    has_next = (offset + per_page) < total_applications
+
+    # Close cursor (we rely on teardown_appcontext(close_db) for final connection close)
+    cur.close()
+
+    return render_template(
+        "admin/applications.html",
+        applications=applications,
+        total_applications=total_applications,
+        status_counts=status_counts,
+        page=page,
+        per_page=per_page,
+        page_start=page_start,
+        page_end=page_end,
+        has_prev=has_prev,
+        has_next=has_next
+    )
+
+
+@enhancements_bp.route("/admin/applications/export")
+def export_applications_csv():
+    """
+    Export applications matching the same filters (q, status) to CSV.
+    """
+    q = (request.args.get("q") or "").strip()
+    status_filter = (request.args.get("status") or "").strip()
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    where_clauses = ["1=1"]
+    params = []
+
+    if q:
+        where_clauses.append("(u.email LIKE ? OR p.company LIKE ? OR p.role LIKE ?)")
+        q_like = f"%{q}%"
+        params.extend([q_like, q_like, q_like])
+
+    if status_filter:
+        where_clauses.append("a.status = ?")
+        params.append(status_filter)
+
+    where_sql = " AND ".join(where_clauses)
+
+    fetch_sql = f"""
+        SELECT 
+            a.id,
+            u.id AS user_id,
+            u.email AS student_email,
+            p.company AS company,
+            p.role AS role,
+            COALESCE(a.status, 'Applied') AS status,
+            a.applied_at,
+            r.filename AS resume
+        FROM applications a
+        JOIN users u ON a.user_id = u.id
+        JOIN placements p ON a.placement_id = p.id
+        LEFT JOIN resumes r ON r.user_id = u.id
+        WHERE {where_sql}
+        ORDER BY a.applied_at DESC
+    """
+    cur.execute(fetch_sql, params)
+    rows = cur.fetchall()
+    cur.close()
+
+    # Create CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["application_id", "user_id", "student_email", "company", "role", "status", "applied_at", "resume_filename"])
+    for r in rows:
+        applied_at = r["applied_at"]
+        if applied_at and not isinstance(applied_at, str):
+            try:
+                applied_at = applied_at.strftime("%Y-%m-%d %H:%M")
+            except Exception:
+                applied_at = str(applied_at)
+        writer.writerow([r["id"], r["user_id"], r["student_email"], r["company"], r["role"], r["status"], applied_at, r["resume"]])
+
+    csv_data = output.getvalue()
+    output.close()
+
+    # Return as file response
+    response = make_response(csv_data)
+    response.headers["Content-Disposition"] = "attachment; filename=applications_export.csv"
+    response.headers["Content-Type"] = "text/csv; charset=utf-8"
+    return response
 
 
 
@@ -829,6 +1035,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
