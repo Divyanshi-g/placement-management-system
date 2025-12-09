@@ -19,7 +19,7 @@
     </p>
   </div>
 
-  <!-- Controls: Search / Filter / Export -->
+  <!-- Controls -->
   <form method="get" class="mt-6 flex flex-col md:flex-row gap-3 items-center justify-between">
     <div class="flex gap-2 w-full md:w-2/3">
       <input name="q" value="{{ request.args.get('q','') }}" type="text"
@@ -46,11 +46,10 @@
     </div>
   </form>
 
-  <!-- Placement Table -->
+  <!-- Placements Table -->
   <div class="mt-6 overflow-x-auto">
     {% if placements %}
     <table class="min-w-full bg-white/5 rounded-lg shadow-lg text-left" aria-label="Placements table">
-      <caption class="sr-only">List of placement postings</caption>
       <thead>
         <tr class="bg-green-600 text-white text-sm">
           <th class="px-4 py-3">#</th>
@@ -64,35 +63,56 @@
       </thead>
       <tbody class="text-gray-100">
         {% for placement in placements %}
-        <tr class="border-b border-white/6 hover:bg-white/3 align-top">
-          <td class="px-4 py-3">{{ loop.index + ((page-1)*per_page) if (page and per_page) else loop.index }}</td>
+        <tr class="border-b border-white/10 hover:bg-white/5 align-top">
+          <td class="px-4 py-3">
+            {{ loop.index + ((page-1)*per_page) if (page and per_page) else loop.index }}
+          </td>
 
-          <!-- Company + optional logo -->
+          <!-- Company + Logo -->
           <td class="px-4 py-3">
             <div class="flex items-center gap-3">
-              {% if placement.get('logo') %}
+
+              {% if placement['logo'] %}
                 <img src="{{ url_for('enhancements.uploaded_profile_pic', filename=placement['logo']) }}"
                      alt="{{ placement['company'] }} logo"
                      class="w-10 h-10 rounded object-cover" />
               {% else %}
                 <div class="w-10 h-10 rounded bg-white/5 flex items-center justify-center text-sm text-gray-300">🏢</div>
               {% endif %}
+
               <div>
-                <a href="{{ url_for('enhancements.view_placement', pid=placement['id']) }}" class="font-semibold text-white/90 underline">
+                <a href="{{ url_for('enhancements.view_placement', pid=placement['id']) }}"
+                   class="font-semibold text-white/90 underline">
                   {{ placement['company'] }}
                 </a>
-                <div class="text-xs text-gray-400">{{ placement.get('short_description','') }}</div>
+
+                <div class="text-xs text-gray-400">
+                  {{ placement['short_description'] if placement['short_description'] else '' }}
+                </div>
               </div>
+
             </div>
           </td>
 
           <td class="px-4 py-3">{{ placement['role'] }}</td>
-          <td class="px-4 py-3">{{ placement.get('location','—') }}</td>
-          <td class="px-4 py-3">{{ placement.get('eligibility','Any') }}</td>
 
           <td class="px-4 py-3">
-            {% if placement.get('deadline') %}
-              <span class="px-2 py-1 rounded text-sm {% if placement.deadline and placement.deadline < now %} bg-rose-100 text-rose-800 {% else %} bg-amber-100 text-amber-800 {% endif %}">
+            {{ placement['location'] if placement['location'] else '—' }}
+          </td>
+
+          <td class="px-4 py-3">
+            {{ placement['eligibility'] if placement['eligibility'] else 'Any' }}
+          </td>
+
+          <td class="px-4 py-3">
+            {% if placement['deadline'] %}
+              <span class="px-2 py-1 rounded text-sm
+                {% if now and placement['deadline'] < now %}
+                    bg-rose-100 text-rose-800
+                {% else %}
+                    bg-amber-100 text-amber-800
+                {% endif %}
+              ">
                 {{ placement['deadline'] }}
               </span>
             {% else %}
@@ -100,18 +120,31 @@
             {% endif %}
           </td>
 
-          <!-- Actions: View Applicants / Edit / Delete -->
+          <!-- Actions -->
           <td class="px-4 py-3">
             <div class="flex gap-2 items-center">
-              <a href="{{ url_for('enhancements.view_applications', pid=placement['id']) }}" class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm">Applicants</a>
 
-              <a href="{{ url_for('enhancements.edit_placement', pid=placement['id']) }}" class="px-3 py-1 rounded bg-yellow-600 hover:bg-yellow-700 text-white text-sm">Edit</a>
+              <a href="{{ url_for('enhancements.view_applications', pid=placement['id']) }}"
+                 class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-sm">
+                Applicants
+              </a>
 
-              <form method="post" action="{{ url_for('enhancements.delete_placement', pid=placement['id']) }}" onsubmit="return confirm('Delete this placement?');">
-                <button type="submit" class="px-3 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white text-sm">Delete</button>
+              <a href="{{ url_for('enhancements.edit_placement', pid=placement['id']) }}"
+                 class="px-3 py-1 rounded bg-yellow-600 hover:bg-yellow-700 text-white text-sm">
+                Edit
+              </a>
+
+              <form method="post"
+                    action="{{ url_for('enhancements.delete_placement', pid=placement['id']) }}"
+                    onsubmit="return confirm('Delete this placement?');">
+                <button type="submit"
+                        class="px-3 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white text-sm">
+                  Delete
+                </button>
               </form>
             </div>
           </td>
+
         </tr>
         {% endfor %}
       </tbody>
@@ -126,21 +159,24 @@
 
       <div class="flex items-center gap-2">
         {% if has_prev %}
-          <a href="{{ url_for('enhancements.manage_placements', page=page-1, q=request.args.get('q',''), sort=request.args.get('sort','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Prev</a>
+          <a href="{{ url_for('enhancements.manage_placements', page=page-1, q=request.args.get('q',''), sort=request.args.get('sort','')) }}"
+             class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Prev</a>
         {% endif %}
+
         <span class="px-3 py-1 rounded bg-white/5">{{ page|default(1) }}</span>
+
         {% if has_next %}
-          <a href="{{ url_for('enhancements.manage_placements', page=page+1, q=request.args.get('q',''), sort=request.args.get('sort','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Next</a>
+          <a href="{{ url_for('enhancements.manage_placements', page=page+1, q=request.args.get('q',''), sort=request.args.get('sort','')) }}"
+             class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Next</a>
         {% endif %}
       </div>
     </div>
 
     {% else %}
-    <div class="px-4 py-6 text-center text-gray-400 rounded-lg bg-white/3">
+    <div class="px-4 py-6 text-center text-gray-400 rounded-lg bg-white/5">
       No placements found.
     </div>
     {% endif %}
   </div>
 </div>
 {% endblock %}
-
