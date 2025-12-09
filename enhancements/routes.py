@@ -306,7 +306,7 @@ def admin_applications():
     )
 
 
-@enhancements_bp.route("/admin/applications/export")
+@enhancements_bp.route("/admin/export_applications_csvt")
 def export_applications_csv():
     """
     Export applications matching the same filters (q, status) to CSV.
@@ -1035,6 +1035,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
