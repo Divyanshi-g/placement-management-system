@@ -1,61 +1,91 @@
 {% extends "base.html" %}
 {% block nav_options %}
-  <a href="/admin_dashboard" class="hover:text-yellow-300 transition">Home</a>
-  <a href="/about" class="hover:text-yellow-300 transition">About</a>
-  <a href="/rate" class="hover:text-yellow-300 transition">Rate</a>
-  <a href="/logout" class="hover:text-yellow-300 transition">Logout</a>
+  <a href="/admin_dashboard" class="hover:text-pink-400 transition">Home</a>
+  <a href="/about" class="hover:text-pink-400 transition">About</a>
+  <a href="/rate" class="hover:text-pink-400 transition">Rate</a>
+  <a href="/logout" class="hover:text-pink-400 transition">Logout</a>
 {% endblock %}
 
 {% block title %}Manage Applications{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 mt-20">
+<style>
+  /* Smooth fade zoom animation */
+  .fade-zoom {
+    opacity: 0;
+    transform: scale(0.98);
+    animation: fadeZoom 0.4s ease-out forwards;
+  }
+  @keyframes fadeZoom {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Table row hover animation */
+  .row-hover:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    transform: scale(1.01);
+    transition: 0.15s ease;
+  }
+
+  /* Header subtle animation */
+  .title-anim {
+    animation: titlePop 0.6s ease-out;
+  }
+  @keyframes titlePop {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+</style>
+
+<div class="max-w-7xl mx-auto px-4 mt-20 fade-zoom">
 
   <!-- Header -->
   <div class="text-center">
-    <h1 class="text-4xl font-extrabold text-pink-500">📊 Applications Overview</h1>
+    <h1 class="text-4xl font-extrabold text-pink-500 title-anim">
+      📊 Applications Overview
+    </h1>
     <p class="mt-3 text-gray-300">Admin panel to view, filter and manage student applications.</p>
   </div>
 
-  <!-- Summary badges -->
+  <!-- Summary Badges -->
   <div class="mt-6 flex flex-wrap justify-center gap-4">
-    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+    <div class="px-4 py-2 rounded-lg bg-white/10 text-white shadow-sm">
       <div class="text-xs text-gray-300">Total Applications</div>
       <div class="text-xl font-semibold">{{ total_applications|default(applications|length if applications else 0) }}</div>
     </div>
 
-    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+    <div class="px-4 py-2 rounded-lg bg-white/10 text-white shadow-sm">
       <div class="text-xs text-gray-300">Shortlisted</div>
       <div class="text-xl font-semibold">{{ status_counts.Shortlisted|default(0) }}</div>
     </div>
 
-    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+    <div class="px-4 py-2 rounded-lg bg-white/10 text-white shadow-sm">
       <div class="text-xs text-gray-300">Selected</div>
       <div class="text-xl font-semibold">{{ status_counts.Selected|default(0) }}</div>
     </div>
 
-    <div class="px-4 py-2 rounded-lg bg-white/5 text-white">
+    <div class="px-4 py-2 rounded-lg bg-white/10 text-white shadow-sm">
       <div class="text-xs text-gray-300">Rejected</div>
       <div class="text-xl font-semibold">{{ status_counts.Rejected|default(0) }}</div>
     </div>
 
-    <!-- Export CSV -->
+    <!-- EXPORT CSV -->
     <div class="ml-auto">
       <a href="{{ url_for('enhancements.export_applications_csv', q=request.args.get('q',''), status=request.args.get('status','')) }}"
-         class="inline-block px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 text-white text-sm transition">
+         class="inline-block px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 text-white text-sm transition shadow-md">
         ⬇️ Export CSV
       </a>
     </div>
   </div>
 
-  <!-- Filter / Search -->
-  <form method="get" class="mt-6 flex flex-col md:flex-row gap-3 items-center justify-between">
+  <!-- Search / Filter -->
+  <form method="get" class="mt-6 flex flex-col md:flex-row gap-3 items-center justify-between fade-zoom">
     <div class="flex gap-2 w-full md:w-2/3">
       <input type="text" name="q" value="{{ request.args.get('q','') }}"
              placeholder="Search by email, company or role"
-             class="w-full px-3 py-2 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none" />
+             class="w-full px-3 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:ring focus:ring-pink-500/40 outline-none" />
 
-      <select name="status" class="px-3 py-2 rounded-lg bg-white/5 text-white">
+      <select name="status" class="px-3 py-2 rounded-lg bg-white/10 text-white">
         <option value="">All statuses</option>
         <option value="Applied" {% if request.args.get('status')=='Applied' %}selected{% endif %}>Applied</option>
         <option value="Shortlisted" {% if request.args.get('status')=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
@@ -63,129 +93,143 @@
         <option value="Rejected" {% if request.args.get('status')=='Rejected' %}selected{% endif %}>Rejected</option>
       </select>
 
-      <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition">
+      <button type="submit" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-md">
         🔎 Filter
       </button>
 
-      <a href="{{ url_for('enhancements.admin_applications') }}" class="px-3 py-2 rounded-lg bg-transparent border border-white/10 text-white hover:bg-white/5">
+      <a href="{{ url_for('enhancements.admin_applications') }}"
+         class="px-3 py-2 rounded-lg bg-transparent border border-white/20 text-white hover:bg-white/10 transition">
         Reset
       </a>
     </div>
 
-    <!-- Quick stats on right (mobile stacked below) -->
-    <div class="text-sm text-gray-300">Showing
-      <strong>{{ page_start|default(1) }}–{{ page_end|default(total_applications|default(applications|length if applications else 0)) }}</strong>
+    <div class="text-sm text-gray-300">
+      Showing <strong>{{ page_start|default(1) }}–{{ page_end|default(total_applications|default(applications|length if applications else 0)) }}</strong>
       of <strong>{{ total_applications|default(applications|length if applications else 0) }}</strong>
     </div>
   </form>
 
-  <!-- Table container -->
-  <div class="mt-8 bg-white/5 p-6 rounded-lg shadow-lg overflow-x-auto">
+  <!-- Table -->
+  <div class="mt-8 bg-white/10 p-6 rounded-lg shadow-lg overflow-x-auto fade-zoom">
     {% if applications %}
-      <table class="min-w-full text-left">
-        <thead>
-          <tr class="text-sm text-gray-200 border-b border-white/10">
-            <th class="px-4 py-3">#</th>
-            <th class="px-4 py-3">Student Email</th>
-            <th class="px-4 py-3">Placement</th>
-            <th class="px-4 py-3">Resume</th>
-            <th class="px-4 py-3">Status</th>
-            <th class="px-4 py-3">Applied At</th>
-            <th class="px-4 py-3">Actions</th>
-          </tr>
-        </thead>
+    <table class="min-w-full text-left">
+      <thead>
+        <tr class="text-sm text-gray-200 border-b border-white/10">
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">Student Email</th>
+          <th class="px-4 py-3">Placement</th>
+          <th class="px-4 py-3">Resume</th>
+          <th class="px-4 py-3">Status</th>
+          <th class="px-4 py-3">Applied At</th>
+          <th class="px-4 py-3">Actions</th>
+        </tr>
+      </thead>
 
-        <tbody class="text-gray-100">
-          {% for app in applications %}
-          <tr class="border-b border-white/6 hover:bg-white/3">
-            <td class="px-4 py-3 align-top">{{ loop.index + ((page-1)*per_page) if (page and per_page) else loop.index }}</td>
+      <tbody class="text-gray-100">
+        {% for app in applications %}
+        <tr class="border-b border-white/5 row-hover">
+          <td class="px-4 py-3 align-top">{{ loop.index + ((page-1)*per_page) if (page and per_page) else loop.index }}</td>
 
-            <td class="px-4 py-3 align-top">
-              {% if app.get('student_profile_url') %}
-                <a href="{{ app.student_profile_url }}" class="underline text-white/90">{{ app['student_email'] }}</a>
-              {% else %}
+          <td class="px-4 py-3 align-top">
+            {% if app.get('student_profile_url') %}
+              <a href="{{ app.student_profile_url }}" class="underline text-pink-300 hover:text-pink-400 transition">
                 {{ app['student_email'] }}
-              {% endif %}
-            </td>
+              </a>
+            {% else %}
+              {{ app['student_email'] }}
+            {% endif %}
+          </td>
 
-            <td class="px-4 py-3 align-top">{{ app['placement_name'] }}</td>
+          <td class="px-4 py-3 align-top">{{ app['placement_name'] }}</td>
 
-            <!-- Resume column -->
-            <td class="px-4 py-3 align-top">
-              {% if app.get('resume') %}
-                <a href="{{ url_for('enhancements.uploaded_resume', filename=app['resume']) }}" target="_blank" rel="noopener" class="text-indigo-200 underline">View</a>
-              {% else %}
-                <span class="text-gray-400">—</span>
-              {% endif %}
-            </td>
+          <!-- Resume -->
+          <td class="px-4 py-3 align-top">
+            {% if app.get('resume') %}
+              <a href="{{ url_for('enhancements.uploaded_resume', filename=app['resume']) }}"
+                 target="_blank" class="text-indigo-300 underline hover:text-indigo-400">View</a>
+            {% else %}
+              <span class="text-gray-400">—</span>
+            {% endif %}
+          </td>
 
-            <!-- Status badge -->
-            <td class="px-4 py-3 align-top">
-              {% set s = app.get('status', '') %}
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
-                {% if s == 'Applied' %} bg-yellow-100 text-yellow-800
-                {% elif s == 'Shortlisted' %} bg-sky-100 text-sky-800
-                {% elif s == 'Selected' %} bg-emerald-100 text-emerald-800
-                {% elif s == 'Rejected' %} bg-rose-100 text-rose-800
-                {% else %} bg-gray-100 text-gray-800
-                {% endif %}">
-                {{ s or '—' }}
-              </span>
-            </td>
+          <!-- Status badge -->
+          <td class="px-4 py-3 align-top">
+            {% set s = app.get('status', '') %}
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
+              {% if s == 'Applied' %} bg-yellow-100 text-yellow-800
+              {% elif s == 'Shortlisted' %} bg-sky-100 text-sky-800
+              {% elif s == 'Selected' %} bg-emerald-100 text-emerald-800
+              {% elif s == 'Rejected' %} bg-rose-100 text-rose-800
+              {% else %} bg-gray-100 text-gray-800
+              {% endif %}">
+              {{ s or '—' }}
+            </span>
+          </td>
 
-            <!-- Applied at -->
-            <td class="px-4 py-3 align-top">
-              {% if app.get('applied_at') %}
-                {{ app['applied_at'] }}
-              {% else %}
-                <span class="text-gray-400">—</span>
-              {% endif %}
-            </td>
+          <!-- Applied at -->
+          <td class="px-4 py-3 align-top">
+            {{ app['applied_at'] if app.get('applied_at') else '—' }}
+          </td>
 
-            <!-- Actions: change status -->
-            <td class="px-4 py-3 align-top">
-              <form method="post" action="{{ url_for('enhancements.update_status', app_id=app['id']) }}" class="flex gap-2 items-center">
-                <select name="status" class="px-2 py-1 rounded bg-white/5 text-white text-sm">
-                  <option value="Applied" {% if s=='Applied' %}selected{% endif %}>Applied</option>
-                  <option value="Shortlisted" {% if s=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
-                  <option value="Selected" {% if s=='Selected' %}selected{% endif %}>Selected</option>
-                  <option value="Rejected" {% if s=='Rejected' %}selected{% endif %}>Rejected</option>
-                </select>
-                <button type="submit" class="px-3 py-1 rounded bg-pink-600 hover:bg-pink-700 text-white text-sm">Update</button>
-              </form>
+          <!-- Actions -->
+          <td class="px-4 py-3 align-top">
+            <form method="post" action="{{ url_for('enhancements.update_status', app_id=app['id']) }}"
+                  class="flex gap-2 items-center">
+              <select name="status" class="px-2 py-1 rounded bg-white/10 text-white text-sm">
+                <option value="Applied" {% if s=='Applied' %}selected{% endif %}>Applied</option>
+                <option value="Shortlisted" {% if s=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                <option value="Selected" {% if s=='Selected' %}selected{% endif %}>Selected</option>
+                <option value="Rejected" {% if s=='Rejected' %}selected{% endif %}>Rejected</option>
+              </select>
 
-              <!-- Optional quick-action links -->
-              <div class="mt-2 text-xs text-gray-400">
-                <a href="{{ url_for('enhancements.uploaded_profile_pic', filename=app.get('profile_pic')) }}" class="mr-2">Pic</a>
-                <a href="{{ url_for('enhancements.student_resumes', student_id=app.get('user_id')) }}">All Resumes</a>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              <button type="submit"
+                      class="px-3 py-1 rounded bg-pink-600 hover:bg-pink-700 text-white text-sm transition shadow">
+                Update
+              </button>
+            </form>
 
-      <!-- Pagination -->
-      <div class="mt-4 flex items-center justify-between text-sm text-gray-300">
-        <div>
-          Showing <strong>{{ page_start|default(1) }}</strong> - <strong>{{ page_end|default(total_applications|default(applications|length)) }}</strong>
-          of <strong>{{ total_applications|default(applications|length) }}</strong>
-        </div>
+            <div class="mt-2 text-xs text-gray-400">
+              <a href="{{ url_for('enhancements.uploaded_profile_pic', filename=app.get('profile_pic')) }}"
+                 class="mr-2 hover:text-pink-400">Pic</a>
 
-        <div class="flex items-center gap-2">
-          {% if has_prev %}
-            <a href="{{ url_for('enhancements.admin_applications', page=page-1, q=request.args.get('q',''), status=request.args.get('status','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Prev</a>
-          {% endif %}
-          <span class="px-3 py-1 rounded bg-white/5">{{ page|default(1) }}</span>
-          {% if has_next %}
-            <a href="{{ url_for('enhancements.admin_applications', page=page+1, q=request.args.get('q',''), status=request.args.get('status','')) }}" class="px-3 py-1 rounded bg-white/5 hover:bg-white/10">Next</a>
-          {% endif %}
-        </div>
+              <a href="{{ url_for('enhancements.student_resumes', student_id=app.get('user_id')) }}"
+                 class="hover:text-pink-400">
+                All Resumes
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="mt-4 flex items-center justify-between text-sm text-gray-300">
+      <div>
+        Showing <strong>{{ page_start|default(1) }}</strong> -
+        <strong>{{ page_end|default(total_applications|default(applications|length)) }}</strong>
+        of <strong>{{ total_applications|default(applications|length) }}</strong>
       </div>
 
+      <div class="flex items-center gap-2">
+        {% if has_prev %}
+          <a href="{{ url_for('enhancements.admin_applications', page=page-1, q=request.args.get('q',''), status=request.args.get('status','')) }}"
+             class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">Prev</a>
+        {% endif %}
+
+        <span class="px-3 py-1 rounded bg-white/10">{{ page|default(1) }}</span>
+
+        {% if has_next %}
+          <a href="{{ url_for('enhancements.admin_applications', page=page+1, q=request.args.get('q',''), status=request.args.get('status','')) }}"
+             class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">Next</a>
+        {% endif %}
+      </div>
+    </div>
+
     {% else %}
-      <p class="text-gray-300">No applications submitted yet.</p>
+      <p class="text-gray-300 text-center py-6">No applications submitted yet.</p>
     {% endif %}
   </div>
 </div>
+
 {% endblock %}
