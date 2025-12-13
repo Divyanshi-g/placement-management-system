@@ -306,7 +306,7 @@ def admin_applications():
     )
 
 
-@enhancements_bp.route("/admin/export_applications_csvt")
+@enhancements_bp.route("/admin/export_applications_csv")
 def export_applications_csv():
     """
     Export applications matching the same filters (q, status) to CSV.
@@ -374,7 +374,19 @@ def export_applications_csv():
     response.headers["Content-Type"] = "text/csv; charset=utf-8"
     return response
 
+@enhancements_bp.route("/admin/student/<int:student_id>")
+def view_student(student_id):
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT id, username, email FROM users WHERE id=?", (student_id,))
+    student = cur.fetchone()
+    conn.close()
 
+    if not student:
+        flash("Student not found", "danger")
+        return redirect(url_for("enhancements.admin_applications"))
+
+    return render_template("admin/view_student.html", student=student)
 
 
 
@@ -1035,6 +1047,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
