@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}View Students{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h2 class="mb-4">👨‍🎓 Registered Students</h2>
+
+    {% if students %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th style="width: 280px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in students %}
+                <tr>
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.username }}</td>
+                    <td>{{ s.email }}</td>
+                    <td>
+
+                        <!-- View Applications -->
+                        <a href="{{ url_for('enhancements.student_applications', student_id=s.id) }}"
+                           class="btn btn-sm btn-primary mb-1">
+                            Applications
+                        </a>
+
+                        <!-- View Resumes -->
+                        <a href="{{ url_for('enhancements.student_resumes', student_id=s.id) }}"
+                           class="btn btn-sm btn-info mb-1">
+                            Resumes
+                        </a>
+
+                        <!-- Edit Student -->
+                        <a href="{{ url_for('enhancements.edit_student', student_id=s.id) }}"
+                           class="btn btn-sm btn-warning mb-1">
+                            Edit
+                        </a>
+
+                        <!-- Delete Student -->
+                        <form action="{{ url_for('enhancements.delete_student', student_id=s.id) }}"
+                              method="POST"
+                              style="display:inline;"
+                              onsubmit="return confirm('Are you sure you want to delete this student?');">
+                            <button type="submit" class="btn btn-sm btn-danger mb-1">
+                                Delete
+                            </button>
+                        </form>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-warning">
+            No students found.
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
