@@ -374,8 +374,8 @@ def export_applications_csv():
     response.headers["Content-Type"] = "text/csv; charset=utf-8"
     return response
 
-@enhancements_bp.route("/admin/students")
-def admin_students():
+@enhancements_bp.route("/admin/view_students")
+def view_students():
     conn = get_db_conn()
     cur = conn.cursor()
     cur.execute("SELECT id, username, email FROM users WHERE role='student'")
@@ -1042,6 +1042,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
