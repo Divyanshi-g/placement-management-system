@@ -131,7 +131,7 @@ def admin_dashboard():
     username = session.get("username", "Admin")
     return render_template("admin_dashboard.html", counts=counts, username=username)
 @enhancements_bp.route("/admin/students")
-def admin_students():
+def students():
     conn = get_db_conn()
     cur = conn.cursor()
     # Only select columns that exist in your table
@@ -141,7 +141,7 @@ def admin_students():
     return render_template("admin/students.html", students=students)
 
 @enhancements_bp.route("/admin/placements")
-def admin_placements():
+def placements():
     conn = get_db_conn()
     cur = conn.cursor()
     # Select only columns that exist in your placements table
@@ -150,7 +150,7 @@ def admin_placements():
     conn.close()
     return render_template("admin/placements.html", placements=placements)
 @enhancements_bp.route("/admin/applications")
-def admin_applications():
+def applications():
     """
     Enhanced admin applications view:
     - supports search (q), status filter
@@ -1042,6 +1042,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
