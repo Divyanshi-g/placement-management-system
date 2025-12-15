@@ -374,19 +374,14 @@ def export_applications_csv():
     response.headers["Content-Type"] = "text/csv; charset=utf-8"
     return response
 
-@enhancements_bp.route("/admin/student/<int:student_id>")
-def view_student(student_id):
+@enhancements_bp.route("/admin/students")
+def admin_students():
     conn = get_db_conn()
     cur = conn.cursor()
-    cur.execute("SELECT id, username, email FROM users WHERE id=?", (student_id,))
-    student = cur.fetchone()
+    cur.execute("SELECT id, username, email FROM users WHERE role='student'")
+    students = cur.fetchall()
     conn.close()
-
-    if not student:
-        flash("Student not found", "danger")
-        return redirect(url_for("enhancements.admin_applications"))
-
-    return render_template("admin/view_student.html", student=student)
+    return render_template("admin/view_students.html", students=students)
 
 
 
@@ -1047,6 +1042,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
