@@ -135,11 +135,25 @@ def admin_dashboard():
 def admin_students():
     conn = get_db_conn()
     cur = conn.cursor()
-    # Only select columns that exist in your table
-    cur.execute("SELECT id, email FROM users WHERE role='student'")
+
+    # Fetch all required student details
+    cur.execute("""
+        SELECT 
+            id,
+            username,
+            email,
+            phone,
+            skills
+        FROM users
+        WHERE role = 'student'
+        ORDER BY id DESC
+    """)
+
     students = cur.fetchall()
     conn.close()
+
     return render_template("admin/students.html", students=students)
+
 
 @enhancements_bp.route("/admin/placements")
 def admin_placements():
@@ -1043,6 +1057,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
