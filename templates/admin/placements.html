@@ -1,97 +1,125 @@
 {% extends "base.html" %}
 
 {% block nav_options %}
-  <a href="/admin_dashboard" class="hover:text-yellow-300 transition">Home</a>
-  <a href="/about" class="hover:text-yellow-300 transition">About</a>
-  <a href="/rate" class="hover:text-yellow-300 transition">Rate</a>
-  <a href="/logout" class="hover:text-yellow-300 transition">Logout</a>
+  <a href="/admin_dashboard" class="hover:text-emerald-300 transition">Home</a>
+  <a href="/about" class="hover:text-emerald-300 transition">About</a>
+  <a href="/rate" class="hover:text-emerald-300 transition">Rate</a>
+  <a href="/logout" class="hover:text-rose-400 transition">Logout</a>
 {% endblock %}
 
 {% block title %}Manage Placements{% endblock %}
 
 {% block content %}
 
-<!-- Smooth fade-in animation -->
 <style>
+  /* Page fade animation */
   .fade-in {
     animation: fadeIn 0.9s ease-out forwards;
   }
   @keyframes fadeIn {
-    0% {opacity: 0; transform: translateY(20px);}
-    100% {opacity: 1; transform: translateY(0);}
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Hover animation for rows */
+  /* Row hover */
   .row-hover {
-    transition: background-color 0.25s ease, transform 0.2s ease;
+    transition: all 0.25s ease;
   }
   .row-hover:hover {
-    background-color: rgba(34,197,94,0.25); /* Soft green glow */
+    background: linear-gradient(90deg, rgba(16,185,129,0.15), rgba(99,102,241,0.15));
     transform: scale(1.01);
   }
 
-  /* Company Name Hover */
+  /* Company hover */
   .company-hover {
-    transition: color 0.25s ease, transform 0.2s ease;
+    transition: all 0.2s ease;
   }
   .company-hover:hover {
-    color: #86efac; /* green-300 */
+    color: #6ee7b7;
     transform: scale(1.03);
   }
 
-  /* Heading animation */
-  .title-zoom {
-    animation: zoomFade 1s ease-out forwards;
+  /* Status badge pulse */
+  .pulse {
+    animation: pulse 1.6s infinite;
   }
-  @keyframes zoomFade {
-    0% {opacity: 0; transform: scale(0.95);}
-    100% {opacity: 1; transform: scale(1);}
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
   }
 </style>
 
-<div class="text-center mt-20 fade-in">
-  <h1 class="text-3xl font-bold text-green-500 title-zoom">
-    🏢 Total Companies
-  </h1>
+<div class="max-w-7xl mx-auto px-4 mt-20 fade-in">
 
-  <p class="mt-4 text-gray-200">
-    Here the admin can view placement postings.  
-    Total: 
-    <span class="font-bold text-yellow-300">
-      {{ placements|length }}
-    </span>
-  </p>
+  <!-- Header -->
+  <div class="text-center">
+    <h1 class="text-4xl font-extrabold text-emerald-400">
+      🏢 Placement Opportunities
+    </h1>
+    <p class="mt-3 text-gray-300">
+      Admin overview of all companies, roles & deadlines.
+      Total:
+      <span class="font-semibold text-amber-300">
+        {{ placements|length }}
+      </span>
+    </p>
+  </div>
 
-  <!-- Placement Table -->
-  <div class="mt-10 overflow-x-auto">
-    <table class="min-w-full bg-white/10 rounded-xl shadow-lg backdrop-blur text-left border border-white/10 fade-in">
+  <!-- Table -->
+  <div class="mt-10 overflow-x-auto bg-white/10 rounded-2xl shadow-xl backdrop-blur fade-in">
+    <table class="min-w-full text-left text-gray-100">
       <thead>
-        <tr class="bg-green-600 text-white text-lg">
-          <th class="px-4 py-3">#</th>
-          <th class="px-4 py-3">Company</th>
-          <th class="px-4 py-3">Role</th>
+        <tr class="bg-gradient-to-r from-emerald-600 to-indigo-600 text-white text-sm uppercase tracking-wider">
+          <th class="px-5 py-4">#</th>
+          <th class="px-5 py-4">Company</th>
+          <th class="px-5 py-4">Role</th>
+          <th class="px-5 py-4">Location</th>
+          <th class="px-5 py-4">Deadline</th>
+          <th class="px-5 py-4">Status</th>
         </tr>
       </thead>
 
-      <tbody class="text-gray-100">
+      <tbody>
         {% for placement in placements %}
-        <tr class="border-b border-gray-700 row-hover">
-          <td class="px-4 py-3 font-semibold text-green-300">
+        <tr class="border-b border-white/10 row-hover">
+          <td class="px-5 py-4 font-semibold text-emerald-300">
             {{ loop.index }}
           </td>
 
-          <td class="px-4 py-3 company-hover font-medium">
-            {{ placement['company'] }}
+          <td class="px-5 py-4 font-medium company-hover">
+            {{ placement.get('company','—') }}
           </td>
 
-          <td class="px-4 py-3 text-yellow-200">
-            {{ placement['role'] }}
+          <td class="px-5 py-4 text-indigo-200">
+            {{ placement.get('role','—') }}
+          </td>
+
+          <td class="px-5 py-4 text-gray-300">
+            {{ placement.get('location','—') }}
+          </td>
+
+          <td class="px-5 py-4 text-amber-200">
+            {{ placement.get('deadline','—') }}
+          </td>
+
+          <!-- Status -->
+          <td class="px-5 py-4">
+            {% if placement.get('deadline') %}
+              <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-sm font-semibold pulse">
+                Open
+              </span>
+            {% else %}
+              <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-sm font-semibold">
+                Closed
+              </span>
+            {% endif %}
           </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="4" class="px-4 py-6 text-center text-gray-400">
-            No placements found.
+          <td colspan="6" class="px-6 py-10 text-center text-gray-400">
+            No placement postings available.
           </td>
         </tr>
         {% endfor %}
