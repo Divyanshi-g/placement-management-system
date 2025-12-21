@@ -156,7 +156,7 @@ def admin_students():
 
 
 @enhancements_bp.route("/admin/placements")
-def admin_placements():
+def placements():
     conn = get_db_conn()
     cur = conn.cursor()
     # Select only columns that exist in your placements table
@@ -1057,6 +1057,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
