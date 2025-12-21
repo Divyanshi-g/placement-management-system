@@ -156,15 +156,29 @@ def admin_students():
 
 
 @enhancements_bp.route("/admin/placements")
-def placements():
+def admin_placements():
     conn = get_db_conn()
+    conn.row_factory = sqlite3.Row   # ⭐ IMPORTANT
     cur = conn.cursor()
-    # Select only columns that exist in your placements table
-    cur.execute("SELECT id, company, role FROM placements")
+
+    cur.execute("""
+        SELECT 
+            id,
+            company,
+            role,
+            location,
+            deadline
+        FROM placements
+    """)
+
     placements = cur.fetchall()
     conn.close()
-    return render_template("admin/placements.html", placements=placements)
-@enhancements_bp.route("/admin/applications")
+
+    return render_template(
+        "admin/placements.html",
+        placements=placements
+    )
+
 def applications():
     """
     Enhanced admin applications view:
@@ -1057,6 +1071,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
