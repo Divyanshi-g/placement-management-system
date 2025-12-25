@@ -5,12 +5,12 @@
 
 <style>
   .home-wrapper {
-    margin-top: -1rem;
-    min-height: 105vh; /* extra height to avoid overlap */
+    margin-top: 0rem;
+    min-height: 90vh; /* extra height to avoid overlap */
   }
 
   .fade-up {
-    animation: fadeUp 0.8s ease-out forwards;
+    animation: fadeUp 0.6s ease-out forwards;
   }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(18px); }
@@ -18,7 +18,7 @@
   }
 
   .float {
-    animation: float 4s ease-in-out infinite;
+    animation: float 5s ease-in-out infinite;
   }
   @keyframes float {
     0% { transform: translateY(0); }
@@ -28,9 +28,9 @@
 </style>
 
 <section
-  class="home-wrapper flex flex-col items-center justify-start text-center px-6 pt-24
-         bg-gradient-to-br from-slate-200 via-indigo-200 to-slate-300
-         rounded-b-3xl shadow-xl">
+  class="home-wrapper mx-4 my-6 flex flex-col items-center justify-start text-center px-6 pt-24
+         bg-gradient-to-br from-blue-100 via-indigo-200 to-blue-200
+         rounded-3xl shadow-2xl">
 
   <!-- Image -->
   <section class="flex justify-center mt-6">
@@ -40,11 +40,12 @@
   </section>
 
   <!-- Welcome -->
-  <h1
-    class="text-5xl md:text-7xl font-extrabold mt-10 mb-6 text-white fade-up
-           transition-transform duration-300 hover:scale-105">
+ <h1 class="text-5xl md:text-7xl font-extrabold mt-10 mb-6 text-white fade-up">
+  <span class="inline-block transition-transform duration-300 hover:scale-105">
     Welcome to HireHub
-  </h1>
+  </span>
+</h1>
+
 
   <!-- Subtitle -->
   <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto text-slate-800 fade-up">
@@ -70,7 +71,7 @@
   <!-- Highlights -->
   <div class="mt-24 mb-32 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full px-4 fade-up">
 
-    <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
+    <div class="bg-white/40 backdrop-blur-md rounded-xl p-6 shadow hover:shadow-lg transition">
       <h3 class="text-xl font-semibold text-emerald-600 mb-2">
         🎯 Smart Placements
       </h3>
@@ -79,7 +80,7 @@
       </p>
     </div>
 
-    <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
+    <div class="bg-white/40 backdrop-blur-md rounded-xl p-6 shadow hover:shadow-lg transition">
       <h3 class="text-xl font-semibold text-indigo-600 mb-2">
         📄 Resume Tracking
       </h3>
@@ -88,7 +89,7 @@
       </p>
     </div>
 
-    <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
+    <div class="bg-white/40 backdrop-blur-md rounded-xl p-6 shadow hover:shadow-lg transition">
       <h3 class="text-xl font-semibold text-blue-600 mb-2">
         🛡 Admin Management
       </h3>
@@ -102,3 +103,4 @@
 </section>
 
 {% endblock %}
+
