@@ -4,64 +4,50 @@
 {% block content %}
 
 <style>
-  /* Reduce navbar-to-content gap */
   .home-wrapper {
-    margin-top: -1.5rem;
+    margin-top: -1rem;
+    min-height: 105vh; /* extra height to avoid overlap */
   }
 
-  /* Fade-up animation */
   .fade-up {
     animation: fadeUp 0.8s ease-out forwards;
   }
   @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(18px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Floating image animation */
   .float {
     animation: float 4s ease-in-out infinite;
   }
   @keyframes float {
     0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
     100% { transform: translateY(0); }
   }
 </style>
 
 <section
-  class="home-wrapper flex flex-col items-center justify-center text-center min-h-[90vh] px-6
-         bg-gradient-to-br from-indigo-50 via-blue-50 to-slate-100
-         rounded-b-3xl shadow-lg">
-    <div class="max-w-7xl mx-auto px-6 mt-4">
-  <button onclick="history.back()"
-          class="text-sm text-indigo-600 hover:text-indigo-800 transition">
-    ← Back
-  </button>
-</div>
+  class="home-wrapper flex flex-col items-center justify-start text-center px-6 pt-24
+         bg-gradient-to-br from-slate-200 via-indigo-200 to-slate-300
+         rounded-b-3xl shadow-xl">
 
-  <!-- Hero Image -->
+  <!-- Image -->
   <section class="flex justify-center mt-6">
     <img src="{{ url_for('static', filename='images/placement.png') }}"
          alt="Placement Portal"
-         class="w-full max-w-4xl float drop-shadow-xl opacity-95">
+         class="w-full max-w-4xl float drop-shadow-xl">
   </section>
 
-  <!-- Welcome Title -->
+  <!-- Welcome -->
   <h1
-    class="text-5xl md:text-7xl font-extrabold mt-6 mb-6 text-indigo-700 fade-up
+    class="text-5xl md:text-7xl font-extrabold mt-10 mb-6 text-white fade-up
            transition-transform duration-300 hover:scale-105">
     Welcome to HireHub
   </h1>
 
-  <!-- Message -->
-  <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto text-slate-700 fade-up">
+  <!-- Subtitle -->
+  <p class="text-lg md:text-xl mb-10 max-w-2xl mx-auto text-slate-800 fade-up">
     Unlock opportunities, track applications, and grow your career with our
     smart and secure placement management system.
   </p>
@@ -69,22 +55,22 @@
   <!-- Buttons -->
   <div class="flex flex-col sm:flex-row gap-4 justify-center fade-up">
     <a href="{{ url_for('enhancements.register') }}"
-       class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg
+       class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow
               transform hover:-translate-y-1 transition">
       Register
     </a>
 
     <a href="{{ url_for('enhancements.login') }}"
-       class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-lg
+       class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow
               transform hover:-translate-y-1 transition">
       Login
     </a>
   </div>
 
-  <!-- Feature Highlights -->
-  <div class="mt-20 mb-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full px-4 fade-up">
+  <!-- Highlights -->
+  <div class="mt-24 mb-32 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full px-4 fade-up">
 
-    <div class="bg-white/60 rounded-xl p-6 shadow-md hover:shadow-lg transition">
+    <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
       <h3 class="text-xl font-semibold text-emerald-600 mb-2">
         🎯 Smart Placements
       </h3>
@@ -93,21 +79,21 @@
       </p>
     </div>
 
-    <div class="bg-white/60 rounded-xl p-6 shadow-md hover:shadow-lg transition">
+    <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
       <h3 class="text-xl font-semibold text-indigo-600 mb-2">
         📄 Resume Tracking
       </h3>
       <p class="text-slate-700 text-sm">
-        Upload resumes, track applications, and monitor selection status.
+        Upload resumes and monitor application progress.
       </p>
     </div>
 
-    <div class="bg-white/60 rounded-xl p-6 shadow-md hover:shadow-lg transition">
+    <div class="bg-white rounded-xl p-6 shadow hover:shadow-md transition">
       <h3 class="text-xl font-semibold text-blue-600 mb-2">
-        🛡 Admin Control
+        🛡 Admin Management
       </h3>
       <p class="text-slate-700 text-sm">
-        Secure admin panel to manage students, companies, and placements.
+        Admins can manage students, companies, and placement drives easily.
       </p>
     </div>
 
@@ -116,4 +102,3 @@
 </section>
 
 {% endblock %}
-
