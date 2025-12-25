@@ -15,10 +15,9 @@
 
 {% include "_chat_widget.html" %}
 
-<body class="min-h-screen flex flex-col
-             bg-gradient-to-r from-slate-100 via-indigo-100 to-slate-200
-             text-gray-800 transition-colors duration-500
-             animate__animated animate__fadeIn animate__faster">
+<body class="bg-gradient-to-br from-slate-100 via-indigo-100 to-blue-100
+         text-slate-800 min-h-screen flex flex-col
+         animate__animated animate__fadeIn animate__faster">
 
   <!-- Navbar -->
   <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md shadow-sm z-50">
@@ -45,19 +44,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- Back Button (Global) -->
-  {% if request.endpoint not in ['enhancements.home'] %}
-  <div class="max-w-7xl mx-auto px-6 mt-24">
-    <button onclick="history.back()"
-            class="inline-flex items-center gap-2 px-4 py-2
-                   bg-white text-slate-700 border border-slate-300
-                   rounded-lg shadow-sm hover:bg-slate-100
-                   hover:text-indigo-700 transition">
-      ← Back
-    </button>
-  </div>
-  {% endif %}
 
   <!-- Flash Messages -->
   <div class="max-w-4xl mx-auto mt-4 px-6">
@@ -87,3 +73,4 @@
 
 </body>
 </html>
+
