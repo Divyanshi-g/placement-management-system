@@ -37,8 +37,14 @@
 
 <section
   class="home-wrapper flex flex-col items-center justify-center text-center min-h-[90vh] px-6
-         bg-gradient-to-br from-slate-200 via-indigo-200 to-slate-100
-         text-slate-800 rounded-b-3xl shadow-xl">
+         bg-gradient-to-br from-indigo-50 via-blue-50 to-slate-100
+         rounded-b-3xl shadow-lg">
+    <div class="max-w-7xl mx-auto px-6 mt-4">
+  <button onclick="history.back()"
+          class="text-sm text-indigo-600 hover:text-indigo-800 transition">
+    ← Back
+  </button>
+</div>
 
   <!-- Hero Image -->
   <section class="flex justify-center mt-6">
@@ -110,3 +116,4 @@
 </section>
 
 {% endblock %}
+
