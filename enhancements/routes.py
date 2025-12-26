@@ -48,25 +48,46 @@ def register():
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
         role = request.form.get("role", "student")
+        admin_code = request.form.get("admin_code", "").strip()
 
-        if not username or not email or not password:
-            flash("All fields are required.", "danger")
+        # Basic validation
+        if not username or not email or not password or not role:
+            flash("All fields are required.", "error")
             return redirect(url_for("enhancements.register"))
 
+        # Admin verification
+        if role == "admin":
+            ADMIN_SECRET_CODE = "ADMIN2025"   # change anytime
+
+            if not admin_code:
+                flash("Admin verification code is required.", "error")
+                return redirect(url_for("enhancements.register"))
+
+            if admin_code != ADMIN_SECRET_CODE:
+                flash("Invalid admin verification code.", "error")
+                return redirect(url_for("enhancements.register"))
+
+        # Hash password
         hashed_password = generate_password_hash(password)
 
         conn = get_db_conn()
         cur = conn.cursor()
+
         try:
             cur.execute(
-                "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)",
+                """
+                INSERT INTO users (username, email, password, role)
+                VALUES (?, ?, ?, ?)
+                """,
                 (username, email, hashed_password, role),
             )
             conn.commit()
-            flash("✅ Registration successful! Please log in.", "success")
+
+            flash("Registration successful! Please log in.", "success")
             return redirect(url_for("enhancements.login"))
+
         except sqlite3.IntegrityError:
-            flash("⚠️ Username or email already exists.", "warning")
+            flash("Username or email already exists.", "error")
             return redirect(url_for("enhancements.register"))
 
     return render_template("register.html")
@@ -1071,6 +1092,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
