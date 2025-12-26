@@ -96,31 +96,42 @@ def register():
 @enhancements_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        login_id = request.form.get("email")
-        password = request.form.get("password")
+        login_id = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+
+        if not login_id or not password:
+            flash("All fields are required.", "warning")
+            return redirect(url_for("enhancements.login"))
 
         conn = get_db_conn()
         cur = conn.cursor()
+
         cur.execute("""
-            SELECT id, username, email, password, role 
-            FROM users WHERE email=? OR username=?
+            SELECT id, username, email, password, role
+            FROM users
+            WHERE email = ? OR username = ?
         """, (login_id, login_id))
+
         user = cur.fetchone()
 
         if user and check_password_hash(user["password"], password):
+            # Clear any old session
+            session.clear()
+
             session["user_id"] = user["id"]
-            session["role"] = user["role"]
             session["username"] = user["username"]
+            session["role"] = user["role"]
 
             if user["role"] == "admin":
                 return redirect(url_for("enhancements.admin_dashboard"))
             else:
                 return redirect(url_for("enhancements.student_dashboard"))
         else:
-            flash("❌ Invalid credentials!", "danger")
+            flash("Invalid email/username or password.", "error")
             return redirect(url_for("enhancements.login"))
 
     return render_template("login.html")
+
 
 
 # ------------------ Admin Pages ------------------
@@ -1092,6 +1103,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
