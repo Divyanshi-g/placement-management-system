@@ -8,53 +8,59 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Animate.css -->
+  <!-- Animate.css (used lightly where needed) -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    /* Global smoothness */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
 
-{% include "_chat_widget.html" %}
-
-<body class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 
-             dark:bg-gradient-to-r dark:from-indigo-500 dark:to-purple-600
-             ...
-             animate__animated animate__fadeIn animate__faster">
+<body class="min-h-screen flex flex-col
+             bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#020617]
+             text-slate-100">
 
   <!-- Navbar -->
-  <nav class="fixed top-0 w-full bg-white/70 dark:bg-gray-900/70 backdrop-blur-md shadow-sm z-50">
+  <nav class="fixed top-0 w-full z-50
+              bg-[#0b1220]/80 backdrop-blur-md border-b border-white/10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
       <!-- Logo -->
-      <div class="flex items-center">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-600 to-blue-700
-                    flex items-center justify-center text-white font-bold mr-3
-                    transition duration-500 hover:rotate-12 hover:scale-110 hover:shadow-lg">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl
+                    bg-gradient-to-br from-indigo-500 to-sky-500
+                    flex items-center justify-center
+                    text-white font-bold text-lg shadow-md">
           H
         </div>
-
-        <span class="text-3xl font-extrabold cursor-pointer
-                     transition duration-300 transform hover:scale-110
-                     hover:text-indigo-800">
+        <span class="text-2xl font-extrabold tracking-wide
+                     text-slate-100 hover:text-sky-400 transition">
           HireHub
         </span>
       </div>
 
-      <!-- Navbar Options -->
-      <div class="flex space-x-6 text-lg font-medium text-slate-800">
+      <!-- Nav options -->
+      <div class="flex items-center gap-6 text-sm font-medium">
         {% block nav_options %}{% endblock %}
       </div>
     </div>
   </nav>
 
+  <!-- Back Button Slot (for pages like login/register) -->
+  {% block back_button %}{% endblock %}
+
   <!-- Flash Messages -->
-  <div class="max-w-4xl mx-auto mt-4 px-6">
+  <div class="max-w-4xl mx-auto px-6 pt-24">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="p-4 mb-2 rounded-lg text-white animate__animated animate__fadeInDown
-                      {% if category == 'success' %} bg-green-500
-                      {% elif category == 'error' %} bg-red-500
-                      {% else %} bg-indigo-500 {% endif %}">
+          <div class="mb-3 px-4 py-3 rounded-lg text-sm shadow
+                      bg-white/10 backdrop-blur border border-white/10
+                      animate__animated animate__fadeInDown">
             {{ message }}
           </div>
         {% endfor %}
@@ -68,12 +74,11 @@
   </main>
 
   <!-- Footer -->
-  <footer class="text-center py-6 text-sm text-slate-600">
-    © {{ current_year }} HireHub · Built with ❤️
+  <footer class="mt-12 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-6 text-center text-sm text-slate-400">
+      © {{ current_year }} HireHub · Placement Management System
+    </div>
   </footer>
 
 </body>
 </html>
-
-
-
