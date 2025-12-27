@@ -3,12 +3,16 @@
 
 {% block content %}
 
-<!-- Back Button -->
-<div class="max-w-4xl mx-auto px-6 pt-24 flex justify-end">
+<div class="max-w-6xl mx-auto px-6 pt-24">
   <button onclick="history.back()"
-          class="flex items-center gap-2 text-sm font-medium text-indigo-700 hover:text-indigo-900
-                 transition">
-    ← Back
+    class="group inline-flex items-center gap-2
+           px-3 py-1.5 rounded-lg
+           text-sm font-medium text-pink-600
+           hover:bg-pink-100/60
+           transition-all duration-200">
+
+    <span class="transform transition group-hover:-translate-x-1">←</span>
+    Back
   </button>
 </div>
 
@@ -94,3 +98,4 @@
 </script>
 
 {% endblock %}
+
