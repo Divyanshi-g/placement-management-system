@@ -5,79 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}HireHub{% endblock %}</title>
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Animate.css (used lightly where needed) -->
+  <!-- Animate.css -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-  <style>
-    /* Global smoothness */
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
 </head>
 
 <body class="min-h-screen flex flex-col
-             bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#020617]
-             text-slate-100">
+             bg-gradient-to-br from-slate-100 via-indigo-100 to-slate-200
+             text-slate-800 transition-colors duration-300">
 
   <!-- Navbar -->
   <nav class="fixed top-0 w-full z-50
-              bg-[#0b1220]/80 backdrop-blur-md border-b border-white/10">
+              bg-white/80 backdrop-blur-md shadow-sm">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
       <!-- Logo -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl
-                    bg-gradient-to-br from-indigo-500 to-sky-500
-                    flex items-center justify-center
-                    text-white font-bold text-lg shadow-md">
+      <div class="flex items-center gap-3 cursor-pointer">
+        <div class="w-10 h-10 rounded-full
+                    bg-gradient-to-br from-indigo-600 to-blue-600
+                    text-white font-bold flex items-center justify-center
+                    shadow">
           H
         </div>
         <span class="text-2xl font-extrabold tracking-wide
-                     text-slate-100 hover:text-sky-400 transition">
+                     text-slate-800
+                     transition hover:text-indigo-700">
           HireHub
         </span>
       </div>
 
-      <!-- Nav options -->
-      <div class="flex items-center gap-6 text-sm font-medium">
+      <!-- Nav links -->
+      <div class="flex gap-6 text-base font-medium">
         {% block nav_options %}{% endblock %}
       </div>
     </div>
   </nav>
 
-  <!-- Back Button Slot (for pages like login/register) -->
+  <!-- Optional Back Button Slot -->
   {% block back_button %}{% endblock %}
 
-  <!-- Flash Messages -->
-  <div class="max-w-4xl mx-auto px-6 pt-24">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="mb-3 px-4 py-3 rounded-lg text-sm shadow
-                      bg-white/10 backdrop-blur border border-white/10
-                      animate__animated animate__fadeInDown">
-            {{ message }}
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-  </div>
-
   <!-- Page Content -->
-  <main class="flex-1 pt-6">
+  <main class="flex-1 pt-28">
     {% block content %}{% endblock %}
   </main>
 
   <!-- Footer -->
-  <footer class="mt-12 border-t border-white/10">
-    <div class="max-w-7xl mx-auto px-6 py-6 text-center text-sm text-slate-400">
-      © {{ current_year }} HireHub · Placement Management System
-    </div>
+  <footer class="text-center py-6 text-sm text-slate-600">
+    © {{ current_year }} HireHub · Placement Management System
   </footer>
 
 </body>
