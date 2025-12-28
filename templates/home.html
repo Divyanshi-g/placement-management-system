@@ -1,112 +1,90 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Home | HireHub{% endblock %}
 
 {% block content %}
 
-<style>
-  /* Subtle fade animation */
-  .fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
-  }
+<!-- Hero Section -->
+<section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>
+  <!-- Left Content -->
+  <div class="animate__animated animate__fadeInLeft">
 
-<!-- Home Wrapper -->
-<section
-  class="mx-6 mt-28 mb-16 px-8 py-16
-         bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800
-         rounded-3xl shadow-2xl fade-in">
+    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight text-slate-900">
+      Smarter Campus Placements,<br>
+      <span class="text-indigo-600">Built for Students & Admins</span>
+    </h1>
 
-  <!-- Hero Section -->
-  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <p class="mt-6 text-lg text-slate-600 max-w-xl">
+      HireHub helps institutions manage placement drives, track applications,
+      and empower students with clarity and confidence.
+    </p>
 
-    <!-- Text Content -->
-    <div class="text-left">
-      <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6">
-        Welcome to <span class="text-blue-400">HireHub</span>
-      </h1>
+    <!-- CTA Buttons -->
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a href="{{ url_for('enhancements.register') }}"
+         class="px-8 py-3 rounded-xl font-semibold text-white
+                bg-indigo-600 hover:bg-indigo-700
+                shadow-md hover:shadow-lg transition">
+        Get Started
+      </a>
 
-      <p class="text-slate-300 text-lg leading-relaxed mb-8 max-w-xl">
-        HireHub is a smart placement management system designed to streamline
-        student placements, company drives, and administrative workflows —
-        all in one secure platform.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-4">
-        <a href="{{ url_for('enhancements.register') }}"
-           class="px-8 py-3 bg-blue-600 hover:bg-blue-700
-                  text-white rounded-xl shadow-lg
-                  transition transform hover:-translate-y-1">
-          Register
-        </a>
-
-        <a href="{{ url_for('enhancements.login') }}"
-           class="px-8 py-3 bg-slate-700 hover:bg-slate-600
-                  text-white rounded-xl shadow-lg
-                  transition transform hover:-translate-y-1">
-          Login
-        </a>
-      </div>
+      <a href="{{ url_for('enhancements.login') }}"
+         class="px-8 py-3 rounded-xl font-semibold
+                bg-white/70 backdrop-blur
+                text-indigo-700 border border-indigo-200
+                hover:bg-white transition">
+        Login
+      </a>
     </div>
-
-    <!-- Image -->
-    <div class="flex justify-center">
-      <img src="{{ url_for('static', filename='images/placement.png') }}"
-           alt="Placement Portal"
-           class="max-w-md w-full drop-shadow-xl">
-    </div>
-
   </div>
 
-  <!-- Divider -->
-  <div class="max-w-5xl mx-auto my-16 border-t border-slate-700"></div>
+  <!-- Right Image -->
+  <div class="flex justify-center animate__animated animate__fadeInRight">
+    <img src="{{ url_for('static', filename='images/placement.png') }}"
+         alt="Placement Dashboard"
+         class="w-full max-w-md drop-shadow-xl">
+  </div>
 
-  <!-- Features -->
-  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+</section>
 
-    <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6
-                border border-white/10 hover:border-blue-400
-                transition">
-      <h3 class="text-xl font-semibold text-blue-400 mb-3">
-        Student Dashboard
+<!-- Highlights Section -->
+<section class="max-w-7xl mx-auto px-6 mt-28">
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Card 1 -->
+    <div class="bg-white/60 backdrop-blur-md rounded-2xl p-6
+                shadow hover:shadow-xl transition">
+      <h3 class="text-xl font-semibold text-indigo-600 mb-3">
+        🎯 Smart Placements
       </h3>
-      <p class="text-slate-300 text-sm">
-        Students can view placements, apply for drives, and track their
-        application status in real time.
+      <p class="text-slate-700 text-sm leading-relaxed">
+        Centralized placement listings with role details, eligibility,
+        deadlines, and real-time updates.
       </p>
     </div>
 
-    <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6
-                border border-white/10 hover:border-emerald-400
-                transition">
-      <h3 class="text-xl font-semibold text-emerald-400 mb-3">
-        Admin Control
+    <!-- Card 2 -->
+    <div class="bg-white/60 backdrop-blur-md rounded-2xl p-6
+                shadow hover:shadow-xl transition">
+      <h3 class="text-xl font-semibold text-emerald-600 mb-3">
+        📄 Application Tracking
       </h3>
-      <p class="text-slate-300 text-sm">
-        Admins manage companies, placement drives, student data,
-        and reports securely from one panel.
+      <p class="text-slate-700 text-sm leading-relaxed">
+        Students can track applied companies, resume status,
+        and placement progress transparently.
       </p>
     </div>
 
-    <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6
-                border border-white/10 hover:border-indigo-400
-                transition">
-      <h3 class="text-xl font-semibold text-indigo-400 mb-3">
-        Secure & Reliable
+    <!-- Card 3 -->
+    <div class="bg-white/60 backdrop-blur-md rounded-2xl p-6
+                shadow hover:shadow-xl transition">
+      <h3 class="text-xl font-semibold text-blue-600 mb-3">
+        🛡 Admin Control
       </h3>
-      <p class="text-slate-300 text-sm">
-        Role-based access, secure authentication, and structured data
-        ensure reliability and scalability.
+      <p class="text-slate-700 text-sm leading-relaxed">
+        Admins manage drives, verify students,
+        and maintain clean, organized placement data.
       </p>
     </div>
 
