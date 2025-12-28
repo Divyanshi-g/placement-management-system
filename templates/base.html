@@ -20,10 +20,11 @@
              ">
 
   <!-- Navbar -->
-  <nav class="fixed top-0 w-full z-70
-              bg-white/70 backdrop-blur-sm shadow-sm">
+  <nav class="fixed top-0 w-full z-50
+            bg-white/70 backdrop-blur-md shadow-sm">
 
-  <div class="flex items-center gap-3 group cursor-pointer">
+  <div class="max-w-7xl mx-auto px-6 py-6
+              flex items-center justify-between">
 
   <!-- Logo circle -->
   <div
@@ -31,8 +32,8 @@
            bg-gradient-to-br from-indigo-500 to-blue-500
            text-white font-bold flex items-center justify-center
            shadow-lg
-           transition-all duration-500
-           group-hover:rotate-90 group-hover:scale-110">
+           transition-all duration-200
+           group-hover:rotate-60 group-hover:scale-110">
     H
   </div>
 
@@ -51,7 +52,7 @@
         {% block nav_options %}{% endblock %}
       </div>
 
-    </div>
+   
   </nav>
 
   <!-- Back button slot -->
@@ -69,6 +70,7 @@
 
 </body>
 </html>
+
 
 
 
