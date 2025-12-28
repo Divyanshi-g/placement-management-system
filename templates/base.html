@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}HireHub{% endblock %}</title>
 
-  <!-- Tailwind -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Animate.css -->
@@ -14,46 +14,51 @@
 </head>
 
 <body class="min-h-screen flex flex-col
-             bg-gradient-to-br from-slate-100 via-indigo-100 to-slate-200
-             text-slate-800 transition-colors duration-300">
+             bg-slate-50 text-slate-800 transition-colors
+
+             /* Neutral base for most pages */
+             ">
 
   <!-- Navbar -->
   <nav class="fixed top-0 w-full z-50
-              bg-white/80 backdrop-blur-md shadow-sm">
+              bg-white/70 backdrop-blur-sm shadow-sm">
+
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
       <!-- Logo -->
       <div class="flex items-center gap-3 cursor-pointer">
         <div class="w-10 h-10 rounded-full
-                    bg-gradient-to-br from-indigo-600 to-blue-600
+                    bg-gradient-to-br from-indigo-500 to-blue-500
                     text-white font-bold flex items-center justify-center
-                    shadow">
+                    shadow-lg animate__animated animate__pulse animate__infinite animate__slow">
           H
         </div>
+
         <span class="text-2xl font-extrabold tracking-wide
-                     text-slate-800
-                     transition hover:text-indigo-700">
+                     text-slate-900
+                     hover:text-indigo-700 transition">
           HireHub
         </span>
       </div>
 
       <!-- Nav links -->
-      <div class="flex gap-6 text-base font-medium">
+      <div class="flex items-center gap-6 text-base font-medium text-slate-700">
         {% block nav_options %}{% endblock %}
       </div>
+
     </div>
   </nav>
 
-  <!-- Optional Back Button Slot -->
+  <!-- Back button slot -->
   {% block back_button %}{% endblock %}
 
-  <!-- Page Content -->
+  <!-- Page content starts -->
   <main class="flex-1 pt-28">
     {% block content %}{% endblock %}
   </main>
 
   <!-- Footer -->
-  <footer class="text-center py-6 text-sm text-slate-600">
+  <footer class="bg-indigo-700 text-center py-6 text-white">
     © {{ current_year }} HireHub · Placement Management System
   </footer>
 
