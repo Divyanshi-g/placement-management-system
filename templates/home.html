@@ -3,15 +3,50 @@
 
 {% block content %}
 
-<section class="w-full relative 
-                bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-800
-                text-white">
+<style>
+  /* Floating animation for hero image */
+  @keyframes floatSlow {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0); }
+  }
 
-  <!-- Container with rounded corners -->
-  <div class="max-w-7xl mx-auto px-8 py-10 rounded-2xl">
+  /* Shine border effect */
+  .glow-hover {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glow-hover::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255,255,255,0.6),
+      transparent
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .glow-hover:hover::before {
+    opacity: 1;
+  }
+</style>
+
+<section class="w-full relative
+                bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-800
+                text-white
+                rounded-3xl">
+
+  <!-- Main container -->
+  <div class="max-w-7xl mx-auto px-8 py-16 rounded-3xl">
 
     <!-- Hero Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
 
       <!-- Text Content -->
       <div class="space-y-6 animate__animated animate__fadeInLeft">
@@ -27,7 +62,7 @@
         </p>
 
         <!-- CTA Buttons -->
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-4 pt-4">
           <a href="{{ url_for('enhancements.register') }}"
              class="px-8 py-3 rounded-xl font-semibold
                     bg-rose-500 hover:bg-rose-600 text-white
@@ -48,17 +83,20 @@
       <div class="flex justify-center animate__animated animate__fadeInRight">
         <img src="{{ url_for('static', filename='images/placement.png') }}"
              alt="Placement Dashboard"
-             class="w-full max-w-lg drop-shadow-2xl">
+             class="w-full max-w-2xl drop-shadow-2xl"
+             style="animation: floatSlow 6s ease-in-out infinite;">
       </div>
 
     </div>
 
-    <!-- Highlights Section -->
-    <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Highlights -->
+    <div class="mt-28 grid grid-cols-1 md:grid-cols-3 gap-8">
 
       <!-- Card 1 -->
-      <div class="bg-transparent backdrop-blur-md rounded-2xl p-6 border border-white/30
-                  shadow hover:shadow-xl transition">
+      <div class="glow-hover bg-transparent backdrop-blur-md
+                  rounded-2xl p-6 border border-white/30
+                  shadow transition duration-300
+                  hover:-translate-y-2 hover:shadow-2xl">
         <h3 class="text-2xl font-semibold text-rose-400 mb-3">
           🎯 Smart Placements
         </h3>
@@ -69,8 +107,10 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="bg-transparent backdrop-blur-md rounded-2xl p-6 border border-white/30
-                  shadow hover:shadow-xl transition">
+      <div class="glow-hover bg-transparent backdrop-blur-md
+                  rounded-2xl p-6 border border-white/30
+                  shadow transition duration-300
+                  hover:-translate-y-2 hover:shadow-2xl">
         <h3 class="text-2xl font-semibold text-amber-300 mb-3">
           📄 Application Tracking
         </h3>
@@ -80,8 +120,10 @@
       </div>
 
       <!-- Card 3 -->
-      <div class="bg-transparent backdrop-blur-md rounded-2xl p-6 border border-white/30
-                  shadow hover:shadow-xl transition">
+      <div class="glow-hover bg-transparent backdrop-blur-md
+                  rounded-2xl p-6 border border-white/30
+                  shadow transition duration-300
+                  hover:-translate-y-2 hover:shadow-2xl">
         <h3 class="text-2xl font-semibold text-blue-300 mb-3">
           🛡 Admin Control
         </h3>
@@ -93,9 +135,6 @@
     </div>
 
   </div>
-
 </section>
 
 {% endblock %}
-
-
