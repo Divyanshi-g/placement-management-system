@@ -1,22 +1,21 @@
 # Core
-Flask==2.3.3
-Flask-Login==0.6.3
-Flask-WTF==1.1.1
-Werkzeug==2.3.7
-Jinja2==3.1.2
+Flask
+Flask-Login
+Flask-WTF
+Werkzeug
+Jinja2
 
 # Resume Parsing
-pdfminer.six==20221105
-python-docx==0.8.11
-PyPDF2==3.0.1
+pdfminer.six
+python-docx
+PyPDF2
 
-# Chatbot (optional, skip if not using GPT)
-openai>=1.31.0
-python-dotenv==1.0.0
+# Environment / Optional AI
+python-dotenv
+openai
 
 # Extra
-requests==2.31.0
+requests
 
 # Deployment
-gunicorn==21.2.0
-
+gunicorn
