@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | HireHub</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Animate.css -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    @keyframes floatSoft {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
+    }
+
+    .card-hover {
+      transition: all 0.35s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+    }
+
+    .shine-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.5),
+        transparent
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .shine-border:hover::before {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col
+             bg-indigo-800 text-slate-100 transition-colors">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 w-full z-50
+              bg-white/70 backdrop-blur-md shadow-sm">
+
+    <div class="max-w-7xl mx-auto px-6 py-3
+                flex items-center justify-between">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3 cursor-pointer">
+        <div
+          class="w-10 h-10 rounded-full
+                 bg-gradient-to-br from-indigo-600 to-blue-600
+                 text-white font-bold flex items-center justify-center
+                 shadow-lg
+                 transition-all duration-500
+                 hover:rotate-180 hover:scale-110">
+          H
+        </div>
+
+        <span
+          class="text-3xl font-extrabold text-indigo-900
+                 transition-transform duration-300
+                 hover:scale-105">
+          HireHub
+        </span>
+      </div>
+
+      <!-- Nav links placeholder -->
+      <div class="flex items-center gap-6 text-base font-medium text-slate-700">
+        <!-- empty for now -->
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 pt-24">
+
+    <section class="relative
+                    bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-800
+                    text-white
+                    rounded-3xl">
+
+      <div class="max-w-7xl mx-auto px-8 pt-16 pb-20">
+
+        <!-- HERO -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+          <!-- Text -->
+          <div class="space-y-6 animate__animated animate__fadeInLeft">
+            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+              Smarter Campus Placements,<br>
+              <span class="text-amber-300">Designed for Real Success</span>
+            </h1>
+
+            <p class="text-xl text-indigo-100 max-w-lg">
+              HireHub brings placement listings, application tracking,
+              and student empowerment into one platform — professional,
+              clear, and efficient.
+            </p>
+
+            <div class="flex gap-4 pt-4">
+              <a href="{{ url_for('enhancements.register') }}"
+                 class="px-8 py-3 rounded-xl font-semibold
+                        bg-rose-500 hover:bg-rose-600 text-white
+                        shadow-lg transition hover:-translate-y-1">
+                Get Started
+              </a>
+
+              <a href="{{ url_for('enhancements.login') }}"
+                 class="px-8 py-3 rounded-xl font-semibold
+                        bg-amber-400 hover:bg-amber-500 text-indigo-900
+                        shadow-lg transition hover:-translate-y-1">
+                Login
+              </a>
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div class="relative flex justify-center items-center animate__animated animate__fadeInRight">
+            <div class="absolute inset-0
+                        bg-white/5 rounded-3xl blur-2xl"></div>
+
+            <img src="{{ url_for('static', filename='images/placement.png') }}"
+                 alt="Placement Dashboard"
+                 class="relative w-full max-w-xl drop-shadow-2xl"
+                 style="animation: floatSoft 6s ease-in-out infinite;">
+          </div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="mt-20 mb-14 h-px w-full bg-white/20"></div>
+
+        <!-- HIGHLIGHTS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          <div class="relative shine-border card-hover
+                      bg-transparent backdrop-blur-md
+                      rounded-2xl p-6 border border-white/30">
+            <h3 class="text-2xl font-semibold text-rose-400 mb-3">
+              🎯 Smart Placements
+            </h3>
+            <p class="text-indigo-200 text-sm leading-relaxed">
+              Centralized placement listings with roles, locations,
+              deadlines, and real-time updates.
+            </p>
+          </div>
+
+          <div class="relative shine-border card-hover
+                      bg-transparent backdrop-blur-md
+                      rounded-2xl p-6 border border-white/30">
+            <h3 class="text-2xl font-semibold text-amber-300 mb-3">
+              📄 Application Tracking
+            </h3>
+            <p class="text-indigo-200 text-sm leading-relaxed">
+              Track applications, resumes, and statuses
+              without confusion.
+            </p>
+          </div>
+
+          <div class="relative shine-border card-hover
+                      bg-transparent backdrop-blur-md
+                      rounded-2xl p-6 border border-white/30">
+            <h3 class="text-2xl font-semibold text-blue-300 mb-3">
+              🛡 Admin Control
+            </h3>
+            <p class="text-indigo-200 text-sm leading-relaxed">
+              Powerful tools for admins to manage
+              placements and students.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-indigo-900 text-center py-6 text-white">
+    © 2025 HireHub · Placement Management System
+  </footer>
+
+</body>
+</html>
