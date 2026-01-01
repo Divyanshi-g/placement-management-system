@@ -136,7 +136,7 @@
             <div class="absolute inset-0
                         bg-white/5 rounded-3xl blur-2xl"></div>
 
-            <img src="static/images/placement.png"
+            <img src="{{ url_for('static', filename='images/placement.png') }}"
                  alt="Placement Dashboard"
                  class="relative w-full max-w-xl drop-shadow-2xl"
                  style="animation: floatSoft 6s ease-in-out infinite;">
@@ -194,12 +194,9 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-indigo-750 text-center py-6 text-white">
+  <footer class="bg-indigo-900 text-center py-6 text-white">
     © 2025 HireHub · Placement Management System
   </footer>
 
 </body>
 </html>
-
-
-
