@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}HireHub{% endblock %}</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Icons -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    /* Logo reveal animation */
+    .logo-text {
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-width 0.4s ease, opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .logo-group:hover .logo-text {
+      max-width: 160px;
+      opacity: 1;
+    }
+
+    /* Navbar link underline animation */
+    .nav-link {
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #ec4899, #a855f7);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col
+             bg-gradient-to-br from-rose-200 via-pink-200 to-purple-300
+             text-slate-900">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 w-full z-50
+              bg-white/70 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4
+                flex items-center justify-between">
+
+      <!-- LOGO -->
+      <div class="logo-group flex items-center gap-3 cursor-pointer">
+        <div class="w-10 h-10 rounded-full
+                    bg-gradient-to-br from-pink-600 to-purple-600
+                    text-white font-bold text-lg
+                    flex items-center justify-center
+                    shadow-md
+                    transition-transform duration-500
+                    hover:rotate-180">
+          H
+        </div>
+
+        <span class="logo-text text-2xl font-extrabold text-purple-800">
+          HireHub
+        </span>
+      </div>
+
+      <!-- NAV OPTIONS -->
+      <div class="flex items-center gap-8 text-sm font-semibold text-slate-700">
+        <a href="#" class="nav-link hover:text-purple-700">Home</a>
+        <a href="#" class="nav-link hover:text-purple-700">About</a>
+        <a href="#" class="nav-link hover:text-purple-700">Rate</a>
+        <a href="#" class="nav-link hover:text-purple-700">Settings</a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- BACK BUTTON SLOT -->
+  <div class="max-w-7xl mx-auto px-6 pt-24">
+    {% block back_button %}{% endblock %}
+  </div>
+
+  <!-- PAGE CONTENT -->
+  <main class="flex-1 max-w-7xl mx-auto px-6 py-10 w-full">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-gradient-to-r from-purple-700 to-pink-600
+                 text-white">
+    <div class="max-w-7xl mx-auto px-6 py-8
+                flex flex-col md:flex-row
+                items-center justify-between gap-6">
+
+      <p class="text-sm text-center md:text-left">
+        © 2025 HireHub · Placement Management System
+      </p>
+
+      <!-- SOCIAL ICONS -->
+      <div class="flex gap-5 text-lg">
+        <a href="#" class="hover:text-emerald-300 transition">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="#" class="hover:text-blue-300 transition">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" class="hover:text-pink-300 transition">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="hover:text-sky-300 transition">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
+
 
