@@ -8,107 +8,113 @@
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Animate.css -->
+  <!-- Icons -->
   <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
 </head>
 
-<body class="min-h-screen flex flex-col text-slate-900"
-      style="
-        background:
-          radial-gradient(at 12% 18%, #4f7fd6 0px, transparent 52%),
-          radial-gradient(at 82% 14%, #d85a9a 0px, transparent 52%),
-          radial-gradient(at 88% 82%, #e0b014 0px, transparent 55%),
-          radial-gradient(at 18% 82%, #2fbf9a 0px, transparent 52%),
-          radial-gradient(at 50% 50%, #6d4bd6 0px, transparent 58%);
-        background-color: #0b1220;
-      ">
+<body class="min-h-screen flex flex-col
+             bg-gradient-to-br
+             from-indigo-900
+             via-purple-900
+             to-yellow-700
+             text-slate-900">
 
-  <!-- NAVBAR -->
-  <nav class="fixed top-0 w-full z-50 bg-white/45 backdrop-blur-xl shadow-sm">
-    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+<!-- ================= NAVBAR ================= -->
+<nav class="fixed top-0 w-full z-50
+            bg-white/60 backdrop-blur-md border-b border-white/40">
 
-      <!-- LOGO -->
-      <div class="group flex items-center gap-3 cursor-pointer">
+  <div class="max-w-7xl mx-auto px-6 py-3
+              flex items-center justify-between">
 
-        <div class="w-10 h-10 rounded-full
-                    bg-gradient-to-br from-purple-700 to-indigo-700
-                    text-white font-bold flex items-center justify-center
-                    transition-all duration-500
-                    group-hover:scale-110">
-          H
-        </div>
+    <!-- Logo -->
+    <div class="group flex items-center gap-3 cursor-pointer">
 
-        <span class="max-w-0 overflow-hidden whitespace-nowrap
-                     text-2xl font-extrabold text-indigo-900
-                     transition-all duration-500
-                     group-hover:max-w-xs group-hover:ml-2">
-          HireHub
-        </span>
+      <div class="w-11 h-11 rounded-full
+                  bg-gradient-to-br from-indigo-600 to-purple-600
+                  text-white font-bold text-xl
+                  flex items-center justify-center
+                  transition-all duration-500
+                  group-hover:rotate-180">
+        H
       </div>
 
-      <!-- NAV OPTIONS (HIDDEN ON LOGIN / REGISTER) -->
-      {% if show_nav_options %}
-      <div class="flex items-center gap-6 text-sm font-medium text-slate-800">
-
-        <a href="{{ home_url }}"
-           class="px-2 py-1 border-b-2 border-transparent
-                  hover:border-indigo-700 transition">
-          Home
-        </a>
-
-        <a href="/about"
-           class="px-2 py-1 border-b-2 border-transparent
-                  hover:border-indigo-700 transition">
-          About
-        </a>
-
-        <a href="/rate"
-           class="px-2 py-1 border-b-2 border-transparent
-                  hover:border-indigo-700 transition">
-          Rate
-        </a>
-
-        {% if is_admin %}
-        <a href="/report"
-           class="px-2 py-1 border-b-2 border-transparent
-                  hover:border-indigo-700 transition">
-          Report
-        </a>
-        {% endif %}
-
-        <a href="/settings"
-           class="px-2 py-1 border-b-2 border-transparent
-                  hover:border-indigo-700 transition">
-          Settings
-        </a>
-
-      </div>
-      {% endif %}
+      <span class="max-w-0 overflow-hidden
+                   group-hover:max-w-xs
+                   transition-all duration-500
+                   text-xl font-extrabold text-indigo-900">
+        HireHub
+      </span>
     </div>
-  </nav>
 
-  <!-- BACK BUTTON -->
-  <div class="max-w-7xl mx-auto px-6 pt-24">
-    <button onclick="history.back()"
-            class="inline-flex items-center gap-2
-                   px-4 py-1.5 rounded-md
-                   border border-black/40
-                   text-sm font-medium text-slate-900
-                   hover:bg-black/10 transition">
-      ← Back
-    </button>
+    <!-- NAV OPTIONS (hidden on login/register) -->
+    {% if show_nav %}
+    <div class="flex items-center gap-6 text-sm font-semibold text-slate-800">
+      <a href="#" class="px-3 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+        Home
+      </a>
+      <a href="#" class="px-3 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+        About
+      </a>
+      <a href="#" class="px-3 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+        Rate
+      </a>
+      <a href="#" class="px-3 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+        Settings
+      </a>
+    </div>
+    {% endif %}
+
   </div>
+</nav>
 
-  <!-- MAIN CONTENT -->
-  <main class="flex-1 max-w-7xl mx-auto px-6 py-12">
-    {% block content %}{% endblock %}
-  </main>
+<!-- ================= BACK BUTTON ================= -->
+<div class="max-w-7xl mx-auto px-6 pt-20">
+  <button onclick="history.back()"
+          class="inline-flex items-center gap-2
+                 px-4 py-2
+                 border-2 border-slate-800
+                 rounded-lg
+                 text-slate-900 font-medium
+                 transition-all duration-200
+                 hover:bg-slate-900 hover:text-white">
+    ← Back
+  </button>
+</div>
 
-  <!-- FOOTER -->
-  <footer class="bg-white/20 backdrop-blur-md text-white text-center py-6">
-    © 2025 HireHub · Placement Management System
-  </footer>
+<!-- ================= MAIN CONTENT ================= -->
+<main class="flex-1">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="mt-16 border-t border-black/20">
+
+  <div class="max-w-7xl mx-auto px-6 py-6
+              flex flex-col md:flex-row
+              items-center justify-between gap-4">
+
+    <!-- Text -->
+    <p class="text-black font-medium text-sm">
+      © 2025 HireHub · Placement Management System
+    </p>
+
+    <!-- Social Icons -->
+    <div class="flex gap-5 text-lg text-black">
+      <a href="#" class="hover:text-indigo-800 transition">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <a href="#" class="hover:text-indigo-800 transition">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="#" class="hover:text-indigo-800 transition">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </div>
+
+  </div>
+</footer>
 
 </body>
 </html>
