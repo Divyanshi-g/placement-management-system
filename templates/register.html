@@ -3,24 +3,21 @@
 
 {% block content %}
 
-<div class="flex justify-center items-center min-h-[75vh] px-6">
+<!-- PAGE CONTENT ONLY (BASE HANDLES NAV, BACK, FOOTER) -->
+<section class="min-h-screen w-full flex items-center justify-center px-6 py-12">
 
-  <!-- GLASS CARD -->
-  <div
-    class="w-full max-w-5xl
-           grid grid-cols-1 md:grid-cols-2
-           rounded-3xl overflow-hidden
-           shadow-2xl"
-    style="
-      background: rgba(88, 40, 120, 0.92);
-      backdrop-filter: blur(14px);
-    "
-  >
+  <!-- REGISTER CARD -->
+  <div class="w-full max-w-5xl
+              grid grid-cols-1 md:grid-cols-2
+              rounded-3xl
+              shadow-2xl
+              overflow-hidden
+              bg-[#faf7fb]
+              animate__animated animate__fadeInUp">
 
     <!-- LEFT FORM -->
-    <div class="p-10 text-white">
-
-      <h2 class="text-3xl font-extrabold text-center mb-8">
+    <div class="p-10 bg-[#fff5fa]">
+      <h2 class="text-3xl font-extrabold text-center mb-8 text-purple-900">
         Create Account
       </h2>
 
@@ -30,81 +27,80 @@
 
         <input type="text" name="username" placeholder="Username" required
           class="w-full px-4 py-3 rounded-lg
-                 bg-purple-50 text-slate-900
-                 border-2 border-purple-400
-                 focus:border-purple-700
-                 focus:ring-2 focus:ring-purple-300
-                 outline-none transition">
+                 bg-white
+                 border-2 border-purple-300
+                 focus:border-rose-500
+                 outline-none">
 
         <input type="email" name="email" placeholder="Email" required
           class="w-full px-4 py-3 rounded-lg
-                 bg-purple-50 text-slate-900
-                 border-2 border-purple-400
-                 focus:border-purple-700
-                 focus:ring-2 focus:ring-purple-300
-                 outline-none transition">
+                 bg-white
+                 border-2 border-purple-300
+                 focus:border-rose-500
+                 outline-none">
 
         <input type="password" name="password" placeholder="Password" required
           class="w-full px-4 py-3 rounded-lg
-                 bg-purple-50 text-slate-900
-                 border-2 border-purple-400
-                 focus:border-purple-700
-                 focus:ring-2 focus:ring-purple-300
-                 outline-none transition">
+                 bg-white
+                 border-2 border-purple-300
+                 focus:border-rose-500
+                 outline-none">
 
+        <!-- ROLE -->
         <select name="role" id="roleSelect" required
           class="w-full px-4 py-3 rounded-lg
-                 bg-purple-50 text-slate-900
-                 border-2 border-purple-400
-                 focus:border-purple-700
-                 focus:ring-2 focus:ring-purple-300
-                 outline-none transition">
+                 bg-white
+                 border-2 border-purple-300
+                 focus:border-rose-500
+                 outline-none">
           <option value="">Select Role</option>
           <option value="student">Student</option>
           <option value="admin">Admin</option>
         </select>
 
+        <!-- ADMIN CODE -->
         <div id="adminCodeField" class="hidden">
           <input type="text" name="admin_code"
             placeholder="Admin Verification Code"
             class="w-full px-4 py-3 rounded-lg
-                   bg-purple-50 text-slate-900
-                   border-2 border-purple-400
-                   focus:border-purple-700
-                   focus:ring-2 focus:ring-purple-300
-                   outline-none transition">
+                   bg-white
+                   border-2 border-purple-300
+                   focus:border-rose-500
+                   outline-none">
         </div>
 
         <!-- BUTTON -->
         <button type="submit"
           class="w-full py-3 rounded-lg
                  font-semibold text-white
+                 bg-rose-600
+                 hover:bg-rose-700
                  transition-all duration-200
-                 hover:bg-purple-900"
-          style="background:#3e1b66;">
+                 hover:scale-[1.02]">
           Register
         </button>
       </form>
 
-      <p class="text-sm text-center mt-6">
+      <p class="text-sm text-center mt-6 text-slate-700">
         Already have an account?
         <a href="{{ url_for('enhancements.login') }}"
-           class="underline font-medium">
+           class="text-rose-600 font-medium hover:underline">
           Login
         </a>
       </p>
     </div>
 
     <!-- RIGHT IMAGE -->
-    <div class="hidden md:flex items-center justify-center bg-white/10">
+    <div class="hidden md:flex items-center justify-center bg-white">
       <img src="{{ url_for('static', filename='images/register.jpg') }}"
            alt="Register"
-           class="max-w-md opacity-90">
+           class="max-w-md animate__animated animate__fadeInRight">
     </div>
 
   </div>
-</div>
+</section>
 
+<!-- ADMIN ROLE TOGGLE -->
 <script>
   const roleSelect = document.getElementById("roleSelect");
   const adminCodeField = document.getElementById("adminCodeField");
