@@ -1,135 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}HireHub{% endblock %}</title>
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome Icons -->
+  <!-- Animate.css -->
   <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-
-  <style>
-    /* Logo text reveal */
-    .logo-text {
-      max-width: 0;
-      opacity: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      transition: max-width 0.4s ease, opacity 0.3s ease;
-    }
-
-    .logo-group:hover .logo-text {
-      max-width: 180px;
-      opacity: 1;
-    }
-
-    /* Navbar border hover effect */
-    .nav-item {
-      border: 2px solid transparent;
-      padding: 6px 14px;
-      border-radius: 9999px;
-      transition: border-color 0.3s ease, color 0.3s ease;
-    }
-
-    .nav-item:hover {
-      border-color: #38bdf8; /* sky blue */
-      color: #0ea5e9;
-    }
-  </style>
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 
-<body class="min-h-screen flex flex-col
-             bg-gradient-to-br from-sky-200 via-cyan-200 to-violet-300
-             text-slate-900">
+<body class="min-h-screen flex flex-col text-slate-900"
+      style="
+        background:
+          radial-gradient(at 12% 18%, #4f7fd6 0px, transparent 52%),
+          radial-gradient(at 82% 14%, #d85a9a 0px, transparent 52%),
+          radial-gradient(at 88% 82%, #e0b014 0px, transparent 55%),
+          radial-gradient(at 18% 82%, #2fbf9a 0px, transparent 52%),
+          radial-gradient(at 50% 50%, #6d4bd6 0px, transparent 58%);
+        background-color: #0b1220;
+      ">
 
   <!-- NAVBAR -->
-  <nav class="fixed top-0 w-full z-50
-              bg-white/60 backdrop-blur-md shadow-sm">
-    <div class="max-w-7xl mx-auto px-6 py-4
-                flex items-center justify-between">
+  <nav class="fixed top-0 w-full z-50 bg-white/45 backdrop-blur-xl shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
       <!-- LOGO -->
-      <div class="logo-group flex items-center gap-3 cursor-pointer">
+      <div class="group flex items-center gap-3 cursor-pointer">
+
         <div class="w-10 h-10 rounded-full
-                    bg-gradient-to-br from-sky-500 to-violet-600
-                    text-white font-bold text-lg
-                    flex items-center justify-center
-                    shadow-md">
+                    bg-gradient-to-br from-purple-700 to-indigo-700
+                    text-white font-bold flex items-center justify-center
+                    transition-all duration-500
+                    group-hover:scale-110">
           H
         </div>
 
-        <span class="logo-text text-2xl font-extrabold text-sky-700">
+        <span class="max-w-0 overflow-hidden whitespace-nowrap
+                     text-2xl font-extrabold text-indigo-900
+                     transition-all duration-500
+                     group-hover:max-w-xs group-hover:ml-2">
           HireHub
         </span>
       </div>
 
-      <!-- NAV OPTIONS -->
-      <div class="flex items-center gap-4
-                  text-sm font-semibold text-slate-700">
-        <a href="#" class="nav-item">Home</a>
-        <a href="#" class="nav-item">About</a>
-        <a href="#" class="nav-item">Rate</a>
-        <a href="#" class="nav-item">Settings</a>
-      </div>
+      <!-- NAV OPTIONS (HIDDEN ON LOGIN / REGISTER) -->
+      {% if show_nav_options %}
+      <div class="flex items-center gap-6 text-sm font-medium text-slate-800">
 
+        <a href="{{ home_url }}"
+           class="px-2 py-1 border-b-2 border-transparent
+                  hover:border-indigo-700 transition">
+          Home
+        </a>
+
+        <a href="/about"
+           class="px-2 py-1 border-b-2 border-transparent
+                  hover:border-indigo-700 transition">
+          About
+        </a>
+
+        <a href="/rate"
+           class="px-2 py-1 border-b-2 border-transparent
+                  hover:border-indigo-700 transition">
+          Rate
+        </a>
+
+        {% if is_admin %}
+        <a href="/report"
+           class="px-2 py-1 border-b-2 border-transparent
+                  hover:border-indigo-700 transition">
+          Report
+        </a>
+        {% endif %}
+
+        <a href="/settings"
+           class="px-2 py-1 border-b-2 border-transparent
+                  hover:border-indigo-700 transition">
+          Settings
+        </a>
+
+      </div>
+      {% endif %}
     </div>
   </nav>
 
-  <!-- BACK BUTTON AREA -->
+  <!-- BACK BUTTON -->
   <div class="max-w-7xl mx-auto px-6 pt-24">
-    {% block back_button %}
-    <!-- example back button -->
-    <!--
-    <a href="javascript:history.back()"
-       class="inline-flex items-center gap-2
-              border-2 border-sky-600
-              text-sky-700
-              px-4 py-2 rounded-lg
-              hover:bg-sky-600 hover:text-white
-              transition">
-      <i class="fas fa-arrow-left"></i> Back
-    </a>
-    -->
-    {% endblock %}
+    <button onclick="history.back()"
+            class="inline-flex items-center gap-2
+                   px-4 py-1.5 rounded-md
+                   border border-black/40
+                   text-sm font-medium text-slate-900
+                   hover:bg-black/10 transition">
+      ← Back
+    </button>
   </div>
 
   <!-- MAIN CONTENT -->
-  <main class="flex-1 max-w-7xl mx-auto px-6 py-10 w-full">
+  <main class="flex-1 max-w-7xl mx-auto px-6 py-12">
     {% block content %}{% endblock %}
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-gradient-to-r from-sky-700 to-violet-700
-                 text-white">
-    <div class="max-w-7xl mx-auto px-6 py-8
-                flex flex-col md:flex-row
-                items-center justify-between gap-6">
-
-      <p class="text-sm text-center md:text-left">
-        © 2025 HireHub · Placement Management System
-      </p>
-
-      <!-- SOCIAL ICONS -->
-      <div class="flex gap-5 text-lg">
-        <a href="#" class="hover:text-emerald-300 transition">
-          <i class="fab fa-whatsapp"></i>
-        </a>
-        <a href="#" class="hover:text-blue-300 transition">
-          <i class="fab fa-facebook"></i>
-        </a>
-        <a href="#" class="hover:text-pink-300 transition">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="#" class="hover:text-sky-300 transition">
-          <i class="fab fa-linkedin"></i>
-        </a>
-      </div>
-
-    </div>
+  <footer class="bg-white/20 backdrop-blur-md text-white text-center py-6">
+    © 2025 HireHub · Placement Management System
   </footer>
 
 </body>
