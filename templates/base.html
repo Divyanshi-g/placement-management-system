@@ -21,10 +21,10 @@
       style="
         background:
           radial-gradient(at 12% 18%, #e45a8d 0px, transparent 55%),   /* rose */
-          radial-gradient(at 85% 15%, #7a4bd9 0px, transparent 55%),   /* violet */
-          radial-gradient(at 90% 80%, #4f7fd6 0px, transparent 55%),   /* blue */
-          radial-gradient(at 18% 85%, #e0b014 0px, transparent 50%),   /* turmeric */
-          radial-gradient(at 50% 50%, #4338ca 0px, transparent 60%);   /* indigo */
+          radial-gradient(at 85% 18%, #4f7fd6 0px, transparent 55%),   /* blue */
+          radial-gradient(at 90% 80%, #7a4bd9 0px, transparent 55%),   /* violet */
+          radial-gradient(at 18% 85%, #4338ca 0px, transparent 55%),   /* purple */
+          radial-gradient(at 50% 50%, #e0b014 0px, transparent 55%);   /* turmeric */
         background-color: #0c1324;
       ">
 
@@ -52,27 +52,45 @@
 
       {% if show_nav_options %}
       <div class="flex items-center gap-6 text-sm font-medium text-slate-800">
-        <a href="{{ home_url }}" class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">Home</a>
-        <a href="/about" class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">About</a>
-        <a href="/rate" class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">Rate</a>
+        <a href="{{ home_url }}"
+           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+          Home
+        </a>
+
+        <a href="/about"
+           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+          About
+        </a>
+
+        <a href="/rate"
+           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+          Rate
+        </a>
+
         {% if is_admin %}
-        <a href="/report" class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">Report</a>
+        <a href="/report"
+           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+          Report
+        </a>
         {% endif %}
-        <a href="/settings" class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">Settings</a>
+
+        <a href="/settings"
+           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
+          Settings
+        </a>
       </div>
       {% endif %}
     </div>
   </nav>
 
-  <!-- BACK BUTTON (LEFT + LIGHT HOVER) -->
-  <div class="max-w-7xl mx-auto px-6 pt-20">
+  <!-- BACK BUTTON (TRUE LEFT) -->
+  <div class="pt-20 pl-6">
     <button onclick="history.back()"
             class="inline-flex items-center gap-2
                    px-4 py-1.5 rounded-md
-                   border-2 border-black/40
+                   border-2 border-black/50
                    text-sm font-medium text-slate-900
-                   hover:bg-white/60
-                   hover:border-black/60
+                   hover:bg-black/10
                    transition-all duration-200">
       ← Back
     </button>
@@ -83,32 +101,27 @@
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER (TRANSPARENT WHITE BACK) -->
+  <!-- FOOTER -->
   <footer class="bg-white/30 backdrop-blur-md text-black text-center py-6">
     <div class="flex justify-center gap-6 mb-3 text-xl">
 
-      <a href="https://wa.me/XXXXXXXXXX" target="_blank"
-         class="hover:text-green-600 transition">
+      <a href="#" class="hover:text-green-600 transition">
         <i class="fab fa-whatsapp"></i>
       </a>
 
-      <a href="https://www.instagram.com/" target="_blank"
-         class="hover:text-pink-600 transition">
+      <a href="#" class="hover:text-pink-600 transition">
         <i class="fab fa-instagram"></i>
       </a>
 
-      <a href="https://www.facebook.com/" target="_blank"
-         class="hover:text-blue-700 transition">
+      <a href="#" class="hover:text-blue-700 transition">
         <i class="fab fa-facebook-f"></i>
       </a>
 
-      <a href="https://www.linkedin.com/" target="_blank"
-         class="hover:text-indigo-700 transition">
+      <a href="#" class="hover:text-indigo-700 transition">
         <i class="fab fa-linkedin-in"></i>
       </a>
 
     </div>
-
     © 2025 HireHub · Placement Management System
   </footer>
 
