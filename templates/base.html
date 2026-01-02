@@ -5,100 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}HireHub{% endblock %}</title>
 
-  <!-- Tailwind -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Icons -->
+  <!-- Font Awesome Icons -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
   <style>
-    /* Logo reveal animation */
+    /* Logo text reveal */
     .logo-text {
       max-width: 0;
       opacity: 0;
       overflow: hidden;
-      transition: max-width 0.4s ease, opacity 0.3s ease;
       white-space: nowrap;
+      transition: max-width 0.4s ease, opacity 0.3s ease;
     }
 
     .logo-group:hover .logo-text {
-      max-width: 160px;
+      max-width: 180px;
       opacity: 1;
     }
 
-    /* Navbar link underline animation */
-    .nav-link {
-      position: relative;
+    /* Navbar border hover effect */
+    .nav-item {
+      border: 2px solid transparent;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      transition: border-color 0.3s ease, color 0.3s ease;
     }
 
-    .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -6px;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(to right, #ec4899, #a855f7);
-      transition: width 0.3s ease;
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
+    .nav-item:hover {
+      border-color: #38bdf8; /* sky blue */
+      color: #0ea5e9;
     }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col
-             bg-gradient-to-br from-rose-200 via-pink-200 to-purple-300
+             bg-gradient-to-br from-sky-200 via-cyan-200 to-violet-300
              text-slate-900">
 
   <!-- NAVBAR -->
   <nav class="fixed top-0 w-full z-50
-              bg-white/70 backdrop-blur-md shadow-sm">
+              bg-white/60 backdrop-blur-md shadow-sm">
     <div class="max-w-7xl mx-auto px-6 py-4
                 flex items-center justify-between">
 
       <!-- LOGO -->
       <div class="logo-group flex items-center gap-3 cursor-pointer">
         <div class="w-10 h-10 rounded-full
-                    bg-gradient-to-br from-pink-600 to-purple-600
+                    bg-gradient-to-br from-sky-500 to-violet-600
                     text-white font-bold text-lg
                     flex items-center justify-center
-                    shadow-md
-                    transition-transform duration-500
-                    hover:rotate-180">
+                    shadow-md">
           H
         </div>
 
-        <span class="logo-text text-2xl font-extrabold text-purple-800">
+        <span class="logo-text text-2xl font-extrabold text-sky-700">
           HireHub
         </span>
       </div>
 
       <!-- NAV OPTIONS -->
-      <div class="flex items-center gap-8 text-sm font-semibold text-slate-700">
-        <a href="#" class="nav-link hover:text-purple-700">Home</a>
-        <a href="#" class="nav-link hover:text-purple-700">About</a>
-        <a href="#" class="nav-link hover:text-purple-700">Rate</a>
-        <a href="#" class="nav-link hover:text-purple-700">Settings</a>
+      <div class="flex items-center gap-4
+                  text-sm font-semibold text-slate-700">
+        <a href="#" class="nav-item">Home</a>
+        <a href="#" class="nav-item">About</a>
+        <a href="#" class="nav-item">Rate</a>
+        <a href="#" class="nav-item">Settings</a>
       </div>
 
     </div>
   </nav>
 
-  <!-- BACK BUTTON SLOT -->
+  <!-- BACK BUTTON AREA -->
   <div class="max-w-7xl mx-auto px-6 pt-24">
-    {% block back_button %}{% endblock %}
+    {% block back_button %}
+    <!-- example back button -->
+    <!--
+    <a href="javascript:history.back()"
+       class="inline-flex items-center gap-2
+              border-2 border-sky-600
+              text-sky-700
+              px-4 py-2 rounded-lg
+              hover:bg-sky-600 hover:text-white
+              transition">
+      <i class="fas fa-arrow-left"></i> Back
+    </a>
+    -->
+    {% endblock %}
   </div>
 
-  <!-- PAGE CONTENT -->
+  <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl mx-auto px-6 py-10 w-full">
     {% block content %}{% endblock %}
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-gradient-to-r from-purple-700 to-pink-600
+  <footer class="bg-gradient-to-r from-sky-700 to-violet-700
                  text-white">
     <div class="max-w-7xl mx-auto px-6 py-8
                 flex flex-col md:flex-row
@@ -129,5 +134,3 @@
 
 </body>
 </html>
-
-
