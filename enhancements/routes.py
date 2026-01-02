@@ -57,7 +57,7 @@ def register():
 
         # Admin verification
         if role == "admin":
-            ADMIN_SECRET_CODE = "ADMIN2025"   # change anytime
+            ADMIN_SECRET_CODE = "ADMIN2025"  # change anytime
 
             if not admin_code:
                 flash("Admin verification code is required.", "error")
@@ -90,7 +90,14 @@ def register():
             flash("Username or email already exists.", "error")
             return redirect(url_for("enhancements.register"))
 
-    return render_template("register.html")
+    # ✅ IMPORTANT: pass layout variables for base.html
+    return render_template(
+        "register.html",
+        show_nav_options=False,   # hide navbar links
+        is_admin=False,           # safe default
+        home_url=None,            # not used here
+        current_year=2025
+    )
 
 
 @enhancements_bp.route("/login", methods=["GET", "POST"])
@@ -1103,6 +1110,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
