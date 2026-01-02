@@ -12,7 +12,7 @@
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
-  <!-- Font Awesome (FOR FOOTER ICONS ONLY) -->
+  <!-- Font Awesome -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 </head>
@@ -20,11 +20,11 @@
 <body class="min-h-screen flex flex-col text-slate-900"
       style="
         background:
-          radial-gradient(at 10% 15%, #4f7fd6 0px, transparent 55%),
-          radial-gradient(at 85% 18%, #7a4bd9 0px, transparent 55%),
-          radial-gradient(at 90% 80%, #d4a017 0px, transparent 50%),
-          radial-gradient(at 15% 85%, #c04f9a 0px, transparent 55%),
-          radial-gradient(at 50% 50%, #5b3fd1 0px, transparent 60%);
+          radial-gradient(at 12% 18%, #e45a8d 0px, transparent 55%),   /* rose */
+          radial-gradient(at 85% 15%, #7a4bd9 0px, transparent 55%),   /* violet */
+          radial-gradient(at 90% 80%, #4f7fd6 0px, transparent 55%),   /* blue */
+          radial-gradient(at 18% 85%, #e0b014 0px, transparent 50%),   /* turmeric */
+          radial-gradient(at 50% 50%, #4338ca 0px, transparent 60%);   /* indigo */
         background-color: #0c1324;
       ">
 
@@ -64,14 +64,15 @@
     </div>
   </nav>
 
-  <!-- BACK BUTTON -->
+  <!-- BACK BUTTON (LEFT + LIGHT HOVER) -->
   <div class="max-w-7xl mx-auto px-6 pt-20">
     <button onclick="history.back()"
             class="inline-flex items-center gap-2
                    px-4 py-1.5 rounded-md
-                   border-2 border-black/60
+                   border-2 border-black/40
                    text-sm font-medium text-slate-900
-                   hover:bg-black hover:text-white
+                   hover:bg-white/60
+                   hover:border-black/60
                    transition-all duration-200">
       ← Back
     </button>
@@ -82,8 +83,8 @@
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER (FIXED WITH REAL ICONS + LINKS) -->
-  <footer class="bg-transparent text-black text-center py-6">
+  <!-- FOOTER (TRANSPARENT WHITE BACK) -->
+  <footer class="bg-white/30 backdrop-blur-md text-black text-center py-6">
     <div class="flex justify-center gap-6 mb-3 text-xl">
 
       <a href="https://wa.me/XXXXXXXXXX" target="_blank"
