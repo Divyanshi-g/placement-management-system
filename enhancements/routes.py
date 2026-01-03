@@ -1035,7 +1035,7 @@ def chat_alias():
 # ------------------ Practice ------------------
 
 @enhancements_bp.route("/practice")
-def practice_page():
+def practice():
     return render_template("practice.html")
 
 
@@ -1130,6 +1130,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
