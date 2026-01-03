@@ -171,9 +171,9 @@
   }
 
   /* -------------------------------
-     CHAT MESSAGE HANDLING (UI ONLY)
+     CHAT MESSAGE HANDLING (BACKEND CONNECTED)
   -------------------------------- */
-  function sendMessage() {
+  async function sendMessage() {
     const input = document.getElementById("chat-input");
     const content = document.getElementById("chat-content");
 
@@ -182,22 +182,59 @@
     const text = input.value.trim();
     if (text === "") return;
 
-    // User message
-    const userMsg = document.createElement("p");
-    userMsg.className = "text-gray-800 dark:text-gray-200 mb-2";
-    userMsg.textContent = "🧑: " + text;
+    /* User Message */
+    const userMsg = document.createElement("div");
+    userMsg.className = "text-right mb-2";
+    userMsg.innerHTML = `
+      <span class="inline-block bg-rose-100 text-gray-800 px-3 py-2 rounded-lg">
+        🧑 ${text}
+      </span>`;
     content.appendChild(userMsg);
 
-    // Temporary bot response (placeholder)
-    const botMsg = document.createElement("p");
-    botMsg.className = "text-indigo-600 dark:text-indigo-400 mb-2";
-    botMsg.textContent = "🤖: I’ve received your message. I’ll respond soon!";
-    content.appendChild(botMsg);
-
-    content.scrollTop = content.scrollHeight;
     input.value = "";
+    content.scrollTop = content.scrollHeight;
+
+    /* Typing Indicator */
+    const typingMsg = document.createElement("div");
+    typingMsg.className = "text-left mb-2 text-sm text-gray-500";
+    typingMsg.textContent = "🤖 typing...";
+    content.appendChild(typingMsg);
+    content.scrollTop = content.scrollHeight;
+
+    try {
+      const response = await fetch("/app-chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: text })
+      });
+
+      const data = await response.json();
+
+      typingMsg.remove();
+
+      const botMsg = document.createElement("div");
+      botMsg.className = "text-left mb-2";
+      botMsg.innerHTML = `
+        <span class="inline-block bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg">
+          🤖 ${data.reply}
+        </span>`;
+      content.appendChild(botMsg);
+
+      content.scrollTop = content.scrollHeight;
+    } catch (error) {
+      typingMsg.remove();
+
+      const errMsg = document.createElement("p");
+      errMsg.className = "text-red-500 text-sm";
+      errMsg.textContent = "🤖 Sorry, I couldn't connect right now.";
+      content.appendChild(errMsg);
+    }
   }
 </script>
 
+
 {% endblock %}
+
 
