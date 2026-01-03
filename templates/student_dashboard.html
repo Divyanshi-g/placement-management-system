@@ -1,18 +1,11 @@
 {% extends "base.html" %}
-{% block nav_options %}
-  <a href="/student_dashboard" class="hover:text-yellow-300 transition">Home</a>
-  <a href="/about" class="hover:text-yellow-300 transition">About</a>
-  <a href="/rate" class="hover:text-yellow-300 transition">Rate</a>
-  <a href="/logout" class="hover:text-yellow-300 transition">Logout</a>
-{% endblock %}
-
 {% block title %}Student Dashboard{% endblock %}
 
 {% block content %}
-<div class="text-center animate__animated animate__bounceInDown">
+<div class="text-center animate__animated animate__bounceInDown pb-10 ">
   <!-- Welcome Message -->
-  <h1 class="mt-16 text-4xl font-bold cursor-pointer transition transform hover:underline hover:scale-103">
-    Welcome back, {{ username }} 👋
+  <h1 class=" text-4xl font-bold cursor-pointer transition transform hover:underline hover:scale-103">
+    Welcome Here, {{ username }} 👋
   </h1>
 
   <!-- Motivation Message (typing once) -->
@@ -190,6 +183,7 @@ const images3 = [
   }, 4000);
 </script>
 {% endblock %}
+
 
 
 
