@@ -145,9 +145,6 @@ def login():
                 session["user_id"] = user["id"]
                 session["username"] = user["username"]
                 session["role"] = user["role"]
-
-                flash(f"Welcome back, {user['username']}!", "success")
-
                 if user["role"] == "admin":
                     return redirect(url_for("enhancements.admin_dashboard"))
                 else:
@@ -1151,6 +1148,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
