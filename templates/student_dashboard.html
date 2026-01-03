@@ -97,7 +97,7 @@
 
       <div class="flex justify-center">
         <img id="slideshow3"
-             src="{{ url_for('static', filename='images/student_dashboard4.jpeg') }}"
+             src="{{ url_for('static', filename='images/student_dashboard4.jpg') }}"
              class="w-4/5 rounded-xl shadow-lg animate__animated animate__fadeInRight">
       </div>
 
@@ -131,36 +131,73 @@
 </button>
 
 <script>
+  /* -------------------------------
+     TYPING EFFECT (RUN ONCE)
+  -------------------------------- */
   const studentText =
     "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!";
-  let i = 0;
+  let typingIndex = 0;
+  let typingStarted = false;
 
   function typeStudent() {
-    if (i < studentText.length) {
-      document.getElementById("student-typing").innerHTML =
-        studentText.substring(0, i + 1) +
-        '<span class="border-r-2 border-yellow-400 animate-pulse"></span>';
-      i++;
-      setTimeout(typeStudent, 50);
+    const target = document.getElementById("student-typing");
+    if (!target) return;
+
+    if (typingIndex < studentText.length) {
+      target.innerHTML =
+        studentText.substring(0, typingIndex + 1) +
+        '<span class="border-r-2 border-yellow-400 animate-pulse ml-1"></span>';
+      typingIndex++;
+      setTimeout(typeStudent, 45);
+    } else {
+      target.innerHTML = studentText; // remove cursor after finish
     }
   }
-  window.onload = typeStudent;
 
+  window.addEventListener("DOMContentLoaded", () => {
+    if (!typingStarted) {
+      typingStarted = true;
+      typeStudent();
+    }
+  });
+
+  /* -------------------------------
+     CHATBOT UI TOGGLE
+  -------------------------------- */
   function toggleChat() {
-    document.getElementById("chatbot").classList.toggle("hidden");
+    const chat = document.getElementById("chatbot");
+    if (!chat) return;
+    chat.classList.toggle("hidden");
   }
 
+  /* -------------------------------
+     CHAT MESSAGE HANDLING (UI ONLY)
+  -------------------------------- */
   function sendMessage() {
     const input = document.getElementById("chat-input");
-    if (!input.value.trim()) return;
-
     const content = document.getElementById("chat-content");
-    const msg = document.createElement("p");
-    msg.textContent = "🧑: " + input.value;
-    content.appendChild(msg);
 
-    input.value = "";
+    if (!input || !content) return;
+
+    const text = input.value.trim();
+    if (text === "") return;
+
+    // User message
+    const userMsg = document.createElement("p");
+    userMsg.className = "text-gray-800 dark:text-gray-200 mb-2";
+    userMsg.textContent = "🧑: " + text;
+    content.appendChild(userMsg);
+
+    // Temporary bot response (placeholder)
+    const botMsg = document.createElement("p");
+    botMsg.className = "text-indigo-600 dark:text-indigo-400 mb-2";
+    botMsg.textContent = "🤖: I’ve received your message. I’ll respond soon!";
+    content.appendChild(botMsg);
+
     content.scrollTop = content.scrollHeight;
+    input.value = "";
   }
 </script>
+
 {% endblock %}
+
