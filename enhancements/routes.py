@@ -104,8 +104,9 @@ def register():
 def login():
     if request.method == "POST":
         login_id = request.form.get("email", "").strip()
-        password = request.form.get("password", "")
+        password = request.form.get("password", "").strip()
 
+        # Basic validation
         if not login_id or not password:
             flash("All fields are required.", "warning")
             return redirect(url_for("enhancements.login"))
@@ -113,31 +114,38 @@ def login():
         conn = get_db_conn()
         cur = conn.cursor()
 
-        cur.execute("""
+        cur.execute(
+            """
             SELECT id, username, email, password, role
             FROM users
             WHERE email = ? OR username = ?
-        """, (login_id, login_id))
+            """,
+            (login_id, login_id),
+        )
 
         user = cur.fetchone()
 
         if user and check_password_hash(user["password"], password):
-            # Clear any old session
             session.clear()
 
             session["user_id"] = user["id"]
             session["username"] = user["username"]
             session["role"] = user["role"]
 
+            # Role-based redirect
             if user["role"] == "admin":
                 return redirect(url_for("enhancements.admin_dashboard"))
             else:
                 return redirect(url_for("enhancements.student_dashboard"))
-        else:
-            flash("Invalid email/username or password.", "error")
-            return redirect(url_for("enhancements.login"))
 
-    return render_template("login.html")
+        flash("Invalid email/username or password.", "error")
+        return redirect(url_for("enhancements.login"))
+
+    # IMPORTANT: hide navbar options on login page
+    return render_template(
+        "login.html",
+        show_nav_options=False
+    )
 
 
 
@@ -1110,6 +1118,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
