@@ -716,10 +716,22 @@ def reports():
 
 @enhancements_bp.route("/student_dashboard")
 def student_dashboard():
+    # User must be logged in
+    if "user_id" not in session:
+        flash("Please login to continue.", "warning")
+        return redirect(url_for("enhancements.login"))
+
+    # Role-based access control
     if session.get("role") != "student":
         flash("Access denied!", "danger")
         return redirect(url_for("enhancements.login"))
-    return render_template("student_dashboard.html", username=session.get("username"))
+
+    return render_template(
+        "student_dashboard.html",
+        username=session.get("username"),
+        role=session.get("role")   # IMPORTANT for navbar
+    )
+
 
 
 # ------------------ Placement search & apply ------------------
@@ -1118,6 +1130,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
