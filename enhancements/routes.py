@@ -995,7 +995,7 @@ def uploaded_file(filename):
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @enhancements_bp.route("/ask", methods=["GET", "POST"])
-def ask_question():
+def ask():
     if request.method == "GET":
         return render_template("ask.html")
 
@@ -1029,7 +1029,7 @@ def chat_alias():
     if "message" in data:
         data["question"] = data.pop("message")
     # Reuse ask_question logic
-    return ask_question()
+    return ask()
 
 
 # ------------------ Practice ------------------
@@ -1130,6 +1130,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
