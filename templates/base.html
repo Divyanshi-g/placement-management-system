@@ -97,7 +97,7 @@
   </div>
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    <div class="max-w-4xl mx-auto mt-24 px-4">
+    <div class="max-w-4xl mx-auto px-4">
       {% for category, message in messages %}
         <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium
           {% if category == 'success' %} bg-green-100 text-green-800
@@ -152,6 +152,7 @@
 
 </body>
 </html>
+
 
 
 
