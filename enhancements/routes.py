@@ -166,6 +166,134 @@ def login():
         current_year=2025
     )
 
+# ------------------ Student Dashboard ------------------
+
+@enhancements_bp.route("/student_dashboard")
+def student_dashboard():
+    # User must be logged in
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
+
+    # Only students allowed
+    if session.get("role") != "student":
+        return redirect(url_for("enhancements.login"))
+
+    return render_template(
+        "student_dashboard.html",
+        username=session.get("username"),
+        role=session.get("role"),
+
+        # Navbar control (VERY IMPORTANT)
+        show_nav_options=True,
+        is_admin=False,
+        home_url=url_for("enhancements.student_dashboard")
+    )
+    from flask import request, jsonify, session
+
+@enhancements_bp.route("/app-chat", methods=["POST"])
+def app_chat():
+    if "user_id" not in session:
+        return jsonify({
+            "reply": "Please login first so I can help you properly 🙂"
+        })
+
+    user_message = request.json.get("message", "").lower().strip()
+
+    if not user_message:
+        return jsonify({"reply": "I’m listening 😊 Tell me what you need help with."})
+
+    # --------- GREETINGS ----------
+    greetings = ["hi", "hello", "hey", "good morning", "good evening"]
+    if any(word in user_message for word in greetings):
+        return jsonify({
+            "reply": f"Hi {session.get('username')} 👋 How can I help you today?"
+        })
+
+    # --------- LOGIN HELP ----------
+    if "login" in user_message:
+        return jsonify({
+            "reply": (
+                "Having trouble logging in?\n\n"
+                "✔ Make sure your email or username is correct\n"
+                "✔ Check your password carefully\n"
+                "✔ Try refreshing once\n\n"
+                "If it still doesn’t work, tell me what error you see."
+            )
+        })
+
+    # --------- REGISTRATION HELP ----------
+    if "register" in user_message or "signup" in user_message:
+        return jsonify({
+            "reply": (
+                "For registration:\n\n"
+                "• Username & email must be unique\n"
+                "• Password should be strong\n"
+                "• Admin users need a valid admin code\n\n"
+                "Let me know what issue you’re facing."
+            )
+        })
+
+    # --------- PLACEMENTS ----------
+    if "placement" in user_message:
+        return jsonify({
+            "reply": (
+                "To access placements:\n\n"
+                "📌 Login as student\n"
+                "📌 Open Placements from dashboard\n"
+                "📌 Click on a company to view details\n\n"
+                "Is the placements page not opening?"
+            )
+        })
+
+    # --------- NAVBAR / UI ----------
+    if "navbar" in user_message or "menu" in user_message:
+        return jsonify({
+            "reply": (
+                "Navbar appears only after login.\n\n"
+                "If you can’t see it:\n"
+                "• Refresh the page\n"
+                "• Make sure you logged in successfully\n\n"
+                "Tell me which page you’re on."
+            )
+        })
+
+    # --------- IMAGES / UI ISSUES ----------
+    if "image" in user_message or "photo" in user_message:
+        return jsonify({
+            "reply": (
+                "If images aren’t showing:\n\n"
+                "• Refresh the page\n"
+                "• Check internet connection\n"
+                "• Clear browser cache\n\n"
+                "Does it happen on all pages or only one?"
+            )
+        })
+
+    # --------- CHATBOT QUESTIONS ----------
+    if "who are you" in user_message or "what can you do" in user_message:
+        return jsonify({
+            "reply": (
+                "I’m your application assistant 🤖\n\n"
+                "I can help you with:\n"
+                "• Login & registration issues\n"
+                "• Dashboard navigation\n"
+                "• Placements help\n"
+                "• App-related problems"
+            )
+        })
+
+    # --------- FALLBACK ----------
+    return jsonify({
+        "reply": (
+            "I didn’t fully understand that 🤔\n\n"
+            "You can ask me about:\n"
+            "• Login problems\n"
+            "• Registration issues\n"
+            "• Placements\n"
+            "• App navigation\n\n"
+            "Try rephrasing your question."
+        )
+    })
 
 # ------------------ Admin Pages ------------------
 
@@ -730,28 +858,6 @@ def reports():
 
 
 
-# ------------------ Student Dashboard ------------------
-
-@enhancements_bp.route("/student_dashboard")
-def student_dashboard():
-    # User must be logged in
-    if "user_id" not in session:
-        flash("Please login to continue.", "warning")
-        return redirect(url_for("enhancements.login"))
-
-    # Role-based access control
-    if session.get("role") != "student":
-        flash("Access denied!", "danger")
-        return redirect(url_for("enhancements.login"))
-
-    return render_template(
-        "student_dashboard.html",
-        username=session.get("username"),
-        role=session.get("role")   # IMPORTANT for navbar
-    )
-
-
-
 # ------------------ Placement search & apply ------------------
 
 @enhancements_bp.route("/apply/<int:pid>", methods=["POST"])
@@ -1148,6 +1254,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
