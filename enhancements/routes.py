@@ -40,7 +40,6 @@ def get_upload_folder():
 
 
 # ------------------ Auth pages ------------------
-
 @enhancements_bp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -50,12 +49,26 @@ def register():
         role = request.form.get("role", "student")
         admin_code = request.form.get("admin_code", "").strip()
 
-        # Basic validation
+        # 1️⃣ Basic validation
         if not username or not email or not password or not role:
-            flash("All fields are required.", "error")
+            flash("All fields are required.", "warning")
             return redirect(url_for("enhancements.register"))
 
-        # Admin verification
+        # 2️⃣ Password strength validation
+        if (
+            len(password) < 8
+            or not any(c.islower() for c in password)
+            or not any(c.isupper() for c in password)
+            or not any(c.isdigit() for c in password)
+            or not any(c in "!@#$%^&*()-_+=<>?/{}[]" for c in password)
+        ):
+            flash(
+                "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+                "error",
+            )
+            return redirect(url_for("enhancements.register"))
+
+        # 3️⃣ Admin verification
         if role == "admin":
             ADMIN_SECRET_CODE = "ADMIN2025"  # change anytime
 
@@ -67,7 +80,7 @@ def register():
                 flash("Invalid admin verification code.", "error")
                 return redirect(url_for("enhancements.register"))
 
-        # Hash password
+        # 4️⃣ Hash password
         hashed_password = generate_password_hash(password)
 
         conn = get_db_conn()
@@ -90,15 +103,14 @@ def register():
             flash("Username or email already exists.", "error")
             return redirect(url_for("enhancements.register"))
 
-    # ✅ IMPORTANT: pass layout variables for base.html
+    # 5️⃣ GET request — layout variables for base.html
     return render_template(
         "register.html",
-        show_nav_options=False,   # hide navbar links
-        is_admin=False,           # safe default
-        home_url=None,            # not used here
+        show_nav_options=False,  # hide dashboard links
+        is_admin=False,          # safe default
+        home_url=None,           # not needed here
         current_year=2025
     )
-
 
 @enhancements_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -106,7 +118,7 @@ def login():
         login_id = request.form.get("email", "").strip()
         password = request.form.get("password", "").strip()
 
-        # Basic validation
+        # 1️⃣ Basic validation
         if not login_id or not password:
             flash("All fields are required.", "warning")
             return redirect(url_for("enhancements.login"))
@@ -125,28 +137,37 @@ def login():
 
         user = cur.fetchone()
 
-        if user and check_password_hash(user["password"], password):
-            session.clear()
+        # 2️⃣ User exists + password correct
+        if user:
+            if check_password_hash(user["password"], password):
+                session.clear()
 
-            session["user_id"] = user["id"]
-            session["username"] = user["username"]
-            session["role"] = user["role"]
+                session["user_id"] = user["id"]
+                session["username"] = user["username"]
+                session["role"] = user["role"]
 
-            # Role-based redirect
-            if user["role"] == "admin":
-                return redirect(url_for("enhancements.admin_dashboard"))
+                flash(f"Welcome back, {user['username']}!", "success")
+
+                if user["role"] == "admin":
+                    return redirect(url_for("enhancements.admin_dashboard"))
+                else:
+                    return redirect(url_for("enhancements.student_dashboard"))
             else:
-                return redirect(url_for("enhancements.student_dashboard"))
+                flash("Incorrect password.", "error")
+                return redirect(url_for("enhancements.login"))
 
-        flash("Invalid email/username or password.", "error")
+        # 3️⃣ User not found
+        flash("User does not exist. Please register first.", "error")
         return redirect(url_for("enhancements.login"))
 
-    # IMPORTANT: hide navbar options on login page
+    # 4️⃣ GET request — hide navbar options
     return render_template(
         "login.html",
-        show_nav_options=False
+        show_nav_options=False,
+        is_admin=False,
+        home_url=None,
+        current_year=2025
     )
-
 
 
 # ------------------ Admin Pages ------------------
@@ -1130,6 +1151,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
