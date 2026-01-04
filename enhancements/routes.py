@@ -188,7 +188,6 @@ def student_dashboard():
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
-    from flask import request, jsonify, session
 
 @enhancements_bp.route("/app-chat", methods=["POST"])
 def app_chat():
@@ -1248,6 +1247,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
