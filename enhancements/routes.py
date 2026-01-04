@@ -197,19 +197,18 @@ def app_chat():
             "reply": "Please login first so I can help you properly 🙂"
         })
 
-    user_message = request.json.get("message", "").lower().strip()
+    data = request.get_json(silent=True) or {}
+    user_message = data.get("message", "").lower().strip()
 
     if not user_message:
         return jsonify({"reply": "I’m listening 😊 Tell me what you need help with."})
 
-    # --------- GREETINGS ----------
     greetings = ["hi", "hello", "hey", "good morning", "good evening"]
     if any(word in user_message for word in greetings):
         return jsonify({
             "reply": f"Hi {session.get('username')} 👋 How can I help you today?"
         })
 
-    # --------- LOGIN HELP ----------
     if "login" in user_message:
         return jsonify({
             "reply": (
@@ -221,7 +220,6 @@ def app_chat():
             )
         })
 
-    # --------- REGISTRATION HELP ----------
     if "register" in user_message or "signup" in user_message:
         return jsonify({
             "reply": (
@@ -233,7 +231,6 @@ def app_chat():
             )
         })
 
-    # --------- PLACEMENTS ----------
     if "placement" in user_message:
         return jsonify({
             "reply": (
@@ -245,7 +242,6 @@ def app_chat():
             )
         })
 
-    # --------- NAVBAR / UI ----------
     if "navbar" in user_message or "menu" in user_message:
         return jsonify({
             "reply": (
@@ -257,7 +253,6 @@ def app_chat():
             )
         })
 
-    # --------- IMAGES / UI ISSUES ----------
     if "image" in user_message or "photo" in user_message:
         return jsonify({
             "reply": (
@@ -269,7 +264,6 @@ def app_chat():
             )
         })
 
-    # --------- CHATBOT QUESTIONS ----------
     if "who are you" in user_message or "what can you do" in user_message:
         return jsonify({
             "reply": (
@@ -282,7 +276,6 @@ def app_chat():
             )
         })
 
-    # --------- FALLBACK ----------
     return jsonify({
         "reply": (
             "I didn’t fully understand that 🤔\n\n"
@@ -294,6 +287,7 @@ def app_chat():
             "Try rephrasing your question."
         )
     })
+
 
 # ------------------ Admin Pages ------------------
 
@@ -1254,6 +1248,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
