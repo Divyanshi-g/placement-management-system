@@ -131,6 +131,26 @@
 </button>
 
 <script>
+
+  const images = [
+    "{{ url_for('static', filename='images/student_dashboard.jpg') }}",
+    "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}",
+    "{{ url_for('static', filename='images/student_dashboard4.jpg') }}"
+  ];
+
+  let imgIndex = 0;
+  const imgElement = document.getElementById("dashboardImage");
+
+  setInterval(() => {
+    imgIndex = (imgIndex + 1) % images.length;
+
+    imgElement.classList.remove("animate__fadeInRight");
+    void imgElement.offsetWidth; // reflow to restart animation
+    imgElement.src = images[imgIndex];
+    imgElement.classList.add("animate__fadeInRight");
+
+  }, 3000);
+
   /* -------------------------------
      TYPING EFFECT (RUN ONCE)
   -------------------------------- */
@@ -236,5 +256,6 @@
 
 
 {% endblock %}
+
 
 
