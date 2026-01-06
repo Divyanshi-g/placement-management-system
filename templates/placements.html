@@ -89,7 +89,7 @@
             ✅ Already Applied
           </button>
           {% else %}
-          <a href="{{ url_for('enhancements.apply_page', pid=j.id) }}"
+          <a href="{{ url_for('enhancements.apply', pid=j.id) }}"
              class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
             📝 Apply
           </a>
@@ -126,3 +126,4 @@ function closePanel(id) {
 }
 </style>
 {% endblock %}
+
