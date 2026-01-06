@@ -312,7 +312,6 @@ def placements():
 
     return render_template("placements.html", jobs=jobs)
 
-
 @enhancements_bp.route("/apply/<int:pid>", methods=["GET", "POST"])
 def apply(pid):
     if "user_id" not in session:
@@ -324,8 +323,8 @@ def apply(pid):
     # Fetch placement
     cur.execute("SELECT * FROM placements WHERE id=?", (pid,))
     placement = cur.fetchone()
+
     if not placement:
-        flash("Placement not found", "danger")
         return redirect(url_for("enhancements.placements"))
 
     # Check already applied
@@ -334,38 +333,35 @@ def apply(pid):
         (session["user_id"], pid)
     )
     if cur.fetchone():
-        flash("⚠️ You have already applied.", "warning")
         return redirect(url_for("enhancements.placements"))
 
-    # Fetch user
-    cur.execute("SELECT * FROM users WHERE id=?", (session["user_id"],))
-    user = cur.fetchone()
-
     if request.method == "POST":
-        phone = request.form.get("phone")
-        skills = request.form.get("skills")
-        experience = request.form.get("experience")
-        message = request.form.get("message")
-
-        # Update user profile
         cur.execute("""
-            UPDATE users SET phone=?, skills=? WHERE id=?
-        """, (phone, skills, session["user_id"]))
-
-        # Insert application
-        cur.execute("""
-            INSERT INTO applications (user_id, placement_id, status)
-            VALUES (?, ?, 'Applied')
-        """, (session["user_id"], pid))
+            INSERT INTO applications (
+                user_id, placement_id, status,
+                student_name, phone, course,
+                skills, experience, why_apply
+            )
+            VALUES (?,?,?,?,?,?,?,?,?)
+        """, (
+            session["user_id"],
+            pid,
+            "Applied",
+            request.form["student_name"],
+            request.form["phone"],
+            request.form["course"],
+            request.form.get("skills"),
+            request.form.get("experience"),
+            request.form["why_apply"]
+        ))
 
         conn.commit()
         conn.close()
-
-        flash("🎉 Application submitted successfully!", "success")
         return redirect(url_for("enhancements.placements"))
 
     conn.close()
-    return render_template("apply.html", placement=placement, user=user)
+    return render_template("apply.html", placement=placement)
+
 
 # ------------------ Admin Pages ------------------
 
@@ -1258,6 +1254,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
