@@ -287,6 +287,96 @@ def app_chat():
         )
     })
 
+# ------------------ Placement search & apply ------------------
+@enhancements_bp.route("/placements")
+def placements():
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
+
+    user_id = session["user_id"]
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    # Get all placements
+    cur.execute("""
+        SELECT *
+        FROM placements
+        ORDER BY created_at DESC
+    """)
+    placements = cur.fetchall()
+
+    jobs = []
+
+    for p in placements:
+        # Check if user already applied
+        cur.execute("""
+            SELECT id FROM applications
+            WHERE user_id=? AND placement_id=?
+        """, (user_id, p["id"]))
+        applied = cur.fetchone() is not None
+
+        job = dict(p)
+        job["applied"] = applied
+        jobs.append(job)
+
+    conn.close()
+
+    return render_template("placements.html", jobs=jobs)
+
+@enhancements_bp.route("/apply/<int:pid>", methods=["GET", "POST"])
+def apply(pid):
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    # Fetch placement
+    cur.execute("SELECT * FROM placements WHERE id=?", (pid,))
+    placement = cur.fetchone()
+    if not placement:
+        flash("Placement not found", "danger")
+        return redirect(url_for("enhancements.placements"))
+
+    # Check already applied
+    cur.execute(
+        "SELECT id FROM applications WHERE user_id=? AND placement_id=?",
+        (session["user_id"], pid)
+    )
+    if cur.fetchone():
+        flash("⚠️ You have already applied.", "warning")
+        return redirect(url_for("enhancements.placements"))
+
+    # Fetch user
+    cur.execute("SELECT * FROM users WHERE id=?", (session["user_id"],))
+    user = cur.fetchone()
+
+    if request.method == "POST":
+        phone = request.form.get("phone")
+        skills = request.form.get("skills")
+        experience = request.form.get("experience")
+        message = request.form.get("message")
+
+        # Update user profile
+        cur.execute("""
+            UPDATE users SET phone=?, skills=? WHERE id=?
+        """, (phone, skills, session["user_id"]))
+
+        # Insert application
+        cur.execute("""
+            INSERT INTO applications (user_id, placement_id, status)
+            VALUES (?, ?, 'Applied')
+        """, (session["user_id"], pid))
+
+        conn.commit()
+        conn.close()
+
+        flash("🎉 Application submitted successfully!", "success")
+        return redirect(url_for("enhancements.placements"))
+
+    conn.close()
+    return render_template("apply.html", placement=placement, user=user)
 
 # ------------------ Admin Pages ------------------
 
@@ -851,74 +941,6 @@ def reports():
 
 
 
-# ------------------ Placement search & apply ------------------
-
-@enhancements_bp.route("/apply/<int:pid>", methods=["POST"])
-def apply(pid):
-    if "user_id" not in session:
-        flash("You need to log in first.", "danger")
-        return redirect(url_for("enhancements.login"))
-
-    user_id = session["user_id"]
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    # ✅ Check if already applied
-    cur.execute(
-        "SELECT id FROM applications WHERE placement_id=? AND user_id=?",
-        (pid, user_id),
-    )
-    already_applied = cur.fetchone()
-
-    if already_applied:
-        flash("⚠️ You have already applied for this placement.", "warning")
-    else:
-        # ✅ Insert new application
-        cur.execute(
-            "INSERT INTO applications (placement_id, user_id, status, applied_at) VALUES (?,?,?,CURRENT_TIMESTAMP)",
-            (pid, user_id, "Applied"),
-        )
-        conn.commit()
-        flash("🎉 Application submitted successfully!", "success")
-
-    conn.close()
-    return redirect(url_for("enhancements.placements"))
-@enhancements_bp.route("/placements")
-def placements():
-    query = request.args.get("q", "")
-    location = request.args.get("location", "")
-    user_id = session.get("user_id")
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    # fetch jobs
-    sql = "SELECT * FROM placements WHERE 1=1"
-    params = []
-    if query:
-        sql += " AND (company LIKE ? OR role LIKE ? OR description LIKE ?)"
-        params.extend([f"%{query}%", f"%{query}%", f"%{query}%"])
-    if location:
-        sql += " AND location LIKE ?"
-        params.append(f"%{location}%")
-    cur.execute(sql, params)
-    jobs = cur.fetchall()
-
-    # ✅ convert rows to list of dicts
-    jobs_list = []
-    for j in jobs:
-        cur.execute(
-            "SELECT 1 FROM applications WHERE placement_id=? AND user_id=?",
-            (j["id"], user_id),
-        )
-        applied = cur.fetchone() is not None
-        jobs_list.append({**dict(j), "applied": applied})
-
-    conn.close()
-    return render_template("placements.html", jobs=jobs_list, query=query)
-
-
 @enhancements_bp.route('/api/search_placements')
 def api_search_placements():
     """
@@ -1247,6 +1269,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
