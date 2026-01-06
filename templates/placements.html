@@ -1,129 +1,125 @@
 {% extends "base.html" %}
-
-{% block nav_options %}
-<a href="/student_dashboard" class="hover:text-yellow-300 transition">Home</a>
-<a href="/about" class="hover:text-yellow-300 transition">About</a>
-<a href="/rate" class="hover:text-yellow-300 transition">Rate</a>
-<a href="/logout" class="hover:text-yellow-300 transition">Logout</a>
-{% endblock %}
-
 {% block title %}Placements{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-6 py-10">
 
   <!-- Page Heading -->
-  <h1 class="text-center text-5xl font-extrabold text-gray-800 mb-12
-             hover:text-indigo-600 transition duration-300">
+  <h1
+    class="text-center text-5xl font-extrabold text-gray-800 mb-12 tracking-wide transition-transform duration-300 hover:scale-105">
     💼 Available Placements
   </h1>
+
+  <!-- Search Section -->
+  <form method="GET"
+        action="{{ url_for('enhancements.placements') }}"
+        class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-14">
+
+    <input type="text" name="q"
+           placeholder="Job title, company, or skill"
+           value="{{ query }}"
+           class="w-72 px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+    <input type="text" name="location"
+           placeholder="Location"
+           value="{{ request.args.get('location','') }}"
+           class="w-64 px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+    <input type="text" name="job_type"
+           placeholder="Job Type (Internship / Full-time)"
+           value="{{ request.args.get('job_type','') }}"
+           class="w-72 px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+    <button type="submit"
+            class="px-7 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-lg shadow-md hover:shadow-xl transition">
+      🔍 Search
+    </button>
+  </form>
 
   <!-- Jobs Grid -->
   {% if jobs %}
   <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
     {% for j in jobs %}
-    <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition">
+    <div
+      class="bg-white rounded-2xl shadow-md p-8 min-h-[260px] flex flex-col justify-between
+             transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
 
-      <!-- Minimal Card Info -->
-      <h2 class="text-xl font-bold text-blue-700 mb-1">{{ j.company }}</h2>
-      <p class="text-gray-800 font-medium">{{ j.role }}</p>
-      <p class="text-gray-600 text-sm">{{ j.location }}</p>
-      <p class="text-green-700 font-semibold mt-2">
-        {{ j.salary or "Salary not disclosed" }}
-      </p>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-1">
+          {{ j.company }}
+        </h2>
+
+        <h3 class="text-lg font-medium text-gray-700">
+          {{ j.role }}
+        </h3>
+
+        <p class="text-gray-600 mt-3 text-md">
+          📍 {{ j.location }}
+        </p>
+
+        {% if j.salary %}
+        <p class="text-gray-600 mt-1 text-md">
+          💰 {{ j.salary }}
+        </p>
+        {% endif %}
+      </div>
 
       <!-- Show Details Button -->
-      <button
-        onclick="openPanel({{ j.id }})"
-        class="mt-4 w-full py-2 bg-indigo-600 text-white rounded-lg
-               hover:bg-indigo-700 transition">
-        🔍 Show Details
-      </button>
-    </div>
-
-    <!-- SLIDE PANEL -->
-    <div id="panel-{{ j.id }}"
-         class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-
-      <div class="absolute bottom-0 w-full bg-white rounded-t-3xl p-8
-                  animate-slideUp max-h-[90vh] overflow-y-auto">
-
-        <!-- Close -->
-        <button onclick="closePanel({{ j.id }})"
-                class="absolute top-4 right-6 text-2xl text-gray-500 hover:text-black">
-          ✕
+      <div class="mt-6 text-right">
+        <button onclick="openPanel({{ j.id }})"
+                class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition">
+          View Details →
         </button>
-
-        <!-- Company Header -->
-        <div class="flex items-center gap-4 mb-6">
-          <img src="{{ j.logo_url or url_for('static', filename='images/default_company.png') }}"
-               class="w-16 h-16 object-contain rounded">
-          <h2 class="text-2xl font-bold">{{ j.company }}</h2>
-        </div>
-
-        <!-- Details -->
-        <p><strong>Role:</strong> {{ j.role }}</p>
-        <p><strong>Location:</strong> {{ j.location }}</p>
-        <p class="mt-3 text-gray-700">{{ j.description }}</p>
-
-        <div class="mt-4 grid grid-cols-2 gap-4">
-          <p><strong>Salary:</strong> {{ j.salary or "Not specified" }}</p>
-          <p><strong>Job Type:</strong> {{ j.job_type or "Full Time" }}</p>
-          <p><strong>Eligibility:</strong> {{ j.eligibility }}</p>
-          <p><strong>Deadline:</strong> {{ j.deadline }}</p>
-        </div>
-
-        <!-- Buttons -->
-        <div class="mt-6 flex gap-4">
-          {% if j.link %}
-          <a href="{{ j.link }}" target="_blank"
-             class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-            🌐 External Link
-          </a>
-          {% endif %}
-
-          {% if j.applied %}
-          <button disabled
-                  class="px-5 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed">
-            ✅ Already Applied
-          </button>
-          {% else %}
-          <a href="{{ url_for('enhancements.apply', pid=j.id) }}"
-             class="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-            📝 Apply
-          </a>
-          {% endif %}
-        </div>
-
       </div>
+
     </div>
     {% endfor %}
-  </div>
 
+  </div>
   {% else %}
-  <p class="text-center text-gray-500 text-lg">🚫 No placements available.</p>
+    <p class="text-center text-gray-500 text-lg mt-10">
+      🚫 No placements found.
+    </p>
   {% endif %}
+
 </div>
 
-<!-- Panel Script -->
+<!-- DETAILS PANEL -->
+<div id="detailsPanel"
+     class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
+
+  <div
+    class="bg-white w-full max-w-2xl rounded-2xl shadow-xl p-8 relative animate__animated animate__fadeInUp">
+
+    <button onclick="closePanel()"
+            class="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl">
+      &times;
+    </button>
+
+    <div id="panelContent">
+      <!-- Filled by JS -->
+    </div>
+
+  </div>
+</div>
+
+<!-- PANEL SCRIPT -->
 <script>
 function openPanel(id) {
-  document.getElementById(`panel-${id}`).classList.remove("hidden");
+  const panel = document.getElementById("detailsPanel");
+  panel.classList.remove("hidden");
+
+  fetch(`/placement/${id}`)
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("panelContent").innerHTML = html;
+    });
 }
-function closePanel(id) {
-  document.getElementById(`panel-${id}`).classList.add("hidden");
+
+function closePanel() {
+  document.getElementById("detailsPanel").classList.add("hidden");
 }
 </script>
 
-<style>
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-.animate-slideUp {
-  animation: slideUp 0.4s ease-out;
-}
-</style>
 {% endblock %}
-
