@@ -293,25 +293,47 @@ def placements():
     if "user_id" not in session:
         return redirect(url_for("enhancements.login"))
 
-    user_id = session["user_id"]
     conn = get_db_conn()
     cur = conn.cursor()
 
-    cur.execute("""
+    q = request.args.get("q", "")
+    location = request.args.get("location", "")
+    job_type = request.args.get("job_type", "")
+
+    sql = """
         SELECT p.*,
         EXISTS(
-            SELECT 1 FROM applications a
-            WHERE a.user_id = ? AND a.placement_id = p.id
+          SELECT 1 FROM applications a
+          WHERE a.user_id=? AND a.placement_id=p.id
         ) AS applied
         FROM placements p
-        ORDER BY p.created_at DESC
-    """, (user_id,))
+        WHERE 1=1
+    """
+    params = [session["user_id"]]
 
+    if q:
+        sql += " AND (p.company LIKE ? OR p.role LIKE ?)"
+        params.extend([f"%{q}%", f"%{q}%"])
+
+    if location:
+        sql += " AND p.location LIKE ?"
+        params.append(f"%{location}%")
+
+    if job_type:
+        sql += " AND p.job_type LIKE ?"
+        params.append(f"%{job_type}%")
+
+    cur.execute(sql, params)
     jobs = cur.fetchall()
     conn.close()
 
-    return render_template("placements.html", jobs=jobs)
-
+    return render_template(
+        "placements.html",
+        jobs=jobs,
+        show_nav_options=True,
+        is_admin=False,
+        home_url=url_for("enhancements.student_dashboard")
+    )
 @enhancements_bp.route("/apply/<int:pid>", methods=["GET", "POST"])
 def apply(pid):
     if "user_id" not in session:
@@ -320,47 +342,59 @@ def apply(pid):
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # Fetch placement
-    cur.execute("SELECT * FROM placements WHERE id=?", (pid,))
+    # Fetch placement (for page display)
+    cur.execute("SELECT * FROM placements WHERE id = ?", (pid,))
     placement = cur.fetchone()
 
     if not placement:
-        return redirect(url_for("enhancements.placements"))
+        conn.close()
+        return "Placement not found", 404
 
-    # Check already applied
-    cur.execute(
-        "SELECT id FROM applications WHERE user_id=? AND placement_id=?",
-        (session["user_id"], pid)
-    )
-    if cur.fetchone():
-        return redirect(url_for("enhancements.placements"))
+    # Check if already applied
+    cur.execute("""
+        SELECT 1 FROM applications
+        WHERE user_id = ? AND placement_id = ?
+    """, (session["user_id"], pid))
+
+    already_applied = cur.fetchone()
 
     if request.method == "POST":
+        if already_applied:
+            conn.close()
+            return redirect(url_for("enhancements.placements"))
+
+        # Example fields (you already planned these)
+        experience = request.form.get("experience")
+        skills = request.form.get("skills")
+        why_you = request.form.get("why_you")
+
         cur.execute("""
-            INSERT INTO applications (
-                user_id, placement_id, status,
-                student_name, phone, course,
-                skills, experience, why_apply
-            )
-            VALUES (?,?,?,?,?,?,?,?,?)
+            INSERT INTO applications
+            (user_id, placement_id, experience, skills, why_you)
+            VALUES (?, ?, ?, ?, ?)
         """, (
             session["user_id"],
             pid,
-            "Applied",
-            request.form["student_name"],
-            request.form["phone"],
-            request.form["course"],
-            request.form.get("skills"),
-            request.form.get("experience"),
-            request.form["why_apply"]
+            experience,
+            skills,
+            why_you
         ))
 
         conn.commit()
         conn.close()
+
         return redirect(url_for("enhancements.placements"))
 
     conn.close()
-    return render_template("apply.html", placement=placement)
+
+    return render_template(
+        "apply.html",
+        placement=placement,
+        already_applied=already_applied,
+        show_nav_options=True,                     # ✅ FIX
+        is_admin=False,                            # ✅ FIX
+        home_url=url_for("enhancements.student_dashboard")  # ✅ FIX
+    )
 
 
 # ------------------ Admin Pages ------------------
@@ -1254,6 +1288,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
