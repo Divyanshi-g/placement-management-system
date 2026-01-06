@@ -1,19 +1,83 @@
 {% extends "base.html" %}
-{% block nav_options %} <a href="/student_dashboard" class="hover:text-yellow-300 transition">Home</a> <a href="/about" class="hover:text-yellow-300 transition">About</a> <a href="/rate" class="hover:text-yellow-300 transition">Rate</a> <a href="/logout" class="hover:text-yellow-300 transition">Logout</a> {% endblock %}
+
+{% block nav_options %}
+<a href="/student_dashboard" class="hover:text-yellow-300">Home</a>
+<a href="/placements" class="hover:text-yellow-300">Placements</a>
+<a href="/logout" class="hover:text-yellow-300">Logout</a>
+{% endblock %}
+
+{% block title %}Apply{% endblock %}
+
 {% block content %}
-<div class="container mx-auto p-6">
-  <h2 class="text-2xl font-bold mb-6">📑 Apply for Placement</h2>
+<div class="max-w-3xl mx-auto p-8">
 
-  <div class="bg-white p-6 rounded-xl shadow-md">
-    <h3 class="text-xl font-semibold">{{ placement.company_name }}</h3>
-    <p><strong>Role:</strong> {{ placement.role }}</p>
-    <p><strong>Eligibility:</strong> {{ placement.eligibility }}</p>
-    <p><strong>Deadline:</strong> {{ placement.deadline }}</p>
+  <h1 class="text-3xl font-bold mb-6 text-center">
+    📝 Apply for {{ placement.company }} – {{ placement.role }}
+  </h1>
 
-    <form method="POST" action="{{ url_for('apply', placement_id=placement.id) }}" class="mt-4">
-      <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-        Confirm Application
+  <div class="bg-white rounded-xl shadow-lg p-6">
+
+    <form method="POST" enctype="multipart/form-data">
+
+      <!-- Name -->
+      <div class="mb-4">
+        <label class="font-semibold">Name</label>
+        <input type="text" value="{{ user.username }}" readonly
+               class="w-full p-3 border rounded bg-gray-100">
+      </div>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="font-semibold">Email</label>
+        <input type="email" value="{{ user.email }}" readonly
+               class="w-full p-3 border rounded bg-gray-100">
+      </div>
+
+      <!-- Phone -->
+      <div class="mb-4">
+        <label class="font-semibold">Phone</label>
+        <input type="text" name="phone" value="{{ user.phone or '' }}"
+               class="w-full p-3 border rounded">
+      </div>
+
+      <!-- Skills -->
+      <div class="mb-4">
+        <label class="font-semibold">Skills</label>
+        <textarea name="skills"
+                  class="w-full p-3 border rounded"
+                  placeholder="Python, SQL, React...">{{ user.skills or '' }}</textarea>
+      </div>
+
+      <!-- Experience -->
+      <div class="mb-4">
+        <label class="font-semibold">Experience</label>
+        <select name="experience" class="w-full p-3 border rounded">
+          <option value="Fresher">Fresher</option>
+          <option value="0-1 Years">0–1 Years</option>
+          <option value="1-3 Years">1–3 Years</option>
+          <option value="3+ Years">3+ Years</option>
+        </select>
+      </div>
+
+      <!-- Message -->
+      <div class="mb-4">
+        <label class="font-semibold">Why should we select you?</label>
+        <textarea name="message"
+                  class="w-full p-3 border rounded"
+                  placeholder="Brief introduction..."></textarea>
+      </div>
+
+      <!-- Resume -->
+      <div class="mb-6">
+        <label class="font-semibold">Upload Resume (optional)</label>
+        <input type="file" name="resume" class="w-full">
+      </div>
+
+      <button type="submit"
+              class="w-full bg-green-600 text-white py-3 rounded-lg text-lg hover:bg-green-700">
+        ✅ Submit Application
       </button>
+
     </form>
   </div>
 </div>
