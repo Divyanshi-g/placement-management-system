@@ -2,34 +2,25 @@ import os
 import sqlite3
 from flask import g, current_app
 
+
+# --------------------------------
+# DATABASE CONNECTION
+# --------------------------------
 def get_db_conn():
-    """
-    Return a sqlite3 connection cached on flask.g.
-    If the configured DATABASE path is relative, place it inside the Flask instance folder
-    (so it remains stable across runs and working directories).
-    Also ensure the DB directory exists and enable foreign keys.
-    """
     if "db_conn" not in g:
-        # Get configured path (may be absolute or relative)
         db_path = current_app.config.get("DATABASE", "placement.db")
 
-        # If provided path is relative, store DB inside instance folder (stable)
         if not os.path.isabs(db_path):
             db_path = os.path.join(current_app.instance_path, db_path)
 
-        # Ensure directory exists
-        db_dir = os.path.dirname(db_path)
-        if db_dir:
-            os.makedirs(db_dir, exist_ok=True)
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
 
-        # Connect and configure
-        conn = sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES, timeout=30)
+        conn = sqlite3.connect(db_path, timeout=30)
         conn.row_factory = sqlite3.Row
-
-        # Ensure foreign keys are enforced
         conn.execute("PRAGMA foreign_keys = ON")
 
         g.db_conn = conn
+
     return g.db_conn
 
 
@@ -39,126 +30,209 @@ def close_db(e=None):
         db.close()
 
 
+# --------------------------------
+# INITIALIZE DATABASE
+# --------------------------------
 def init_db():
-    """
-    Create required tables and add missing columns if needed.
-    Seed sample placements if empty.
-    """
     db = get_db_conn()
     cur = db.cursor()
 
-    # --- Create tables if not exist ---
-    cur.executescript("""
+    # --------------------------------
+    # USERS
+    # --------------------------------
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
         email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
         role TEXT CHECK(role IN ('student','admin')) NOT NULL DEFAULT 'student',
+        phone TEXT,
+        skills TEXT,
+        profile_pic TEXT,
+        resume TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+    )
+    """)
 
+    # --------------------------------
+    # PLACEMENTS
+    # --------------------------------
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS placements (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         company TEXT NOT NULL,
         role TEXT NOT NULL,
         location TEXT NOT NULL,
+        salary TEXT,
+        job_type TEXT,
+        eligibility TEXT,
         description TEXT,
+        deadline TEXT,
         link TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+    )
+    """)
 
-    CREATE TABLE IF NOT EXISTS resumes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        filename TEXT,
-        storage_path TEXT,
-        verdict TEXT,
-        details TEXT,
-        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-
+    # --------------------------------
+    # APPLICATIONS
+    # --------------------------------
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS applications (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
         placement_id INTEGER NOT NULL,
-        status TEXT CHECK(status IN ('Applied','Shortlisted','Selected','Rejected')) NOT NULL DEFAULT 'Applied',
+        status TEXT DEFAULT 'Applied',
         applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY(placement_id) REFERENCES placements(id) ON DELETE CASCADE
-    );
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (placement_id) REFERENCES placements(id) ON DELETE CASCADE
+    )
+    """)
 
+    # --------------------------------
+    # RESUMES
+    # --------------------------------
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS resumes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        filename TEXT,
+        score TEXT,
+        feedback TEXT,
+        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+    """)
+
+    # --------------------------------
+    # CHAT LOGS
+    # --------------------------------
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS chat_logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
-        role TEXT,
+        sender TEXT,
         message TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+    """)
 
-    CREATE TABLE IF NOT EXISTS quiz_attempts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        quiz_name TEXT,
-        category TEXT,
-        score INTEGER,
-        total INTEGER,
-        details TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-
+    # --------------------------------
+    # FEEDBACK
+    # --------------------------------
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS feedback (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
-        rating INTEGER NOT NULL,
-        comment TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+        rating INTEGER CHECK(rating BETWEEN 1 AND 5),
+        comment TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
     """)
 
-    # --- Add missing columns to users ---
-    cur.execute("PRAGMA table_info(users)")
-    existing_columns = [row["name"] for row in cur.fetchall()]
-    if "phone" not in existing_columns:
-        cur.execute("ALTER TABLE users ADD COLUMN phone TEXT")
-    if "skills" not in existing_columns:
-        cur.execute("ALTER TABLE users ADD COLUMN skills TEXT")
-    if "profile_pic" not in existing_columns:
-        cur.execute("ALTER TABLE users ADD COLUMN profile_pic TEXT")
-    if "resume" not in existing_columns:
-        cur.execute("ALTER TABLE users ADD COLUMN resume TEXT")
+    # --------------------------------
+    # SEED DATA (15 COMPANIES)
+    # --------------------------------
+    cur.execute("SELECT COUNT(*) FROM placements")
+    if cur.fetchone()[0] == 0:
+        cur.executemany("""
+        INSERT INTO placements
+        (company, role, location, salary, job_type, eligibility, description, deadline, link)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, [
 
-    # --- Add missing columns to placements ---
-    cur.execute("PRAGMA table_info(placements)")
-    existing_columns = [row["name"] for row in cur.fetchall()]
-    if "eligibility" not in existing_columns:
-        cur.execute("ALTER TABLE placements ADD COLUMN eligibility TEXT")
-    if "deadline" not in existing_columns:
-        cur.execute("ALTER TABLE placements ADD COLUMN deadline TEXT")
+        ("Google", "Software Engineer", "Bangalore", "₹18–25 LPA", "Full-time",
+         "B.Tech CS/IT",
+         "Work on highly scalable distributed systems used by millions of users worldwide. "
+         "You will design, develop, test, and maintain software solutions while collaborating "
+         "with global engineering teams.",
+         "2025-12-31", "https://careers.google.com"),
 
-    # --- Seed sample placements ---
-    cur.execute("SELECT COUNT(*) AS cnt FROM placements")
-    row = cur.fetchone()
-    cnt = row[0] if row else 0
-    if cnt == 0:
-        cur.executescript("""
-        INSERT INTO placements (company, role, location, description, link, eligibility, deadline) VALUES
-        ('Google', 'Software Engineer', 'Bangalore', 'Work on scalable systems and new features for global products.', 'https://careers.google.com', 'B.Tech/B.E in CS', '2025-12-31'),
-        ('TCS', 'System Analyst', 'Mumbai', 'Client projects and solutions in business systems.', 'https://www.tcs.com', 'Any Graduate', '2025-12-31'),
-        ('Infosys', 'Java Developer', 'Hyderabad', 'Backend application development for enterprise clients.', 'https://www.infosys.com', 'B.Tech/B.E in IT', '2025-12-31'),
-        ('Amazon', 'Data Engineer', 'Chennai', 'Build and optimize data pipelines and analytics systems.', 'https://www.amazon.jobs', 'B.Tech/B.E in CS or Data Science', '2025-11-30'),
-        ('Microsoft', 'Cloud Support Engineer', 'Pune', 'Support Azure customers with cloud deployments and troubleshooting.', 'https://careers.microsoft.com', 'B.Tech/B.E in CS/IT/ECE', '2025-12-15'),
-        ('Wipro', 'Cybersecurity Analyst', 'Noida', 'Monitor and protect enterprise infrastructure against threats.', 'https://careers.wipro.com', 'B.Tech/B.E in CS/IT', '2025-12-20'),
-        ('Accenture', 'AI Research Intern', 'Gurgaon', 'Work on AI-driven automation and NLP models.', 'https://www.accenture.com', 'B.Tech/B.E/M.Tech in CS or AI', '2025-11-25'),
-        ('IBM', 'Software Developer', 'Pune', 'Develop and maintain enterprise-grade software solutions.', 'https://www.ibm.com/careers', 'B.Tech/B.E in CS/IT', '2025-12-10'),
-        ('Deloitte', 'Business Technology Analyst', 'Bangalore', 'Support consulting projects using data analytics and business tech.', 'https://www.deloitte.com', 'B.Tech/B.E/MBA', '2025-12-05'),
-        ('Capgemini', 'DevOps Engineer', 'Kolkata', 'Automate deployments and CI/CD pipelines using modern tools.', 'https://www.capgemini.com', 'B.Tech/B.E in CS/IT', '2025-12-25'),
-        ('Flipkart', 'Frontend Developer', 'Bangalore', 'Design responsive UI for e-commerce platform using React and JS.', 'https://www.flipkartcareers.com', 'B.Tech/B.E in CS/IT', '2025-12-18'),
-        ('Adobe', 'UX Designer Intern', 'Noida', 'Design intuitive user experiences and prototypes for creative tools.', 'https://adobe.wd5.myworkdayjobs.com', 'B.Des/B.Tech with UI/UX experience', '2025-12-28'),
-        ('Swiggy', 'Backend Developer', 'Bangalore', 'Work on order management and delivery optimization systems.', 'https://careers.swiggy.com', 'B.Tech/B.E in CS/IT', '2025-11-29'),
-        ('Paytm', 'Mobile App Developer', 'Noida', 'Develop new features for the Paytm app ecosystem.', 'https://paytm.com/careers', 'B.Tech/B.E in CS/IT', '2025-12-22'),
-        ('ISRO', 'Research Scientist', 'Ahmedabad', 'Work on satellite systems and data analysis.', 'https://www.isro.gov.in', 'M.Sc/M.Tech in Physics, CS, or Electronics', '2025-12-31'),
-        ('Zomato', 'Machine Learning Engineer', 'Gurgaon', 'Build recommendation and delivery optimization algorithms.', 'https://www.zomato.com/careers', 'B.Tech/B.E in CS or Data Science', '2025-12-12');
-        """)
+        ("Amazon", "Data Engineer", "Hyderabad", "₹16–22 LPA", "Full-time",
+         "B.Tech / Data Science",
+         "Design and maintain large-scale data pipelines, work with AWS services, optimize "
+         "data workflows, and enable business decision-making through analytics.",
+         "2025-11-30", "https://www.amazon.jobs"),
+
+        ("Microsoft", "Cloud Support Engineer", "Pune", "₹14–20 LPA", "Full-time",
+         "B.Tech CS/IT",
+         "Provide enterprise-level cloud solutions, troubleshoot Azure environments, and "
+         "support global customers with mission-critical systems.",
+         "2025-12-15", "https://careers.microsoft.com"),
+
+        ("Infosys", "Java Developer", "Mysore", "₹6–8 LPA", "Full-time",
+         "Any Graduate",
+         "Develop enterprise Java applications, participate in SDLC phases, and work "
+         "on real-world client projects across multiple domains.",
+         "2025-12-20", "https://www.infosys.com/careers"),
+
+        ("TCS", "System Analyst", "Mumbai", "₹7–9 LPA", "Full-time",
+         "Any Graduate",
+         "Analyze business requirements, coordinate with development teams, and ensure "
+         "successful implementation of IT solutions for clients.",
+         "2025-12-10", "https://www.tcs.com/careers"),
+
+        ("Accenture", "AI Intern", "Gurgaon", "₹40k/month", "Internship",
+         "B.Tech / M.Tech",
+         "Work on artificial intelligence and automation projects involving data processing, "
+         "model training, and enterprise transformation initiatives.",
+         "2025-11-25", "https://www.accenture.com/careers"),
+
+        ("Deloitte", "Business Analyst", "Bangalore", "₹10–14 LPA", "Full-time",
+         "B.Tech / MBA",
+         "Analyze complex business problems, create data-driven insights, and support "
+         "clients in strategic and operational decision-making.",
+         "2025-12-05", "https://www.deloitte.com/careers"),
+
+        ("Flipkart", "Frontend Developer", "Bangalore", "₹12–18 LPA", "Full-time",
+         "React / JavaScript",
+         "Build modern, high-performance user interfaces, collaborate with designers, "
+         "and improve customer experience at scale.",
+         "2025-12-18", "https://www.flipkartcareers.com"),
+
+        ("Adobe", "UX Designer Intern", "Noida", "₹35k/month", "Internship",
+         "UI/UX Portfolio",
+         "Design intuitive user experiences, conduct usability research, and work closely "
+         "with product and engineering teams.",
+         "2025-12-28", "https://adobe.wd5.myworkdayjobs.com"),
+
+        ("ISRO", "Research Scientist", "Ahmedabad", "₹15–20 LPA", "Full-time",
+         "M.Tech / PhD",
+         "Engage in advanced research related to satellite systems, space exploration, "
+         "and national-level scientific missions.",
+         "2025-12-31", "https://www.isro.gov.in"),
+
+        ("Wipro", "Project Engineer", "Bangalore", "₹6–7 LPA", "Full-time",
+         "Any Graduate",
+         "Work on enterprise IT solutions, development, testing, and deployment for global "
+         "clients across industries.",
+         "2025-12-22", "https://careers.wipro.com"),
+
+        ("Capgemini", "Cloud Analyst", "Chennai", "₹8–12 LPA", "Full-time",
+         "B.Tech CS/IT",
+         "Assist in cloud migration projects, manage infrastructure, and support digital "
+         "transformation initiatives.",
+         "2025-12-26", "https://www.capgemini.com/careers"),
+
+        ("Oracle", "Database Engineer", "Bangalore", "₹14–19 LPA", "Full-time",
+         "SQL / PL-SQL",
+         "Design, maintain, and optimize database systems, ensure data security, and support "
+         "enterprise-scale applications.",
+         "2025-12-29", "https://www.oracle.com/careers"),
+
+        ("Zoho", "Backend Developer", "Chennai", "₹8–13 LPA", "Full-time",
+         "Python / Java",
+         "Develop robust backend services, APIs, and scalable systems for Zoho's suite of "
+         "enterprise products.",
+         "2025-12-27", "https://www.zoho.com/careers"),
+
+        ("Paytm", "Product Analyst", "Noida", "₹9–14 LPA", "Full-time",
+         "Analytics / SQL",
+         "Analyze product metrics, user behavior, and business data to improve fintech "
+         "solutions and customer engagement.",
+         "2025-12-30", "https://paytm.com/careers")
+        ])
 
     db.commit()
