@@ -2,14 +2,14 @@ import os
 import sqlite3
 from flask import g, current_app
 
-
-# --------------------------------
-# DATABASE CONNECTION
-# --------------------------------
+# -------------------------------------------------
+# DB CONNECTION
+# -------------------------------------------------
 def get_db_conn():
     if "db_conn" not in g:
         db_path = current_app.config.get("DATABASE", "placement.db")
 
+        # store DB inside instance folder if relative
         if not os.path.isabs(db_path):
             db_path = os.path.join(current_app.instance_path, db_path)
 
@@ -18,7 +18,6 @@ def get_db_conn():
         conn = sqlite3.connect(db_path, timeout=30)
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
-
         g.db_conn = conn
 
     return g.db_conn
@@ -30,17 +29,15 @@ def close_db(e=None):
         db.close()
 
 
-# --------------------------------
-# INITIALIZE DATABASE
-# --------------------------------
+# -------------------------------------------------
+# INIT DATABASE
+# -------------------------------------------------
 def init_db():
     db = get_db_conn()
     cur = db.cursor()
 
-    # --------------------------------
-    # USERS
-    # --------------------------------
-    cur.execute("""
+    # ---------------- SCHEMA ----------------
+    cur.executescript("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
@@ -52,187 +49,159 @@ def init_db():
         profile_pic TEXT,
         resume TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
+    );
 
-    # --------------------------------
-    # PLACEMENTS
-    # --------------------------------
-    cur.execute("""
     CREATE TABLE IF NOT EXISTS placements (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         company TEXT NOT NULL,
         role TEXT NOT NULL,
         location TEXT NOT NULL,
+        description TEXT NOT NULL,
+        eligibility TEXT,
         salary TEXT,
         job_type TEXT,
-        eligibility TEXT,
-        description TEXT,
+        duration TEXT,
         deadline TEXT,
+        logo TEXT,
         link TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
+    );
 
-    # --------------------------------
-    # APPLICATIONS
-    # --------------------------------
-    cur.execute("""
     CREATE TABLE IF NOT EXISTS applications (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
         placement_id INTEGER NOT NULL,
-        status TEXT DEFAULT 'Applied',
+        status TEXT CHECK(status IN
+            ('Applied','Shortlisted','Selected','Rejected')
+        ) NOT NULL DEFAULT 'Applied',
         applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (placement_id) REFERENCES placements(id) ON DELETE CASCADE
-    )
-    """)
+        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY(placement_id) REFERENCES placements(id) ON DELETE CASCADE
+    );
 
-    # --------------------------------
-    # RESUMES
-    # --------------------------------
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS resumes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        filename TEXT,
-        score TEXT,
-        feedback TEXT,
-        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )
-    """)
-
-    # --------------------------------
-    # CHAT LOGS
-    # --------------------------------
-    cur.execute("""
     CREATE TABLE IF NOT EXISTS chat_logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
-        sender TEXT,
-        message TEXT,
+        role TEXT CHECK(role IN ('user','bot')),
+        message TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )
-    """)
+        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
 
-    # --------------------------------
-    # FEEDBACK
-    # --------------------------------
-    cur.execute("""
     CREATE TABLE IF NOT EXISTS feedback (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         rating INTEGER CHECK(rating BETWEEN 1 AND 5),
         comment TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    )
+        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
     """)
 
-    # --------------------------------
-    # SEED DATA (15 COMPANIES)
-    # --------------------------------
+    # ---------------- SEED DATA ----------------
     cur.execute("SELECT COUNT(*) FROM placements")
     if cur.fetchone()[0] == 0:
         cur.executemany("""
         INSERT INTO placements
-        (company, role, location, salary, job_type, eligibility, description, deadline, link)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (company, role, location, description, eligibility, salary, job_type,
+         duration, deadline, logo, link)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?)
         """, [
 
-        ("Google", "Software Engineer", "Bangalore", "₹18–25 LPA", "Full-time",
-         "B.Tech CS/IT",
-         "Work on highly scalable distributed systems used by millions of users worldwide. "
-         "You will design, develop, test, and maintain software solutions while collaborating "
-         "with global engineering teams.",
-         "2025-12-31", "https://careers.google.com"),
+        ("Google", "Software Engineer", "Bangalore",
+         "Work on large-scale distributed systems, improve product reliability, and build new features used by millions of users worldwide.",
+         "B.Tech CS/IT", "₹15–25 LPA", "Full-Time", "NA", "2025-12-31",
+         "google.png", "https://careers.google.com"),
 
-        ("Amazon", "Data Engineer", "Hyderabad", "₹16–22 LPA", "Full-time",
-         "B.Tech / Data Science",
-         "Design and maintain large-scale data pipelines, work with AWS services, optimize "
-         "data workflows, and enable business decision-making through analytics.",
-         "2025-11-30", "https://www.amazon.jobs"),
+        ("Amazon", "Data Engineer", "Hyderabad",
+         "Design, build, and maintain scalable data pipelines and analytics systems supporting business intelligence.",
+         "B.Tech CS/Data", "₹14–22 LPA", "Full-Time", "NA", "2025-12-20",
+         "amazon.png", "https://www.amazon.jobs"),
 
-        ("Microsoft", "Cloud Support Engineer", "Pune", "₹14–20 LPA", "Full-time",
-         "B.Tech CS/IT",
-         "Provide enterprise-level cloud solutions, troubleshoot Azure environments, and "
-         "support global customers with mission-critical systems.",
-         "2025-12-15", "https://careers.microsoft.com"),
+        ("Microsoft", "Cloud Support Engineer", "Pune",
+         "Provide enterprise-level technical support for Azure cloud services and assist customers globally.",
+         "B.Tech CS/IT", "₹12–18 LPA", "Full-Time", "NA", "2025-12-15",
+         "microsoft.png", "https://careers.microsoft.com"),
 
-        ("Infosys", "Java Developer", "Mysore", "₹6–8 LPA", "Full-time",
-         "Any Graduate",
-         "Develop enterprise Java applications, participate in SDLC phases, and work "
-         "on real-world client projects across multiple domains.",
-         "2025-12-20", "https://www.infosys.com/careers"),
+        ("TCS", "System Analyst", "Mumbai",
+         "Work with clients to design business solutions, analyze requirements, and implement enterprise systems.",
+         "Any Graduate", "₹6–10 LPA", "Full-Time", "NA", "2025-12-10",
+         "tcs.png", "https://www.tcs.com"),
 
-        ("TCS", "System Analyst", "Mumbai", "₹7–9 LPA", "Full-time",
-         "Any Graduate",
-         "Analyze business requirements, coordinate with development teams, and ensure "
-         "successful implementation of IT solutions for clients.",
-         "2025-12-10", "https://www.tcs.com/careers"),
+        ("Infosys", "Java Developer", "Hyderabad",
+         "Develop backend enterprise applications using Java, Spring Boot, and microservices architecture.",
+         "B.Tech IT/CS", "₹7–11 LPA", "Full-Time", "NA", "2025-12-18",
+         "infosys.png", "https://www.infosys.com"),
 
-        ("Accenture", "AI Intern", "Gurgaon", "₹40k/month", "Internship",
-         "B.Tech / M.Tech",
-         "Work on artificial intelligence and automation projects involving data processing, "
-         "model training, and enterprise transformation initiatives.",
-         "2025-11-25", "https://www.accenture.com/careers"),
+        ("Accenture", "Business Technology Analyst", "Bangalore",
+         "Support consulting projects involving data analysis, business process optimization, and technology solutions.",
+         "B.Tech/MBA", "₹8–12 LPA", "Full-Time", "NA", "2025-12-22",
+         "accenture.png", "https://www.accenture.com"),
 
-        ("Deloitte", "Business Analyst", "Bangalore", "₹10–14 LPA", "Full-time",
-         "B.Tech / MBA",
-         "Analyze complex business problems, create data-driven insights, and support "
-         "clients in strategic and operational decision-making.",
-         "2025-12-05", "https://www.deloitte.com/careers"),
+        ("IBM", "Software Developer", "Pune",
+         "Develop enterprise-grade software solutions using modern frameworks and cloud-native technologies.",
+         "B.Tech CS", "₹9–14 LPA", "Full-Time", "NA", "2025-12-08",
+         "ibm.png", "https://www.ibm.com"),
 
-        ("Flipkart", "Frontend Developer", "Bangalore", "₹12–18 LPA", "Full-time",
-         "React / JavaScript",
-         "Build modern, high-performance user interfaces, collaborate with designers, "
-         "and improve customer experience at scale.",
-         "2025-12-18", "https://www.flipkartcareers.com"),
+        ("Deloitte", "Technology Consultant", "Bangalore",
+         "Assist clients with digital transformation, analytics, and system integration solutions.",
+         "B.Tech/MBA", "₹10–15 LPA", "Full-Time", "NA", "2025-12-05",
+         "deloitte.png", "https://www.deloitte.com"),
 
-        ("Adobe", "UX Designer Intern", "Noida", "₹35k/month", "Internship",
-         "UI/UX Portfolio",
-         "Design intuitive user experiences, conduct usability research, and work closely "
-         "with product and engineering teams.",
-         "2025-12-28", "https://adobe.wd5.myworkdayjobs.com"),
+        ("Capgemini", "DevOps Engineer", "Kolkata",
+         "Implement CI/CD pipelines, automate deployments, and manage cloud infrastructure.",
+         "B.Tech CS", "₹8–13 LPA", "Full-Time", "NA", "2025-12-25",
+         "capgemini.png", "https://www.capgemini.com"),
 
-        ("ISRO", "Research Scientist", "Ahmedabad", "₹15–20 LPA", "Full-time",
-         "M.Tech / PhD",
-         "Engage in advanced research related to satellite systems, space exploration, "
-         "and national-level scientific missions.",
-         "2025-12-31", "https://www.isro.gov.in"),
+        ("Adobe", "UX Design Intern", "Noida",
+         "Design intuitive user interfaces, wireframes, and prototypes for Adobe products.",
+         "Design/CS", "₹30k/month", "Internship", "6 Months", "2025-12-28",
+         "adobe.png", "https://adobe.wd5.myworkdayjobs.com"),
 
-        ("Wipro", "Project Engineer", "Bangalore", "₹6–7 LPA", "Full-time",
-         "Any Graduate",
-         "Work on enterprise IT solutions, development, testing, and deployment for global "
-         "clients across industries.",
-         "2025-12-22", "https://careers.wipro.com"),
+        ("Flipkart", "Frontend Developer", "Bangalore",
+         "Build responsive UI using React, improve performance, and enhance user experience.",
+         "B.Tech CS", "₹10–16 LPA", "Full-Time", "NA", "2025-12-18",
+         "flipkart.png", "https://www.flipkartcareers.com"),
 
-        ("Capgemini", "Cloud Analyst", "Chennai", "₹8–12 LPA", "Full-time",
-         "B.Tech CS/IT",
-         "Assist in cloud migration projects, manage infrastructure, and support digital "
-         "transformation initiatives.",
-         "2025-12-26", "https://www.capgemini.com/careers"),
+        ("Paytm", "Mobile App Developer", "Noida",
+         "Develop Android/iOS features for Paytm ecosystem using modern frameworks.",
+         "B.Tech CS", "₹9–14 LPA", "Full-Time", "NA", "2025-12-22",
+         "paytm.png", "https://paytm.com/careers"),
 
-        ("Oracle", "Database Engineer", "Bangalore", "₹14–19 LPA", "Full-time",
-         "SQL / PL-SQL",
-         "Design, maintain, and optimize database systems, ensure data security, and support "
-         "enterprise-scale applications.",
-         "2025-12-29", "https://www.oracle.com/careers"),
+        ("Wipro", "Cybersecurity Analyst", "Noida",
+         "Monitor enterprise infrastructure, detect threats, and implement security best practices.",
+         "B.Tech CS", "₹7–12 LPA", "Full-Time", "NA", "2025-12-20",
+         "wipro.png", "https://careers.wipro.com"),
 
-        ("Zoho", "Backend Developer", "Chennai", "₹8–13 LPA", "Full-time",
-         "Python / Java",
-         "Develop robust backend services, APIs, and scalable systems for Zoho's suite of "
-         "enterprise products.",
-         "2025-12-27", "https://www.zoho.com/careers"),
+        ("Zomato", "ML Engineer", "Gurgaon",
+         "Develop recommendation engines and optimize logistics using machine learning models.",
+         "B.Tech CS/Data", "₹14–20 LPA", "Full-Time", "NA", "2025-12-12",
+         "zomato.png", "https://www.zomato.com/careers"),
 
-        ("Paytm", "Product Analyst", "Noida", "₹9–14 LPA", "Full-time",
-         "Analytics / SQL",
-         "Analyze product metrics, user behavior, and business data to improve fintech "
-         "solutions and customer engagement.",
-         "2025-12-30", "https://paytm.com/careers")
+        ("ISRO", "Research Scientist", "Ahmedabad",
+         "Work on satellite systems, data analysis, and advanced space research projects.",
+         "M.Tech/M.Sc", "Govt Scale", "Full-Time", "NA", "2025-12-31",
+         "isro.png", "https://www.isro.gov.in"),
+
+        ("Swiggy", "Backend Engineer", "Bangalore",
+         "Build scalable backend services for order and delivery systems.",
+         "B.Tech CS", "₹12–18 LPA", "Full-Time", "NA", "2025-11-29",
+         "swiggy.png", "https://careers.swiggy.com"),
+
+        ("Oracle", "Database Engineer", "Hyderabad",
+         "Manage enterprise databases, optimize performance, and ensure high availability.",
+         "B.Tech CS", "₹11–17 LPA", "Full-Time", "NA", "2025-12-19",
+         "oracle.png", "https://www.oracle.com/careers"),
+
+        ("SAP", "Functional Consultant", "Bangalore",
+         "Support SAP implementations, business analysis, and ERP solutions.",
+         "B.Tech/MBA", "₹10–15 LPA", "Full-Time", "NA", "2025-12-23",
+         "sap.png", "https://jobs.sap.com"),
+
+        ("Zoho", "Product Engineer", "Chennai",
+         "Develop scalable SaaS products and collaborate with cross-functional teams.",
+         "B.Tech CS", "₹8–14 LPA", "Full-Time", "NA", "2025-12-27",
+         "zoho.png", "https://www.zoho.com/careers")
         ])
 
     db.commit()
