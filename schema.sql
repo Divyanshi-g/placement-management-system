@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS placements (
     duration TEXT,                   -- Optional (e.g. 6 months)
 
     deadline TEXT,
+    logo TEXT,
     link TEXT,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -112,3 +113,4 @@ CREATE TABLE IF NOT EXISTS chat_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
