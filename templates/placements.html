@@ -1,125 +1,181 @@
 {% extends "base.html" %}
+
+{% block nav_options %}
+  <a href="/student_dashboard" class="hover:text-indigo-300 transition">Home</a>
+  <a href="/about" class="hover:text-indigo-300 transition">About</a>
+  <a href="/rate" class="hover:text-indigo-300 transition">Rate</a>
+  <a href="/logout" class="hover:text-red-300 transition">Logout</a>
+{% endblock %}
+
 {% block title %}Placements{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-6 py-10">
 
-  <!-- Page Heading -->
-  <h1
-    class="text-center text-5xl font-extrabold text-gray-800 mb-12 tracking-wide transition-transform duration-300 hover:scale-105">
+  <!-- PAGE HEADING -->
+  <h1 class="text-center text-5xl font-extrabold text-slate-800 mb-12
+             transition transform hover:scale-105 hover:text-indigo-600">
     💼 Available Placements
   </h1>
 
-  <!-- Search Section -->
-  <form method="GET"
-        action="{{ url_for('enhancements.placements') }}"
-        class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-14">
-
-    <input type="text" name="q"
-           placeholder="Job title, company, or skill"
-           value="{{ query }}"
-           class="w-72 px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-
-    <input type="text" name="location"
-           placeholder="Location"
-           value="{{ request.args.get('location','') }}"
-           class="w-64 px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-
-    <input type="text" name="job_type"
-           placeholder="Job Type (Internship / Full-time)"
-           value="{{ request.args.get('job_type','') }}"
-           class="w-72 px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-
-    <button type="submit"
-            class="px-7 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-lg shadow-md hover:shadow-xl transition">
-      🔍 Search
-    </button>
-  </form>
-
-  <!-- Jobs Grid -->
   {% if jobs %}
   <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 
     {% for j in jobs %}
     <div
-      class="bg-white rounded-2xl shadow-md p-8 min-h-[260px] flex flex-col justify-between
-             transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
+      class="bg-white rounded-2xl shadow-lg p-8 flex flex-col justify-between
+             hover:shadow-2xl transition duration-300">
 
       <div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-1">
+        <h2 class="text-2xl font-bold text-indigo-700 mb-1">
           {{ j.company }}
         </h2>
 
-        <h3 class="text-lg font-medium text-gray-700">
+        <p class="text-lg font-medium text-gray-800">
           {{ j.role }}
-        </h3>
+        </p>
 
-        <p class="text-gray-600 mt-3 text-md">
+        <p class="text-gray-600 mt-2">
           📍 {{ j.location }}
         </p>
 
         {% if j.salary %}
-        <p class="text-gray-600 mt-1 text-md">
+        <p class="text-gray-700 mt-2 font-semibold">
           💰 {{ j.salary }}
         </p>
         {% endif %}
       </div>
 
-      <!-- Show Details Button -->
-      <div class="mt-6 text-right">
-        <button onclick="openPanel({{ j.id }})"
-                class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition">
-          View Details →
-        </button>
-      </div>
-
+      <!-- SHOW DETAILS BUTTON -->
+      <button
+        onclick="openPanel(this)"
+        data-id="{{ j.id }}"
+        data-company="{{ j.company }}"
+        data-role="{{ j.role }}"
+        data-location="{{ j.location }}"
+        data-description="{{ j.description }}"
+        data-eligibility="{{ j.eligibility }}"
+        data-jobtype="{{ j.job_type }}"
+        data-salary="{{ j.salary }}"
+        data-deadline="{{ j.deadline }}"
+        data-link="{{ j.link }}"
+        data-applied="{{ j.applied }}"
+        class="mt-6 w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold
+               hover:bg-indigo-700 transition">
+        Show Details
+      </button>
     </div>
     {% endfor %}
 
   </div>
   {% else %}
-    <p class="text-center text-gray-500 text-lg mt-10">
+    <p class="text-center text-gray-500 text-lg mt-16">
       🚫 No placements found.
     </p>
   {% endif %}
-
 </div>
 
-<!-- DETAILS PANEL -->
+<!-- ========================= -->
+<!-- BOTTOM SLIDE-UP PANEL -->
+<!-- ========================= -->
 <div id="detailsPanel"
-     class="fixed inset-0 bg-black bg-opacity-40 hidden flex items-center justify-center z-50">
+     class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl rounded-t-3xl
+            transform translate-y-full transition-transform duration-500 z-50">
 
-  <div
-    class="bg-white w-full max-w-2xl rounded-2xl shadow-xl p-8 relative animate__animated animate__fadeInUp">
+  <div class="max-w-4xl mx-auto p-8">
 
-    <button onclick="closePanel()"
-            class="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl">
-      &times;
-    </button>
-
-    <div id="panelContent">
-      <!-- Filled by JS -->
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 id="panelCompany"
+          class="text-3xl font-extrabold text-indigo-700"></h2>
+      <button onclick="closePanel()"
+              class="text-gray-500 hover:text-red-500 text-2xl">
+        ✖
+      </button>
     </div>
 
+    <!-- DETAILS -->
+    <div class="space-y-3 text-gray-700 text-lg">
+      <p><strong>Role:</strong> <span id="panelRole"></span></p>
+      <p><strong>Location:</strong> <span id="panelLocation"></span></p>
+      <p><strong>Job Type:</strong> <span id="panelJobType"></span></p>
+      <p><strong>Salary:</strong> <span id="panelSalary"></span></p>
+      <p><strong>Eligibility:</strong> <span id="panelEligibility"></span></p>
+      <p><strong>Deadline:</strong> <span id="panelDeadline"></span></p>
+      <p class="mt-4 text-gray-600" id="panelDescription"></p>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="mt-8 flex gap-4 flex-wrap">
+
+      <a id="panelLink" target="_blank"
+         class="px-6 py-3 rounded-xl bg-green-600 text-white font-semibold
+                hover:bg-green-700 transition">
+        🌐 External Apply
+      </a>
+
+      <form id="panelApplyForm" method="POST">
+        <button id="panelApplyBtn"
+                type="submit"
+                class="px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold
+                       hover:bg-indigo-700 transition">
+          📝 Apply
+        </button>
+      </form>
+
+    </div>
   </div>
 </div>
 
-<!-- PANEL SCRIPT -->
+<!-- ========================= -->
+<!-- SCRIPT -->
+<!-- ========================= -->
 <script>
-function openPanel(id) {
-  const panel = document.getElementById("detailsPanel");
-  panel.classList.remove("hidden");
+  function openPanel(btn) {
+    const panel = document.getElementById("detailsPanel");
 
-  fetch(`/placement/${id}`)
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("panelContent").innerHTML = html;
-    });
-}
+    document.getElementById("panelCompany").innerText = btn.dataset.company;
+    document.getElementById("panelRole").innerText = btn.dataset.role;
+    document.getElementById("panelLocation").innerText = btn.dataset.location;
+    document.getElementById("panelJobType").innerText = btn.dataset.jobtype || "—";
+    document.getElementById("panelSalary").innerText = btn.dataset.salary || "—";
+    document.getElementById("panelEligibility").innerText = btn.dataset.eligibility || "—";
+    document.getElementById("panelDeadline").innerText = btn.dataset.deadline || "—";
+    document.getElementById("panelDescription").innerText = btn.dataset.description || "";
 
-function closePanel() {
-  document.getElementById("detailsPanel").classList.add("hidden");
-}
+    // External link
+    const link = document.getElementById("panelLink");
+    if (btn.dataset.link) {
+      link.href = btn.dataset.link;
+      link.classList.remove("hidden");
+    } else {
+      link.classList.add("hidden");
+    }
+
+    // Apply button logic
+    const applyBtn = document.getElementById("panelApplyBtn");
+    const applyForm = document.getElementById("panelApplyForm");
+
+    applyForm.action = `/apply/${btn.dataset.id}`;
+
+    if (btn.dataset.applied === "1") {
+      applyBtn.innerText = "✅ Already Applied";
+      applyBtn.disabled = true;
+      applyBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+    } else {
+      applyBtn.innerText = "📝 Apply";
+      applyBtn.disabled = false;
+      applyBtn.className =
+        "px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition";
+    }
+
+    panel.classList.remove("translate-y-full");
+  }
+
+  function closePanel() {
+    document.getElementById("detailsPanel")
+      .classList.add("translate-y-full");
+  }
 </script>
 
 {% endblock %}
