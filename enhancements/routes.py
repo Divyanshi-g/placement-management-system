@@ -294,35 +294,24 @@ def placements():
         return redirect(url_for("enhancements.login"))
 
     user_id = session["user_id"]
-
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # Get all placements
     cur.execute("""
-        SELECT *
-        FROM placements
-        ORDER BY created_at DESC
-    """)
-    placements = cur.fetchall()
+        SELECT p.*,
+        EXISTS(
+            SELECT 1 FROM applications a
+            WHERE a.user_id = ? AND a.placement_id = p.id
+        ) AS applied
+        FROM placements p
+        ORDER BY p.created_at DESC
+    """, (user_id,))
 
-    jobs = []
-
-    for p in placements:
-        # Check if user already applied
-        cur.execute("""
-            SELECT id FROM applications
-            WHERE user_id=? AND placement_id=?
-        """, (user_id, p["id"]))
-        applied = cur.fetchone() is not None
-
-        job = dict(p)
-        job["applied"] = applied
-        jobs.append(job)
-
+    jobs = cur.fetchall()
     conn.close()
 
     return render_template("placements.html", jobs=jobs)
+
 
 @enhancements_bp.route("/apply/<int:pid>", methods=["GET", "POST"])
 def apply(pid):
@@ -1269,6 +1258,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
