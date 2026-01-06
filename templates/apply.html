@@ -1,84 +1,69 @@
 {% extends "base.html" %}
 
-{% block nav_options %}
-<a href="/student_dashboard" class="hover:text-yellow-300">Home</a>
-<a href="/placements" class="hover:text-yellow-300">Placements</a>
-<a href="/logout" class="hover:text-yellow-300">Logout</a>
-{% endblock %}
-
 {% block title %}Apply{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto p-8">
+<div class="max-w-3xl mx-auto px-6 py-10">
 
-  <h1 class="text-3xl font-bold mb-6 text-center">
+  <h2 class="text-3xl font-bold mb-8 text-center">
     📝 Apply for {{ placement.company }} – {{ placement.role }}
-  </h1>
+  </h2>
 
-  <div class="bg-white rounded-xl shadow-lg p-6">
+  <div class="bg-white rounded-xl shadow-lg p-8">
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST">
 
       <!-- Name -->
       <div class="mb-4">
-        <label class="font-semibold">Name</label>
-        <input type="text" value="{{ user.username }}" readonly
-               class="w-full p-3 border rounded bg-gray-100">
-      </div>
-
-      <!-- Email -->
-      <div class="mb-4">
-        <label class="font-semibold">Email</label>
-        <input type="email" value="{{ user.email }}" readonly
-               class="w-full p-3 border rounded bg-gray-100">
+        <label class="font-medium">👤 Full Name</label>
+        <input type="text" name="student_name" required
+          class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
       </div>
 
       <!-- Phone -->
       <div class="mb-4">
-        <label class="font-semibold">Phone</label>
-        <input type="text" name="phone" value="{{ user.phone or '' }}"
-               class="w-full p-3 border rounded">
+        <label class="font-medium">📞 Phone Number</label>
+        <input type="text" name="phone" required
+          class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+      </div>
+
+      <!-- Course -->
+      <div class="mb-4">
+        <label class="font-medium">🎓 Course</label>
+        <input type="text" name="course" required
+          class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
       </div>
 
       <!-- Skills -->
       <div class="mb-4">
-        <label class="font-semibold">Skills</label>
-        <textarea name="skills"
-                  class="w-full p-3 border rounded"
-                  placeholder="Python, SQL, React...">{{ user.skills or '' }}</textarea>
+        <label class="font-medium">🛠 Skills</label>
+        <input type="text" name="skills"
+          placeholder="Python, SQL, React"
+          class="w-full mt-2 px-4 py-2 border rounded-lg">
       </div>
 
       <!-- Experience -->
       <div class="mb-4">
-        <label class="font-semibold">Experience</label>
-        <select name="experience" class="w-full p-3 border rounded">
-          <option value="Fresher">Fresher</option>
-          <option value="0-1 Years">0–1 Years</option>
-          <option value="1-3 Years">1–3 Years</option>
-          <option value="3+ Years">3+ Years</option>
-        </select>
+        <label class="font-medium">💼 Experience (if any)</label>
+        <textarea name="experience" rows="3"
+          class="w-full mt-2 px-4 py-2 border rounded-lg"></textarea>
       </div>
 
-      <!-- Message -->
-      <div class="mb-4">
-        <label class="font-semibold">Why should we select you?</label>
-        <textarea name="message"
-                  class="w-full p-3 border rounded"
-                  placeholder="Brief introduction..."></textarea>
-      </div>
-
-      <!-- Resume -->
+      <!-- Why apply -->
       <div class="mb-6">
-        <label class="font-semibold">Upload Resume (optional)</label>
-        <input type="file" name="resume" class="w-full">
+        <label class="font-medium">✍️ Why should we select you?</label>
+        <textarea name="why_apply" rows="4" required
+          class="w-full mt-2 px-4 py-2 border rounded-lg"></textarea>
       </div>
 
+      <!-- Submit -->
       <button type="submit"
-              class="w-full bg-green-600 text-white py-3 rounded-lg text-lg hover:bg-green-700">
-        ✅ Submit Application
+        class="w-full py-3 bg-indigo-600 text-white rounded-lg text-lg hover:bg-indigo-700 transition">
+        🚀 Submit Application
       </button>
 
     </form>
   </div>
+
 </div>
 {% endblock %}
