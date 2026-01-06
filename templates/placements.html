@@ -9,7 +9,7 @@
   <h1
     class="text-center text-4xl md:text-5xl font-extrabold tracking-wide mb-12
            transition transform hover:scale-105 hover:underline underline-offset-8">
-    Available Placements
+    💼 Available Placements
   </h1>
 
   <!-- Search Section -->
@@ -17,26 +17,26 @@
 
     <input type="text" name="q"
       value="{{ request.args.get('q','') }}"
-      placeholder="Company, role or skill"
+      placeholder="🔍 Company, role or skill"
       class="w-full md:w-72 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
 
     <input type="text" name="location"
       value="{{ request.args.get('location','') }}"
-      placeholder="Location"
+      placeholder="📍 Location"
       class="w-full md:w-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
 
     <select name="job_type"
       class="w-full md:w-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
-      <option value="">Job Type</option>
-      <option value="Full-time">Full-time</option>
-      <option value="Internship">Internship</option>
-      <option value="Hybrid">Hybrid</option>
-      <option value="Remote">Remote</option>
+      <option value="">🧩 Job Type</option>
+      <option value="Full-time">💼 Full-time</option>
+      <option value="Internship">🎓 Internship</option>
+      <option value="Hybrid">🔄 Hybrid</option>
+      <option value="Remote">🏠 Remote</option>
     </select>
 
     <button
       class="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
-      Search
+      🔎 Search
     </button>
   </form>
 
@@ -54,18 +54,18 @@
           class="w-16 h-16 object-contain rounded">
 
         <div>
-          <h3 class="text-xl font-bold">{{ j.company }}</h3>
-          <p class="text-gray-600">{{ j.role }}</p>
+          <h3 class="text-xl font-bold">🏢 {{ j.company }}</h3>
+          <p class="text-gray-600">👨‍💻 {{ j.role }}</p>
         </div>
       </div>
 
-      <p class="text-gray-700"><strong>Location:</strong> {{ j.location }}</p>
-      <p class="text-gray-700"><strong>Salary:</strong> {{ j.salary }}</p>
+      <p class="text-gray-700">📍 <strong>Location:</strong> {{ j.location }}</p>
+      <p class="text-gray-700">💰 <strong>Salary:</strong> {{ j.salary }}</p>
 
       <button
         onclick="document.getElementById('panel-{{ j.id }}').classList.remove('hidden')"
         class="mt-6 w-full py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800">
-        Show Details
+        📄 Show Details
       </button>
     </div>
 
@@ -78,35 +78,42 @@
 
         <button
           onclick="this.closest('.fixed').classList.add('hidden')"
-          class="absolute right-6 top-4 text-2xl">&times;</button>
+          class="absolute right-6 top-4 text-2xl">
+          ❌
+        </button>
 
         <div class="flex items-center gap-4 mb-6">
           <img
             src="{{ url_for('static', filename='uploads/logos/' ~ (j.company_logo or 'default.png')) }}"
             class="w-20 h-20 object-contain">
-          <h2 class="text-2xl font-bold">{{ j.company }}</h2>
+          <h2 class="text-2xl font-bold">🏢 {{ j.company }}</h2>
         </div>
 
-        <p><strong>Role:</strong> {{ j.role }}</p>
-        <p><strong>Location:</strong> {{ j.location }}</p>
-        <p><strong>Job Type:</strong> {{ j.job_type }}</p>
-        <p><strong>Duration:</strong> {{ j.duration }}</p>
-        <p><strong>Salary:</strong> {{ j.salary }}</p>
-        <p class="mt-4"><strong>Description:</strong><br>{{ j.description }}</p>
-        <p class="mt-2"><strong>Eligibility:</strong> {{ j.eligibility }}</p>
-        <p class="mt-2"><strong>Deadline:</strong> {{ j.deadline }}</p>
+        <p>👨‍💻 <strong>Role:</strong> {{ j.role }}</p>
+        <p>📍 <strong>Location:</strong> {{ j.location }}</p>
+        <p>🧩 <strong>Job Type:</strong> {{ j.job_type }}</p>
+        <p>⏳ <strong>Duration:</strong> {{ j.duration }}</p>
+        <p>💰 <strong>Salary:</strong> {{ j.salary }}</p>
+
+        <p class="mt-4">
+          📝 <strong>Description:</strong><br>
+          {{ j.description }}
+        </p>
+
+        <p class="mt-2">✅ <strong>Eligibility:</strong> {{ j.eligibility }}</p>
+        <p class="mt-2">📅 <strong>Deadline:</strong> {{ j.deadline }}</p>
 
         <div class="flex gap-4 mt-8">
           {% if j.link %}
           <a href="{{ j.link }}" target="_blank"
              class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-            External Link
+            🌐 External Link
           </a>
           {% endif %}
 
           <a href="{{ url_for('enhancements.apply', pid=j.id) }}"
              class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-            Apply
+            📝 Apply
           </a>
         </div>
       </div>
@@ -117,7 +124,7 @@
 
   {% else %}
   <p class="text-center text-gray-500 text-lg mt-20">
-    No placements available for your search.
+    🚫 No placements available for your search.
   </p>
   {% endif %}
 
