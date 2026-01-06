@@ -85,14 +85,24 @@ CREATE TABLE IF NOT EXISTS reports (
 );
 CREATE TABLE IF NOT EXISTS applications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
     user_id INTEGER NOT NULL,
     placement_id INTEGER NOT NULL,
-    status TEXT CHECK(status IN ('Applied','Shortlisted','Selected','Rejected'))
-           NOT NULL DEFAULT 'Applied',
+
+    experience TEXT,          -- Student experience
+    skills TEXT,              -- Skills / technologies
+    why_you TEXT,             -- Why should we select you?
+
+    status TEXT
+        CHECK(status IN ('Applied','Shortlisted','Selected','Rejected'))
+        NOT NULL DEFAULT 'Applied',
+
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(placement_id) REFERENCES placements(id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS resumes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -112,5 +122,6 @@ CREATE TABLE IF NOT EXISTS chat_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
