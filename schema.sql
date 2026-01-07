@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
     phone TEXT,
     skills TEXT,
     profile_pic TEXT,
-    resume TEXT,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -91,7 +90,7 @@ CREATE TABLE IF NOT EXISTS applications (
 
     experience TEXT,          -- Student experience
     skills TEXT,              -- Skills / technologies
-    why_you TEXT,             -- Why should we select you?
+    resume TEXT,            
 
     status TEXT
         CHECK(status IN ('Applied','Shortlisted','Selected','Rejected'))
@@ -122,6 +121,7 @@ CREATE TABLE IF NOT EXISTS chat_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 
