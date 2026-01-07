@@ -23,7 +23,7 @@ def create_app():
 
 
     # Ensure upload folder exists
-    os.makedirs(app.config["RESUME_UPLOAD_FOLDER"], exist_ok=True)
+    os.makedirs(app.config["UPLOAD_FOLDER_RESUMES"], exist_ok=True)
 
     # ---------------- Blueprints ----------------
     init_enhancements(app)
@@ -48,6 +48,7 @@ def create_app():
 app = create_app()
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
