@@ -116,7 +116,7 @@
   ✅ Already Applied
 </button>
 {% else %}
-<a href="{{ url_for('enhancements.apply', pid=j.id) }}"
+<a href="{{ url_for('enhancements.apply', placement_id=j.id) }}"
    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
   Apply Now 🚀
 </a>
@@ -148,6 +148,7 @@
 }
 </style>
 {% endblock %}
+
 
 
 
