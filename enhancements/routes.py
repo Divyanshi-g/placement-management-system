@@ -343,20 +343,24 @@ def placements():
         home_url=url_for("enhancements.student_dashboard")
     )
 
-@enhancements_bp.route("/apply/<int:placement_id>", methods=["GET","POST"])
+@enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
 def apply(placement_id):
-    db = get_db_conn()
-    cur = db.cursor()
-
-    # Get placement
-    cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
-    placement = cur.fetchone()
-    if not placement:
-        return "Placement not found", 404
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
 
     user_id = session["user_id"]
 
-    # Check if already applied
+    db = get_db_conn()
+    cur = db.cursor()
+
+    # ----- Placement Check -----
+    cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
+    placement = cur.fetchone()
+    if not placement:
+        db.close()
+        return "Placement not found", 404
+
+    # ----- Already Applied Check -----
     cur.execute("""
         SELECT id FROM applications
         WHERE user_id = ? AND placement_id = ?
@@ -364,9 +368,10 @@ def apply(placement_id):
     already = cur.fetchone()
 
     if already:
-        return redirect(url_for("placements"))
+        db.close()
+        return redirect(url_for("enhancements.placements"))
 
-    # -------- POST (Submitting Form) --------
+    # ----- POST -----
     if request.method == "POST":
         student_name = request.form.get("student_name")
         phone = request.form.get("phone")
@@ -378,34 +383,40 @@ def apply(placement_id):
         resume_file = None
         file = request.files.get("resume")
 
-        if file and file.filename != "":
-            os.makedirs(current_app.config["UPLOAD_FOLDER_RESUMES"], exist_ok=True)
+        if file and file.filename.strip() != "":
+            # ensure config exists
+            upload_folder = current_app.config.get("UPLOAD_FOLDER_RESUMES", "static/resumes")
+            current_app.config["UPLOAD_FOLDER_RESUMES"] = upload_folder
+
+            os.makedirs(upload_folder, exist_ok=True)
 
             filename = secure_filename(file.filename)
-            resume_path = os.path.join(current_app.config["UPLOAD_FOLDER_RESUMES"], filename)
-
+            resume_path = os.path.join(upload_folder, filename)
             file.save(resume_path)
+
             resume_file = filename
 
-        # Insert into applications
+        # ---------- Insert Applications ----------
         cur.execute("""
             INSERT INTO applications (user_id, placement_id)
-            VALUES (?,?)
+            VALUES (?, ?)
         """, (user_id, placement_id))
         app_id = cur.lastrowid
 
-        # Insert into details
+        # ---------- Insert Additional Details ----------
         cur.execute("""
             INSERT INTO application_details
             (application_id, student_name, phone, course, skills, experience, resume_file)
-            VALUES (?,?,?,?,?,?,?,?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (app_id, student_name, phone, course, skills, experience, resume_file))
 
         db.commit()
+        db.close()
 
-        return redirect(url_for("placements"))
+        return redirect(url_for("enhancements.placements"))
 
-    # -------- GET (Page Open) --------
+    # ----- GET -----
+    db.close()
     return render_template(
         "apply.html",
         placement=placement,
@@ -413,7 +424,6 @@ def apply(placement_id):
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
-
 
 # ------------------ Admin Pages ------------------
 
@@ -1306,6 +1316,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
