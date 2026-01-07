@@ -338,6 +338,7 @@ def placements():
     return render_template(
         "placements.html",
         jobs=jobs,
+        status="success",
         show_nav_options=True,
         is_admin=session.get("role") == "admin",
         home_url=url_for("enhancements.student_dashboard")
@@ -1312,6 +1313,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
