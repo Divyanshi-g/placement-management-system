@@ -3,62 +3,67 @@
 {% block title %}Apply{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl px-4 pb-10">
+<div class="max-w-4xl mx-auto px-6 pb-10">
 
   <h2 class="text-3xl font-bold mb-8 text-center">
-    📝 Apply for {{ placement.company }} – {{ placement.role }}
+    📝 Application Form – {{ placement.company }} ({{ placement.role }})
   </h2>
 
   <div class="bg-white rounded-xl shadow-lg p-8">
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
 
-      <!-- Name -->
-      <div class="mb-4">
-        <label class="font-medium">👤 Full Name</label>
-        <input type="text" name="student_name" required
-          class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
-      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-      <!-- Phone -->
-      <div class="mb-4">
-        <label class="font-medium">📞 Phone Number</label>
-        <input type="text" name="phone" required
-          class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
-      </div>
+        <!-- Name -->
+        <div>
+          <label class="font-medium">👤 Full Name</label>
+          <input type="text" name="student_name" required
+            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+        </div>
 
-      <!-- Course -->
-      <div class="mb-4">
-        <label class="font-medium">🎓 Course</label>
-        <input type="text" name="course" required
-          class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
-      </div>
+        <!-- Phone -->
+        <div>
+          <label class="font-medium">📞 Phone Number</label>
+          <input type="text" name="phone" required
+            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+        </div>
 
-      <!-- Skills -->
-      <div class="mb-4">
-        <label class="font-medium">🛠 Skills</label>
-        <input type="text" name="skills"
-          placeholder="Python, SQL, React"
-          class="w-full mt-2 px-4 py-2 border rounded-lg">
+        <!-- Course -->
+        <div>
+          <label class="font-medium">🎓 Course</label>
+          <input type="text" name="course" required
+            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+        </div>
+
+        <!-- Skills -->
+        <div>
+          <label class="font-medium">🛠 Skills</label>
+          <input type="text" name="skills"
+            placeholder="Python, SQL, React"
+            class="w-full mt-2 px-4 py-2 border rounded-lg">
+        </div>
+
       </div>
 
       <!-- Experience -->
-      <div class="mb-4">
+      <div class="mt-6">
         <label class="font-medium">💼 Experience (if any)</label>
         <textarea name="experience" rows="3"
           class="w-full mt-2 px-4 py-2 border rounded-lg"></textarea>
       </div>
 
-      <!-- Why apply -->
-      <div class="mb-6">
-        <label class="font-medium">✍️ Why should we select you?</label>
-        <textarea name="why_apply" rows="4" required
-          class="w-full mt-2 px-4 py-2 border rounded-lg"></textarea>
+      <!-- Resume Upload -->
+      <div class="mt-6">
+        <label class="font-medium">📎 Upload Resume (PDF Only)</label>
+        <input type="file" name="resume"
+          accept=".pdf"
+          class="w-full mt-2 px-4 py-2 border rounded-lg border-dashed">
       </div>
 
       <!-- Submit -->
       <button type="submit"
-        class="w-full py-3 bg-indigo-600 text-white rounded-lg text-lg hover:bg-indigo-700 transition">
+        class="mt-8 w-full py-3 bg-indigo-600 text-white rounded-lg text-lg hover:bg-indigo-700 transition">
         🚀 Submit Application
       </button>
 
@@ -67,6 +72,3 @@
 
 </div>
 {% endblock %}
-
-
-
