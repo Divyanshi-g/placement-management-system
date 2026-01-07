@@ -296,44 +296,53 @@ def placements():
     conn = get_db_conn()
     cur = conn.cursor()
 
-    q = request.args.get("q", "")
-    location = request.args.get("location", "")
-    job_type = request.args.get("job_type", "")
+    # ---------------- FILTER INPUTS ----------------
+    q = request.args.get("q", "").strip()
+    location = request.args.get("location", "").strip()
+    job_type = request.args.get("job_type", "").strip()
 
+    # ---------------- BASE QUERY ----------------
     sql = """
         SELECT p.*,
-        EXISTS(
-          SELECT 1 FROM applications a
-          WHERE a.user_id=? AND a.placement_id=p.id
+        (
+            SELECT COUNT(*) FROM applications a
+            WHERE a.user_id = ? AND a.placement_id = p.id
         ) AS applied
         FROM placements p
-        WHERE 1=1
+        WHERE 1 = 1
     """
     params = [session["user_id"]]
 
+    # ---------------- SEARCH FILTER ----------------
     if q:
         sql += " AND (p.company LIKE ? OR p.role LIKE ?)"
         params.extend([f"%{q}%", f"%{q}%"])
 
+    # ---------------- LOCATION FILTER ----------------
     if location:
         sql += " AND p.location LIKE ?"
         params.append(f"%{location}%")
 
+    # ---------------- JOB TYPE FILTER ----------------
     if job_type:
         sql += " AND p.job_type LIKE ?"
         params.append(f"%{job_type}%")
 
+    # ---------------- EXECUTE ----------------
     cur.execute(sql, params)
     jobs = cur.fetchall()
-    conn.close()
+
+    # ❌ Do NOT close connection here if you still use DB later
+    # conn.close()
 
     return render_template(
         "placements.html",
         jobs=jobs,
         show_nav_options=True,
-        is_admin=False,
+        is_admin=session.get("role") == "admin",
         home_url=url_for("enhancements.student_dashboard")
     )
+
 @enhancements_bp.route("/apply/<int:placement_id>", methods=["GET","POST"])
 def apply(placement_id):
     db = get_db_conn()
@@ -1297,6 +1306,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
