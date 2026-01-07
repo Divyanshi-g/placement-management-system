@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone TEXT,
     skills TEXT,
     profile_pic TEXT,
-
+    resume TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS placements (
