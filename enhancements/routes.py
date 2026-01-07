@@ -335,7 +335,6 @@ def placements():
         home_url=url_for("enhancements.student_dashboard")
     )
 @enhancements_bp.route("/apply/<int:placement_id>", methods=["GET","POST"])
-@login_required
 def apply(placement_id):
     db = get_db_conn()
     cur = db.cursor()
@@ -1303,6 +1302,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
