@@ -16,8 +16,8 @@ def create_app():
     # ---------------- Config ----------------
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key")
     app.config["DATABASE"] = os.environ.get("DATABASE", "placement.db")
-    app.config["RESUME_UPLOAD_FOLDER"] = os.environ.get(
-        "RESUME_UPLOAD_FOLDER", "static/uploads/resumes"
+    app.config["UPLOAD_FOLDER_RESUMES"] = os.environ.get(
+        "UPLOAD_FOLDER_RESUMES", "static/uploads/resumes"
     )
     app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB limit
 
@@ -48,6 +48,7 @@ def create_app():
 app = create_app()
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
