@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS placements (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
 
     company TEXT NOT NULL,
-    company_logo TEXT,              -- image filename or URL
+    logo TEXT,              -- image filename or URL
     role TEXT NOT NULL,
     location TEXT NOT NULL,
 
@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS chat_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 
