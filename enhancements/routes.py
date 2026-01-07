@@ -345,22 +345,18 @@ def placements():
 
 @enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
 def apply(placement_id):
-    if "user_id" not in session:
-        return redirect(url_for("enhancements.login"))
-
-    user_id = session["user_id"]
-
     db = get_db_conn()
     cur = db.cursor()
 
-    # ----- Placement Check -----
+    # Get placement
     cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
     placement = cur.fetchone()
     if not placement:
-        db.close()
         return "Placement not found", 404
 
-    # ----- Already Applied Check -----
+    user_id = session["user_id"]
+
+    # Check if already applied
     cur.execute("""
         SELECT id FROM applications
         WHERE user_id = ? AND placement_id = ?
@@ -368,10 +364,9 @@ def apply(placement_id):
     already = cur.fetchone()
 
     if already:
-        db.close()
         return redirect(url_for("enhancements.placements"))
 
-    # ----- POST -----
+    # ------------- POST SUBMISSION -------------
     if request.method == "POST":
         student_name = request.form.get("student_name")
         phone = request.form.get("phone")
@@ -383,37 +378,31 @@ def apply(placement_id):
         resume_file = None
         file = request.files.get("resume")
 
-        if file and file.filename.strip() != "":
-            # ensure config exists
-            upload_folder = current_app.config.get("UPLOAD_FOLDER_RESUMES", "static/resumes")
-            current_app.config["UPLOAD_FOLDER_RESUMES"] = upload_folder
-
+        if file and file.filename != "":
+            upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
             os.makedirs(upload_folder, exist_ok=True)
 
             filename = secure_filename(file.filename)
             resume_path = os.path.join(upload_folder, filename)
-            file.save(resume_path)
 
+            file.save(resume_path)
             resume_file = filename
 
-        # ---- Ensure user exists for FK ----
-         cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
-         user_exists = cur.fetchone()
+        # ---------- Ensure user exists ----------
+        cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
+        if not cur.fetchone():
+            db.close()
+            return "User not found in users table.", 400
 
-         if not user_exists:
-           db.close()
-           return "User record missing. Cannot apply.", 400
-
-# ---------- Insert Applications ----------
-         cur.execute("""
-          INSERT INTO applications (user_id, placement_id)
-          VALUES (?, ?)
-          """, (int(user_id), placement_id))
+        # ---------- Insert Applications ----------
+        cur.execute("""
+            INSERT INTO applications (user_id, placement_id)
+            VALUES (?, ?)
+        """, (int(user_id), placement_id))
 
         app_id = cur.lastrowid
 
-
-        # ---------- Insert Additional Details ----------
+        # ---------- Insert Application Details ----------
         cur.execute("""
             INSERT INTO application_details
             (application_id, student_name, phone, course, skills, experience, resume_file)
@@ -421,12 +410,9 @@ def apply(placement_id):
         """, (app_id, student_name, phone, course, skills, experience, resume_file))
 
         db.commit()
-        db.close()
-
         return redirect(url_for("enhancements.placements"))
 
-    # ----- GET -----
-    db.close()
+    # ---------- GET REQUEST ----------
     return render_template(
         "apply.html",
         placement=placement,
@@ -1326,6 +1312,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
