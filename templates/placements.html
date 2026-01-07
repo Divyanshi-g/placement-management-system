@@ -111,10 +111,17 @@
           </a>
           {% endif %}
 
-          <a href="{{ url_for('enhancements.apply', pid=j.id) }}"
-             class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-            📝 Apply
-          </a>
+        {% if j.id in applied %}
+<button class="bg-green-600 text-white px-4 py-2 rounded cursor-not-allowed">
+  ✅ Already Applied
+</button>
+{% else %}
+<a href="{{ url_for('enhancements.apply', pid=j.id) }}"
+   class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
+  Apply Now 🚀
+</a>
+{% endif %}
+
         </div>
       </div>
     </div>
@@ -141,6 +148,7 @@
 }
 </style>
 {% endblock %}
+
 
 
 
