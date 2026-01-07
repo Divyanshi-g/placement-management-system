@@ -67,14 +67,22 @@ def init_db():
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
-    CREATE TABLE IF NOT EXISTS applications (
+   CREATE TABLE IF NOT EXISTS applications (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
         placement_id INTEGER NOT NULL,
+
+        -- Student filled details (Apply Page)
+        experience TEXT,
+        skills TEXT,
+        why_you TEXT,
+
         status TEXT CHECK(status IN
             ('Applied','Shortlisted','Selected','Rejected')
         ) NOT NULL DEFAULT 'Applied',
+
         applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY(placement_id) REFERENCES placements(id) ON DELETE CASCADE
     );
@@ -205,3 +213,4 @@ def init_db():
         ])
 
     db.commit()
+
