@@ -75,7 +75,7 @@ def init_db():
         -- Student filled details (Apply Page)
         experience TEXT,
         skills TEXT,
-        why_you TEXT,
+        resume TEXT,
 
         status TEXT CHECK(status IN
             ('Applied','Shortlisted','Selected','Rejected')
@@ -213,4 +213,5 @@ def init_db():
         ])
 
     db.commit()
+
 
