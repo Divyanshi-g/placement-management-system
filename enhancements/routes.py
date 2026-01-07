@@ -339,11 +339,6 @@ def apply(placement_id):
     db = get_db_conn()
     cur = db.cursor()
 
-    # Navbar context
-    show_nav_options = True
-    is_admin = session.get("role") == "admin"
-    home_url = url_for("home")
-
     # Get placement
     cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
     placement = cur.fetchone()
@@ -405,9 +400,9 @@ def apply(placement_id):
     return render_template(
         "apply.html",
         placement=placement,
-        show_nav_options=show_nav_options,
-        is_admin=is_admin,
-        home_url=home_url
+        show_nav_options=True,
+        is_admin=False,
+        home_url=url_for("enhancements.student_dashboard")
     )
 
 
@@ -1302,6 +1297,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
