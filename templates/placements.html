@@ -110,6 +110,11 @@
             🌐 External Link
           </a>
           {% endif %}
+{% if request.args.get('status') == 'success' %}
+<div class="bg-green-100 text-green-800 px-4 py-3 rounded-lg mb-4">
+  ✔ Application submitted successfully!
+</div>
+{% endif %}
 
         {% if j.id in applied %}
 <button class="bg-green-600 text-white px-4 py-2 rounded cursor-not-allowed">
@@ -148,6 +153,7 @@
 }
 </style>
 {% endblock %}
+
 
 
 
