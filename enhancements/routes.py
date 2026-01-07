@@ -26,7 +26,7 @@ def init_app(app):
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
 
 # ----------------- Config -----------------
-DEFAULT_UPLOAD_FOLDER = os.environ.get("RESUME_UPLOAD_FOLDER", "uploads/resumes")
+DEFAULT_UPLOAD_FOLDER = os.environ.get("RESUME_UPLOAD_FOLDER", "staticuploads/resumes")
 os.makedirs(DEFAULT_UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXT = {".pdf", ".docx", ".doc", ".txt"}
 
@@ -334,66 +334,81 @@ def placements():
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
-@enhancements_bp.route("/apply/<int:pid>", methods=["GET", "POST"])
-def apply(pid):
-    if "user_id" not in session:
-        return redirect(url_for("enhancements.login"))
+@enhancements_bp.route("/apply/<int:placement_id>", methods=["GET","POST"])
+@login_required
+def apply(placement_id):
+    db = get_db_conn()
+    cur = db.cursor()
 
-    conn = get_db_conn()
-    cur = conn.cursor()
+    # Navbar context
+    show_nav_options = True
+    is_admin = session.get("role") == "admin"
+    home_url = url_for("home")
 
-    # Fetch placement (for page display)
-    cur.execute("SELECT * FROM placements WHERE id = ?", (pid,))
+    # Get placement
+    cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
     placement = cur.fetchone()
-
     if not placement:
-        conn.close()
         return "Placement not found", 404
+
+    user_id = session["user_id"]
 
     # Check if already applied
     cur.execute("""
-        SELECT 1 FROM applications
+        SELECT id FROM applications
         WHERE user_id = ? AND placement_id = ?
-    """, (session["user_id"], pid))
+    """, (user_id, placement_id))
+    already = cur.fetchone()
 
-    already_applied = cur.fetchone()
+    if already:
+        return redirect(url_for("placements"))
 
+    # -------- POST (Submitting Form) --------
     if request.method == "POST":
-        if already_applied:
-            conn.close()
-            return redirect(url_for("enhancements.placements"))
-
-        # Example fields (you already planned these)
-        experience = request.form.get("experience")
+        student_name = request.form.get("student_name")
+        phone = request.form.get("phone")
+        course = request.form.get("course")
         skills = request.form.get("skills")
-        why_you = request.form.get("why_you")
+        experience = request.form.get("experience")
 
+        # ---------- Resume Upload ----------
+        resume_file = None
+        file = request.files.get("resume")
+
+        if file and file.filename != "":
+            os.makedirs(current_app.config["UPLOAD_FOLDER_RESUMES"], exist_ok=True)
+
+            filename = secure_filename(file.filename)
+            resume_path = os.path.join(current_app.config["UPLOAD_FOLDER_RESUMES"], filename)
+
+            file.save(resume_path)
+            resume_file = filename
+
+        # Insert into applications
         cur.execute("""
-            INSERT INTO applications
-            (user_id, placement_id, experience, skills, why_you)
-            VALUES (?, ?, ?, ?, ?)
-        """, (
-            session["user_id"],
-            pid,
-            experience,
-            skills,
-            why_you
-        ))
+            INSERT INTO applications (user_id, placement_id)
+            VALUES (?,?)
+        """, (user_id, placement_id))
+        app_id = cur.lastrowid
 
-        conn.commit()
-        conn.close()
+        # Insert into details
+        cur.execute("""
+            INSERT INTO application_details
+            (application_id, student_name, phone, course, skills, experience, resume_file)
+            VALUES (?,?,?,?,?,?,?,?)
+        """, (app_id, student_name, phone, course, skills, experience, resume_file))
 
-        return redirect(url_for("enhancements.placements"))
+        db.commit()
 
-    conn.close()
+        return redirect(url_for("placements"))
 
+    # -------- GET (Page Open) --------
     return render_template(
         "apply.html",
         placement=placement,
-        already_applied=already_applied,
-        show_nav_options=True,                     # ✅ FIX
-        is_admin=False,                            # ✅ FIX
-        home_url=url_for("enhancements.student_dashboard")  # ✅ FIX
+        show_nav_options=show_nav_options,
+        is_admin=is_admin,
+        home_url=home_url
     )
 
 
@@ -1288,6 +1303,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
