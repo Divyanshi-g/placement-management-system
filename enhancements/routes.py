@@ -396,12 +396,22 @@ def apply(placement_id):
 
             resume_file = filename
 
-        # ---------- Insert Applications ----------
-        cur.execute("""
-            INSERT INTO applications (user_id, placement_id)
-            VALUES (?, ?)
-        """, (user_id, placement_id))
+        # ---- Ensure user exists for FK ----
+         cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
+         user_exists = cur.fetchone()
+
+         if not user_exists:
+           db.close()
+           return "User record missing. Cannot apply.", 400
+
+# ---------- Insert Applications ----------
+         cur.execute("""
+          INSERT INTO applications (user_id, placement_id)
+          VALUES (?, ?)
+          """, (int(user_id), placement_id))
+
         app_id = cur.lastrowid
+
 
         # ---------- Insert Additional Details ----------
         cur.execute("""
@@ -1316,6 +1326,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
