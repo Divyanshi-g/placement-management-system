@@ -405,7 +405,7 @@ def apply(placement_id):
 
         # ---------- Insert Application Details ----------
         cur.execute("""
-            INSERT INTO application
+            INSERT INTO applications
             (application_id, student_name, phone, course, skills, experience, resume_file)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (app_id, student_name, phone, course, skills, experience, resume_file))
