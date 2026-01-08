@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS profiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
 
-    -- Basic Details
     full_name TEXT,
     phone TEXT,
     gender TEXT,
@@ -43,18 +42,19 @@ CREATE TABLE IF NOT EXISTS profiles (
     passing_year TEXT,
     cgpa TEXT,
 
-    -- Skills / Extras
     skills TEXT,
     certifications TEXT,
     bio TEXT,
 
-    -- Files (store only filenames, not full path)
-    profile_pic TEXT,     -- stored in static/uploads/profile_picts/
-    resume TEXT,          -- stored in static/uploads/resumes/
+    linkedin TEXT,
+    github TEXT,
+
+    profile_pic TEXT,
+    resume TEXT,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS ratings (
@@ -133,6 +133,7 @@ CREATE TABLE IF NOT EXISTS chat_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 
