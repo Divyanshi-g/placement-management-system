@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
 <div class="max-w-7xl mx-auto p-6 mt-8 rounded-xl shadow-xl bg-gradient-to-r 
             from-blue-50 via-white to-blue-50 animate-fadeIn">
@@ -13,7 +14,7 @@
     <button id="modeQuiz" class="modeBtn bg-yellow-600">🎯 Quiz</button>
   </div>
 
-  <!-- TOPICS -->
+  <!-- TOPIC BOX -->
   <div id="topicBox" class="hidden text-center mb-8">
     <h3 class="text-xl font-semibold mb-4">Choose Topic</h3>
     <div class="flex justify-center flex-wrap gap-4">
@@ -28,13 +29,18 @@
   <!-- PRACTICE SECTION -->
   <div id="practiceSection" class="hidden">
     <h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
-    <div id="practiceContainer" class="space-y-4"></div>
+    <div id="practiceContainer" 
+         class="space-y-4 max-h-[420px] overflow-y-auto pr-2">
+    </div>
   </div>
 
   <!-- QUIZ SECTION -->
   <div id="quizSection" class="hidden mt-8">
     <h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
-    <form id="quizForm" class="space-y-4"></form>
+
+    <form id="quizForm"
+          class="space-y-4 max-h-[420px] overflow-y-auto pr-2">
+    </form>
 
     <button id="submitQuiz" 
       class="hidden mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition">
@@ -42,26 +48,50 @@
     </button>
 
     <!-- RESULT -->
-    <div id="quizResult" class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow"></div>
+    <div id="quizResult" 
+         class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow text-lg font-semibold text-center">
+    </div>
 
     <!-- SCORE HISTORY -->
-    <div id="scoreHistory" class="mt-6 bg-white border rounded-lg p-4 shadow">
+    <div id="scoreHistory" 
+         class="mt-6 bg-white border rounded-lg p-4 shadow">
       <h4 class="font-bold mb-2">📊 Previous Attempts</h4>
-      <div id="historyList" class="text-gray-700 text-sm"></div>
+      <div id="historyList" class="text-gray-700 text-sm">
+        No previous attempts yet...
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-  @keyframes fadeIn {from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
-  .animate-fadeIn{animation:fadeIn .7s ease-in-out;}
-  .modeBtn,.topicBtn{
-    padding:10px 20px;border-radius:10px;color:white;font-weight:700;
-    box-shadow:0 3px 8px rgba(0,0,0,.2);transition:0.3s;
-  }
-  .modeBtn:hover,.topicBtn:hover{transform:scale(1.05);}
-  .qaBox{background:white;padding:14px;border-radius:8px;border-left:6px solid #4f46e5;}
-  .ans{display:none;margin-top:6px;background:#f9fafb;padding:8px;border-radius:6px;}
+@keyframes fadeIn {from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+.animate-fadeIn{animation:fadeIn .7s ease-in-out;}
+
+.modeBtn,.topicBtn{
+  padding:10px 22px;border-radius:10px;color:white;font-weight:700;
+  box-shadow:0 3px 8px rgba(0,0,0,.2);transition:0.3s;
+}
+.modeBtn:hover,.topicBtn:hover{transform:scale(1.07);}
+
+.qaBox{
+  background:white;padding:14px;border-radius:8px;
+  border-left:6px solid #4f46e5;
+}
+.ans{
+  display:none;margin-top:6px;background:#f9fafb;
+  padding:8px;border-radius:6px;
+}
+
+/* Emoji Result Styles */
+.goodResult{
+  background:#d1fae5;border-left:6px solid #10b981;
+}
+.averageResult{
+  background:#e0f2fe;border-left:6px solid #0ea5e9;
+}
+.badResult{
+  background:#fee2e2;border-left:6px solid #ef4444;
+}
 </style>
 
 <script src="{{ url_for('static', filename='js/practice.js') }}"></script>
