@@ -433,33 +433,47 @@ def profile():
     conn = get_db_conn()
     cur = conn.cursor()
 
+    # Get current data first
+    cur.execute("""
+        SELECT username, email, phone, skills, profile_pic, resume
+        FROM users WHERE id = ?
+    """, (session["user_id"],))
+    current = cur.fetchone()
+
     if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        email = request.form.get("email", "").strip()
+
         phone = request.form.get("phone", "").strip()
         skills = request.form.get("skills", "").strip()
 
+        # ---- FILES ----
         profile_pic_file = request.files.get("profile_pic")
-        profile_pic_filename = None
+        resume_file = request.files.get("resume")
+
+        profile_pic_filename = current["profile_pic"]
+        resume_filename = current["resume"]
+
         if profile_pic_file and profile_pic_file.filename:
             profile_pic_filename = secure_filename(profile_pic_file.filename)
             profile_pic_file.save(os.path.join(PROFILE_PIC_FOLDER, profile_pic_filename))
 
-        resume_file = request.files.get("resume")
-        resume_filename = None
         if resume_file and resume_file.filename:
             resume_filename = secure_filename(resume_file.filename)
             resume_file.save(os.path.join(RESUME_FOLDER, resume_filename))
 
+        # ---- UPDATE ONLY OPTIONAL FIELDS ----
         cur.execute("""
             UPDATE users
-            SET username=?, email=?, phone=?, skills=?,
-                profile_pic=COALESCE(?, profile_pic),
-                resume=COALESCE(?, resume)
-            WHERE id=?
+            SET 
+                phone = COALESCE(NULLIF(?, ''), phone),
+                skills = COALESCE(NULLIF(?, ''), skills),
+                profile_pic = ?,
+                resume = ?
+            WHERE id = ?
         """, (
-            username, email, phone, skills,
-            profile_pic_filename, resume_filename,
+            phone,
+            skills,
+            profile_pic_filename,
+            resume_filename,
             session["user_id"]
         ))
 
@@ -467,25 +481,16 @@ def profile():
         flash("✅ Profile updated successfully!", "success")
         return redirect(url_for("enhancements.profile"))
 
-    # GET fetch user
-    cur.execute("""
-        SELECT id, username, email, phone, skills, profile_pic, resume
-        FROM users WHERE id = ?
-    """, (session["user_id"],))
-    row = cur.fetchone()
     conn.close()
 
-    user = None
-    if row:
-        user = {
-            "id": row["id"],
-            "username": row["username"],
-            "email": row["email"],
-            "phone": row["phone"],
-            "skills": row["skills"],
-            "profile_pic": row["profile_pic"],
-            "resume": row["resume"]
-        }
+    user = {
+        "username": current["username"],
+        "email": current["email"],
+        "phone": current["phone"],
+        "skills": current["skills"],
+        "profile_pic": current["profile_pic"],
+        "resume": current["resume"]
+    }
 
     return render_template(
         "profile.html",
@@ -499,6 +504,7 @@ def profile():
             else url_for("enhancements.student_dashboard")
         )
     )
+)
 
 # ------------------ Admin Pages ------------------
 
@@ -1314,6 +1320,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
