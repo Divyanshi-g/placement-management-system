@@ -572,6 +572,16 @@ def profile():
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
+# ------------------ Practice ------------------
+
+@enhancements_bp.route("/practice")
+def practice():
+    return render_template("practice.html"
+        show_nav_options=True,
+        is_admin=False,
+        home_url=url_for("enhancements.student_dashboard")
+    )
+
 
 # ------------------ Admin Pages ------------------
 
@@ -1289,13 +1299,6 @@ def chat_alias():
     return ask()
 
 
-# ------------------ Practice ------------------
-
-@enhancements_bp.route("/practice")
-def practice():
-    return render_template("practice.html")
-
-
 @enhancements_bp.route("/check_resume", methods=["POST"])
 def check_resume():
     try:
@@ -1387,6 +1390,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
