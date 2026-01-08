@@ -38,7 +38,10 @@ def get_upload_folder():
     except RuntimeError:
         return DEFAULT_UPLOAD_FOLDER
 
-
+PROFILE_PIC_FOLDER = os.path.join("uploads", "profile_pics")
+RESUME_FOLDER = os.path.join("uploads", "resumes")
+os.makedirs(PROFILE_PIC_FOLDER, exist_ok=True)
+os.makedirs(RESUME_FOLDER, exist_ok=True)
 # ------------------ Auth pages ------------------
 @enhancements_bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -420,6 +423,81 @@ def apply(placement_id):
         show_nav_options=True,
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
+    )
+# ------------------ Profile ------------------
+@enhancements_bp.route("/profile", methods=["GET", "POST"])
+def profile():
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        email = request.form.get("email", "").strip()
+        phone = request.form.get("phone", "").strip()
+        skills = request.form.get("skills", "").strip()
+
+        profile_pic_file = request.files.get("profile_pic")
+        profile_pic_filename = None
+        if profile_pic_file and profile_pic_file.filename:
+            profile_pic_filename = secure_filename(profile_pic_file.filename)
+            profile_pic_file.save(os.path.join(PROFILE_PIC_FOLDER, profile_pic_filename))
+
+        resume_file = request.files.get("resume")
+        resume_filename = None
+        if resume_file and resume_file.filename:
+            resume_filename = secure_filename(resume_file.filename)
+            resume_file.save(os.path.join(RESUME_FOLDER, resume_filename))
+
+        cur.execute("""
+            UPDATE users
+            SET username=?, email=?, phone=?, skills=?,
+                profile_pic=COALESCE(?, profile_pic),
+                resume=COALESCE(?, resume)
+            WHERE id=?
+        """, (
+            username, email, phone, skills,
+            profile_pic_filename, resume_filename,
+            session["user_id"]
+        ))
+
+        conn.commit()
+        flash("✅ Profile updated successfully!", "success")
+        return redirect(url_for("enhancements.profile"))
+
+    # GET fetch user
+    cur.execute("""
+        SELECT id, username, email, phone, skills, profile_pic, resume
+        FROM users WHERE id = ?
+    """, (session["user_id"],))
+    row = cur.fetchone()
+    conn.close()
+
+    user = None
+    if row:
+        user = {
+            "id": row["id"],
+            "username": row["username"],
+            "email": row["email"],
+            "phone": row["phone"],
+            "skills": row["skills"],
+            "profile_pic": row["profile_pic"],
+            "resume": row["resume"]
+        }
+
+    return render_template(
+        "profile.html",
+        user=user,
+        status="success",
+        show_nav_options=True,
+        is_admin=session.get("role") == "admin",
+        home_url=(
+            url_for("enhancements.admin_dashboard")
+            if session.get("role") == "admin"
+            else url_for("enhancements.student_dashboard")
+        )
     )
 
 # ------------------ Admin Pages ------------------
@@ -1017,83 +1095,6 @@ def api_search_placements():
 
     return jsonify({"results": results})
 
-
-
-# ------------------ Profile ------------------
-
-PROFILE_PIC_FOLDER = os.path.join("uploads", "profile_pics")
-RESUME_FOLDER = os.path.join("uploads", "resumes")
-os.makedirs(PROFILE_PIC_FOLDER, exist_ok=True)
-os.makedirs(RESUME_FOLDER, exist_ok=True)
-
-
-@enhancements_bp.route("/profile", methods=["GET", "POST"])
-def profile():
-    if "user_id" not in session:
-        return redirect(url_for("enhancements.login"))
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    if request.method == "POST":
-        # Get fields from form
-        username = request.form.get("username", "").strip()
-        email = request.form.get("email", "").strip()
-        phone = request.form.get("phone", "").strip()
-        skills = request.form.get("skills", "").strip()
-
-        # Handle profile picture
-        profile_pic_file = request.files.get("profile_pic")
-        profile_pic_filename = None
-        if profile_pic_file and profile_pic_file.filename:
-            profile_pic_filename = secure_filename(profile_pic_file.filename)
-            profile_pic_file.save(os.path.join(PROFILE_PIC_FOLDER, profile_pic_filename))
-
-        # Handle resume
-        resume_file = request.files.get("resume")
-        resume_filename = None
-        if resume_file and resume_file.filename:
-            resume_filename = secure_filename(resume_file.filename)
-            resume_file.save(os.path.join(RESUME_FOLDER, resume_filename))
-
-        # Update DB
-        cur.execute("""
-            UPDATE users
-            SET username=?, email=?, phone=?, skills=?,
-                profile_pic=COALESCE(?, profile_pic),
-                resume=COALESCE(?, resume)
-            WHERE id=?
-        """, (username, email, phone, skills,
-              profile_pic_filename, resume_filename,
-              session["user_id"]))
-        conn.commit()
-        flash("✅ Profile updated successfully!", "success")
-        return redirect(url_for("enhancements.profile"))
-
-    # GET → fetch user data
-    cur.execute("""
-        SELECT id, username, email, phone, skills, profile_pic, resume
-        FROM users WHERE id = ?
-    """, (session["user_id"],))
-    row = cur.fetchone()
-    conn.close()
-
-    user = None
-    if row:
-        user = {
-            "id": row["id"],
-            "username": row["username"],
-            "email": row["email"],
-            "phone": row["phone"],
-            "skills": row["skills"],
-            "profile_pic": row["profile_pic"],
-            "resume": row["resume"]
-        }
-
-    return render_template("profile.html", user=user)
-
-
-
 # ------------------ File Routes ------------------
 
 @enhancements_bp.route('/uploads/profile_pics/<filename>')
@@ -1313,6 +1314,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
