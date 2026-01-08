@@ -437,7 +437,6 @@ def profile():
     cur.execute("SELECT role, username, email FROM users WHERE id = ?", (session["user_id"],))
     user_row = cur.fetchone()
 
-    user_role = user_row["role"]
     username = user_row["username"]
     email = user_row["email"]
 
@@ -1379,6 +1378,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
