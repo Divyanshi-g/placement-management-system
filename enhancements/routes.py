@@ -504,7 +504,7 @@ def profile():
             else url_for("enhancements.student_dashboard")
         )
     )
-)
+
 
 # ------------------ Admin Pages ------------------
 
@@ -1320,6 +1320,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
