@@ -433,9 +433,13 @@ def profile():
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # -------- NAVBAR ROLE LOGIC --------
-    cur.execute("SELECT role, username, email FROM users WHERE id = ?", (session["user_id"],))
+    # -------- NAVBAR + USER VALIDATION --------
+    cur.execute("SELECT id, role, username, email FROM users WHERE id = ?", (session["user_id"],))
     user_row = cur.fetchone()
+
+    if not user_row:
+        flash("User not found. Please login again.", "danger")
+        return redirect(url_for("enhancements.login"))
 
     username = user_row["username"]
     email = user_row["email"]
@@ -538,6 +542,10 @@ def profile():
     row = cur.fetchone()
     conn.close()
 
+    if not row:
+        flash("User data could not be loaded.", "danger")
+        return redirect(url_for("enhancements.login"))
+
     user = {
         "username": row["username"],
         "email": row["email"],
@@ -560,10 +568,11 @@ def profile():
     return render_template(
         "profile.html",
         user=user,
-       show_nav_options=True,
+        show_nav_options=True,
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
+
 # ------------------ Admin Pages ------------------
 
 @enhancements_bp.route("/admin_dashboard")
@@ -1378,6 +1387,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
