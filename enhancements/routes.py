@@ -576,7 +576,7 @@ def profile():
 
 @enhancements_bp.route("/practice")
 def practice():
-    return render_template("practice.html"
+    return render_template("practice.html",
         show_nav_options=True,
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
@@ -1390,6 +1390,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
