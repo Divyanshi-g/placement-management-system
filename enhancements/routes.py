@@ -433,79 +433,139 @@ def profile():
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # Get current data first
-    cur.execute("""
-        SELECT username, email, phone, skills, profile_pic, resume
-        FROM users WHERE id = ?
-    """, (session["user_id"],))
-    current = cur.fetchone()
+    # -------- NAVBAR ROLE LOGIC --------
+    cur.execute("SELECT role, username, email FROM users WHERE id = ?", (session["user_id"],))
+    user_row = cur.fetchone()
 
+    user_role = user_row["role"]
+    username = user_row["username"]
+    email = user_row["email"]
+
+    # -------- PROFILE UPDATE --------
     if request.method == "POST":
 
-        phone = request.form.get("phone", "").strip()
-        skills = request.form.get("skills", "").strip()
+        fields = {
+            "full_name": request.form.get("full_name", "").strip(),
+            "phone": request.form.get("phone", "").strip(),
+            "gender": request.form.get("gender", "").strip(),
+            "course": request.form.get("course", "").strip(),
+            "branch": request.form.get("branch", "").strip(),
+            "passing_year": request.form.get("passing_year", "").strip(),
+            "cgpa": request.form.get("cgpa", "").strip(),
+            "bio": request.form.get("bio", "").strip(),
+            "skills": request.form.get("skills", "").strip(),
+            "certifications": request.form.get("certifications", "").strip(),
+            "linkedin": request.form.get("linkedin", "").strip(),
+            "github": request.form.get("github", "").strip()
+        }
 
-        # ---- FILES ----
+        # -------- PROFILE PIC --------
         profile_pic_file = request.files.get("profile_pic")
-        resume_file = request.files.get("resume")
-
-        profile_pic_filename = current["profile_pic"]
-        resume_filename = current["resume"]
-
+        profile_pic_filename = None
         if profile_pic_file and profile_pic_file.filename:
             profile_pic_filename = secure_filename(profile_pic_file.filename)
             profile_pic_file.save(os.path.join(PROFILE_PIC_FOLDER, profile_pic_filename))
 
+        # -------- RESUME --------
+        resume_file = request.files.get("resume")
+        resume_filename = None
         if resume_file and resume_file.filename:
             resume_filename = secure_filename(resume_file.filename)
             resume_file.save(os.path.join(RESUME_FOLDER, resume_filename))
 
-        # ---- UPDATE ONLY OPTIONAL FIELDS ----
-        cur.execute("""
-            UPDATE users
-            SET 
-                phone = COALESCE(NULLIF(?, ''), phone),
-                skills = COALESCE(NULLIF(?, ''), skills),
-                profile_pic = ?,
-                resume = ?
-            WHERE id = ?
-        """, (
-            phone,
-            skills,
-            profile_pic_filename,
-            resume_filename,
-            session["user_id"]
-        ))
+        # -------- CHECK PROFILE EXISTS --------
+        cur.execute("SELECT id FROM profiles WHERE user_id = ?", (session["user_id"],))
+        profile_exists = cur.fetchone()
+
+        if profile_exists:
+            cur.execute("""
+                UPDATE profiles
+                SET full_name = COALESCE(NULLIF(?, ''), full_name),
+                    phone = COALESCE(NULLIF(?, ''), phone),
+                    gender = COALESCE(NULLIF(?, ''), gender),
+                    course = COALESCE(NULLIF(?, ''), course),
+                    branch = COALESCE(NULLIF(?, ''), branch),
+                    passing_year = COALESCE(NULLIF(?, ''), passing_year),
+                    cgpa = COALESCE(NULLIF(?, ''), cgpa),
+                    bio = COALESCE(NULLIF(?, ''), bio),
+                    skills = COALESCE(NULLIF(?, ''), skills),
+                    certifications = COALESCE(NULLIF(?, ''), certifications),
+                    linkedin = COALESCE(NULLIF(?, ''), linkedin),
+                    github = COALESCE(NULLIF(?, ''), github),
+                    profile_pic = COALESCE(?, profile_pic),
+                    resume = COALESCE(?, resume)
+                WHERE user_id = ?
+            """, (
+                fields["full_name"], fields["phone"], fields["gender"],
+                fields["course"], fields["branch"], fields["passing_year"],
+                fields["cgpa"], fields["bio"], fields["skills"],
+                fields["certifications"], fields["linkedin"], fields["github"],
+                profile_pic_filename, resume_filename,
+                session["user_id"]
+            ))
+
+        else:
+            cur.execute("""
+                INSERT INTO profiles 
+                (user_id, full_name, phone, gender, course, branch, passing_year, cgpa,
+                 bio, skills, certifications, linkedin, github, profile_pic, resume)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                session["user_id"],
+                fields["full_name"], fields["phone"], fields["gender"],
+                fields["course"], fields["branch"], fields["passing_year"],
+                fields["cgpa"], fields["bio"], fields["skills"],
+                fields["certifications"], fields["linkedin"], fields["github"],
+                profile_pic_filename, resume_filename
+            ))
 
         conn.commit()
         flash("✅ Profile updated successfully!", "success")
         return redirect(url_for("enhancements.profile"))
 
+    # -------- PROFILE FETCH --------
+    cur.execute("""
+        SELECT u.username, u.email,
+               p.full_name, p.phone, p.gender, p.course, p.branch,
+               p.passing_year, p.cgpa, p.bio,
+               p.skills, p.certifications,
+               p.linkedin, p.github,
+               p.profile_pic, p.resume
+        FROM users u
+        LEFT JOIN profiles p ON u.id = p.user_id
+        WHERE u.id = ?
+    """, (session["user_id"],))
+
+    row = cur.fetchone()
     conn.close()
 
     user = {
-        "username": current["username"],
-        "email": current["email"],
-        "phone": current["phone"],
-        "skills": current["skills"],
-        "profile_pic": current["profile_pic"],
-        "resume": current["resume"]
+        "username": row["username"],
+        "email": row["email"],
+        "full_name": row["full_name"],
+        "phone": row["phone"],
+        "gender": row["gender"],
+        "course": row["course"],
+        "branch": row["branch"],
+        "passing_year": row["passing_year"],
+        "cgpa": row["cgpa"],
+        "bio": row["bio"],
+        "skills": row["skills"],
+        "certifications": row["certifications"],
+        "linkedin": row["linkedin"],
+        "github": row["github"],
+        "profile_pic": row["profile_pic"],
+        "resume": row["resume"]
     }
 
     return render_template(
         "profile.html",
         user=user,
-        status="success",
         show_nav_options=True,
-        is_admin=session.get("role") == "admin",
-        home_url=(
-            url_for("enhancements.admin_dashboard")
-            if session.get("role") == "admin"
-            else url_for("enhancements.student_dashboard")
-        )
+        is_admin=(user_role == "admin"),
+        home_url=url_for("enhancements.admin_dashboard") if user_role == "admin"
+                 else url_for("enhancements.student_dashboard")
     )
-
-
 # ------------------ Admin Pages ------------------
 
 @enhancements_bp.route("/admin_dashboard")
@@ -1320,6 +1380,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
