@@ -26,24 +26,25 @@
 
       <p class="text-gray-700 font-semibold text-center">{{ user.full_name or user.username }}</p>
 
+      <!-- only editable on edit -->
       <input type="file" name="profile_pic"
-             class="text-sm mt-2 inputField hidden">
+             class="text-sm mt-2 hidden editableField">
     </div>
 
     <!-- Username + Email -->
     <div class="grid grid-cols-2 gap-6">
       <div>
         <label class="font-semibold">Username</label>
-        <input type="text" name="username" value="{{ user.username }}"
+        <input type="text" value="{{ user.username }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField focus:ring-2 focus:ring-green-500">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500">
       </div>
 
       <div>
         <label class="font-semibold">Email</label>
-        <input type="email" name="email" value="{{ user.email }}"
+        <input type="email" value="{{ user.email }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField focus:ring-2 focus:ring-green-500">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500">
       </div>
     </div>
 
@@ -53,14 +54,14 @@
         <label class="font-semibold">Phone</label>
         <input type="text" name="phone" value="{{ user.phone or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
 
       <div>
         <label class="font-semibold">Gender</label>
         <input type="text" name="gender" value="{{ user.gender or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
     </div>
 
@@ -70,14 +71,14 @@
         <label class="font-semibold">Course</label>
         <input type="text" name="course" value="{{ user.course or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
 
       <div>
         <label class="font-semibold">Branch</label>
         <input type="text" name="branch" value="{{ user.branch or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
     </div>
 
@@ -87,14 +88,14 @@
         <label class="font-semibold">Passing Year</label>
         <input type="text" name="passing_year" value="{{ user.passing_year or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
 
       <div>
         <label class="font-semibold">CGPA / %</label>
         <input type="text" name="cgpa" value="{{ user.cgpa or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
     </div>
 
@@ -103,7 +104,7 @@
       <label class="font-semibold">Short Bio</label>
       <textarea name="bio" rows="2"
                 disabled
-                class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">{{ user.bio or '' }}</textarea>
+                class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">{{ user.bio or '' }}</textarea>
     </div>
 
     <!-- Skills -->
@@ -111,7 +112,7 @@
       <label class="font-semibold">Skills</label>
       <textarea name="skills" rows="3"
                 disabled
-                class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">{{ user.skills or '' }}</textarea>
+                class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">{{ user.skills or '' }}</textarea>
     </div>
 
     <!-- Certifications -->
@@ -119,7 +120,7 @@
       <label class="font-semibold">Certifications</label>
       <textarea name="certifications" rows="3"
                 disabled
-                class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">{{ user.certifications or '' }}</textarea>
+                class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">{{ user.certifications or '' }}</textarea>
     </div>
 
     <!-- LinkedIn + GitHub -->
@@ -128,22 +129,22 @@
         <label class="font-semibold">LinkedIn</label>
         <input type="text" name="linkedin" value="{{ user.linkedin or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
 
       <div>
         <label class="font-semibold">GitHub</label>
         <input type="text" name="github" value="{{ user.github or '' }}"
                disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500 inputField">
+               class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
       </div>
     </div>
 
-    <!-- Resume Upload -->
+    <!-- Resume -->
     <div>
       <label class="font-semibold">Upload Resume</label>
 
-      <div class="border-2 border-dashed border-gray-500 rounded-lg p-4 text-center inputField hidden">
+      <div class="border-2 border-dashed border-gray-500 rounded-lg p-4 text-center hidden editableField">
         <input type="file" name="resume" class="mx-auto">
         <p class="text-sm text-gray-600 mt-1">PDF / DOC allowed</p>
       </div>
@@ -172,7 +173,7 @@
 
 <script>
 function enableEdit() {
-  document.querySelectorAll(".inputField").forEach(el => {
+  document.querySelectorAll(".editableField").forEach(el => {
     el.disabled = false;
     el.classList.remove("hidden");
   });
