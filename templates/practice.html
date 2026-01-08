@@ -1,77 +1,68 @@
 {% extends "base.html" %}
-
-{% block nav_options %}
-  <a href="/student_dashboard" class="hover:text-yellow-300 transition">Home</a>
-  <a href="/about" class="hover:text-yellow-300 transition">About</a>
-  <a href="/rate" class="hover:text-yellow-300 transition">Rate</a>
-  <a href="/logout" class="hover:text-yellow-300 transition">Logout</a>
-{% endblock %}
-
 {% block content %}
-<div class="max-w-6xl mx-auto mt-10 p-6 rounded-xl shadow-lg animate-fadeIn 
-            bg-gradient-to-r from-blue-50 via-red to-blue-50">
+<div class="max-w-7xl mx-auto p-6 mt-8 rounded-xl shadow-xl bg-gradient-to-r 
+            from-blue-50 via-white to-blue-50 animate-fadeIn">
 
-  <!-- Page Title -->
-  <h2 class="text-3xl font-bold text-gray-800 mb-10 text-center">
-    📝 Practice & Quiz
+  <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
+    📝 Practice & Quiz Arena
   </h2>
 
-  <!-- ================= Mode Selection ================= -->
-  <div class="flex justify-center gap-6 mb-10">
-    <button id="mode-practice" class="mode-btn bg-blue-600">📚 Practice</button>
-    <button id="mode-quiz" class="mode-btn bg-yellow-600">🎯 Quiz</button>
+  <!-- MODE BUTTONS -->
+  <div class="flex justify-center gap-6 mb-8">
+    <button id="modePractice" class="modeBtn bg-blue-600">📚 Practice</button>
+    <button id="modeQuiz" class="modeBtn bg-yellow-600">🎯 Quiz</button>
   </div>
 
-  <!-- ================= Category Buttons ================= -->
-  <div class="flex justify-center gap-4 mb-8 flex-wrap hidden" id="category-buttons">
-    <button data-type="coding" class="category-btn bg-blue-600">💻 Coding</button>
-    <button data-type="aptitude" class="category-btn bg-green-600">🔢 Aptitude</button>
-    <button data-type="reasoning" class="category-btn bg-purple-600">🧠 Reasoning</button>
-    <button data-type="interview" class="category-btn bg-pink-600">🎤 Interview</button>
-  </div>
-
-  <!-- ================= Practice Section ================= -->
-  <div id="practice-section" class="hidden">
-    <h3 class="text-xl font-semibold mb-4 text-gray-700">📚 Practice Questions</h3>
-    <div id="practice-questions"
-     class="bg-white text-gray-900 border rounded-lg p-5 shadow-inner text-lg min-h-[100px]">
+  <!-- TOPICS -->
+  <div id="topicBox" class="hidden text-center mb-8">
+    <h3 class="text-xl font-semibold mb-4">Choose Topic</h3>
+    <div class="flex justify-center flex-wrap gap-4">
+      <button class="topicBtn bg-blue-600" data-topic="coding">💻 Coding</button>
+      <button class="topicBtn bg-green-600" data-topic="aptitude">🔢 Aptitude</button>
+      <button class="topicBtn bg-purple-600" data-topic="reasoning">🧠 Reasoning</button>
+      <button class="topicBtn bg-pink-600" data-topic="interview">🎤 Interview</button>
+      <button class="topicBtn bg-orange-600" data-topic="gd">🗣 Group Discussion</button>
     </div>
   </div>
 
-  <!-- ================= Quiz Section ================= -->
-  <div id="quiz-section" class="hidden mt-12">
-    <h3 class="text-xl font-semibold mb-4 text-gray-700">🎯 Quiz Section</h3>
-    <form id="quiz-form" class="space-y-6"></form>
-    <button id="submit-quiz" 
-      class="mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition hidden">
+  <!-- PRACTICE SECTION -->
+  <div id="practiceSection" class="hidden">
+    <h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
+    <div id="practiceContainer" class="space-y-4"></div>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div id="quizSection" class="hidden mt-8">
+    <h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
+    <form id="quizForm" class="space-y-4"></form>
+
+    <button id="submitQuiz" 
+      class="hidden mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition">
       Submit Quiz
     </button>
-    <div id="quiz-result" class="mt-6 p-4 rounded-lg bg-gray-50 hidden"></div>
+
+    <!-- RESULT -->
+    <div id="quizResult" class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow"></div>
+
+    <!-- SCORE HISTORY -->
+    <div id="scoreHistory" class="mt-6 bg-white border rounded-lg p-4 shadow">
+      <h4 class="font-bold mb-2">📊 Previous Attempts</h4>
+      <div id="historyList" class="text-gray-700 text-sm"></div>
+    </div>
   </div>
 </div>
 
 <style>
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes fadeIn {from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+  .animate-fadeIn{animation:fadeIn .7s ease-in-out;}
+  .modeBtn,.topicBtn{
+    padding:10px 20px;border-radius:10px;color:white;font-weight:700;
+    box-shadow:0 3px 8px rgba(0,0,0,.2);transition:0.3s;
   }
-  .animate-fadeIn { animation: fadeIn 0.6s ease-in-out; }
-  .mode-btn, .category-btn {
-    padding: 10px 20px;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    transition: 0.3s;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
-  .mode-btn:hover, .category-btn:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-  }
+  .modeBtn:hover,.topicBtn:hover{transform:scale(1.05);}
+  .qaBox{background:white;padding:14px;border-radius:8px;border-left:6px solid #4f46e5;}
+  .ans{display:none;margin-top:6px;background:#f9fafb;padding:8px;border-radius:6px;}
 </style>
 
 <script src="{{ url_for('static', filename='js/practice.js') }}"></script>
-<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
-<script src="{{ url_for('static', filename='js/questions_data.js') }}"></script>
 {% endblock %}
-
