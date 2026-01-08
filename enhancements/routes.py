@@ -561,10 +561,9 @@ def profile():
     return render_template(
         "profile.html",
         user=user,
-        show_nav_options=True,
-        is_admin=(user_role == "admin"),
-        home_url=url_for("enhancements.admin_dashboard") if user_role == "admin"
-                 else url_for("enhancements.student_dashboard")
+       show_nav_options=True,
+        is_admin=False,
+        home_url=url_for("enhancements.student_dashboard")
     )
 # ------------------ Admin Pages ------------------
 
@@ -1380,6 +1379,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
