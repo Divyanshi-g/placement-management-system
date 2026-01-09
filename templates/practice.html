@@ -33,22 +33,58 @@
 
 <!-- QUIZ SECTION -->
 <div id="quizSection" class="hidden mt-8">
-<h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
 
-<form id="quizForm" class="space-y-4 max-h-[420px] overflow-y-auto pr-2"></form>
+    <!-- Right Side Save Score Button -->
+    <button id="saveScoreBtn" class="hidden fixed right-6 top-28 
+            bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
+        📁 Save Score
+    </button>
 
-<button id="submitQuiz" class="hidden mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition">
-Submit Quiz
-</button>
+    <h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
 
-<!-- RESULT -->
-<div id="quizResult" class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow text-lg font-semibold text-center"></div>
+    <!-- QUIZ CARD -->
+    <div class="bg-white shadow-xl rounded-xl p-5 border
+                min-h-[380px] flex flex-col justify-between">
 
-<!-- SCORE HISTORY -->
-<div id="scoreHistory" class="mt-6 bg-white border rounded-lg p-4 shadow">
-<h4 class="font-bold mb-2">📊 Previous Attempts</h4>
-<div id="historyList" class="text-gray-700 text-sm">No previous attempts yet...</div>
-</div>
+        <!-- QUESTIONS CONTAINER -->
+        <form id="quizForm" class="space-y-4 overflow-y-auto max-h-[300px] pr-2"></form>
+
+        <!-- SUBMIT BUTTON (Only visible on last question via JS) -->
+        <button id="submitQuiz"
+            class="hidden w-full mt-4 px-6 py-2 bg-yellow-500 
+                   text-white rounded-lg shadow hover:bg-yellow-600 transition">
+            Submit Quiz
+        </button>
+
+    </div>
+
+    <!-- RESULT PANEL -->
+    <div id="quizResult"
+        class="hidden mt-6 bg-gray-50 p-5 rounded-xl shadow text-center">
+
+        <h2 class="text-2xl font-bold mb-2">🎉 Result Summary</h2>
+
+        <p class="text-lg font-semibold text-green-700">
+            Correct Answers: <span id="correctCount"></span>
+        </p>
+
+        <p class="text-lg font-semibold text-red-600">
+            Wrong Answers: <span id="wrongCount"></span>
+        </p>
+
+        <p class="text-lg font-semibold text-gray-700">
+            Not Attempted: <span id="notAttempt"></span>
+        </p>
+
+        <h1 id="emojiResult" class="text-4xl mt-3"></h1>
+    </div>
+ <!-- SCORE HISTORY -->
+    <div id="scoreHistory" class="mt-6 bg-white border rounded-lg p-4 shadow">
+        <h4 class="font-bold mb-2">📊 Previous Attempts</h4>
+        <div id="historyList" class="text-gray-700 text-sm">
+            No previous attempts yet...
+        </div>
+    </div>
 </div>
 </div>
 
@@ -2025,37 +2061,51 @@ answer: "Confidence + Clarity + Respect"
 ]
 };
 
-/* UI */
-const topicBox=document.getElementById("topicBox");
-const practiceSection=document.getElementById("practiceSection");
-const quizSection=document.getElementById("quizSection");
-const practiceContainer=document.getElementById("practiceContainer");
-const quizForm=document.getElementById("quizForm");
-const quizResult=document.getElementById("quizResult");
-const submitQuiz=document.getElementById("submitQuiz");
+/* ===================== UI ===================== */
+const topicBox = document.getElementById("topicBox");
+const practiceSection = document.getElementById("practiceSection");
+const quizSection = document.getElementById("quizSection");
+const practiceContainer = document.getElementById("practiceContainer");
 
-document.getElementById("modePractice").onclick=()=>{
-topicBox.classList.remove("hidden");
-practiceSection.classList.remove("hidden");
-quizSection.classList.add("hidden");
+const quizForm = document.getElementById("quizForm");
+const quizResult = document.getElementById("quizResult");
+const submitQuiz = document.getElementById("submitQuiz");
+
+const correctSpan = document.getElementById("correctCount");
+const wrongSpan = document.getElementById("wrongCount");
+const notAttemptSpan = document.getElementById("notAttempt");
+const emojiResult = document.getElementById("emojiResult");
+
+const saveScoreBtn = document.getElementById("saveScoreBtn");
+const historyList = document.getElementById("historyList");
+
+/* ===================== MODE SWITCH ===================== */
+document.getElementById("modePractice").onclick = () => {
+  topicBox.classList.remove("hidden");
+  practiceSection.classList.remove("hidden");
+  quizSection.classList.add("hidden");
 };
 
-document.getElementById("modeQuiz").onclick=()=>{
-topicBox.classList.remove("hidden");
-quizSection.classList.remove("hidden");
-practiceSection.classList.add("hidden");
+document.getElementById("modeQuiz").onclick = () => {
+  topicBox.classList.remove("hidden");
+  quizSection.classList.remove("hidden");
+  practiceSection.classList.add("hidden");
 };
 
-document.querySelectorAll(".topicBtn").forEach(btn=>{
-btn.addEventListener("click",()=>{
-let topic=btn.dataset.topic;
-renderPractice(topic);
-startQuiz(topic);
-});
+/* ===================== TOPIC CLICK ===================== */
+document.querySelectorAll(".topicBtn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    let topic = btn.dataset.topic;
+
+    if (practiceData[topic]) renderPractice(topic);
+    if (quizData[topic]) startQuiz(topic);
+
+    quizResult.classList.add("hidden");
+    saveScoreBtn.classList.add("hidden");
+  });
 });
 
-/* PRACTICE */
-// ================= PRACTICE LOGIC =================
+/* ===================== PRACTICE ===================== */
 function renderPractice(topic) {
   practiceContainer.innerHTML = "";
 
@@ -2073,7 +2123,7 @@ function renderPractice(topic) {
 
     let ansDiv = document.createElement("div");
     ansDiv.className = "ans";
-    // Safely handle undefined explanations
+
     let explanation = x.e ? x.e.replace(/\n/g, "<br>") : "";
     ansDiv.innerHTML = `<b>Answer:</b> ${x.a}<br>${explanation}`;
 
@@ -2087,55 +2137,103 @@ function renderPractice(topic) {
   });
 }
 
-/* QUIZ */
-let activeQuiz=[];
-function startQuiz(topic){
-activeQuiz=quizData[topic];
-quizForm.innerHTML="";
-activeQuiz.forEach((q,i)=>{
-let opts=q.options.map((o,idx)=>`
-<label><input type="radio" name="q${i}" value="${idx}"> ${o}</label><br>`).join("");
-quizForm.innerHTML+=`<div class="qaBox"><b>Q${i+1}. ${q.q}</b><br>${opts}</div>`;
-});
-submitQuiz.classList.remove("hidden");
+/* ===================== QUIZ ===================== */
+let activeQuiz = [];
+
+function startQuiz(topic) {
+  activeQuiz = quizData[topic] || [];
+  quizForm.innerHTML = "";
+  quizResult.classList.add("hidden");
+  saveScoreBtn.classList.add("hidden");
+  submitQuiz.classList.remove("hidden");
+
+  activeQuiz.forEach((q, i) => {
+    let opts = q.options
+      .map((o, idx) => `
+        <label class="block">
+          <input type="radio" name="q${i}" value="${idx}">
+          ${o}
+        </label>
+      `)
+      .join("");
+
+    quizForm.innerHTML += `
+      <div class="qaBox">
+        <b>Q${i + 1}. ${q.q}</b>
+        <br>${opts}
+      </div>
+    `;
+  });
 }
 
-submitQuiz.onclick=()=>{
-let score=0,attempted=0;
-activeQuiz.forEach((q,i)=>{
-let ans=document.querySelector(`input[name='q${i}']:checked`);
-if(ans){attempted++;if(+ans.value===q.correct)score++;}
-});
+/* ===================== SUBMIT QUIZ ===================== */
+submitQuiz.onclick = () => {
+  let correct = 0;
+  let wrong = 0;
 
-let level="🙂 Good",cls="goodResult";
-if(score<=5){level="😭 Bad";cls="badResult";}
-else if(score<=10){level="🙂 Good";cls="averageResult";}
-else if(score<=20){level="😎 Better";cls="goodResult";}
-else{level="🔥 Best";cls="bestResult";}
+  activeQuiz.forEach((q, i) => {
+    let ans = document.querySelector(`input[name='q${i}']:checked`);
+    if (!ans) return;
 
-quizResult.className=`mt-6 p-4 rounded-lg shadow text-lg font-semibold text-center ${cls}`;
-quizResult.classList.remove("hidden");
-quizResult.innerHTML=`Score: ${score}/${activeQuiz.length}<br>Performance: ${level}<br>Attempted: ${attempted}`;
+    if (+ans.value === q.correct) correct++;
+    else wrong++;
+  });
 
-saveHistory(score);
-showHistory();
+  let total = activeQuiz.length;
+  let notAttempt = total - (correct + wrong);
+  let percent = (correct / total) * 100;
+
+  correctSpan.innerText = correct;
+  wrongSpan.innerText = wrong;
+  notAttemptSpan.innerText = notAttempt;
+
+  if (percent >= 80) emojiResult.innerText = "🎉 Excellent!";
+  else if (percent >= 50) emojiResult.innerText = "🙂 Good Job!";
+  else emojiResult.innerText = "😐 Need More Practice";
+
+  quizResult.classList.remove("hidden");
+  saveScoreBtn.classList.remove("hidden");
+  submitQuiz.classList.add("hidden");
 };
 
-/* SCORE HISTORY */
-function saveHistory(score){
-let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
-history.push(score);
-localStorage.setItem("quizHistory",JSON.stringify(history));
+/* ===================== SAVE HISTORY ===================== */
+saveScoreBtn.addEventListener("click", () => {
+  let history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+
+  history.push({
+    correct: correctSpan.innerText,
+    wrong: wrongSpan.innerText,
+    notAttempt: notAttemptSpan.innerText,
+    time: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("quizHistory", JSON.stringify(history));
+
+  alert("Score Saved Successfully 🎯");
+  showHistory();
+});
+
+function showHistory() {
+  let history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+
+  if (!history.length) {
+    historyList.innerText = "No previous attempts yet...";
+    return;
+  }
+
+  historyList.innerHTML = history
+    .map(
+      (h, i) =>
+        `Attempt ${i + 1} → Correct: ${h.correct}, Wrong: ${h.wrong}, Missed: ${h.notAttempt} (${h.time})`
+    )
+    .join("<br>");
 }
 
-function showHistory(){
-let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
-let box=document.getElementById("historyList");
-box.innerHTML=history.length?history.map((s,i)=>`Attempt ${i+1}: ${s} score`).join("<br>"):"No previous attempts yet...";
-}
 showHistory();
+
 </script>
 {% endblock %}
+
 
 
 
