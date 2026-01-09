@@ -516,7 +516,7 @@ gd:[
 {q:"Is prior knowledge necessary?", a:"Helpful but not mandatory.", e:"Having background information improves contribution quality. However, logical reasoning and communication skills also matter."},
 {q:"How to balance speaking and listening?", a:"Ensure fair participation.", e:"Speak clearly when you have points, but also listen actively. Avoid dominating or staying silent entirely."},
 {q:"How to present a unique idea?", a:"Be innovative but relevant.", e:"Introduce original viewpoints backed with reasoning or examples. Creativity is appreciated if it aligns with the topic."},
-{q:"What role does ethics play in GD?", a:"High importance.", e:"Avoid unethical arguments, personal attacks, or biased statements. Professional behavior and respect are crucial in GD evaluation."}
+{q:"What role does ethics play in GD?", a:"High importance.", e:"Avoid unethical arguments, personal attacks, or biased statements. Professional behavior and respect are crucial in GD evaluation."},
 {q:"Topic: Corporate Ethics", a:"Moral principles in business.", e:"Corporate ethics involves fairness, transparency, and responsibility in business practices. GD topics can cover whistleblowing, sustainability, and employee treatment. Demonstrating understanding of ethical dilemmas shows maturity and professional insight."},
 
 {q:"Topic: Work-Life Balance", a:"Healthy balance between work and personal life.", e:"Work-life balance ensures productivity while maintaining well-being. In GDs, candidates can discuss flexible hours, remote work, and stress management. Presenting practical solutions shows empathy, planning skills, and awareness of workplace dynamics."},
