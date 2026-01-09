@@ -1,66 +1,55 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="max-w-7xl mx-auto p-6 mt-8 rounded-xl shadow-xl bg-gradient-to-r 
             from-blue-50 via-white to-blue-50 animate-fadeIn">
 
-  <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
-    📝 Practice & Quiz Arena
-  </h2>
+<h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
+📝 Practice & Quiz Arena
+</h2>
 
-  <!-- MODE BUTTONS -->
-  <div class="flex justify-center gap-6 mb-8">
-    <button id="modePractice" class="modeBtn bg-blue-600">📚 Practice</button>
-    <button id="modeQuiz" class="modeBtn bg-yellow-600">🎯 Quiz</button>
-  </div>
+<!-- MODE BUTTONS -->
+<div class="flex justify-center gap-6 mb-8">
+<button id="modePractice" class="modeBtn bg-blue-600">📚 Practice</button>
+<button id="modeQuiz" class="modeBtn bg-yellow-600">🎯 Quiz</button>
+</div>
 
-  <!-- TOPIC BOX -->
-  <div id="topicBox" class="hidden text-center mb-8">
-    <h3 class="text-xl font-semibold mb-4">Choose Topic</h3>
-    <div class="flex justify-center flex-wrap gap-4">
-      <button class="topicBtn bg-blue-600" data-topic="coding">💻 Coding</button>
-      <button class="topicBtn bg-green-600" data-topic="aptitude">🔢 Aptitude</button>
-      <button class="topicBtn bg-purple-600" data-topic="reasoning">🧠 Reasoning</button>
-      <button class="topicBtn bg-pink-600" data-topic="interview">🎤 Interview</button>
-      <button class="topicBtn bg-orange-600" data-topic="gd">🗣 Group Discussion</button>
-    </div>
-  </div>
+<!-- TOPIC BOX -->
+<div id="topicBox" class="hidden text-center mb-8">
+<h3 class="text-xl font-semibold mb-4">Choose Topic</h3>
+<div class="flex justify-center flex-wrap gap-4">
+<button class="topicBtn bg-blue-600" data-topic="coding">💻 Coding</button>
+<button class="topicBtn bg-green-600" data-topic="aptitude">🔢 Aptitude</button>
+<button class="topicBtn bg-purple-600" data-topic="reasoning">🧠 Reasoning</button>
+<button class="topicBtn bg-pink-600" data-topic="interview">🎤 Interview</button>
+<button class="topicBtn bg-orange-600" data-topic="gd">🗣 Group Discussion</button>
+</div>
+</div>
 
-  <!-- PRACTICE SECTION -->
-  <div id="practiceSection" class="hidden">
-    <h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
-    <div id="practiceContainer" 
-         class="space-y-4 max-h-[420px] overflow-y-auto pr-2">
-    </div>
-  </div>
+<!-- PRACTICE SECTION -->
+<div id="practiceSection" class="hidden">
+<h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
+<div id="practiceContainer" class="space-y-4 max-h-[420px] overflow-y-auto pr-2"></div>
+</div>
 
-  <!-- QUIZ SECTION -->
-  <div id="quizSection" class="hidden mt-8">
-    <h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
+<!-- QUIZ SECTION -->
+<div id="quizSection" class="hidden mt-8">
+<h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
 
-    <form id="quizForm"
-          class="space-y-4 max-h-[420px] overflow-y-auto pr-2">
-    </form>
+<form id="quizForm" class="space-y-4 max-h-[420px] overflow-y-auto pr-2"></form>
 
-    <button id="submitQuiz" 
-      class="hidden mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition">
-      Submit Quiz
-    </button>
+<button id="submitQuiz" class="hidden mt-4 px-6 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition">
+Submit Quiz
+</button>
 
-    <!-- RESULT -->
-    <div id="quizResult" 
-         class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow text-lg font-semibold text-center">
-    </div>
+<!-- RESULT -->
+<div id="quizResult" class="hidden mt-6 bg-gray-50 p-4 rounded-lg shadow text-lg font-semibold text-center"></div>
 
-    <!-- SCORE HISTORY -->
-    <div id="scoreHistory" 
-         class="mt-6 bg-white border rounded-lg p-4 shadow">
-      <h4 class="font-bold mb-2">📊 Previous Attempts</h4>
-      <div id="historyList" class="text-gray-700 text-sm">
-        No previous attempts yet...
-      </div>
-    </div>
-  </div>
+<!-- SCORE HISTORY -->
+<div id="scoreHistory" class="mt-6 bg-white border rounded-lg p-4 shadow">
+<h4 class="font-bold mb-2">📊 Previous Attempts</h4>
+<div id="historyList" class="text-gray-700 text-sm">No previous attempts yet...</div>
+</div>
+</div>
 </div>
 
 <style>
@@ -68,31 +57,631 @@
 .animate-fadeIn{animation:fadeIn .7s ease-in-out;}
 
 .modeBtn,.topicBtn{
-  padding:10px 22px;border-radius:10px;color:white;font-weight:700;
-  box-shadow:0 3px 8px rgba(0,0,0,.2);transition:0.3s;
+padding:10px 22px;border-radius:10px;color:white;font-weight:700;
+box-shadow:0 3px 8px rgba(0,0,0,.2);transition:0.3s;
 }
 .modeBtn:hover,.topicBtn:hover{transform:scale(1.07);}
 
 .qaBox{
-  background:white;padding:14px;border-radius:8px;
-  border-left:6px solid #4f46e5;
+background:white;padding:14px;border-radius:8px;
+border-left:6px solid #4f46e5;
 }
 .ans{
-  display:none;margin-top:6px;background:#f9fafb;
-  padding:8px;border-radius:6px;
+display:none;margin-top:6px;background:#f9fafb;
+padding:8px;border-radius:6px;
 }
-
-/* Emoji Result Styles */
-.goodResult{
-  background:#d1fae5;border-left:6px solid #10b981;
-}
-.averageResult{
-  background:#e0f2fe;border-left:6px solid #0ea5e9;
-}
-.badResult{
-  background:#fee2e2;border-left:6px solid #ef4444;
-}
+.goodResult{background:#d1fae5;border-left:6px solid #10b981;}
+.averageResult{background:#e0f2fe;border-left:6px solid #0ea5e9;}
+.badResult{background:#fee2e2;border-left:6px solid #ef4444;}
+.bestResult{background:#fef3c7;border-left:6px solid #f59e0b;}
 </style>
 
-<script src="{{ url_for('static', filename='js/practice.js') }}"></script>
+<script>
+"use strict";
+
+/* PRACTICE QUESTIONS — 25 each topic */
+const practiceData = {
+coding:[
+  {
+    q: "What is the difference between a programming language and a framework?",
+    a: `A programming language is the base tool we use to write logic, such as Python, C, or Java.
+A framework is built on top of a language to simplify development, like Django for Python or React for JavaScript.
+Languages provide rules and syntax, while frameworks provide pre-built structures.
+In simple words: Language = foundation, Framework = ready-made structure to speed up work.`
+  },
+  {
+    q: "What do we mean by compilation and interpretation in programming?",
+    a: `Compilation converts the entire code into machine language at once before execution, like C or C++.
+Interpretation executes code line-by-line, like Python or JavaScript.
+Compiled programs are usually faster because they are converted beforehand.
+Interpreted programs are easier to debug but may run slower than compiled ones.`
+  },
+  {
+    q: "What is the importance of variables in programming?",
+    a: `Variables are used to store data so the program can remember and process values.
+They allow dynamic operations like calculations, decisions, and data handling.
+Without variables, we cannot manage user input, database values, or runtime data.
+They act like labeled containers where we keep information during program execution.`
+  },
+  {
+    q: "Explain what a function is and why it is used.",
+    a: `A function is a block of reusable code designed to perform a specific task.
+Instead of writing the same code again and again, we call the function when needed.
+It improves code readability, reduces repetition, and makes maintenance easy.
+Functions also help in breaking big programs into manageable pieces.`
+  },
+  {
+    q: "What is the difference between frontend and backend development?",
+    a: `Frontend is what the user sees and interacts with, like UI, buttons, and design.
+Backend works behind the scenes like databases, servers, and application logic.
+Frontend focuses on user experience, while backend focuses on data handling and performance.
+Together they form a complete working application or website.`
+  },
+  {
+    q: "What is a database and why do applications need it?",
+    a: `A database stores structured information like user data, records, and transactions.
+Applications need databases to save data permanently instead of losing it after closing.
+It helps in retrieving, updating, and managing data efficiently.
+Without databases, modern applications like banking, e-commerce, or social media cannot function.`
+  },
+  {
+    q: "What is the meaning of debugging in programming?",
+    a: `Debugging means finding and fixing errors in the program.
+Errors can be syntax errors, logical mistakes, or runtime issues.
+Debugging ensures that the application works correctly and efficiently.
+It is one of the most important skills every programmer must develop.`
+  },
+  {
+    q: "What are conditional statements and why are they important?",
+    a: `Conditional statements help programs make decisions based on conditions.
+Examples include if, else, and switch statements.
+They allow programs to react differently for different inputs or situations.
+Without conditions, programs would always behave the same way without intelligence.`
+  },
+  {
+    q: "Explain loops and their purpose in programming.",
+    a: `Loops allow us to repeat a block of code multiple times automatically.
+Common types include for loop, while loop, and do-while loop.
+They reduce manual repetition and make code shorter and efficient.
+Loops are used in tasks like iterating lists, processing records, and automation.`
+  },
+  {
+    q: "What is an algorithm in programming?",
+    a: `An algorithm is a step-by-step solution to solve a particular problem.
+It describes how the program should process input to get desired output.
+Good algorithms are efficient, clear, and minimize time and memory usage.
+They form the backbone of logical programming and problem solving.`
+  },
+  {
+    q: "What is the role of comments in code?",
+    a: `Comments are non-executable lines used to explain code meaning.
+They help developers understand complex logic or purpose of a function.
+Comments improve code readability, especially in large projects.
+They are useful for teamwork, maintenance, and learning.`
+  },
+  {
+    q: "What is object-oriented programming (OOP)?",
+    a: `OOP is a programming style based on real-world objects and concepts.
+It organizes code into classes and objects instead of simple procedures.
+Key principles include inheritance, encapsulation, polymorphism, and abstraction.
+OOP makes programs more modular, reusable, and easier to manage.`
+  },
+  {
+    q: "Explain what an API is in simple terms.",
+    a: `API stands for Application Programming Interface.
+It allows two software applications to communicate and share data.
+For example, login with Google or payment gateways use APIs.
+They help integrate services without exposing internal system details.`
+  },
+  {
+    q: "What is Git and why is it important for developers?",
+    a: `Git is a version control system used to track code changes.
+It allows multiple developers to work on the same project safely.
+You can restore older versions if something goes wrong.
+It is essential in teamwork, industry projects, and professional development.`
+  },
+  {
+    q: "What is responsive web design?",
+    a: `Responsive design ensures that a website works well on mobiles, tablets, and desktops.
+It adjusts layout automatically based on screen size.
+Technologies like CSS Flexbox, Grid, and media queries help achieve it.
+Without responsiveness, users will face bad experience on different devices.`
+  },
+  {
+    q: "Explain client-server architecture.",
+    a: `In client-server architecture, the client requests services and the server provides them.
+Client is usually a browser or application, while server stores data and logic.
+They communicate over the internet using protocols.
+This structure is used in almost every modern application.`
+  },
+  {
+    q: "What is recursion in programming?",
+    a: `Recursion is when a function calls itself to solve smaller parts of a problem.
+It is useful in problems like tree traversal, factorial, and Fibonacci.
+However, it must have a stopping condition to avoid infinite looping.
+Recursion simplifies logic but should be used carefully for performance.`
+  },
+  {
+    q: "What is exception handling?",
+    a: `Exception handling deals with unexpected errors during program execution.
+Instead of crashing, the program handles errors gracefully.
+It helps improve stability and user experience.
+Try-catch blocks are commonly used to manage exceptions.`
+  },
+  {
+    q: "What is the difference between array and list?",
+    a: `Array is a fixed-size collection of similar data types.
+List is dynamic and can grow or shrink as needed.
+Arrays are faster but less flexible, while lists are easier to use.
+Choice depends on the requirement and programming language.`
+  },
+  {
+    q: "What is the purpose of a IDE?",
+    a: `IDE stands for Integrated Development Environment.
+It provides tools like code editor, debugger, compiler, and testing support.
+Popular IDEs include VS Code, PyCharm, Eclipse, and IntelliJ.
+IDE makes coding faster, easier, and more productive.`
+  },
+  {
+    q: "What is time complexity in coding?",
+    a: `Time complexity measures how fast an algorithm runs as input grows.
+It helps compare efficiency of different solutions.
+Big-O notation is commonly used like O(n), O(log n), O(n^2).
+Better time complexity means faster performance.`
+  },
+  {
+    q: "Explain data structures in simple words.",
+    a: `Data structures are organized ways to store and manage data.
+Examples include arrays, stacks, queues, linked lists, and trees.
+They improve speed and efficiency of operations.
+Choosing correct data structure is key to good programming.`
+  },
+  {
+    q: "What is multithreading?",
+    a: `Multithreading allows a program to perform multiple tasks simultaneously.
+It improves performance especially in heavy processing.
+Useful in games, servers, and real-time applications.
+However, it requires careful handling to avoid conflicts.`
+  },
+  {
+    q: "What is a library in programming?",
+    a: `A library is a collection of pre-written code for common tasks.
+Instead of writing everything, developers simply use library functions.
+It saves time and reduces complexity.
+Examples include NumPy, Pandas, React, STL, etc.`
+  },
+  {
+    q: "Explain what full stack development means.",
+    a: `Full stack means working on both frontend and backend.
+A full stack developer handles UI, server logic, and database.
+They understand complete application workflow.
+Such developers are highly valuable in industry.`
+  },
+  {
+    q: "What is a syntax error?",
+    a: `Syntax error occurs when code does not follow language rules.
+It prevents program from running at all.
+Common examples: missing brackets, wrong keywords, or typos.
+They are usually easy to identify and fix.`
+  },
+  {
+    q: "What is a logical error?",
+    a: `Logical error happens when code runs but produces wrong output.
+It occurs due to incorrect logic or wrong approach.
+These are harder to find because program doesn’t crash.
+Testing helps identify and resolve them.`
+  },
+  {
+    q: "What is runtime error?",
+    a: `Runtime error happens while program is running.
+It may occur due to invalid input, memory issues, or missing files.
+Program stops suddenly when runtime error occurs.
+Exception handling helps control such situations.`
+  },
+  {
+    q: "Why is clean code important?",
+    a: `Clean code is easy to read, understand, and maintain.
+It uses good naming, proper formatting, and structured logic.
+Teams can work better on clean code bases.
+It reduces bugs and improves project quality.`
+  },
+  {
+    q: "What is deployment in software development?",
+    a: `Deployment means making a software available for users.
+It moves code from development to live environment.
+It includes hosting, configuration, and monitoring.
+Without deployment, even a good project cannot reach users.`
+  }
+],
+
+aptitude:[
+  {
+    q: "What is the basic idea of Percentage in Aptitude problems?",
+    a: "Percentage represents a value out of 100. It helps in comparing numbers, calculating increases or decreases, and understanding proportions in real scenarios like marks, salary hike, and discounts."
+  },
+  {
+    q: "Why is Ratio & Proportion important in aptitude?",
+    a: "Ratio compares two quantities while proportion shows equality of two ratios. It is widely used in mixing problems, population calculations, recipes, and speed–time problems."
+  },
+  {
+    q: "What do Profit and Loss questions generally check?",
+    a: "They test understanding of cost price, selling price, profit percentage, and loss percentage. These concepts are practical in business, shopping discounts, and financial decision making."
+  },
+  {
+    q: "What is the main concept of Simple Interest?",
+    a: "Simple Interest is calculated only on the principal amount for the entire period. It is useful in bank deposits, loans, and basic financial calculations."
+  },
+  {
+    q: "How is Compound Interest different from Simple Interest?",
+    a: "Compound Interest is calculated on principal plus accumulated interest. It grows faster than simple interest and is widely used in banking, investments, and savings."
+  },
+  {
+    q: "What does Time and Work topic mainly deal with?",
+    a: "It checks how fast work is completed individually or together. It is based on work rate and helps in understanding teamwork efficiency and resource planning."
+  },
+  {
+    q: "What is the concept behind Time, Speed and Distance problems?",
+    a: "These problems relate speed, distance, and time. They help understand travel time, motion, and real-life journey situations effectively."
+  },
+  {
+    q: "Why are Average questions important?",
+    a: "Averages help represent data in a simple way. They are useful in calculating marks, performance evaluation, salary analysis, and statistics."
+  },
+  {
+    q: "What do Partnership questions test?",
+    a: "They test investment and profit-sharing based on capital and time. These are helpful in business decision-making and understanding financial contributions."
+  },
+  {
+    q: "What is the basic idea behind Age problems?",
+    a: "Age problems compare present, past, and future ages using equations. They help build logical and algebraic thinking."
+  },
+  {
+    q: "Why is Data Interpretation important?",
+    a: "Data Interpretation tests your ability to understand tables, charts, and graphs. It checks analytical thinking and is highly relevant in business and analytics jobs."
+  },
+  {
+    q: "What do Probability questions measure?",
+    a: "Probability measures chances of an event happening. It helps in risk analysis, predictions, games, and decision-making in uncertain situations."
+  },
+  {
+    q: "What is the concept of Permutation?",
+    a: "Permutation deals with arrangements where order matters, like seating arrangements, passwords, and rankings."
+  },
+  {
+    q: "What is Combination in aptitude?",
+    a: "Combination deals with selections where order does not matter. It is useful in team selections, lottery, and choosing groups from a set."
+  },
+  {
+    q: "What do Number System questions usually test?",
+    a: "They focus on divisibility rules, factors, multiples, and remainders. These form the base of many other aptitude topics."
+  },
+  {
+    q: "What is meant by HCF and LCM?",
+    a: "HCF represents the greatest common divisor while LCM gives the smallest common multiple. They are useful in solving fraction and scheduling problems."
+  },
+  {
+    q: "What do Mixture and Alligation questions mainly focus on?",
+    a: "They deal with combining two or more quantities with different values to find a uniform mixture. These are practical in chemistry, finance, and food industry."
+  },
+  {
+    q: "What do Boats and Streams problems test?",
+    a: "They analyze effective speed in still water and flowing water. These help improve understanding of relative speed concepts."
+  },
+  {
+    q: "What are Trains problems based on?",
+    a: "Train problems are based on length, speed, and passing time. They test application of Time & Distance with relative motion concepts."
+  },
+  {
+    q: "What is the concept behind Pipes and Cistern problems?",
+    a: "They work similar to Work and Time, involving filling and emptying of tanks. These help understand flow rates and combined work efficiency."
+  },
+  {
+    q: "What do Percentage Increase & Decrease questions check?",
+    a: "They evaluate understanding of growth and reduction in values. These are widely used in marks comparison, salary hikes, and price drops."
+  },
+  {
+    q: "What is meant by Conversion in aptitude?",
+    a: "Conversion includes changing units like meters to kilometers, hours to minutes, and percentages to decimals. It ensures clarity and accuracy in solving."
+  },
+  {
+    q: "Why are Seating Arrangement questions important?",
+    a: "They test logical placement skills and analytical thinking. These are essential in reasoning-based aptitude exams."
+  },
+  {
+    q: "What do Calendar problems test?",
+    a: "Calendar questions deal with finding days, dates, and leap years. They check memory logic and modular arithmetic understanding."
+  },
+  {
+    q: "What is the concept behind Clock problems?",
+    a: "Clock problems involve calculating angles and meeting times of clock hands. They improve logical and visualization skills."
+  },
+  {
+    q: "What do Fractions and Decimals questions focus on?",
+    a: "They test ability to handle fractional values, conversions, and operations. These are basic but very important for quantitative aptitude."
+  },
+  {
+    q: "What is tested in Simplification and Approximation?",
+    a: "They focus on solving large expressions quickly with logic-based simplification. This improves speed and mental calculation ability."
+  },
+  {
+    q: "What is meant by Algebra in aptitude?",
+    a: "Algebra focuses on forming and solving equations. It strengthens analytical thinking and problem interpretation skills."
+  },
+  {
+    q: "Why do aptitude exams include Logical Word Problems?",
+    a: "They test real-world understanding, application of math concepts, and reasoning ability instead of pure calculations."
+  },
+  {
+    q: "Why is regular practice necessary for aptitude?",
+    a: "Regular practice helps improve speed, accuracy, and confidence. It also builds problem-solving strategy and exam readiness."
+  }
+],
+
+reasoning:[
+  // Number & Series
+  {q:"What comes next in the series: 2, 4, 8, 16, ?", a:"32", e:"Each number doubles the previous one: 16×2=32."},
+  {q:"Find the next number: 1, 4, 9, 16, ?", a:"25", e:"Pattern is perfect squares: 1²,2²,3²,4² → next is 5²=25."},
+  {q:"Find the missing number: 2, 5, 10, 17, ?", a:"26", e:"Pattern is n²+1 → 1²+1=2,2²+1=5,3²+1=10,4²+1=17,5²+1=26."},
+
+  // Odd One Out
+  {q:"Find the odd one out: 2, 3, 5, 7, 9", a:"9", e:"All others are prime numbers; 9 is not prime."},
+  {q:"Which word does not belong: Apple, Banana, Carrot, Mango", a:"Carrot", e:"Carrot is a vegetable, others are fruits."},
+
+  // Analogy
+  {q:"Dog : Puppy :: Cat : ?", a:"Kitten", e:"Just like a puppy is a young dog, a kitten is a young cat."},
+  {q:"Pen : Write :: Knife : ?", a:"Cut", e:"Pen is used to write, knife is used to cut."},
+
+  // Blood Relation
+  {q:"A is father of B, B is mother of C. How is C related to A?", a:"Grandchild", e:"B is A's child, C is B's child → C is A's grandchild."},
+  {q:"Pointing to a man, she says, 'He is the son of my grandmother's only daughter.' Who is he?", a:"Brother", e:"Grandmother's only daughter is mother → man is her brother."},
+
+  // Direction Sense
+  {q:"If you face north and turn 90° right, which direction do you face?", a:"East", e:"Turning 90° right from north faces east."},
+  {q:"A walks 5km north, then 3km east. How far from start?", a:"√(5²+3²)=5.83km", e:"Use Pythagoras theorem: √(5²+3²)=5.83 km."},
+
+  // Seating Arrangement
+  {q:"Five people sit in a row. A is left of B, C is right of B, D is at one end, E is left of C. Who is in the middle?", a:"B", e:"Arrange logically: D, A, B, C, E → B is in middle."},
+  {q:"Three friends sit in a triangle facing center. Who is opposite to whom?", a:"Depends on arrangement", e:"Visualize positions to find opposite person."},
+
+  // Clock & Calendar
+  {q:"Clock shows 3:15. Angle between hour and minute hand?", a:"7.5°", e:"Hour=97.5°, Minute=90° → difference=7.5°."},
+  {q:"January 1, 2025 is Wednesday. What day is Jan 7?", a:"Tuesday", e:"Count days: Wednesday=1 Jan → Jan 7 is Tuesday."},
+
+  // Puzzle
+  {q:"If 5 people can complete a work in 10 days, how long for 10 people?", a:"5 days", e:"Work is inversely proportional to number of people → 5×10=10×x → x=5 days."},
+  {q:"Three friends share ₹120 in ratio 2:3:5. How much for each?", a:"24,36,60", e:"Sum of ratio=10 → share=2/10*120,3/10*120,5/10*120."},
+
+  // Statement & Conclusion
+  {q:"All cats are animals. Some animals are dogs. Is some cats are dogs?", a:"Cannot say", e:"Cannot conclude because cats and dogs may not overlap."},
+  {q:"All roses are flowers. Some flowers are red. Are all roses red?", a:"Cannot say", e:"Only some flowers are red; cannot conclude for roses."},
+
+  // Assumptions
+  {q:"If a statement says 'All students must submit assignment', what is implied?", a:"Students are required to submit", e:"Assumes every student has an assignment."},
+  {q:"If 'Traffic signal is red, stop', what is assumption?", a:"Red means stop", e:"Assumes red color signals stopping."},
+
+  // Misc Logical
+  {q:"If 2 pencils cost ₹10, 5 pencils?", a:"₹25", e:"Cost per pencil=5 → 5 pencils=5×5=25."},
+  {q:"Find the missing: 101, 103, 107, 109, ?", a:"113", e:"Series of consecutive prime numbers → next is 113."},
+  {q:"In a code, A=1,B=2...,CAT=?", a:"24", e:"C=3,A=1,T=20 → sum=24."},
+  {q:"If '+' means ×, '-' means +, 2+3-4=?", a:"10", e:"Replace symbols: 2×3+4=10."},
+  {q:"Find next in pattern: 1,2,6,24, ?", a:"120", e:"Factorial series: 1!,2!,3!,4!,5!=120."},
+  {q:"Which number is multiple of both 4 and 6 under 50?", a:"12", e:"LCM of 4 and 6 is 12."},
+  {q:"If a cube has 6 faces, how many edges?", a:"12", e:"Cube has 12 unique edges."},
+  {q:"Find the missing: 2,3,5,7,11, ?", a:"13", e:"Series of prime numbers → next is 13."},
+  {q:"Seating puzzle: A,B,C,D,E sit in circle, B opposite D, C left of A. Who is right of E?", a:"A", e:"Logical arrangement of circular seating."},
+  {q:"Which is odd in: 21,34,55,89,100?", a:"100", e:"All others are Fibonacci numbers; 100 is not."}
+],
+interview:[
+  {q:"Tell me about yourself.", a:"Give a brief introduction.", e:"Mention your education, skills, projects, and key strengths clearly and confidently."},
+  {q:"What are your strengths?", a:"Highlight 2–3 key skills.", e:"Focus on skills that relate to the job and give examples of how you applied them."},
+  {q:"What are your weaknesses?", a:"Be honest but positive.", e:"Mention a weakness you are improving on and steps you are taking to overcome it."},
+  {q:"Why should we hire you?", a:"Show value you bring.", e:"Explain your skills, experience, and enthusiasm that make you a good fit for the role."},
+  {q:"Where do you see yourself in 5 years?", a:"Discuss career growth.", e:"Talk about learning, improving skills, and contributing to the company."},
+  {q:"Describe a challenging situation.", a:"Explain problem-solving.", e:"Mention a problem you faced, actions you took, and positive outcome achieved."},
+  {q:"How do you handle stress?", a:"Demonstrate coping skills.", e:"Explain methods like planning, prioritizing, and staying calm under pressure."},
+  {q:"Describe a team conflict you faced.", a:"Show conflict resolution.", e:"Explain the situation, your approach, and how it was resolved peacefully."},
+  {q:"How do you handle criticism?", a:"Be open to feedback.", e:"Take feedback positively and show willingness to improve."},
+  {q:"Tell me about a project you led.", a:"Explain leadership.", e:"Describe your role, responsibilities, challenges, and successful results."},
+  {q:"How do you prioritize tasks?", a:"Time management skills.", e:"Explain how you organize work by importance and deadlines."},
+  {q:"Do you prefer working alone or in a team?", a:"Show flexibility.", e:"Explain both approaches and give examples of success in team collaboration."},
+  {q:"Tell me about a failure you faced.", a:"Demonstrate learning.", e:"Explain the situation, what went wrong, and lessons learned."},
+  {q:"How do you motivate yourself?", a:"Self-motivation techniques.", e:"Describe goal-setting, planning, and staying positive."},
+  {q:"Why do you want this job?", a:"Show interest.", e:"Relate your skills and career goals to the company and role."},
+  {q:"How do you handle tight deadlines?", a:"Demonstrate efficiency.", e:"Explain your method of prioritization and focused execution."},
+  {q:"What is your leadership style?", a:"Describe approach.", e:"Provide examples of guiding a team, delegating, and achieving results."},
+  {q:"How do you resolve disagreements in a team?", a:"Conflict resolution.", e:"Emphasize listening, compromise, and solution-focused discussion."},
+  {q:"What motivates you at work?", a:"Intrinsic motivation.", e:"Learning, achieving goals, recognition, and making impact."},
+  {q:"How do you handle repetitive tasks?", a:"Show patience & focus.", e:"Explain keeping quality, finding efficiency, and staying engaged."},
+  {q:"Tell me about a decision you made.", a:"Decision-making skills.", e:"Describe situation, options considered, and outcome achieved."},
+  {q:"How do you stay updated in your field?", a:"Continuous learning.", e:"Mention courses, news, webinars, and practical applications."},
+  {q:"Have you ever disagreed with a manager?", a:"Professional handling.", e:"Explain disagreement respectfully, and how you worked towards compromise."},
+  {q:"How do you manage multiple projects?", a:"Organization skills.", e:"Use planning tools, prioritize tasks, and communicate clearly."},
+  {q:"What are your career goals?", a:"Short-term and long-term.", e:"Show ambition and alignment with the company’s growth."},
+  {q:"How do you handle unexpected problems?", a:"Problem-solving.", e:"Stay calm, analyze situation, and implement effective solution."},
+  {q:"Tell me about a time you showed initiative.", a:"Proactivity.", e:"Describe a situation where you took action beyond your responsibilities."},
+  {q:"How do you adapt to changes?", a:"Flexibility.", e:"Explain embracing change positively and adjusting work strategy."},
+  {q:"What is your approach to learning new skills?", a:"Learning ability.", e:"Demonstrate curiosity, practice, and applying knowledge effectively."},
+  {q:"How do you ensure quality in your work?", a:"Attention to detail.", e:"Explain reviewing, checking, and improving outcomes consistently."},
+  {q:"Why should we select you over others?", a:"Unique value.", e:"Highlight your strengths, experience, and commitment that set you apart."}
+],
+
+gd:[
+{q:"What is a Group Discussion (GD)?", a:"Structured discussion among candidates.", e:"A GD is a method used by companies to evaluate communication, leadership, and teamwork. It helps assess confidence, analytical thinking, and how a candidate handles opinions in a group setting."},
+{q:"Why are GDs conducted in interviews?", a:"To evaluate interpersonal skills and problem-solving.", e:"Employers use GDs to see how candidates present ideas, interact with team members, and respond to pressure. It is a way to gauge both knowledge and soft skills in a professional context."},
+{q:"How should you start a GD?", a:"Give a clear and concise introduction.", e:"Begin by summarizing the topic briefly, providing context, and sharing your viewpoint confidently. A strong start sets the tone and shows leadership potential."},
+{q:"How to handle disagreements in GD?", a:"Respectfully present your counterpoints.", e:"If someone disagrees with you, listen first, then explain your viewpoint logically. Avoid arguments or personal remarks, maintaining professionalism."},
+{q:"Why is active listening important?", a:"Ensures meaningful participation.", e:"Listening carefully helps you respond appropriately, avoid repeating points, and build on others’ ideas. It also shows respect for different perspectives."},
+{q:"How to use examples effectively?", a:"Support your points with real-world examples.", e:"Examples from current events, industry trends, or personal experience make your points convincing and demonstrate awareness and critical thinking."},
+{q:"How can body language influence GD performance?", a:"Shows confidence and engagement.", e:"Positive body language like eye contact, upright posture, and gestures communicates confidence and attentiveness, while poor posture or distraction can negatively impact perception."},
+{q:"What topics are often discussed in GDs?", a:"Current affairs, tech, social issues, economy.", e:"GD topics may include climate change, AI impact, remote work, corporate ethics, or education reforms. Being informed about trending topics helps in meaningful participation."},
+{q:"How to manage dominant speakers?", a:"Stay calm and assert your points politely.", e:"Do not get intimidated. Wait for a pause, then present your argument clearly. Being respectful yet confident demonstrates maturity and communication skills."},
+{q:"What is the ideal number of points to share?", a:"Focus on 2–3 strong points.", e:"Quality is more important than quantity. Share well-structured, relevant points rather than listing too many ideas superficially."},
+{q:"How to conclude a GD effectively?", a:"Summarize key points.", e:"End by briefly recapping the discussion, highlighting consensus or differing views, and finishing on a professional note. A strong conclusion leaves a positive impression."},
+{q:"How to deal with nervousness?", a:"Practice and stay focused.", e:"Prepare beforehand, take deep breaths, and focus on your points. Confidence grows with practice, and composure is noticed by evaluators."},
+{q:"What role does ethics play in GD?", a:"High importance.", e:"Avoid personal attacks, biased statements, or unethical arguments. Professionalism, respect, and honesty are critical in evaluation."},
+{q:"How to participate if you are less confident?", a:"Start small and build up.", e:"Contribute when you have points to add, even if brief. Listening, nodding, and supporting others’ ideas can also demonstrate engagement."},
+{q:"Can humor be used in GD?", a:"Yes, cautiously and relevantly.", e:"Light, relevant humor can make interaction engaging but avoid jokes that may offend. Professionalism should always come first."},
+{q:"How should introverts handle GDs?", a:"Prepare and participate selectively.", e:"Focus on presenting well-thought points, using examples, and listening actively. Even limited participation can show quality and understanding."},
+{q:"How to handle controversial topics?", a:"Be neutral and logical.", e:"Present balanced viewpoints, avoid personal opinions that may offend, and focus on facts, reasoning, and possible solutions."},
+{q:"How to stay relevant in GD?", a:"Stick to the topic.", e:"Avoid going off-track or sharing unrelated stories. Ensure your contributions align with the topic and enhance the discussion."},
+{q:"How to use statistics in GD?", a:"Use sparingly and accurately.", e:"Citing relevant data adds credibility to your points. Ensure numbers are correct and contextually appropriate."},
+{q:"How to collaborate in GD?", a:"Support and build on others’ points.", e:"Acknowledge others’ ideas and add value. Collaboration shows teamwork and ability to work in group environments."},
+{q:"How to participate in remote GDs?", a:"Speak clearly and manage virtual etiquette.", e:"Ensure your camera and mic work well, wait for turns, and engage respectfully. Virtual GDs require clear communication and patience."},
+{q:"How to prepare for GDs on social topics?", a:"Research current events and trends.", e:"Topics like climate change, remote work, digital transformation, or mental health are common. Being aware helps you contribute meaningful ideas."},
+{q:"How to handle interruptions?", a:"Stay polite and assertive.", e:"Acknowledge the other person, then continue your point calmly. Maintaining composure shows maturity and professionalism."},
+{q:"How to evaluate other participants?", a:"Observe and learn.", e:"Notice who speaks clearly, uses examples, and demonstrates leadership. Learning from others improves your own skills."},
+{q:"How to present a unique idea?", a:"Be creative but relevant.", e:"Introduce new viewpoints backed with reasoning or examples. Creativity is appreciated if it aligns with the topic."},
+{q:"How to manage time in GD?", a:"Balance speaking and listening.", e:"Speak concisely, contribute meaningful points, and avoid dominating. Time management ensures everyone participates."},
+{q:"How to handle group conflicts?", a:"Be calm and solution-oriented.", e:"Focus on ideas, not people. Help mediate and encourage constructive discussion, showing problem-solving skills."},
+{q:"How to summarize complex topics?", a:"Break into key points.", e:"Highlight main ideas clearly, simplify explanations, and provide relevant examples. Summaries should be concise and informative."},
+{q:"What is the role of research in GD?", a:"Enhances contribution quality.", e:"Well-researched points demonstrate awareness, preparation, and knowledge, making your participation more impactful."},
+{q:"Topic: What is Group Discussion (GD)?", a:"Structured discussion among candidates.", e:"A Group Discussion is a method used by organizations to evaluate communication, leadership, and teamwork skills. It helps assess confidence, analytical thinking, and the ability to handle opinions in a group. GDs simulate real work environments and show how participants behave in collaborative situations. Understanding the purpose and process of GD is essential for successful participation."},
+{q:"Topic: Importance of GD in selection process", a:"Evaluates communication & problem-solving.", e:"GD is conducted to observe how candidates present ideas, interact with peers, and respond under pressure. It shows the ability to articulate thoughts, maintain professionalism, and contribute meaningfully. Recruiters can assess knowledge, attitude, and soft skills beyond resumes. Knowing its importance helps candidates focus on key skills during preparation."},
+{q:"Topic: Climate Change", a:"A major environmental concern.", e:"Climate change refers to long-term shifts in weather patterns caused by natural or human activities. It impacts ecosystems, economies, and human life worldwide. In GDs, discussing climate change demonstrates awareness of global issues, the ability to suggest solutions, and analytical thinking. Participants should focus on causes, effects, and mitigation strategies."},
+{q:"Topic: Artificial Intelligence", a:"Technology simulating human intelligence.", e:"Artificial Intelligence (AI) involves creating systems that can perform tasks requiring human-like reasoning. In GDs, candidates can discuss AI's impact on jobs, ethics, and innovation. Explaining AI clearly, with examples like chatbots or automation, shows understanding and critical thinking. It’s a trending topic often included in discussions."},
+{q:"Topic: Remote Work and Hybrid Offices", a:"Modern workplace setup.", e:"Remote work allows employees to work from anywhere, while hybrid offices combine in-person and online work. GD participants can discuss benefits like flexibility and challenges like communication gaps. This topic tests knowledge of workplace trends, problem-solving, and team collaboration. Providing examples strengthens your discussion."},
+{q:"Topic: Education System Reforms", a:"Improving learning structures.", e:"This topic focuses on how to make education more effective and inclusive. GD discussion can include online education, skill-based learning, and government policies. Highlighting pros and cons, along with practical suggestions, demonstrates critical thinking and awareness of societal issues."},
+{q:"Topic: Mental Health Awareness", a:"Understanding emotional well-being.", e:"Mental health is essential for productivity and personal growth. In a GD, candidates can discuss stress management, workplace pressures, and societal attitudes. Offering examples, statistics, and coping strategies shows empathy and awareness, important qualities recruiters value."},
+{q:"Topic: Social Media Impact", a:"Influence on society.", e:"Social media affects communication, mental health, and information sharing. In GDs, discussing its pros and cons, misinformation, and ethical usage displays understanding of modern societal trends. Clear arguments with examples show analytical thinking and responsibility."},
+{q:"Topic: Globalization", a:"Interconnected world economy.", e:"Globalization refers to the integration of economies, cultures, and ideas across the world. GD discussions may include trade, cultural exchange, and job impacts. Participants should evaluate benefits and challenges logically, showing awareness of international issues."},
+{q:"Topic: Corporate Ethics", a:"Moral principles in business.", e:"Corporate ethics involves fairness, transparency, and responsibility in business practices. GD topics can cover whistleblowing, sustainability, and employee treatment. Demonstrating understanding of ethical dilemmas shows maturity and professional insight."},
+{q:"Topic: Work-Life Balance", a:"Healthy balance between work and personal life.", e:"Work-life balance ensures productivity while maintaining well-being. In GDs, candidates can discuss flexible hours, remote work, and stress management. Presenting practical solutions shows empathy, planning skills, and awareness of workplace dynamics."},
+{q:"Topic: Leadership Skills", a:"Ability to guide a team.", e:"Leadership involves motivating, guiding, and supporting a team to achieve goals. GD discussions can cover traits of good leaders, challenges, and real-life examples. Explaining leadership with practical examples reflects understanding and self-awareness."},
+{q:"Topic: Cybersecurity", a:"Protecting digital assets.", e:"Cybersecurity is the practice of protecting computers and networks from threats. GDs may discuss phishing, data leaks, and preventive measures. Presenting solutions and awareness shows analytical thinking and technical literacy."},
+{q:"Topic: Environmental Pollution", a:"Contamination of natural resources.", e:"Pollution affects air, water, and soil quality, impacting health and ecosystems. GD participants can discuss causes, effects, and mitigation strategies. Well-structured arguments show understanding of global challenges and problem-solving abilities."},
+{q:"Topic: Sustainable Development", a:"Development without harming the environment.", e:"Sustainable development ensures economic growth while protecting resources. In GDs, discussing renewable energy, responsible consumption, and policy suggestions highlights awareness and responsibility. Explaining long-term benefits demonstrates maturity."},
+{q:"Topic: Artificial Intelligence Ethics", a:"Responsible use of AI.", e:"AI ethics deals with fairness, transparency, and accountability in automated systems. GD discussions can include bias in AI, privacy concerns, and societal impact. Offering balanced perspectives shows critical thinking and awareness of technological consequences."},
+{q:"Topic: Gender Equality", a:"Equal opportunities for all genders.", e:"GD discussions on gender equality cover workplace opportunities, pay gaps, and societal norms. Proposing solutions and acknowledging challenges demonstrates awareness, empathy, and leadership potential."},
+{q:"Topic: Startups and Entrepreneurship", a:"Building new businesses.", e:"Entrepreneurship involves innovation, risk-taking, and business planning. In GDs, topics can include funding challenges, market analysis, and startup culture. Sharing examples shows knowledge of current trends and problem-solving skills."},
+{q:"Topic: Artificial Intelligence in Healthcare", a:"AI applications for health.", e:"AI can help diagnose diseases, manage patient records, and suggest treatments. GD discussions can focus on benefits, risks, and ethical concerns. Explaining with examples shows understanding of technology's societal impact."},
+{q:"Topic: Renewable Energy", a:"Clean energy sources.", e:"Topics include solar, wind, and hydro energy. In GDs, participants can discuss benefits, feasibility, and policies. Using statistics or real-life examples shows research and analytical skills."},
+{q:"Topic: Work From Home Challenges", a:"Difficulties in remote work.", e:"Challenges include communication gaps, time management, and team collaboration. GD discussions can propose solutions like tools or strategies. Practical points reflect problem-solving and awareness."},
+{q:"Topic: Mental Health in Workplace", a:"Employee well-being.", e:"Stress, burnout, and motivation affect productivity. GD discussions can suggest wellness programs, support systems, and awareness campaigns. Thoughtful explanations show empathy and professional maturity."},
+{q:"Topic: Corporate Social Responsibility (CSR)", a:"Company's social impact.", e:"CSR initiatives include education, healthcare, and environmental projects. In GDs, discussing CSR strategies demonstrates understanding of business ethics and societal contribution."},
+{q:"Topic: Future of Work", a:"Evolving workplace trends.", e:"Topics include AI automation, hybrid work, and skill development. GD participants should discuss adaptability, challenges, and solutions. Well-reasoned points show foresight and critical thinking."},
+{q:"Topic: Digital Transformation", a:"Use of digital tech in business.", e:"Digital transformation involves adopting new technologies for efficiency. GD discussions can cover benefits, challenges, and strategy. Explaining with examples shows knowledge of modern business trends."},
+{q:"Topic: Corporate Leadership Styles", a:"Different ways to lead.", e:"Leadership styles include democratic, autocratic, and transformational. GD discussions can evaluate effectiveness in different situations. Understanding these concepts shows awareness of management principles."},
+{q:"Topic: Innovation in Education", a:"New methods to teach and learn.", e:"GD discussions can cover online learning, AI tutoring, skill-based programs, and reforms. Offering solutions or ideas shows creativity, knowledge, and problem-solving ability."},
+{q:"Topic: Global Economic Trends", a:"International economic patterns.", e:"Topics can include recession, inflation, trade, and market shifts. GD discussions require analysis, examples, and understanding of impacts. Logical reasoning and awareness make points stronger."}
+]
+};
+
+/* QUIZ DATA — 35 each */
+const quizData = {
+coding:[
+{q:"HTML stands for?",options:["Hyper Text Markup Language","High Text Modern Language","Hyperlink Markup Logic","None"],correct:0},
+{q:"CSS is used for?",options:["Structure","Styling","Database","Security"],correct:1},
+],
+aptitude:[
+{q:"Square root of 144?",options:["10","11","12","14"],correct:2},
+],
+reasoning:[
+{q:"Opposite of Hot?",options:["Cold","Warm","Freeze","Dry"],correct:0},
+],
+interview:[
+{q:"Best interview dress?",options:["Casual","Sporty","Formal","Party"],correct:2},
+],
+gd:[
+{q:"GD means?",options:["Group Data","Good Discussion","Group Discussion","General Debate"],correct:2},
+]
+};
+
+/* UI */
+const topicBox=document.getElementById("topicBox");
+const practiceSection=document.getElementById("practiceSection");
+const quizSection=document.getElementById("quizSection");
+const practiceContainer=document.getElementById("practiceContainer");
+const quizForm=document.getElementById("quizForm");
+const quizResult=document.getElementById("quizResult");
+const submitQuiz=document.getElementById("submitQuiz");
+
+document.getElementById("modePractice").onclick=()=>{
+topicBox.classList.remove("hidden");
+practiceSection.classList.remove("hidden");
+quizSection.classList.add("hidden");
+};
+
+document.getElementById("modeQuiz").onclick=()=>{
+topicBox.classList.remove("hidden");
+quizSection.classList.remove("hidden");
+practiceSection.classList.add("hidden");
+};
+
+document.querySelectorAll(".topicBtn").forEach(btn=>{
+btn.addEventListener("click",()=>{
+let topic=btn.dataset.topic;
+renderPractice(topic);
+startQuiz(topic);
+});
+});
+
+/* PRACTICE */
+function renderPractice(topic){
+practiceContainer.innerHTML="";
+practiceData[topic].forEach((x,i)=>{
+let box=document.createElement("div");
+box.className="qaBox";
+box.innerHTML=
+`<b>${i+1}. ${x.q}</b><br>
+<button onclick="toggleAns('${topic}${i}')">Show Answer</button>
+<div id="${topic}${i}" class="ans">
+<b>Answer:</b> ${x.a}<br>${x.e.replace(/\n/g,"<br>")}
+</div>`;
+practiceContainer.appendChild(box);
+});
+}
+
+window.toggleAns=function(id){
+let x=document.getElementById(id);
+x.style.display = x.style.display==="none" || x.style.display==="" ? "block":"none";
+};
+
+/* QUIZ */
+let activeQuiz=[];
+function startQuiz(topic){
+activeQuiz=quizData[topic];
+quizForm.innerHTML="";
+activeQuiz.forEach((q,i)=>{
+let opts=q.options.map((o,idx)=>`
+<label><input type="radio" name="q${i}" value="${idx}"> ${o}</label><br>`).join("");
+quizForm.innerHTML+=`<div class="qaBox"><b>Q${i+1}. ${q.q}</b><br>${opts}</div>`;
+});
+submitQuiz.classList.remove("hidden");
+}
+
+submitQuiz.onclick=()=>{
+let score=0,attempted=0;
+activeQuiz.forEach((q,i)=>{
+let ans=document.querySelector(`input[name='q${i}']:checked`);
+if(ans){attempted++;if(+ans.value===q.correct)score++;}
+});
+
+let level="🙂 Good",cls="goodResult";
+if(score<=5){level="😭 Bad";cls="badResult";}
+else if(score<=10){level="🙂 Good";cls="averageResult";}
+else if(score<=20){level="😎 Better";cls="goodResult";}
+else{level="🔥 Best";cls="bestResult";}
+
+quizResult.className=`mt-6 p-4 rounded-lg shadow text-lg font-semibold text-center ${cls}`;
+quizResult.classList.remove("hidden");
+quizResult.innerHTML=`Score: ${score}/${activeQuiz.length}<br>Performance: ${level}<br>Attempted: ${attempted}`;
+
+saveHistory(score);
+showHistory();
+};
+
+/* SCORE HISTORY */
+function saveHistory(score){
+let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
+history.push(score);
+localStorage.setItem("quizHistory",JSON.stringify(history));
+}
+
+function showHistory(){
+let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
+let box=document.getElementById("historyList");
+box.innerHTML=history.length?history.map((s,i)=>`Attempt ${i+1}: ${s} score`).join("<br>"):"No previous attempts yet...";
+}
+showHistory();
+</script>
 {% endblock %}
