@@ -581,6 +581,35 @@ def practice():
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
+#--------logout--------
+@enhancements_bp.route("/logout")
+def logout():
+    session.clear()
+    flash("You have been logged out.", "info")
+    return redirect(url_for("enhancements.login"))
+
+#---------about--------
+@enhancements_bp.route("/about")
+def about():
+    role = session.get("role")
+
+    # Default values (if no login)
+    is_admin = False
+    home_url = url_for("enhancements.student_dashboard")
+
+    if role == "admin":
+        is_admin = True
+        home_url = url_for("enhancements.admin_dashboard")
+    elif role == "student":
+        is_admin = False
+        home_url = url_for("enhancements.student_dashboard")
+
+    return render_template(
+        "about.html",
+        show_nav_options=True,
+        is_admin=is_admin,
+        home_url=home_url
+    )
 
 
 # ------------------ Admin Pages ------------------
@@ -1367,18 +1396,8 @@ def rate():
     return render_template("rate.html", feedbacks=feedbacks)
 
 
-# ------------------ Misc ------------------
+# ------------------ Misc -----------------
 
-@enhancements_bp.route("/logout")
-def logout():
-    session.clear()
-    flash("You have been logged out.", "info")
-    return redirect(url_for("enhancements.login"))
-
-
-@enhancements_bp.route("/about")
-def about():
-    return render_template("about.html")
 
 
 @enhancements_bp.route("/settings")
@@ -1390,6 +1409,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
