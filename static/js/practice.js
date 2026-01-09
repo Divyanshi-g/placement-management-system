@@ -1,4 +1,4 @@
-<script>
+
 "use strict";
 
 /* PRACTICE QUESTIONS */
