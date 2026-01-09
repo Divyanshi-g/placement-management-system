@@ -2226,4 +2226,3 @@ function showHistory(){
  `).join("");
 }
 
-</script>
