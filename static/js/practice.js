@@ -602,11 +602,11 @@ coding:[
     options: ["GET", "SELECT", "FETCH", "TAKE"],
     answer: "SELECT"
   },
-  {
-    q: "Which tag is used to insert an image in HTML?",
-    options: ["<img>", "<image>", "<src>", "<pic>"],
-    answer: "<img>"
-  },
+ {
+    q:"Python is?",
+    options:["Compiled","Interpreted","Both","None"],
+    answer: "Compiled"
+ },
   {
     q: "Which operator is used for equality check in JavaScript?",
     options: ["=", "==", "===", "!=="],
@@ -673,10 +673,11 @@ coding:[
     answer: "MySQL"
   },
   {
-    q: "Which HTML tag is used for largest heading?",
-    options: ["<h6>", "<head>", "<h1>", "<heading>"],
-    answer: "<h1>"
+     q:"SQL full form?",
+     options:["Structured Query Language","Simple Query Language","Server Query Language","None"],
+     answer: "Structured Query Language"
   },
+
   {
     q: "Which keyword is used for inheritance in Java?",
     options: ["extends", "inherits", "derives", "from"],
@@ -751,6 +752,31 @@ coding:[
       "Database Monitoring Service"
     ],
     answer: "Data Base Management System"
+  },
+   {
+    q: "What is a Framework?",
+    a: "A framework provides structure and ready-made features for building applications.",
+    e: "Examples: Django, React, Angular, Spring."
+  },
+  {
+    q: "What is Responsive Web Design?",
+    a: "Designing websites that adjust layout for different screen sizes.",
+    e: "Helps websites work well on mobiles, tablets, and desktops."
+  },
+   {
+    q: "What is Debugging?",
+    a: "Debugging is the process of finding and fixing errors in code.",
+    e: "Important to ensure program runs correctly."
+  },
+  {
+    q: "What is Open Source Software?",
+    a: "Software whose source code is publicly available.",
+    e: "Developers can use, modify, and distribute it."
+  },
+  {
+    q: "What is Cloud Computing?",
+    a: "Using online servers for storage and computing instead of local machines.",
+    e: "Examples: AWS, Azure, Google Cloud."
   }
 ],
 
