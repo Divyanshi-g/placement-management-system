@@ -2218,22 +2218,22 @@ submitQuiz.onclick = () => {
 
 
 /* ================== PREVIOUS RESULT PANEL ================== */
-const saveBtn = document.getElementById("saveScoreBtn");
-const historyBox = document.getElementById("scoreHistory");
+document.addEventListener("DOMContentLoaded", () => {
 
+    const saveBtn = document.getElementById("saveScoreBtn");
+    const historyBox = document.getElementById("scoreHistory");
 
-// Slide Animation
-historyBox.style.maxHeight = "0px";
-historyBox.style.overflow = "hidden";
-historyBox.style.transition = "max-height .4s ease";
+    if (!saveBtn || !historyBox) return;
 
-saveBtn.onclick = () => {
-    if (historyBox.style.maxHeight === "0px") {
-        historyBox.style.maxHeight = "500px";
-    } else {
-        historyBox.style.maxHeight = "0px";
-    }
-};
+    historyBox.style.maxHeight = "0px";
+    historyBox.style.overflow = "hidden";
+    historyBox.style.transition = "max-height .4s ease";
+
+    saveBtn.onclick = () => {
+        historyBox.style.maxHeight =
+            historyBox.style.maxHeight === "0px" ? "500px" : "0px";
+    };
+});
 
 
 /* ================== SAVE + SHOW HISTORY ================== */
@@ -2271,6 +2271,7 @@ showHistory();
 
 </script>
 {% endblock %}
+
 
 
 
