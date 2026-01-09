@@ -4,219 +4,6 @@
 /* PRACTICE QUESTIONS */
 const practiceData = {
 coding:[
-  {
-    q: "What is the difference between a programming language and a framework?",
-    a: `A programming language is the base tool we use to write logic, such as Python, C, or Java.
-A framework is built on top of a language to simplify development, like Django for Python or React for JavaScript.
-Languages provide rules and syntax, while frameworks provide pre-built structures.
-In simple words: Language = foundation, Framework = ready-made structure to speed up work.`
-  },
-  {
-    q: "What do we mean by compilation and interpretation in programming?",
-    a: `Compilation converts the entire code into machine language at once before execution, like C or C++.
-Interpretation executes code line-by-line, like Python or JavaScript.
-Compiled programs are usually faster because they are converted beforehand.
-Interpreted programs are easier to debug but may run slower than compiled ones.`
-  },
-  {
-    q: "What is the importance of variables in programming?",
-    a: `Variables are used to store data so the program can remember and process values.
-They allow dynamic operations like calculations, decisions, and data handling.
-Without variables, we cannot manage user input, database values, or runtime data.
-They act like labeled containers where we keep information during program execution.`
-  },
-  {
-    q: "Explain what a function is and why it is used.",
-    a: `A function is a block of reusable code designed to perform a specific task.
-Instead of writing the same code again and again, we call the function when needed.
-It improves code readability, reduces repetition, and makes maintenance easy.
-Functions also help in breaking big programs into manageable pieces.`
-  },
-  {
-    q: "What is the difference between frontend and backend development?",
-    a: `Frontend is what the user sees and interacts with, like UI, buttons, and design.
-Backend works behind the scenes like databases, servers, and application logic.
-Frontend focuses on user experience, while backend focuses on data handling and performance.
-Together they form a complete working application or website.`
-  },
-  {
-    q: "What is a database and why do applications need it?",
-    a: `A database stores structured information like user data, records, and transactions.
-Applications need databases to save data permanently instead of losing it after closing.
-It helps in retrieving, updating, and managing data efficiently.
-Without databases, modern applications like banking, e-commerce, or social media cannot function.`
-  },
-  {
-    q: "What is the meaning of debugging in programming?",
-    a: `Debugging means finding and fixing errors in the program.
-Errors can be syntax errors, logical mistakes, or runtime issues.
-Debugging ensures that the application works correctly and efficiently.
-It is one of the most important skills every programmer must develop.`
-  },
-  {
-    q: "What are conditional statements and why are they important?",
-    a: `Conditional statements help programs make decisions based on conditions.
-Examples include if, else, and switch statements.
-They allow programs to react differently for different inputs or situations.
-Without conditions, programs would always behave the same way without intelligence.`
-  },
-  {
-    q: "Explain loops and their purpose in programming.",
-    a: `Loops allow us to repeat a block of code multiple times automatically.
-Common types include for loop, while loop, and do-while loop.
-They reduce manual repetition and make code shorter and efficient.
-Loops are used in tasks like iterating lists, processing records, and automation.`
-  },
-  {
-    q: "What is an algorithm in programming?",
-    a: `An algorithm is a step-by-step solution to solve a particular problem.
-It describes how the program should process input to get desired output.
-Good algorithms are efficient, clear, and minimize time and memory usage.
-They form the backbone of logical programming and problem solving.`
-  },
-  {
-    q: "What is the role of comments in code?",
-    a: `Comments are non-executable lines used to explain code meaning.
-They help developers understand complex logic or purpose of a function.
-Comments improve code readability, especially in large projects.
-They are useful for teamwork, maintenance, and learning.`
-  },
-  {
-    q: "What is object-oriented programming (OOP)?",
-    a: `OOP is a programming style based on real-world objects and concepts.
-It organizes code into classes and objects instead of simple procedures.
-Key principles include inheritance, encapsulation, polymorphism, and abstraction.
-OOP makes programs more modular, reusable, and easier to manage.`
-  },
-  {
-    q: "Explain what an API is in simple terms.",
-    a: `API stands for Application Programming Interface.
-It allows two software applications to communicate and share data.
-For example, login with Google or payment gateways use APIs.
-They help integrate services without exposing internal system details.`
-  },
-  {
-    q: "What is Git and why is it important for developers?",
-    a: `Git is a version control system used to track code changes.
-It allows multiple developers to work on the same project safely.
-You can restore older versions if something goes wrong.
-It is essential in teamwork, industry projects, and professional development.`
-  },
-  {
-    q: "What is responsive web design?",
-    a: `Responsive design ensures that a website works well on mobiles, tablets, and desktops.
-It adjusts layout automatically based on screen size.
-Technologies like CSS Flexbox, Grid, and media queries help achieve it.
-Without responsiveness, users will face bad experience on different devices.`
-  },
-  {
-    q: "Explain client-server architecture.",
-    a: `In client-server architecture, the client requests services and the server provides them.
-Client is usually a browser or application, while server stores data and logic.
-They communicate over the internet using protocols.
-This structure is used in almost every modern application.`
-  },
-  {
-    q: "What is recursion in programming?",
-    a: `Recursion is when a function calls itself to solve smaller parts of a problem.
-It is useful in problems like tree traversal, factorial, and Fibonacci.
-However, it must have a stopping condition to avoid infinite looping.
-Recursion simplifies logic but should be used carefully for performance.`
-  },
-  {
-    q: "What is exception handling?",
-    a: `Exception handling deals with unexpected errors during program execution.
-Instead of crashing, the program handles errors gracefully.
-It helps improve stability and user experience.
-Try-catch blocks are commonly used to manage exceptions.`
-  },
-  {
-    q: "What is the difference between array and list?",
-    a: `Array is a fixed-size collection of similar data types.
-List is dynamic and can grow or shrink as needed.
-Arrays are faster but less flexible, while lists are easier to use.
-Choice depends on the requirement and programming language.`
-  },
-  {
-    q: "What is the purpose of a IDE?",
-    a: `IDE stands for Integrated Development Environment.
-It provides tools like code editor, debugger, compiler, and testing support.
-Popular IDEs include VS Code, PyCharm, Eclipse, and IntelliJ.
-IDE makes coding faster, easier, and more productive.`
-  },
-  {
-    q: "What is time complexity in coding?",
-    a: `Time complexity measures how fast an algorithm runs as input grows.
-It helps compare efficiency of different solutions.
-Big-O notation is commonly used like O(n), O(log n), O(n^2).
-Better time complexity means faster performance.`
-  },
-  {
-    q: "Explain data structures in simple words.",
-    a: `Data structures are organized ways to store and manage data.
-Examples include arrays, stacks, queues, linked lists, and trees.
-They improve speed and efficiency of operations.
-Choosing correct data structure is key to good programming.`
-  },
-  {
-    q: "What is multithreading?",
-    a: `Multithreading allows a program to perform multiple tasks simultaneously.
-It improves performance especially in heavy processing.
-Useful in games, servers, and real-time applications.
-However, it requires careful handling to avoid conflicts.`
-  },
-  {
-    q: "What is a library in programming?",
-    a: `A library is a collection of pre-written code for common tasks.
-Instead of writing everything, developers simply use library functions.
-It saves time and reduces complexity.
-Examples include NumPy, Pandas, React, STL, etc.`
-  },
-  {
-    q: "Explain what full stack development means.",
-    a: `Full stack means working on both frontend and backend.
-A full stack developer handles UI, server logic, and database.
-They understand complete application workflow.
-Such developers are highly valuable in industry.`
-  },
-  {
-    q: "What is a syntax error?",
-    a: `Syntax error occurs when code does not follow language rules.
-It prevents program from running at all.
-Common examples: missing brackets, wrong keywords, or typos.
-They are usually easy to identify and fix.`
-  },
-  {
-    q: "What is a logical error?",
-    a: `Logical error happens when code runs but produces wrong output.
-It occurs due to incorrect logic or wrong approach.
-These are harder to find because program doesn’t crash.
-Testing helps identify and resolve them.`
-  },
-  {
-    q: "What is runtime error?",
-    a: `Runtime error happens while program is running.
-It may occur due to invalid input, memory issues, or missing files.
-Program stops suddenly when runtime error occurs.
-Exception handling helps control such situations.`
-  },
-  {
-    q: "Why is clean code important?",
-    a: `Clean code is easy to read, understand, and maintain.
-It uses good naming, proper formatting, and structured logic.
-Teams can work better on clean code bases.
-It reduces bugs and improves project quality.`
-  },
-  {
-    q: "What is deployment in software development?",
-    a: `Deployment means making a software available for users.
-It moves code from development to live environment.
-It includes hosting, configuration, and monitoring.
-Without deployment, even a good project cannot reach users.`
-  }
-],
-
-aptitude:[
    {
     q: "What is the difference between a programming language and a framework?",
     a: `A programming language is the base tool we use to write logic, such as Python, C, or Java.
@@ -429,8 +216,190 @@ Without deployment, even a good project cannot reach users.`
   }
 ],
 
+aptitude:[
+  {
+    q: "What is aptitude and why is it important in placements?",
+    a: "Aptitude measures logical thinking, numerical ability, and problem-solving skills. Companies test aptitude to understand how quickly and smartly a candidate can think in real situations."
+  },
+  {
+    q: "Why do companies give aptitude tests before interviews?",
+    a: "Aptitude tests filter candidates based on analytical and reasoning skills. They ensure that selected candidates can learn fast, understand problems, and perform well in dynamic environments."
+  },
+  {
+    q: "What is the difference between aptitude and intelligence?",
+    a: "Intelligence is a broad mental ability, while aptitude focuses on specific skills like logic, math, reasoning, and decision-making. Aptitude reflects job readiness and learning capability."
+  },
+  {
+    q: "Why is time management important in aptitude exams?",
+    a: "Most aptitude tests are time-bound, so solving fast with accuracy is crucial. Time management helps prioritize easier questions first and improves overall performance."
+  },
+  {
+    q: "What is Numerical Aptitude?",
+    a: "Numerical Aptitude tests your ability to work with numbers, calculations, data, and logic. It checks mathematical understanding and speed of solving numeric-based problems."
+  },
+  {
+    q: "What is Logical Reasoning in aptitude?",
+    a: "Logical Reasoning tests your thinking pattern, ability to draw conclusions, and analyze situations. It checks how well you understand patterns, sequences, and logical relationships."
+  },
+  {
+    q: "What are Verbal Ability questions in aptitude?",
+    a: "Verbal ability tests communication, grammar, comprehension, and sentence understanding. It ensures you can understand instructions and communicate clearly in a workplace."
+  },
+  {
+    q: "Why do aptitude tests include Data Interpretation?",
+    a: "Data Interpretation tests your ability to understand graphs, charts, tables, and numerical data. It checks analytical thinking and decision-making abilities in real business situations."
+  },
+  {
+    q: "How does aptitude help in real-life situations?",
+    a: "Aptitude improves decision-making, logical thinking, and analytical skills. It helps in solving daily life problems smarter and improves professional performance."
+  },
+  {
+    q: "What are common aptitude test sections?",
+    a: "Common sections include Quantitative Aptitude, Logical Reasoning, Verbal Ability, and Data Interpretation. Some exams also add puzzles, probability, and analytical reasoning."
+  },
+  {
+    q: "Is speed more important than accuracy in aptitude?",
+    a: "Both are important, but accuracy matters more. Wrong answers reduce score or confidence. First maintain accuracy, then improve speed through practice."
+  },
+  {
+    q: "Why do aptitude exams include puzzles?",
+    a: "Puzzles check creativity, problem-solving approach, and structured thinking. They help companies see how candidates handle tricky or confusing situations logically."
+  },
+  {
+    q: "What is the benefit of practicing aptitude daily?",
+    a: "Daily practice builds speed, confidence, and thinking ability. It strengthens concepts, improves memory, and helps perform better in real exams."
+  },
+  {
+    q: "Why do aptitude questions include percentages and ratios?",
+    a: "Percentages and ratios help evaluate numerical understanding and calculation ability. These topics are commonly used in finance, business, and everyday decision making."
+  },
+  {
+    q: "What is the importance of simplification in aptitude?",
+    a: "Simplification helps solve large or complex calculations quickly. It shows how efficiently a candidate can reduce problems and get answers faster."
+  },
+  {
+    q: "What role does practice play in aptitude success?",
+    a: "Aptitude is skill-based, so more practice improves speed, accuracy, and confidence. It helps build problem-solving strategies and familiarity with question patterns."
+  },
+  {
+    q: "Why is logical ability important in technical fields?",
+    a: "Logical ability helps in coding, debugging, and system thinking. It improves structured thinking, which is essential for solving technical and engineering problems."
+  },
+  {
+    q: "What is the purpose of seating arrangement questions?",
+    a: "They test your understanding of positions, arrangements, and logical placements. These questions judge clarity of thinking and ability to handle structured information."
+  },
+  {
+    q: "Why do aptitude exams include probability questions?",
+    a: "Probability measures risk analysis and prediction skills. It is useful in finance, analytics, decision-making, and real-life uncertain situations."
+  },
+  {
+    q: "What is the importance of problem-solving skills?",
+    a: "Problem-solving helps handle challenges calmly and logically. It improves confidence, creativity, and adaptability in academic and workplace environments."
+  },
+  {
+    q: "What does data sufficiency test in aptitude?",
+    a: "Data sufficiency checks whether given information is enough to answer a question. It tests reasoning power, judgment, and analytical decision-making."
+  },
+  {
+    q: "Why is mental calculation speed important?",
+    a: "Fast calculation saves time, improves accuracy, and boosts confidence. It reduces dependency on calculators and helps in competitive exams and daily life."
+  },
+  {
+    q: "What does critical thinking mean in aptitude?",
+    a: "Critical thinking means analyzing information deeply before concluding. It checks judgment ability, understanding, and smart decision-making power."
+  },
+  {
+    q: "Why are aptitude tests standardized?",
+    a: "Standardization ensures fair evaluation for all candidates. It provides equal testing conditions and unbiased measurement of skills."
+  },
+  {
+    q: "What is the purpose of blood relation questions?",
+    a: "Blood relation questions test logical understanding of family connections. They check clarity, interpretation skills, and relationship reasoning ability."
+  },
+  {
+    q: "What does direction sense in aptitude measure?",
+    a: "Direction sense measures spatial thinking and understanding of directions. It helps test logical visualization and movement-based reasoning."
+  },
+  {
+    q: "Why do aptitude exams include series and pattern questions?",
+    a: "Series and patterns check observation skills and logical sequence recognition. They show how well a candidate identifies trends and logical steps."
+  },
+  {
+    q: "How does aptitude reflect career readiness?",
+    a: "Strong aptitude shows intelligence, decision ability, and learning capacity. It indicates how quickly a candidate can adapt and perform in professional environments."
+  },
+  {
+    q: "What does reasoning ability show about a person?",
+    a: "Reasoning ability shows clarity of thought, logical sense, and stable thinking. It reflects how well a person analyzes and understands situations."
+  },
+  {
+    q: "Why do students fear aptitude and how to overcome it?",
+    a: "Students fear aptitude due to lack of practice and confidence. Regular practice, understanding basics, and solving stepwise helps overcome fear easily."
+  }
+  {
+    q: "What is the basic idea of Percentage in Aptitude problems?",
+    a: "Percentage represents a value out of 100. It helps in comparing numbers, calculating increases or decreases, and understanding proportions in real scenarios like marks, salary hike, and discounts."
+  },
+  {
+    q: "Why is Ratio & Proportion important in aptitude?",
+    a: "Ratio compares two quantities while proportion shows equality of two ratios. It is widely used in mixing problems, population calculations, recipes, and speed–time problems."
+  },
+  {
+    q: "What do Profit and Loss questions generally check?",
+    a: "They test understanding of cost price, selling price, profit percentage, and loss percentage. These concepts are practical in business, shopping discounts, and financial decision making."
+  },
+  {
+    q: "What is the main concept of Simple Interest?",
+    a: "Simple Interest is calculated only on the principal amount for the entire period. It is useful in bank deposits, loans, and basic financial calculations."
+  },
+  {
+    q: "How is Compound Interest different from Simple Interest?",
+    a: "Compound Interest is calculated on principal plus accumulated interest. It grows faster than simple interest and is widely used in banking, investments, and savings."
+  },
+  {
+    q: "What does Time and Work topic mainly deal with?",
+    a: "It checks how fast work is completed individually or together. It is based on work rate and helps in understanding teamwork efficiency and resource planning."
+  },
+  {
+    q: "What is the concept behind Time, Speed and Distance problems?",
+    a: "These problems relate speed, distance, and time. They help understand travel time, motion, and real-life journey situations effectively."
+  },
+  {
+    q: "Why are Average questions important?",
+    a: "Averages help represent data in a simple way. They are useful in calculating marks, performance evaluation, salary analysis, and statistics."
+  },
+  {
+    q: "What do Partnership questions test?",
+    a: "They test investment and profit-sharing based on capital and time. These are helpful in business decision-making and understanding financial contributions."
+  },
+  {
+    q: "What is the basic idea behind Age problems?",
+    a: "Age problems compare present, past, and future ages using equations. They help build logical and algebraic thinking."
+  },
+  {
+    q: "Why is Data Interpretation important?",
+    a: "Data Interpretation tests your ability to understand tables, charts, and graphs. It checks analytical thinking and is highly relevant in business and analytics jobs."
+  },
+  {
+    q: "What do Probability questions measure?",
+    a: "Probability measures chances of an event happening. It helps in risk analysis, predictions, games, and decision-making in uncertain situations."
+  },
+  {
+    q: "What is the concept of Permutation?",
+    a: "Permutation deals with arrangements where order matters, like seating arrangements, passwords, and rankings."
+  },
+  {
+    q: "What is Combination in aptitude?",
+    a: "Combination deals with selections where order does not matter. It is useful in team selections, lottery, and choosing groups from a set."
+  },
+  {
+    q: "What do Number System questions usually test?",
+    a: "They focus on divisibility rules, factors, multiples, and remainders. These form the base of many other aptitude topics."
+  },
+],
+
 reasoning:[
-  // Number & Series
   {q:"What comes next in the series: 2, 4, 8, 16, ?", a:"32", e:"Each number doubles the previous one: 16×2=32."},
   {q:"Find the next number: 1, 4, 9, 16, ?", a:"25", e:"Pattern is perfect squares: 1²,2²,3²,4² → next is 5²=25."},
   {q:"Find the missing number: 2, 5, 10, 17, ?", a:"26", e:"Pattern is n²+1 → 1²+1=2,2²+1=5,3²+1=10,4²+1=17,5²+1=26."},
@@ -482,10 +451,11 @@ reasoning:[
   {q:"Find the missing: 2,3,5,7,11, ?", a:"13", e:"Series of prime numbers → next is 13."},
   {q:"Seating puzzle: A,B,C,D,E sit in circle, B opposite D, C left of A. Who is right of E?", a:"A", e:"Logical arrangement of circular seating."},
   {q:"Which is odd in: 21,34,55,89,100?", a:"100", e:"All others are Fibonacci numbers; 100 is not."}
+
 ],
 
 interview:[
-  {q:"Tell me about yourself.", a:"Give a brief introduction.", e:"Mention your education, skills, projects, and key strengths clearly and confidently."},
+ {q:"Tell me about yourself.", a:"Give a brief introduction.", e:"Mention your education, skills, projects, and key strengths clearly and confidently."},
   {q:"What are your strengths?", a:"Highlight 2–3 key skills.", e:"Focus on skills that relate to the job and give examples of how you applied them."},
   {q:"What are your weaknesses?", a:"Be honest but positive.", e:"Mention a weakness you are improving on and steps you are taking to overcome it."},
   {q:"Why should we hire you?", a:"Show value you bring.", e:"Explain your skills, experience, and enthusiasm that make you a good fit for the role."},
@@ -515,66 +485,74 @@ interview:[
   {q:"How do you adapt to changes?", a:"Flexibility.", e:"Explain embracing change positively and adjusting work strategy."},
   {q:"What is your approach to learning new skills?", a:"Learning ability.", e:"Demonstrate curiosity, practice, and applying knowledge effectively."},
   {q:"How do you ensure quality in your work?", a:"Attention to detail.", e:"Explain reviewing, checking, and improving outcomes consistently."},
-  {q:"Why should we select you over others?", a:"Unique value.", e:"Highlight your strengths, experience, and commitment that set you apart."},
+  {q:"Why should we select you over others?", a:"Unique value.", e:"Highlight your strengths, experience, and commitment that set you apart."}
 ],
 
 gd:[
- {q:"What is a Group Discussion (GD)?", a:"Structured discussion among candidates.", e:"A GD is a method used by companies to evaluate communication, leadership, and teamwork. It helps assess confidence, analytical thinking, and how a candidate handles opinions in a group setting."},
-{q:"Why are GDs conducted in interviews?", a:"To evaluate interpersonal skills and problem-solving.", e:"Employers use GDs to see how candidates present ideas, interact with team members, and respond to pressure. It is a way to gauge both knowledge and soft skills in a professional context."},
-{q:"How should you start a GD?", a:"Give a clear and concise introduction.", e:"Begin by summarizing the topic briefly, providing context, and sharing your viewpoint confidently. A strong start sets the tone and shows leadership potential."},
-{q:"How to handle disagreements in GD?", a:"Respectfully present your counterpoints.", e:"If someone disagrees with you, listen first, then explain your viewpoint logically. Avoid arguments or personal remarks, maintaining professionalism."},
-{q:"Why is active listening important?", a:"Ensures meaningful participation.", e:"Listening carefully helps you respond appropriately, avoid repeating points, and build on others’ ideas. It also shows respect for different perspectives."},
-{q:"How to use examples effectively?", a:"Support your points with real-world examples.", e:"Examples from current events, industry trends, or personal experience make your points convincing and demonstrate awareness and critical thinking."},
-{q:"How can body language influence GD performance?", a:"Shows confidence and engagement.", e:"Positive body language like eye contact, upright posture, and gestures communicates confidence and attentiveness, while poor posture or distraction can negatively impact perception."},
-{q:"What topics are often discussed in GDs?", a:"Current affairs, tech, social issues, economy.", e:"GD topics may include climate change, AI impact, remote work, corporate ethics, or education reforms. Being informed about trending topics helps in meaningful participation."},
-{q:"How to manage dominant speakers?", a:"Stay calm and assert your points politely.", e:"Do not get intimidated. Wait for a pause, then present your argument clearly. Being respectful yet confident demonstrates maturity and communication skills."},
-{q:"What is the ideal number of points to share?", a:"Focus on 2–3 strong points.", e:"Quality is more important than quantity. Share well-structured, relevant points rather than listing too many ideas superficially."},
-{q:"How to conclude a GD effectively?", a:"Summarize key points.", e:"End by briefly recapping the discussion, highlighting consensus or differing views, and finishing on a professional note. A strong conclusion leaves a positive impression."},
-{q:"How to deal with nervousness?", a:"Practice and stay focused.", e:"Prepare beforehand, take deep breaths, and focus on your points. Confidence grows with practice, and composure is noticed by evaluators."},
-{q:"What role does ethics play in GD?", a:"High importance.", e:"Avoid personal attacks, biased statements, or unethical arguments. Professionalism, respect, and honesty are critical in evaluation."},
-{q:"How to participate if you are less confident?", a:"Start small and build up.", e:"Contribute when you have points to add, even if brief. Listening, nodding, and supporting others’ ideas can also demonstrate engagement."},
-{q:"Can humor be used in GD?", a:"Yes, cautiously and relevantly.", e:"Light, relevant humor can make interaction engaging but avoid jokes that may offend. Professionalism should always come first."},
-{q:"How should introverts handle GDs?", a:"Prepare and participate selectively.", e:"Focus on presenting well-thought points, using examples, and listening actively. Even limited participation can show quality and understanding."},
-{q:"How to handle controversial topics?", a:"Be neutral and logical.", e:"Present balanced viewpoints, avoid personal opinions that may offend, and focus on facts, reasoning, and possible solutions."},
-{q:"How to stay relevant in GD?", a:"Stick to the topic.", e:"Avoid going off-track or sharing unrelated stories. Ensure your contributions align with the topic and enhance the discussion."},
-{q:"How to use statistics in GD?", a:"Use sparingly and accurately.", e:"Citing relevant data adds credibility to your points. Ensure numbers are correct and contextually appropriate."},
-{q:"How to collaborate in GD?", a:"Support and build on others’ points.", e:"Acknowledge others’ ideas and add value. Collaboration shows teamwork and ability to work in group environments."},
-{q:"How to participate in remote GDs?", a:"Speak clearly and manage virtual etiquette.", e:"Ensure your camera and mic work well, wait for turns, and engage respectfully. Virtual GDs require clear communication and patience."},
-{q:"How to prepare for GDs on social topics?", a:"Research current events and trends.", e:"Topics like climate change, remote work, digital transformation, or mental health are common. Being aware helps you contribute meaningful ideas."},
-{q:"How to handle interruptions?", a:"Stay polite and assertive.", e:"Acknowledge the other person, then continue your point calmly. Maintaining composure shows maturity and professionalism."},
-{q:"How to evaluate other participants?", a:"Observe and learn.", e:"Notice who speaks clearly, uses examples, and demonstrates leadership. Learning from others improves your own skills."},
-{q:"How to present a unique idea?", a:"Be creative but relevant.", e:"Introduce new viewpoints backed with reasoning or examples. Creativity is appreciated if it aligns with the topic."},
-{q:"How to manage time in GD?", a:"Balance speaking and listening.", e:"Speak concisely, contribute meaningful points, and avoid dominating. Time management ensures everyone participates."},
-{q:"How to handle group conflicts?", a:"Be calm and solution-oriented.", e:"Focus on ideas, not people. Help mediate and encourage constructive discussion, showing problem-solving skills."},
-{q:"How to summarize complex topics?", a:"Break into key points.", e:"Highlight main ideas clearly, simplify explanations, and provide relevant examples. Summaries should be concise and informative."},
-{q:"What is the role of research in GD?", a:"Enhances contribution quality.", e:"Well-researched points demonstrate awareness, preparation, and knowledge, making your participation more impactful."},
-{q:"Topic: What is Group Discussion (GD)?", a:"Structured discussion among candidates.", e:"A Group Discussion is a method used by organizations to evaluate communication, leadership, and teamwork skills. It helps assess confidence, analytical thinking, and the ability to handle opinions in a group. GDs simulate real work environments and show how participants behave in collaborative situations. Understanding the purpose and process of GD is essential for successful participation."},
-{q:"Topic: Importance of GD in selection process", a:"Evaluates communication & problem-solving.", e:"GD is conducted to observe how candidates present ideas, interact with peers, and respond under pressure. It shows the ability to articulate thoughts, maintain professionalism, and contribute meaningfully. Recruiters can assess knowledge, attitude, and soft skills beyond resumes. Knowing its importance helps candidates focus on key skills during preparation."},
-{q:"Topic: Climate Change", a:"A major environmental concern.", e:"Climate change refers to long-term shifts in weather patterns caused by natural or human activities. It impacts ecosystems, economies, and human life worldwide. In GDs, discussing climate change demonstrates awareness of global issues, the ability to suggest solutions, and analytical thinking. Participants should focus on causes, effects, and mitigation strategies."},
-{q:"Topic: Artificial Intelligence", a:"Technology simulating human intelligence.", e:"Artificial Intelligence (AI) involves creating systems that can perform tasks requiring human-like reasoning. In GDs, candidates can discuss AI's impact on jobs, ethics, and innovation. Explaining AI clearly, with examples like chatbots or automation, shows understanding and critical thinking. It’s a trending topic often included in discussions."},
-{q:"Topic: Remote Work and Hybrid Offices", a:"Modern workplace setup.", e:"Remote work allows employees to work from anywhere, while hybrid offices combine in-person and online work. GD participants can discuss benefits like flexibility and challenges like communication gaps. This topic tests knowledge of workplace trends, problem-solving, and team collaboration. Providing examples strengthens your discussion."},
-{q:"Topic: Education System Reforms", a:"Improving learning structures.", e:"This topic focuses on how to make education more effective and inclusive. GD discussion can include online education, skill-based learning, and government policies. Highlighting pros and cons, along with practical suggestions, demonstrates critical thinking and awareness of societal issues."},
-{q:"Topic: Mental Health Awareness", a:"Understanding emotional well-being.", e:"Mental health is essential for productivity and personal growth. In a GD, candidates can discuss stress management, workplace pressures, and societal attitudes. Offering examples, statistics, and coping strategies shows empathy and awareness, important qualities recruiters value."},
-{q:"Topic: Social Media Impact", a:"Influence on society.", e:"Social media affects communication, mental health, and information sharing. In GDs, discussing its pros and cons, misinformation, and ethical usage displays understanding of modern societal trends. Clear arguments with examples show analytical thinking and responsibility."},
-{q:"Topic: Globalization", a:"Interconnected world economy.", e:"Globalization refers to the integration of economies, cultures, and ideas across the world. GD discussions may include trade, cultural exchange, and job impacts. Participants should evaluate benefits and challenges logically, showing awareness of international issues."},
+{q:"What is a Group Discussion (GD)?", a:"GD is a structured discussion among candidates.", e:"A Group Discussion is a process where a group of people discuss a topic to evaluate their communication, thinking, and teamwork skills. It helps assess confidence, knowledge, and leadership potential in a professional setting."},
+{q:"Why is GD conducted in interviews?", a:"To evaluate skills beyond academics.", e:"GD is conducted to analyze a candidate's problem-solving ability, communication skills, team participation, and ability to handle pressure. Employers use it to identify potential leaders and collaborative team members."},
+{q:"How is GD different from a debate?", a:"Focus is on collaboration, not winning.", e:"Unlike debates, GDs are not about winning an argument but discussing ideas constructively. Participants are expected to present opinions, listen actively, and reach logical conclusions as a group."},
+{q:"What skills are evaluated in GD?", a:"Communication, confidence, leadership, and knowledge.", e:"During a GD, evaluators observe how candidates articulate their thoughts, interact with others, maintain body language, show listening skills, and contribute meaningful points relevant to the topic."},
+{q:"What role does body language play in GD?", a:"Important for expressing confidence.", e:"Positive body language like eye contact, upright posture, gestures, and attentiveness shows confidence and professionalism. Poor body language can convey disinterest or lack of engagement."},
+{q:"What is the importance of listening in GD?", a:"Active listening is crucial.", e:"Participants must carefully listen to others’ points before responding. Listening ensures meaningful contributions, prevents repetition, and shows respect for different opinions."},
+{q:"How to initiate a GD?", a:"Start with a clear, concise opening.", e:"The first participant sets the tone by briefly summarizing the topic, providing context, and presenting their viewpoint confidently. A strong start demonstrates leadership and clarity of thought."},
+{q:"How to handle interruptions in GD?", a:"Politely assert your point.", e:"If interrupted, stay calm, acknowledge others, and continue your point respectfully. Maintaining composure shows maturity and effective communication skills."},
+{q:"What is the ideal number of points to present?", a:"3–4 strong points.", e:"Focus on quality over quantity. Presenting a few well-structured points with examples is more impactful than listing many ideas superficially."},
+{q:"How to conclude a GD?", a:"Summarize key points.", e:"The conclusion should briefly recap the discussion, highlight consensus or diverse viewpoints, and end on a professional note. A good conclusion leaves a positive impression on evaluators."},
+{q:"What topics are common in GD?", a:"Current affairs, technology, business, and social issues.", e:"Topics may include climate change, digital transformation, work-from-home trends, ethical dilemmas, or societal challenges. Candidates should stay informed to contribute effectively."},
+{q:"How to handle disagreement?", a:"Respectfully present counterpoints.", e:"Disagree politely by providing logical reasoning. Avoid arguments or dominating the discussion. Respecting others’ opinions is crucial for professional interaction."},
+{q:"What is the role of a moderator in GD?", a:"Guides and evaluates the discussion.", e:"Moderators may introduce the topic, manage time, and ensure smooth flow. They also observe participant skills like communication, leadership, and teamwork."},
+{q:"Can you participate without speaking much?", a:"Active listening counts but speaking is essential.", e:"While listening is important, active participation is required to demonstrate communication and analytical skills. Contribute at least 2–3 meaningful points."},
+{q:"How to use examples in GD?", a:"Support points with real-life examples.", e:"Using examples from current events, studies, or personal experiences strengthens your argument, shows awareness, and makes contributions more convincing."},
+{q:"Is interrupting allowed in GD?", a:"No, but assert politely when needed.", e:"Avoid cutting others off unnecessarily. You may interject only to clarify or add value, always maintaining a respectful tone."},
+{q:"What is the time limit in GD?", a:"Typically 10–15 minutes.", e:"Most GDs last around 10–15 minutes for 8–10 participants. Each participant should manage their time to contribute effectively without monopolizing the discussion."},
+{q:"How to stay relevant in GD?", a:"Stick to the topic.", e:"Avoid straying from the subject. Ensure your points relate directly to the topic and add value to the overall discussion."},
+{q:"Can humor be used in GD?", a:"Use cautiously.", e:"A light, relevant humor can engage participants but avoid jokes that may offend or distract. Professionalism is key."},
+{q:"How to deal with dominant speakers?", a:"Stay confident and assert politely.", e:"Do not get intimidated. Wait for a natural pause, then present your point clearly. Respectful assertiveness is valued."},
+{q:"What is the ideal tone in GD?", a:"Calm, confident, and polite.", e:"Maintain a steady voice, clarity in words, and friendly demeanor. Aggressive or loud tone can negatively impact perception."},
+{q:"How to prepare for GD?", a:"Research and practice.", e:"Read current affairs, trending topics, and common GD scenarios. Practice expressing points concisely with friends or mentors."},
+{q:"What is the importance of teamwork in GD?", a:"Collaboration is key.", e:"Show ability to work with others, support ideas, build on points, and help reach a common understanding."},
+{q:"How to handle nervousness?", a:"Practice and focus.", e:"Take deep breaths, focus on your points, and maintain eye contact. Confidence grows with preparation."},
+{q:"Is prior knowledge necessary?", a:"Helpful but not mandatory.", e:"Having background information improves contribution quality. However, logical reasoning and communication skills also matter."},
+{q:"How to balance speaking and listening?", a:"Ensure fair participation.", e:"Speak clearly when you have points, but also listen actively. Avoid dominating or staying silent entirely."},
+{q:"How to present a unique idea?", a:"Be innovative but relevant.", e:"Introduce original viewpoints backed with reasoning or examples. Creativity is appreciated if it aligns with the topic."},
+{q:"What role does ethics play in GD?", a:"High importance.", e:"Avoid unethical arguments, personal attacks, or biased statements. Professional behavior and respect are crucial in GD evaluation."}
 {q:"Topic: Corporate Ethics", a:"Moral principles in business.", e:"Corporate ethics involves fairness, transparency, and responsibility in business practices. GD topics can cover whistleblowing, sustainability, and employee treatment. Demonstrating understanding of ethical dilemmas shows maturity and professional insight."},
+
 {q:"Topic: Work-Life Balance", a:"Healthy balance between work and personal life.", e:"Work-life balance ensures productivity while maintaining well-being. In GDs, candidates can discuss flexible hours, remote work, and stress management. Presenting practical solutions shows empathy, planning skills, and awareness of workplace dynamics."},
+
 {q:"Topic: Leadership Skills", a:"Ability to guide a team.", e:"Leadership involves motivating, guiding, and supporting a team to achieve goals. GD discussions can cover traits of good leaders, challenges, and real-life examples. Explaining leadership with practical examples reflects understanding and self-awareness."},
+
 {q:"Topic: Cybersecurity", a:"Protecting digital assets.", e:"Cybersecurity is the practice of protecting computers and networks from threats. GDs may discuss phishing, data leaks, and preventive measures. Presenting solutions and awareness shows analytical thinking and technical literacy."},
+
 {q:"Topic: Environmental Pollution", a:"Contamination of natural resources.", e:"Pollution affects air, water, and soil quality, impacting health and ecosystems. GD participants can discuss causes, effects, and mitigation strategies. Well-structured arguments show understanding of global challenges and problem-solving abilities."},
+
 {q:"Topic: Sustainable Development", a:"Development without harming the environment.", e:"Sustainable development ensures economic growth while protecting resources. In GDs, discussing renewable energy, responsible consumption, and policy suggestions highlights awareness and responsibility. Explaining long-term benefits demonstrates maturity."},
+
 {q:"Topic: Artificial Intelligence Ethics", a:"Responsible use of AI.", e:"AI ethics deals with fairness, transparency, and accountability in automated systems. GD discussions can include bias in AI, privacy concerns, and societal impact. Offering balanced perspectives shows critical thinking and awareness of technological consequences."},
+
 {q:"Topic: Gender Equality", a:"Equal opportunities for all genders.", e:"GD discussions on gender equality cover workplace opportunities, pay gaps, and societal norms. Proposing solutions and acknowledging challenges demonstrates awareness, empathy, and leadership potential."},
+
 {q:"Topic: Startups and Entrepreneurship", a:"Building new businesses.", e:"Entrepreneurship involves innovation, risk-taking, and business planning. In GDs, topics can include funding challenges, market analysis, and startup culture. Sharing examples shows knowledge of current trends and problem-solving skills."},
+
 {q:"Topic: Artificial Intelligence in Healthcare", a:"AI applications for health.", e:"AI can help diagnose diseases, manage patient records, and suggest treatments. GD discussions can focus on benefits, risks, and ethical concerns. Explaining with examples shows understanding of technology's societal impact."},
+
 {q:"Topic: Renewable Energy", a:"Clean energy sources.", e:"Topics include solar, wind, and hydro energy. In GDs, participants can discuss benefits, feasibility, and policies. Using statistics or real-life examples shows research and analytical skills."},
+
 {q:"Topic: Work From Home Challenges", a:"Difficulties in remote work.", e:"Challenges include communication gaps, time management, and team collaboration. GD discussions can propose solutions like tools or strategies. Practical points reflect problem-solving and awareness."},
+
 {q:"Topic: Mental Health in Workplace", a:"Employee well-being.", e:"Stress, burnout, and motivation affect productivity. GD discussions can suggest wellness programs, support systems, and awareness campaigns. Thoughtful explanations show empathy and professional maturity."},
+
 {q:"Topic: Corporate Social Responsibility (CSR)", a:"Company's social impact.", e:"CSR initiatives include education, healthcare, and environmental projects. In GDs, discussing CSR strategies demonstrates understanding of business ethics and societal contribution."},
+
 {q:"Topic: Future of Work", a:"Evolving workplace trends.", e:"Topics include AI automation, hybrid work, and skill development. GD participants should discuss adaptability, challenges, and solutions. Well-reasoned points show foresight and critical thinking."},
+
 {q:"Topic: Digital Transformation", a:"Use of digital tech in business.", e:"Digital transformation involves adopting new technologies for efficiency. GD discussions can cover benefits, challenges, and strategy. Explaining with examples shows knowledge of modern business trends."},
+
 {q:"Topic: Corporate Leadership Styles", a:"Different ways to lead.", e:"Leadership styles include democratic, autocratic, and transformational. GD discussions can evaluate effectiveness in different situations. Understanding these concepts shows awareness of management principles."},
+
 {q:"Topic: Innovation in Education", a:"New methods to teach and learn.", e:"GD discussions can cover online learning, AI tutoring, skill-based programs, and reforms. Offering solutions or ideas shows creativity, knowledge, and problem-solving ability."},
+
 {q:"Topic: Global Economic Trends", a:"International economic patterns.", e:"Topics can include recession, inflation, trade, and market shifts. GD discussions require analysis, examples, and understanding of impacts. Logical reasoning and awareness make points stronger."}
 ]
 };
@@ -2102,7 +2080,8 @@ function renderPractice(topic){
 
  let ans=box.querySelector(".ans");
  let btn=box.querySelector("button");
-
+ let explanation = x.e ? x.e.replace(/\n/g, "<br>") : "";
+    ans.innerHTML = `<b>Answer:</b> ${x.a}<br>${explanation}`;
  btn.onclick=()=> ans.style.display = ans.style.display==="block"?"none":"block";
 
  practiceContainer.appendChild(box);
@@ -2146,16 +2125,38 @@ function startQuiz(topic){
 
 
 /* SUBMIT RESULT */
-submitQuiz.onclick=()=>{
+submitQuiz.onclick = () => {
 
- let score=0,attempted=0;
+ let score = 0, attempted = 0;
 
- activeQuiz.forEach((q,i)=>{
- let ans=document.querySelector(`input[name='q${i}']:checked`);
- if(ans){
- attempted++;
- if(ans.value===q.answer) score++;
- }
+ activeQuiz.forEach((q, i) => {
+    let ans = document.querySelector(`input[name='q${i}']:checked`);
+
+    if (ans) {
+        attempted++;
+        if (ans.value === q.answer) score++;
+    }
+
+    // ==== Highlighting Logic ====
+    let options = document.querySelectorAll(`input[name='q${i}']`);
+
+    options.forEach(opt => {
+        let parent = opt.parentElement;
+
+        parent.classList.remove("bg-green-200","bg-red-200","border","border-green-600","border-red-600");
+
+        // correct answer => GREEN
+        if (opt.value === q.answer) {
+            parent.classList.add("bg-green-200","border","border-green-600");
+        }
+
+        // selected wrong answer => RED
+        if (ans && opt === ans && opt.value !== q.answer) {
+            parent.classList.add("bg-red-200","border","border-red-600");
+        }
+
+        opt.disabled = true; // lock after submit
+    });
  });
 
  let wrong = activeQuiz.length - score;
@@ -2165,10 +2166,10 @@ submitQuiz.onclick=()=>{
  document.getElementById("wrongCount").innerText = wrong;
  document.getElementById("notAttempt").innerText = notAttempt;
 
- let emoji="🙂";
- if(score<=1) emoji="😢";
- else if(score<=3) emoji="🙂";
- else emoji="🔥";
+ let emoji = "🙂";
+ if (score <= 1) emoji = "😢";
+ else if (score <= 3) emoji = "🙂";
+ else emoji = "🔥";
 
  document.getElementById("emojiResult").innerText = emoji;
 
