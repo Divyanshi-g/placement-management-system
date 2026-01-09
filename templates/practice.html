@@ -617,24 +617,21 @@ startQuiz(topic);
 
 /* PRACTICE */
 function renderPractice(topic){
-practiceContainer.innerHTML="";
-practiceData[topic].forEach((x,i)=>{
-let box=document.createElement("div");
-box.className="qaBox";
-box.innerHTML=
-`<b>${i+1}. ${x.q}</b><br>
-<button onclick="toggleAns('${topic}${i}')">Show Answer</button>
-<div id="${topic}${i}" class="ans">
-<b>Answer:</b> ${x.a}<br>${x.e.replace(/\n/g,"<br>")}
-</div>`;
-practiceContainer.appendChild(box);
-});
+  practiceContainer.innerHTML = "";
+  practiceData[topic].forEach((x, i) => {
+    let explanation = x.e ? x.e.replace(/\n/g,"<br>") : "No detailed explanation available.";
+    let box = document.createElement("div");
+    box.className = "qaBox";
+    box.innerHTML =
+    `<b>${i+1}. ${x.q}</b><br>
+    <button onclick="toggleAns('${topic}${i}')">Show Answer</button>
+    <div id="${topic}${i}" class="ans">
+    <b>Answer:</b> ${x.a}<br>
+    ${explanation}
+    </div>`;
+    practiceContainer.appendChild(box);
+  });
 }
-
-window.toggleAns=function(id){
-let x=document.getElementById(id);
-x.style.display = x.style.display==="none" || x.style.display==="" ? "block":"none";
-};
 
 /* QUIZ */
 let activeQuiz=[];
@@ -685,3 +682,4 @@ box.innerHTML=history.length?history.map((s,i)=>`Attempt ${i+1}: ${s} score`).jo
 showHistory();
 </script>
 {% endblock %}
+
