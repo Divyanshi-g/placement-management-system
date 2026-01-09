@@ -2066,190 +2066,213 @@ answer: "Confidence + Clarity + Respect"
 ]
 };
 
-/* ===================== UI ===================== */
-const topicBox=document.getElementById("topicBox");
-const practiceSection=document.getElementById("practiceSection");
-const quizSection=document.getElementById("quizSection");
-const practiceContainer=document.getElementById("practiceContainer");
+/* ================== UI ================== */
+const topicBox = document.getElementById("topicBox");
+const practiceSection = document.getElementById("practiceSection");
+const quizSection = document.getElementById("quizSection");
 
-const quizForm=document.getElementById("quizForm");
-const quizResult=document.getElementById("quizResult");
-const submitQuiz=document.getElementById("submitQuiz");
+const practiceContainer = document.getElementById("practiceContainer");
+const quizForm = document.getElementById("quizForm");
+const quizResult = document.getElementById("quizResult");
+const submitQuiz = document.getElementById("submitQuiz");
 
-const correctSpan=document.getElementById("correctCount");
-const wrongSpan=document.getElementById("wrongCount");
-const notAttemptSpan=document.getElementById("notAttempt");
-const emojiResult=document.getElementById("emojiResult");
-
-const historyPanel=document.getElementById("historyPanel");
-const historyList=document.getElementById("historyList");
-const openHistoryBtn=document.getElementById("openHistory");
-const closeHistoryBtn=document.getElementById("closeHistory");
-
-/* ===================== MODE ===================== */
-document.getElementById("modePractice").onclick=()=>{
-  topicBox.classList.remove("hidden");
-  practiceSection.classList.remove("hidden");
-  quizSection.classList.add("hidden");
+document.getElementById("modePractice").onclick = () => {
+    topicBox.classList.remove("hidden");
+    practiceSection.classList.remove("hidden");
+    quizSection.classList.add("hidden");
 };
 
-document.getElementById("modeQuiz").onclick=()=>{
-  topicBox.classList.remove("hidden");
-  quizSection.classList.remove("hidden");
-  practiceSection.classList.add("hidden");
+document.getElementById("modeQuiz").onclick = () => {
+    topicBox.classList.remove("hidden");
+    quizSection.classList.remove("hidden");
+    practiceSection.classList.add("hidden");
 };
 
-/* ===================== TOPIC SELECT ===================== */
-document.querySelectorAll(".topicBtn").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    let topic=btn.dataset.topic;
-
-    if(practiceData[topic]) renderPractice(topic);
-    if(quizData[topic]) startQuiz(topic);
-
-    quizResult.classList.add("hidden");
-  });
+document.querySelectorAll(".topicBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        let topic = btn.dataset.topic;
+        renderPractice(topic);
+        startQuiz(topic);
+    });
 });
 
-/* ===================== PRACTICE ===================== */
-function renderPractice(topic){
-  practiceContainer.innerHTML="";
 
-  practiceData[topic].forEach((x,i)=>{
-    let box=document.createElement("div");
-    box.className="qaBox";
+/* ================== PRACTICE ================== */
+function renderPractice(topic) {
+    practiceContainer.innerHTML = "";
 
-    box.innerHTML=
-    `<b>${i+1}. ${x.q}</b>
-     <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded showBtn">Show Answer</button>
-     <div class="ans"><b>Answer:</b> ${x.a}<br>${x.e?x.e.replace(/\n/g,"<br>"):""}</div>`;
-
-    box.querySelector(".showBtn").onclick=()=>{
-      let a=box.querySelector(".ans");
-      a.style.display=a.style.display==="block"?"none":"block";
-    };
-
-    practiceContainer.appendChild(box);
-  });
-}
-
-/* ===================== QUIZ ===================== */
-let activeQuiz=[];
-
-function startQuiz(topic){
-  activeQuiz=quizData[topic] || [];
-
-  quizForm.innerHTML="";
-  quizResult.classList.add("hidden");
-  submitQuiz.classList.remove("hidden");
-
-  activeQuiz.forEach((q,i)=>{
-
-    if(!q.q) q.q="(Question text missing)";
-
-    let opts=q.options.map((o,idx)=>`
-      <label class="block">
-        <input type="radio" name="q${i}" value="${idx}">
-        ${o}
-      </label>
-    `).join("");
-
-    quizForm.innerHTML+=`
-      <div class="qaBox">
-        <b>Q${i+1}. ${q.q}</b>
-        ${opts}
-      </div>`;
-  });
-}
-
-/* ===================== SUBMIT ===================== */
-submitQuiz.onclick=()=>{
-  let correct=0,wrong=0;
-  let detailedResult=[];
-
-  activeQuiz.forEach((q,i)=>{
-    let ans=document.querySelector(`input[name='q${i}']:checked`);
-    if(!ans){
-      detailedResult.push({q:q.q,status:"Not Attempted"});
-      return;
+    if (!practiceData[topic] || practiceData[topic].length === 0) {
+        practiceContainer.innerHTML = `
+        <div class="p-4 bg-red-100 text-red-700 rounded-lg font-semibold">
+          ❌ No Practice Questions Available For "${topic}"
+        </div>`;
+        return;
     }
 
-    if(+ans.value===q.correct){
-      correct++;
-      detailedResult.push({q:q.q,status:"Correct"});
-    }else{
-      wrong++;
-      detailedResult.push({q:q.q,status:"Wrong"});
+    practiceData[topic].forEach((x, i) => {
+        let box = document.createElement("div");
+        box.className = "qaBox";
+
+        let questionEl = document.createElement("p");
+        questionEl.innerHTML = `<b>${i + 1}. ${x.q}</b>`;
+        box.appendChild(questionEl);
+
+        let btn = document.createElement("button");
+        btn.textContent = "Show Answer";
+        btn.className = "mt-2 px-3 py-1 bg-blue-500 text-white rounded";
+
+        let ansDiv = document.createElement("div");
+        ansDiv.className = "ans";
+        let explanation = x.e ? x.e.replace(/\n/g, "<br>") : "";
+        ansDiv.innerHTML = `<b>Answer:</b> ${x.a}<br>${explanation}`;
+
+        btn.addEventListener("click", () => {
+            ansDiv.style.display = ansDiv.style.display === "block" ? "none" : "block";
+        });
+
+        box.appendChild(btn);
+        box.appendChild(ansDiv);
+        practiceContainer.appendChild(box);
+    });
+}
+
+
+/* ================== QUIZ ================== */
+let activeQuiz = [];
+let userAnswers = [];
+
+function startQuiz(topic) {
+
+    if (!quizData[topic] || quizData[topic].length === 0) {
+        quizForm.innerHTML = `
+        <div class="p-4 bg-red-100 text-red-700 rounded-lg font-semibold">
+          ❌ Quiz for "${topic}" exists but has NO questions in JS file.
+        </div>`;
+        submitQuiz.classList.add("hidden");
+        return;
     }
-  });
 
-  let total=activeQuiz.length;
-  let miss=total-(correct+wrong);
-  let percent=(correct/total)*100;
+    activeQuiz = quizData[topic];
+    userAnswers = [];
 
-  correctSpan.innerText=correct;
-  wrongSpan.innerText=wrong;
-  notAttemptSpan.innerText=miss;
+    quizForm.innerHTML = "";
 
-  if(percent>=80) emojiResult.innerText="🎉 Excellent Performance!";
-  else if(percent>=50) emojiResult.innerText="🙂 Good Try!";
-  else emojiResult.innerText="😐 Keep Practicing!";
+    activeQuiz.forEach((q, i) => {
 
-  quizResult.classList.remove("hidden");
-  submitQuiz.classList.add("hidden");
+        let opts = q.options.map((o, idx) => `
+        <label class="block cursor-pointer">
+           <input type="radio" name="q${i}" value="${idx}">
+           ${o}
+        </label>
+      `).join("");
 
-  saveHistory(correct,wrong,miss,detailedResult);
+        quizForm.innerHTML += `
+        <div class="qaBox">
+           <b>Q${i + 1}. ${q.q}</b>
+           ${opts}
+        </div>
+      `;
+    });
+
+    submitQuiz.classList.remove("hidden");
+}
+
+
+/* ================== SUBMIT RESULT ================== */
+submitQuiz.onclick = () => {
+    let score = 0, attempted = 0;
+
+    userAnswers = [];
+
+    activeQuiz.forEach((q, i) => {
+        let ans = document.querySelector(`input[name='q${i}']:checked`);
+
+        if (ans) {
+            attempted++;
+            userAnswers.push(+ans.value);
+            if (+ans.value === q.correct) score++;
+        } else {
+            userAnswers.push(null);
+        }
+    });
+
+    let wrong = activeQuiz.length - score;
+    let notAttempted = activeQuiz.length - attempted;
+
+    document.getElementById("correctCount").innerText = score;
+    document.getElementById("wrongCount").innerText = wrong;
+    document.getElementById("notAttempt").innerText = notAttempted;
+
+    let emoji = "🙂";
+    if (score <= 5) emoji = "😢";
+    else if (score <= 10) emoji = "🙂";
+    else if (score <= 20) emoji = "😎";
+    else emoji = "🔥";
+
+    document.getElementById("emojiResult").innerText = emoji;
+
+    quizResult.classList.remove("hidden");
+
+    saveHistory(score);
 };
 
-/* ===================== SAVE HISTORY ===================== */
-function saveHistory(c,w,m,detail){
-  let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
 
-  history.push({
-    correct:c,
-    wrong:w,
-    miss:m,
-    detail,
-    time:new Date().toLocaleString()
-  });
+/* ================== PREVIOUS RESULT PANEL ================== */
+const saveBtn = document.getElementById("saveScoreBtn");
+const historyBox = document.getElementById("scoreHistory");
 
-  localStorage.setItem("quizHistory",JSON.stringify(history));
-  showHistory();
+saveBtn.classList.remove("hidden");
+
+// Slide Animation
+historyBox.style.maxHeight = "0px";
+historyBox.style.overflow = "hidden";
+historyBox.style.transition = "max-height .4s ease";
+
+saveBtn.onclick = () => {
+    if (historyBox.style.maxHeight === "0px") {
+        historyBox.style.maxHeight = "500px";
+    } else {
+        historyBox.style.maxHeight = "0px";
+    }
+};
+
+
+/* ================== SAVE + SHOW HISTORY ================== */
+function saveHistory(score) {
+    let history = JSON.parse(localStorage.getItem("quizHistory") || "[]");
+
+    history.push({
+        score: score,
+        total: activeQuiz.length,
+        time: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("quizHistory", JSON.stringify(history));
+    showHistory();
 }
 
-/* ===================== HISTORY PANEL ===================== */
-openHistoryBtn.onclick=()=>historyPanel.classList.remove("hidden");
-closeHistoryBtn.onclick=()=>historyPanel.classList.add("hidden");
+function showHistory() {
+    let history = JSON.parse(localStorage.getItem("quizHistory") || "[]");
+    let box = document.getElementById("historyList");
 
-function showHistory(){
-  let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
+    if (history.length === 0) {
+        box.innerHTML = "No previous attempts yet...";
+        return;
+    }
 
-  if(!history.length){
-    historyList.innerHTML="No previous attempts.";
-    return;
-  }
-
-  historyList.innerHTML = history.map((h,i)=>`
-    <div class="p-3 border rounded mb-3 bg-white">
-      <b>Attempt ${i+1}</b> (${h.time})<br>
-      Correct: ${h.correct} | Wrong: ${h.wrong} | Missed: ${h.miss}
-      <hr class="my-2">
-      ${h.detail.map(d=>`
-        <div class="text-sm">
-          <b>${d.q}</b><br>
-          <span class="${
-            d.status==="Correct"?"text-green-600":
-            d.status==="Wrong"?"text-red-600":"text-gray-600"
-          }">${d.status}</span>
-        </div>
-      `).join("")}
-    </div>
-  `).join("");
+    box.innerHTML = history.map((h, i) => `
+       <div class="p-2 border rounded mb-1">
+         Attempt ${i + 1} — Score: ${h.score}/${h.total}<br>
+         📅 ${h.time}
+       </div>
+    `).join("");
 }
 
 showHistory();
+
 </script>
 {% endblock %}
+
 
 
 
