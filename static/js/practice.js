@@ -265,3 +265,4 @@ quizResult.innerHTML=
 `<h3>Your Score: ${score} / ${activeQuiz.length}</h3>
 <h2>Performance: ${level}</h2>`;
 };
+
