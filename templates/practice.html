@@ -3,41 +3,41 @@
 <div class="max-w-7xl mx-auto p-6 mb-8 rounded-xl shadow-xl bg-gradient-to-r 
             from-blue-50 via-white to-blue-50 animate-fadeIn">
 
-<h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
-📝 Practice & Quiz Arena
-</h2>
+  <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
+    📝 Practice & Quiz Arena
+  </h2>
 
-<!-- MODE BUTTONS -->
-<div class="flex justify-center gap-6 mb-8">
-<button id="modePractice" class="modeBtn bg-blue-600">📚 Practice</button>
-<button id="modeQuiz" class="modeBtn bg-yellow-600">🎯 Quiz</button>
-</div>
+  <!-- MODE BUTTONS -->
+  <div class="flex justify-center gap-6 mb-8">
+    <button id="modePractice" class="modeBtn bg-blue-600">📚 Practice</button>
+    <button id="modeQuiz" class="modeBtn bg-yellow-600">🎯 Quiz</button>
+  </div>
 
-<!-- TOPIC BOX -->
-<div id="topicBox" class="hidden text-center mb-8">
-<h3 class="text-xl font-semibold mb-4">Choose Topic</h3>
-<div class="flex justify-center flex-wrap gap-4">
-<button class="topicBtn bg-blue-600" data-topic="coding">💻 Coding</button>
-<button class="topicBtn bg-green-600" data-topic="aptitude">🔢 Aptitude</button>
-<button class="topicBtn bg-purple-600" data-topic="reasoning">🧠 Reasoning</button>
-<button class="topicBtn bg-pink-600" data-topic="interview">🎤 Interview</button>
-<button class="topicBtn bg-orange-600" data-topic="gd">🗣 Group Discussion</button>
-</div>
-</div>
+  <!-- TOPIC BOX -->
+  <div id="topicBox" class="hidden text-center mb-8">
+    <h3 class="text-xl font-semibold mb-4">Choose Topic</h3>
+    <div class="flex justify-center flex-wrap gap-4">
+      <button class="topicBtn bg-blue-600" data-topic="coding">💻 Coding</button>
+      <button class="topicBtn bg-green-600" data-topic="aptitude">🔢 Aptitude</button>
+      <button class="topicBtn bg-purple-600" data-topic="reasoning">🧠 Reasoning</button>
+      <button class="topicBtn bg-pink-600" data-topic="interview">🎤 Interview</button>
+      <button class="topicBtn bg-orange-600" data-topic="gd">🗣 Group Discussion</button>
+    </div>
+  </div>
 
-<!-- PRACTICE SECTION -->
-<div id="practiceSection" class="hidden">
-<h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
-<div id="practiceContainer" class="space-y-4 max-h-[420px] overflow-y-auto pr-2"></div>
-</div>
+  <!-- PRACTICE SECTION -->
+  <div id="practiceSection" class="hidden">
+    <h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
+    <div id="practiceContainer" class="space-y-4 max-h-[420px] overflow-y-auto pr-2"></div>
+  </div>
 
-<!-- QUIZ SECTION -->
-<div id="quizSection" class="hidden mt-8">
+  <!-- QUIZ SECTION -->
+  <div id="quizSection" class="hidden mt-8">
 
-    <!-- Right Side Save Score Button -->
-    <button id="saveScoreBtn" class="hidden fixed right-6 top-28 
-            bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
-        📁 Save Score
+    <!-- Fixed Save Score / Previous Result Button -->
+    <button id="openHistory" 
+        class="fixed right-6 top-28 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
+        📁 Previous Result
     </button>
 
     <h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
@@ -46,15 +46,15 @@
     <div class="bg-white shadow-xl rounded-xl p-5 border
                 min-h-[380px] flex flex-col justify-between">
 
-        <!-- QUESTIONS CONTAINER -->
-        <form id="quizForm" class="space-y-4 overflow-y-auto max-h-[300px] pr-2"></form>
+      <!-- QUESTIONS CONTAINER -->
+      <form id="quizForm" class="space-y-4 overflow-y-auto max-h-[300px] pr-2"></form>
 
-        <!-- SUBMIT BUTTON (Only visible on last question via JS) -->
-        <button id="submitQuiz"
-            class="hidden w-full mt-4 px-6 py-2 bg-yellow-500 
-                   text-white rounded-lg shadow hover:bg-yellow-600 transition">
-            Submit Quiz
-        </button>
+      <!-- SUBMIT BUTTON -->
+      <button id="submitQuiz"
+          class="hidden w-full mt-4 px-6 py-2 bg-yellow-500 
+                 text-white rounded-lg shadow hover:bg-yellow-600 transition">
+          Submit Quiz
+      </button>
 
     </div>
 
@@ -62,30 +62,35 @@
     <div id="quizResult"
         class="hidden mt-6 bg-gray-50 p-5 rounded-xl shadow text-center">
 
-        <h2 class="text-2xl font-bold mb-2">🎉 Result Summary</h2>
+      <h2 class="text-2xl font-bold mb-2">🎉 Result Summary</h2>
 
-        <p class="text-lg font-semibold text-green-700">
-            Correct Answers: <span id="correctCount"></span>
-        </p>
+      <p class="text-lg font-semibold text-green-700">
+          Correct Answers: <span id="correctCount">0</span>
+      </p>
 
-        <p class="text-lg font-semibold text-red-600">
-            Wrong Answers: <span id="wrongCount"></span>
-        </p>
+      <p class="text-lg font-semibold text-red-600">
+          Wrong Answers: <span id="wrongCount">0</span>
+      </p>
 
-        <p class="text-lg font-semibold text-gray-700">
-            Not Attempted: <span id="notAttempt"></span>
-        </p>
+      <p class="text-lg font-semibold text-gray-700">
+          Not Attempted: <span id="notAttempt">0</span>
+      </p>
 
-        <h1 id="emojiResult" class="text-4xl mt-3"></h1>
+      <h1 id="emojiResult" class="text-4xl mt-3"></h1>
     </div>
- <!-- SCORE HISTORY -->
-    <div id="scoreHistory" class="mt-6 bg-white border rounded-lg p-4 shadow">
-        <h4 class="font-bold mb-2">📊 Previous Attempts</h4>
-        <div id="historyList" class="text-gray-700 text-sm">
-            No previous attempts yet...
-        </div>
+
+    <!-- HISTORY PANEL (Slide-in from Right) -->
+    <div id="historyPanel" class="fixed right-0 top-0 h-full w-96 bg-white shadow-xl p-4 overflow-y-auto hidden z-50">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold">📊 Previous Attempts</h3>
+        <button id="closeHistory" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Close</button>
+      </div>
+      <div id="historyList" class="space-y-2 text-sm">
+        No previous attempts yet...
+      </div>
     </div>
-</div>
+
+  </div>
 </div>
 
 <style>
@@ -2062,177 +2067,190 @@ answer: "Confidence + Clarity + Respect"
 };
 
 /* ===================== UI ===================== */
-const topicBox = document.getElementById("topicBox");
-const practiceSection = document.getElementById("practiceSection");
-const quizSection = document.getElementById("quizSection");
-const practiceContainer = document.getElementById("practiceContainer");
+const topicBox=document.getElementById("topicBox");
+const practiceSection=document.getElementById("practiceSection");
+const quizSection=document.getElementById("quizSection");
+const practiceContainer=document.getElementById("practiceContainer");
 
-const quizForm = document.getElementById("quizForm");
-const quizResult = document.getElementById("quizResult");
-const submitQuiz = document.getElementById("submitQuiz");
+const quizForm=document.getElementById("quizForm");
+const quizResult=document.getElementById("quizResult");
+const submitQuiz=document.getElementById("submitQuiz");
 
-const correctSpan = document.getElementById("correctCount");
-const wrongSpan = document.getElementById("wrongCount");
-const notAttemptSpan = document.getElementById("notAttempt");
-const emojiResult = document.getElementById("emojiResult");
+const correctSpan=document.getElementById("correctCount");
+const wrongSpan=document.getElementById("wrongCount");
+const notAttemptSpan=document.getElementById("notAttempt");
+const emojiResult=document.getElementById("emojiResult");
 
-const saveScoreBtn = document.getElementById("saveScoreBtn");
-const historyList = document.getElementById("historyList");
+const historyPanel=document.getElementById("historyPanel");
+const historyList=document.getElementById("historyList");
+const openHistoryBtn=document.getElementById("openHistory");
+const closeHistoryBtn=document.getElementById("closeHistory");
 
-/* ===================== MODE SWITCH ===================== */
-document.getElementById("modePractice").onclick = () => {
+/* ===================== MODE ===================== */
+document.getElementById("modePractice").onclick=()=>{
   topicBox.classList.remove("hidden");
   practiceSection.classList.remove("hidden");
   quizSection.classList.add("hidden");
 };
 
-document.getElementById("modeQuiz").onclick = () => {
+document.getElementById("modeQuiz").onclick=()=>{
   topicBox.classList.remove("hidden");
   quizSection.classList.remove("hidden");
   practiceSection.classList.add("hidden");
 };
 
-/* ===================== TOPIC CLICK ===================== */
-document.querySelectorAll(".topicBtn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    let topic = btn.dataset.topic;
+/* ===================== TOPIC SELECT ===================== */
+document.querySelectorAll(".topicBtn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    let topic=btn.dataset.topic;
 
-    if (practiceData[topic]) renderPractice(topic);
-    if (quizData[topic]) startQuiz(topic);
+    if(practiceData[topic]) renderPractice(topic);
+    if(quizData[topic]) startQuiz(topic);
 
     quizResult.classList.add("hidden");
-    saveScoreBtn.classList.add("hidden");
   });
 });
 
 /* ===================== PRACTICE ===================== */
-function renderPractice(topic) {
-  practiceContainer.innerHTML = "";
+function renderPractice(topic){
+  practiceContainer.innerHTML="";
 
-  practiceData[topic].forEach((x, i) => {
-    let box = document.createElement("div");
-    box.className = "qaBox";
+  practiceData[topic].forEach((x,i)=>{
+    let box=document.createElement("div");
+    box.className="qaBox";
 
-    let questionEl = document.createElement("p");
-    questionEl.innerHTML = `<b>${i + 1}. ${x.q}</b>`;
-    box.appendChild(questionEl);
+    box.innerHTML=
+    `<b>${i+1}. ${x.q}</b>
+     <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded showBtn">Show Answer</button>
+     <div class="ans"><b>Answer:</b> ${x.a}<br>${x.e?x.e.replace(/\n/g,"<br>"):""}</div>`;
 
-    let btn = document.createElement("button");
-    btn.textContent = "Show Answer";
-    btn.className = "mt-2 px-3 py-1 bg-blue-500 text-white rounded";
+    box.querySelector(".showBtn").onclick=()=>{
+      let a=box.querySelector(".ans");
+      a.style.display=a.style.display==="block"?"none":"block";
+    };
 
-    let ansDiv = document.createElement("div");
-    ansDiv.className = "ans";
-
-    let explanation = x.e ? x.e.replace(/\n/g, "<br>") : "";
-    ansDiv.innerHTML = `<b>Answer:</b> ${x.a}<br>${explanation}`;
-
-    btn.addEventListener("click", () => {
-      ansDiv.style.display = ansDiv.style.display === "block" ? "none" : "block";
-    });
-
-    box.appendChild(btn);
-    box.appendChild(ansDiv);
     practiceContainer.appendChild(box);
   });
 }
 
 /* ===================== QUIZ ===================== */
-let activeQuiz = [];
+let activeQuiz=[];
 
-function startQuiz(topic) {
-  activeQuiz = quizData[topic] || [];
-  quizForm.innerHTML = "";
+function startQuiz(topic){
+  activeQuiz=quizData[topic] || [];
+
+  quizForm.innerHTML="";
   quizResult.classList.add("hidden");
-  saveScoreBtn.classList.add("hidden");
   submitQuiz.classList.remove("hidden");
 
-  activeQuiz.forEach((q, i) => {
-    let opts = q.options
-      .map((o, idx) => `
-        <label class="block">
-          <input type="radio" name="q${i}" value="${idx}">
-          ${o}
-        </label>
-      `)
-      .join("");
+  activeQuiz.forEach((q,i)=>{
 
-    quizForm.innerHTML += `
+    if(!q.q) q.q="(Question text missing)";
+
+    let opts=q.options.map((o,idx)=>`
+      <label class="block">
+        <input type="radio" name="q${i}" value="${idx}">
+        ${o}
+      </label>
+    `).join("");
+
+    quizForm.innerHTML+=`
       <div class="qaBox">
-        <b>Q${i + 1}. ${q.q}</b>
-        <br>${opts}
-      </div>
-    `;
+        <b>Q${i+1}. ${q.q}</b>
+        ${opts}
+      </div>`;
   });
 }
 
-/* ===================== SUBMIT QUIZ ===================== */
-submitQuiz.onclick = () => {
-  let correct = 0;
-  let wrong = 0;
+/* ===================== SUBMIT ===================== */
+submitQuiz.onclick=()=>{
+  let correct=0,wrong=0;
+  let detailedResult=[];
 
-  activeQuiz.forEach((q, i) => {
-    let ans = document.querySelector(`input[name='q${i}']:checked`);
-    if (!ans) return;
+  activeQuiz.forEach((q,i)=>{
+    let ans=document.querySelector(`input[name='q${i}']:checked`);
+    if(!ans){
+      detailedResult.push({q:q.q,status:"Not Attempted"});
+      return;
+    }
 
-    if (+ans.value === q.correct) correct++;
-    else wrong++;
+    if(+ans.value===q.correct){
+      correct++;
+      detailedResult.push({q:q.q,status:"Correct"});
+    }else{
+      wrong++;
+      detailedResult.push({q:q.q,status:"Wrong"});
+    }
   });
 
-  let total = activeQuiz.length;
-  let notAttempt = total - (correct + wrong);
-  let percent = (correct / total) * 100;
+  let total=activeQuiz.length;
+  let miss=total-(correct+wrong);
+  let percent=(correct/total)*100;
 
-  correctSpan.innerText = correct;
-  wrongSpan.innerText = wrong;
-  notAttemptSpan.innerText = notAttempt;
+  correctSpan.innerText=correct;
+  wrongSpan.innerText=wrong;
+  notAttemptSpan.innerText=miss;
 
-  if (percent >= 80) emojiResult.innerText = "🎉 Excellent!";
-  else if (percent >= 50) emojiResult.innerText = "🙂 Good Job!";
-  else emojiResult.innerText = "😐 Need More Practice";
+  if(percent>=80) emojiResult.innerText="🎉 Excellent Performance!";
+  else if(percent>=50) emojiResult.innerText="🙂 Good Try!";
+  else emojiResult.innerText="😐 Keep Practicing!";
 
   quizResult.classList.remove("hidden");
-  saveScoreBtn.classList.remove("hidden");
   submitQuiz.classList.add("hidden");
+
+  saveHistory(correct,wrong,miss,detailedResult);
 };
 
 /* ===================== SAVE HISTORY ===================== */
-saveScoreBtn.addEventListener("click", () => {
-  let history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+function saveHistory(c,w,m,detail){
+  let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
 
   history.push({
-    correct: correctSpan.innerText,
-    wrong: wrongSpan.innerText,
-    notAttempt: notAttemptSpan.innerText,
-    time: new Date().toLocaleString()
+    correct:c,
+    wrong:w,
+    miss:m,
+    detail,
+    time:new Date().toLocaleString()
   });
 
-  localStorage.setItem("quizHistory", JSON.stringify(history));
-
-  alert("Score Saved Successfully 🎯");
+  localStorage.setItem("quizHistory",JSON.stringify(history));
   showHistory();
-});
+}
 
-function showHistory() {
-  let history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+/* ===================== HISTORY PANEL ===================== */
+openHistoryBtn.onclick=()=>historyPanel.classList.remove("hidden");
+closeHistoryBtn.onclick=()=>historyPanel.classList.add("hidden");
 
-  if (!history.length) {
-    historyList.innerText = "No previous attempts yet...";
+function showHistory(){
+  let history=JSON.parse(localStorage.getItem("quizHistory")||"[]");
+
+  if(!history.length){
+    historyList.innerHTML="No previous attempts.";
     return;
   }
 
-  historyList.innerHTML = history
-    .map(
-      (h, i) =>
-        `Attempt ${i + 1} → Correct: ${h.correct}, Wrong: ${h.wrong}, Missed: ${h.notAttempt} (${h.time})`
-    )
-    .join("<br>");
+  historyList.innerHTML = history.map((h,i)=>`
+    <div class="p-3 border rounded mb-3 bg-white">
+      <b>Attempt ${i+1}</b> (${h.time})<br>
+      Correct: ${h.correct} | Wrong: ${h.wrong} | Missed: ${h.miss}
+      <hr class="my-2">
+      ${h.detail.map(d=>`
+        <div class="text-sm">
+          <b>${d.q}</b><br>
+          <span class="${
+            d.status==="Correct"?"text-green-600":
+            d.status==="Wrong"?"text-red-600":"text-gray-600"
+          }">${d.status}</span>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
 }
 
 showHistory();
-
 </script>
 {% endblock %}
+
 
 
 
