@@ -336,7 +336,7 @@ aptitude:[
   {
     q: "Why do students fear aptitude and how to overcome it?",
     a: "Students fear aptitude due to lack of practice and confidence. Regular practice, understanding basics, and solving stepwise helps overcome fear easily."
-  }
+  },
   {
     q: "What is the basic idea of Percentage in Aptitude problems?",
     a: "Percentage represents a value out of 100. It helps in comparing numbers, calculating increases or decreases, and understanding proportions in real scenarios like marks, salary hike, and discounts."
