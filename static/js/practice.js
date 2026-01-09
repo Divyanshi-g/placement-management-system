@@ -30,7 +30,7 @@ modeQuiz.addEventListener("click", () => {
 });
 
 
-/console.log("Practice & Quiz Loaded Successfully");
+console.log("Practice & Quiz Loaded Successfully");
 
 // ================= PRACTICE QUESTIONS =================
 const practiceData = {
@@ -317,3 +317,4 @@ function saveHistory(topic, score) {
   record.textContent = `${topic.toUpperCase()} → Score: ${score}`;
   historyList.appendChild(record);
 }
+
