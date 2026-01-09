@@ -616,19 +616,40 @@ startQuiz(topic);
 });
 
 /* PRACTICE */
-function renderPractice(topic){
+// ================= PRACTICE LOGIC =================
+function renderPractice(topic) {
   practiceContainer.innerHTML = "";
+
   practiceData[topic].forEach((x, i) => {
-    let explanation = x.e ? x.e.replace(/\n/g,"<br>") : "No detailed explanation available.";
+    // Create the main question box
     let box = document.createElement("div");
     box.className = "qaBox";
-    box.innerHTML =
-    `<b>${i+1}. ${x.q}</b><br>
-    <button onclick="toggleAns('${topic}${i}')">Show Answer</button>
-    <div id="${topic}${i}" class="ans">
-    <b>Answer:</b> ${x.a}<br>
-    ${explanation}
-    </div>`;
+
+    // Create question element
+    let questionEl = document.createElement("p");
+    questionEl.innerHTML = `<b>${i + 1}. ${x.q}</b>`;
+    box.appendChild(questionEl);
+
+    // Create answer button
+    let btn = document.createElement("button");
+    btn.textContent = "Show Answer";
+    btn.className = "mt-2 px-3 py-1 bg-blue-500 text-white rounded";
+
+    // Create answer div
+    let ansDiv = document.createElement("div");
+    ansDiv.className = "ans";
+    ansDiv.innerHTML = `<b>Answer:</b> ${x.a}<br>${x.e.replace(/\n/g, "<br>")}`;
+
+    // Attach event listener to toggle answer visibility
+    btn.addEventListener("click", () => {
+      ansDiv.style.display = ansDiv.style.display === "block" ? "none" : "block";
+    });
+
+    // Append button and answer div to the box
+    box.appendChild(btn);
+    box.appendChild(ansDiv);
+
+    // Append box to practice container
     practiceContainer.appendChild(box);
   });
 }
@@ -682,4 +703,5 @@ box.innerHTML=history.length?history.map((s,i)=>`Attempt ${i+1}: ${s} score`).jo
 showHistory();
 </script>
 {% endblock %}
+
 
