@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-7xl mx-auto p-6 mt-8 rounded-xl shadow-xl bg-gradient-to-r 
+<div class="max-w-7xl mx-auto p-6 mb-8 rounded-xl shadow-xl bg-gradient-to-r 
             from-blue-50 via-white to-blue-50 animate-fadeIn">
 
 <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">
@@ -569,20 +569,1459 @@ gd:[
 /* QUIZ DATA — 35 each */
 const quizData = {
 coding:[
-{q:"HTML stands for?",options:["Hyper Text Markup Language","High Text Modern Language","Hyperlink Markup Logic","None"],correct:0},
-{q:"CSS is used for?",options:["Structure","Styling","Database","Security"],correct:1},
+  {
+    q: "Which data structure uses LIFO (Last In First Out)?",
+    options: ["Queue", "Stack", "Array", "Linked List"],
+    answer: "Stack"
+  },
+  {
+    q: "Which language is primarily used for web page styling?",
+    options: ["HTML", "Python", "CSS", "C"],
+    answer: "CSS"
+  },
+  {
+    q: "Which keyword is used to define a function in Python?",
+    options: ["func", "def", "function", "declare"],
+    answer: "def"
+  },
+  {
+    q: "What does HTML stand for?",
+    options: [
+      "Hyper Trainer Marking Language",
+      "Hyper Text Markup Language",
+      "High Text Machine Language",
+      "Hyper Text Management Language"
+    ],
+    answer: "Hyper Text Markup Language"
+  },
+  {
+    q: "Which symbol is used for comments in C?",
+    options: ["//", "#", "--", "/* */"],
+    answer: "//"
+  },
+  {
+    q: "Which of the following is NOT an OOPS concept?",
+    options: ["Inheritance", "Encapsulation", "Polymorphism", "Compilation"],
+    answer: "Compilation"
+  },
+  {
+    q: "Which SQL command is used to fetch data?",
+    options: ["GET", "SELECT", "FETCH", "TAKE"],
+    answer: "SELECT"
+  },
+  {
+    q: "Which tag is used to insert an image in HTML?",
+    options: ["<img>", "<image>", "<src>", "<pic>"],
+    answer: "<img>"
+  },
+  {
+    q: "Which operator is used for equality check in JavaScript?",
+    options: ["=", "==", "===", "!=="],
+    answer: "==="
+  },
+  {
+    q: "Which loop executes at least once?",
+    options: ["for loop", "while loop", "do while loop", "foreach loop"],
+    answer: "do while loop"
+  },
+  {
+    q: "What is the time complexity of binary search?",
+    options: ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+    answer: "O(log n)"
+  },
+  {
+    q: "Which is the correct file extension for Python files?",
+    options: [".pt", ".pyt", ".py", ".python"],
+    answer: ".py"
+  },
+  {
+    q: "Which method is used to print output in Java?",
+    options: ["print()", "System.out.println()", "echo()", "cout<<"],
+    answer: "System.out.println()"
+  },
+  {
+    q: "Which data type stores true/false values?",
+    options: ["int", "bool", "float", "char"],
+    answer: "bool"
+  },
+  {
+    q: "Which is used to create a database?",
+    options: ["CREATE DATABASE", "MAKE DATABASE", "NEW DB", "INIT DATABASE"],
+    answer: "CREATE DATABASE"
+  },
+  {
+    q: "Which CSS property changes text color?",
+    options: ["font-color", "color", "text-color", "foreground"],
+    answer: "color"
+  },
+  {
+    q: "Which programming language is known as platform independent?",
+    options: ["C", "C++", "Java", "Assembly"],
+    answer: "Java"
+  },
+  {
+    q: "Who is known as the father of C language?",
+    options: ["Guido van Rossum", "James Gosling", "Dennis Ritchie", "Bjarne Stroustrup"],
+    answer: "Dennis Ritchie"
+  },
+  {
+    q: "Which of the following is used to connect database in backend?",
+    options: ["JDBC", "HTML", "CSS", "Bootstrap"],
+    answer: "JDBC"
+  },
+  {
+    q: "Which data structure is used in BFS?",
+    options: ["Stack", "Queue", "Tree", "Array"],
+    answer: "Queue"
+  },
+  {
+    q: "Which of the following is a relational database?",
+    options: ["MongoDB", "Firebase", "MySQL", "Cassandra"],
+    answer: "MySQL"
+  },
+  {
+    q: "Which HTML tag is used for largest heading?",
+    options: ["<h6>", "<head>", "<h1>", "<heading>"],
+    answer: "<h1>"
+  },
+  {
+    q: "Which keyword is used for inheritance in Java?",
+    options: ["extends", "inherits", "derives", "from"],
+    answer: "extends"
+  },
+  {
+    q: "Which of these is a frontend framework?",
+    options: ["React", "Django", "Flask", "Node.js"],
+    answer: "React"
+  },
+  {
+    q: "What does CSS stand for?",
+    options: [
+      "Cascading Style Sheets",
+      "Creative Style System",
+      "Color Styling Sheet",
+      "Computer Style Syntax"
+    ],
+    answer: "Cascading Style Sheets"
+  },
+  {
+    q: "Which keyword is used to stop loop execution?",
+    options: ["stop", "exit", "break", "end"],
+    answer: "break"
+  },
+  {
+    q: "Which memory stores function call details?",
+    options: ["Heap", "Cache", "Stack", "CPU"],
+    answer: "Stack"
+  },
+  {
+    q: "A function that calls itself is called?",
+    options: ["Loop", "Recursive", "Inline", "Nested"],
+    answer: "Recursive"
+  },
+  {
+    q: "Which command deletes a table in SQL?",
+    options: ["DELETE TABLE", "REMOVE TABLE", "DROP TABLE", "CLEAR TABLE"],
+    answer: "DROP TABLE"
+  },
+  {
+    q: "Which JavaScript method is used to convert string to integer?",
+    options: ["parseInt()", "int()", "convert()", "toNumber()"],
+    answer: "parseInt()"
+  },
+  {
+    q: "Which of the following is NOT a programming language?",
+    options: ["Python", "HTML", "Java", "C++"],
+    answer: "HTML"
+  },
+  {
+    q: "Which algorithm is used for sorting efficiently?",
+    options: ["Bubble Sort", "Selection Sort", "Quick Sort", "Linear Sort"],
+    answer: "Quick Sort"
+  },
+  {
+    q: "Which concept hides internal details?",
+    options: ["Abstraction", "Inheritance", "Polymorphism", "Overloading"],
+    answer: "Abstraction"
+  },
+  {
+    q: "Which tag is used for a hyperlink?",
+    options: ["<link>", "<a>", "<href>", "<url>"],
+    answer: "<a>"
+  },
+  {
+    q: "What does DBMS stand for?",
+    options: [
+      "Database Managing System",
+      "Data Base Management System",
+      "Data Based Maintain System",
+      "Database Monitoring Service"
+    ],
+    answer: "Data Base Management System"
+  }
 ],
 aptitude:[
-{q:"Square root of 144?",options:["10","11","12","14"],correct:2},
+{q:"What is Aptitude in placements?",options:["Subject Knowledge","Natural Ability to Solve Problems","Communication Skill","Programming Skill"],correct:1},
+{q:"Why do companies test aptitude?",options:["Check your marks","Check attitude only","Check thinking, speed & accuracy","Time pass"],correct:2},
+{q:"Which topic checks business understanding?",options:["Profit & Loss","Shapes","GK","Chemistry"],correct:0},
+{q:"Why is Percentage important?",options:["Used in daily life decisions","Only for exams","Only for shops","Not important"],correct:0},
+{q:"Aptitude mainly improves?",options:["Memory","Decision Making","Singing","Drawing"],correct:1},
+{q:"Difference between aptitude & reasoning?",options:["Both same","Aptitude = Maths + Logic, Reasoning = Logical Thinking","Reasoning = Only Maths","No difference"],correct:1},
+{q:"Why Time & Work is important?",options:["Helps in games","Helps in understanding efficiency & productivity","Only exam topic","Not useful"],correct:1},
+{q:"Data Interpretation is used in?",options:["Cooking","Business Reports & Analytics","Dancing","Driving"],correct:1},
+{q:"Aptitude helps mostly in?",options:["Only engineering","All job roles","Only IT","Only government exams"],correct:1},
+{q:"Logical aptitude checks?",options:["Memory","IQ & Thinking Pattern","Sports skill","Communication"],correct:1},
+{q:"Which aptitude topic helps in budgeting?",options:["Ratio & Proportion","Calendar","Clock","Cube"],correct:0},
+{q:"Why companies love aptitude?",options:["Fast decision makers","Slow thinkers","Only toppers","Only coders"],correct:0},
+{q:"Verbal aptitude improves?",options:["Speaking Speed","Understanding & Clear Meaning","Dancing","Maths"],correct:1},
+{q:"Reason companies avoid only marks?",options:["Marks don't show thinking ability","Marks are everything","Marks show talent fully","They don’t check thinking"],correct:0},
+{q:"If salary increases from 20k to 25k, what skill required?",options:["Coding","Percentage","Chemistry","History"],correct:1},
+{q:"Time-Speed-Distance helps in?",options:["Travelling decisions","Sleeping schedule","Food","Nothing"],correct:0},
+{q:"Aptitude builds confidence because?",options:["We guess answers","We understand concepts logically","We cheat better","We speak fast"],correct:1},
+{q:"Why shortcuts & tricks are used?",options:["Look smart","Reduce solving time","Avoid questions","Show off"],correct:1},
+{q:"Logical puzzles improve?",options:["Humor","Brain processing power","Typing","Drawing"],correct:1},
+{q:"Which aptitude helps in market comparison?",options:["Simple Interest & Compound Interest","Clock","Cube","Coding"],correct:0},
+{q:"Companies want aptitude because employee must?",options:["Work without thinking","Take quick right decisions","Just follow orders","Only code"],correct:1},
+{q:"Aptitude also tests?",options:["Patience & focus","Height","Weight","Voice"],correct:0},
+{q:"Data Interpretation mainly requires?",options:["Guessing","Observation & logic","Speaking","Acting"],correct:1},
+{q:"Aptitude questions are usually?",options:["Impossible","Tricky but logical","Random","Pure luck"],correct:1},
+{q:"Why practice aptitude daily?",options:["Brain becomes smarter & faster","Timepass","Show off","Teachers force"],correct:0},
+{q:"Aptitude + Reasoning together help in?",options:["Only study","Real life & job situations","Only exams","Nothing"],correct:1},
+{q:"Which improves exam time management?",options:["Watching movies","Aptitude solving","Sleeping","Gaming"],correct:1},
+{q:"Aptitude mainly tests?",options:["Knowledge only","Accuracy + Speed + Logic","Luck","Memory only"],correct:1},
+{q:"In group discussions, aptitude helps because?",options:["We talk louder","We understand logically","We joke better","We read fast"],correct:1},
+{q:"Which is best way to master aptitude?",options:["Mug up formulas only","Understand concept + practice","Never practice","Skip"],correct:1},
+  {
+    q: "If the cost price of a pen is ₹50 and it is sold for ₹75, what is the profit percentage?",
+    options: ["25%", "30%", "40%", "50%"],
+    answer: "50%"
+  },
+  {
+    q: "What will be 25% of 480?",
+    options: ["90", "100", "110", "120"],
+    answer: "120"
+  },
+  {
+    q: "A train 200m long crosses a pole in 10 seconds. What is its speed?",
+    options: ["10 m/s", "20 m/s", "25 m/s", "30 m/s"],
+    answer: "20 m/s"
+  },
+  {
+    q: "What is the next number in the sequence: 2, 6, 12, 20, ?",
+    options: ["28", "30", "32", "36"],
+    answer: "30"
+  },
+  {
+    q: "The average of 10, 20, 30, 40 and 50 is?",
+    options: ["20", "25", "30", "35"],
+    answer: "30"
+  },
+  {
+    q: "If a person covers 60 km in 2 hours, what is his speed?",
+    options: ["20 km/hr", "25 km/hr", "30 km/hr", "35 km/hr"],
+    answer: "30 km/hr"
+  },
+  {
+    q: "If 12 workers finish a work in 8 days, in how many days will 6 workers finish it?",
+    options: ["8 days", "12 days", "14 days", "16 days"],
+    answer: "16 days"
+  },
+  {
+    q: "What is 15% of 200?",
+    options: ["20", "25", "30", "35"],
+    answer: "30"
+  },
+  {
+    q: "If x = 10, what is the value of 3x + 5?",
+    options: ["25", "30", "35", "40"],
+    answer: "35"
+  },
+  {
+    q: "If 20% of a number is 40, what is the number?",
+    options: ["100", "150", "180", "200"],
+    answer: "200"
+  },
+  {
+    q: "The simple interest on ₹1000 at 10% per annum for 2 years is?",
+    options: ["₹100", "₹150", "₹180", "₹200"],
+    answer: "₹200"
+  },
+  {
+    q: "A man walks 4 km north and then 3 km east. How far is he from the starting point?",
+    options: ["5 km", "6 km", "7 km", "4 km"],
+    answer: "5 km"
+  },
+  {
+    q: "If 8 pencils cost ₹40, what is the cost of 1 pencil?",
+    options: ["₹3", "₹4", "₹5", "₹6"],
+    answer: "₹5"
+  },
+  {
+    q: "What is the HCF of 18 and 24?",
+    options: ["2", "3", "6", "12"],
+    answer: "6"
+  },
+  {
+    q: "Convert 3/4 into percentage:",
+    options: ["50%", "60%", "70%", "75%"],
+    answer: "75%"
+  },
+  {
+    q: "A car travels 240 km in 4 hours. What is the speed?",
+    options: ["40 km/hr", "50 km/hr", "60 km/hr", "70 km/hr"],
+    answer: "60 km/hr"
+  },
+  {
+    q: "The next number in series: 11, 22, 44, 88, ?",
+    options: ["100", "110", "130", "176"],
+    answer: "176"
+  },
+  {
+    q: "If the perimeter of a square is 40 cm, what is the side length?",
+    options: ["5 cm", "8 cm", "10 cm", "12 cm"],
+    answer: "10 cm"
+  },
+  {
+    q: "What is 3/5 of 200?",
+    options: ["80", "100", "110", "120"],
+    answer: "120"
+  },
+  {
+    q: "If 5 notebooks cost ₹75, what is the cost of 1 notebook?",
+    options: ["₹10", "₹12", "₹15", "₹20"],
+    answer: "₹15"
+  },
+  {
+    q: "Find the missing number: 7, 14, 21, 28, ?",
+    options: ["30", "32", "35", "40"],
+    answer: "35"
+  },
+  {
+    q: "The sum of angles in a triangle is?",
+    options: ["90°", "120°", "150°", "180°"],
+    answer: "180°"
+  },
+  {
+    q: "What is the least even prime number?",
+    options: ["1", "2", "3", "5"],
+    answer: "2"
+  },
+  {
+    q: "If CP is ₹800 and profit is 25%, SP is?",
+    options: ["₹900", "₹950", "₹1000", "₹1200"],
+    answer: "₹1000"
+  },
+  {
+    q: "What is the reciprocal of 5/9?",
+    options: ["5/9", "9/5", "1/5", "1/9"],
+    answer: "9/5"
+  },
+  {
+    q: "The average of 5, 15 and 25 is?",
+    options: ["10", "12", "15", "20"],
+    answer: "15"
+  },
+  {
+    q: "If 10 workers complete a task in 5 days, how many days for 5 workers?",
+    options: ["5", "8", "10", "15"],
+    answer: "10"
+  },
+{q:"Aptitude prepares us for?",options:["Only jobs","Competitive exams + Jobs + Real life decisions","Only government exams","Only school"],correct:1},
+{q:"Why ratio & proportion are useful?",options:["In recipes, salary splits, comparisons","Only exams","Nothing","Only maths class"],correct:0},
+{q:"Aptitude reflects?",options:["Your degree","Your smartness & thinking approach","Your handwriting","Your clothes"],correct:1},
+{q:"Final meaning of Aptitude?",options:["Knowledge storage","Ability to think, analyze & solve effectively","Only maths","Only logic"],correct:1}
 ],
+
 reasoning:[
-{q:"Opposite of Hot?",options:["Cold","Warm","Freeze","Dry"],correct:0},
+  {
+    question: "1. What is reasoning and why is it important in competitive exams?",
+    options: [
+      "It tests physical strength only",
+      "It helps measure logical thinking and problem-solving ability",
+      "It is used only in interviews",
+      "It is used only for memory testing"
+    ],
+    answer: "It helps measure logical thinking and problem-solving ability"
+  },
+  {
+    question: "2. If A is the brother of B, B is the sister of C, and C is the father of D, what is A to D?",
+    options: ["Uncle", "Father", "Brother", "Cousin"],
+    answer: "Uncle"
+  },
+  {
+    question: "3. Find the odd one out: Apple, Mango, Banana, Carrot",
+    options: ["Apple", "Mango", "Banana", "Carrot"],
+    answer: "Carrot"
+  },
+  {
+    question: "4. Which direction will a person face if they turn right from East and then left?",
+    options: ["North", "South", "East", "West"],
+    answer: "South"
+  },
+  {
+    question: "5. Complete the series: A, C, E, G, ?",
+    options: ["H", "I", "J", "K"],
+    answer: "I"
+  },
+  {
+    question: "6. If CAT is coded as DBU, how will DOG be coded?",
+    options: ["EPH", "EOG", "FPG", "EOF"],
+    answer: "EPH"
+  },
+  {
+    question: "7. What does logical reasoning mainly test?",
+    options: ["Guessing ability", "Logical and analytical skills", "Speaking skills", "Memory only"],
+    answer: "Logical and analytical skills"
+  },
+  {
+    question: "8. If P is mother of Q and Q is father of R, what is P to R?",
+    options: ["Mother", "Grandmother", "Aunt", "Sister"],
+    answer: "Grandmother"
+  },
+  {
+    question: "9. Choose the correct analogy: Bird : Nest :: Lion : ?",
+    options: ["Cave", "Forest", "Zoo", "Den"],
+    answer: "Den"
+  },
+  {
+    question: "10. Which one does not belong to the group? Circle, Square, Triangle, Cube",
+    options: ["Circle", "Square", "Triangle", "Cube"],
+    answer: "Cube"
+  },
+  {
+    question: "11. A person walks 5 km North, then 3 km East. Which direction is he from starting point?",
+    options: ["North-East", "South-East", "North-West", "West"],
+    answer: "North-East"
+  },
+  {
+    question: "12. If ALL = BMM, then YES will be coded as?",
+    options: ["ZFT", "ZFR", "ZES", "ZFS"],
+    answer: "ZFT"
+  },
+  {
+    question: "13. Which type of questions measure decision-making ability?",
+    options: [
+      "Blood relation questions",
+      "Direction sense questions",
+      "Logical assumption questions",
+      "Alphabet series questions"
+    ],
+    answer: "Logical assumption questions"
+  },
+  {
+    question: "14. In a row of students, A is 7th from left and 10th from right. How many students are there?",
+    options: ["15", "16", "17", "18"],
+    answer: "16"
+  },
+  {
+    question: "15. Find the odd one out: Pen, Pencil, Eraser, Paper, Computer",
+    options: ["Pen", "Pencil", "Paper", "Computer"],
+    answer: "Computer"
+  },
+  {
+    question: "16. If 'FLOWER' is written as 'FKPVFQ', what is the pattern?",
+    options: [
+      "Each letter +2",
+      "Each letter -2",
+      "Alternate +1 and -1",
+      "Reverse alphabet rule"
+    ],
+    answer: "Each letter -1"
+  },
+  {
+    question: "17. Syllogism tests mainly help in understanding what?",
+    options: [
+      "Verbal speaking",
+      "Logical conclusion from given statements",
+      "Mathematical solving",
+      "Memory strength"
+    ],
+    answer: "Logical conclusion from given statements"
+  },
+  {
+    question: "18. If all squares are rectangles and all rectangles are shapes, then what is true?",
+    options: [
+      "All shapes are squares",
+      "All squares are shapes",
+      "No square is shape",
+      "Square and shapes are unrelated"
+    ],
+    answer: "All squares are shapes"
+  },
+  {
+    question: "19. Which skill improves the most through reasoning practice?",
+    options: [
+      "Physical skill",
+      "Emotional strength",
+      "Logical thinking and accuracy",
+      "Handwriting"
+    ],
+    answer: "Logical thinking and accuracy"
+  },
+  {
+    question: "20. Why do companies test reasoning in interviews?",
+    options: [
+      "To check English fluency",
+      "To check academic marks",
+      "To test real-time problem solving",
+      "To test physical energy"
+    ],
+    answer: "To test real-time problem solving"
+  }, 
+  {
+    question: "21. Which of the following best defines Non-Verbal Reasoning?",
+    options: [
+      "Reasoning based on spoken language",
+      "Reasoning without using numbers",
+      "Reasoning based on figures, patterns, and visuals",
+      "Reasoning based only on memory"
+    ],
+    answer: "Reasoning based on figures, patterns, and visuals"
+  },
+  {
+    question: "22. If TODAY is coded as UPEBZ, how is INDIA coded?",
+    options: ["JOEJB", "JOEIB", "HMCJZ", "JNEJB"],
+    answer: "JOEJB"
+  },
+  {
+    question: "23. Find the odd one out: Dog, Tiger, Lion, Cow",
+    options: ["Dog", "Tiger", "Lion", "Cow"],
+    answer: "Dog"
+  },
+  {
+    question: "24. In a certain language, SCHOOL is written as OCHSLO. How is COLLEGE written?",
+    options: ["OCLLEGE", "ELLOGEC", "OCLEGEL", "EGCOLLO"],
+    answer: "OCLEGEL"
+  },
+  {
+    question: "25. Which of these topics mainly checks common-sense decision ability?",
+    options: [
+      "Blood Relations",
+      "Logical Assumptions",
+      "Alphabet Series",
+      "Direction Sense"
+    ],
+    answer: "Logical Assumptions"
+  },
+  {
+    question: "26. A person travels 4 km North, then 4 km West, then 4 km South. Where is he from the starting point?",
+    options: ["Back to start", "4 km East", "4 km West", "4 km North"],
+    answer: "4 km West"
+  },
+  {
+    question: "27. Find the analogy: Hand : Glove :: Foot : ?",
+    options: ["Shoe", "Socks", "Leg", "Boot"],
+    answer: "Shoe"
+  },
+  {
+    question: "28. Which reasoning topic helps in solving corporate case studies?",
+    options: [
+      "Alphabet Reasoning",
+      "Syllogism",
+      "Coding-Decoding",
+      "Statement and Conclusion"
+    ],
+    answer: "Statement and Conclusion"
+  },
+  {
+    question: "29. Which of the following improves by practicing reasoning regularly?",
+    options: [
+      "Only memory",
+      "Only vocabulary",
+      "Logical thinking and accuracy",
+      "Physical stamina"
+    ],
+    answer: "Logical thinking and accuracy"
+  },
+  {
+    question: "30. Why do exams include reasoning questions?",
+    options: [
+      "To increase exam length",
+      "To judge logical ability and decision-making",
+      "To confuse students",
+      "To check handwriting"
+    ],
+    answer: "To judge logical ability and decision-making"
+  },
+{
+  question: "31. Which reasoning topic mainly helps in real-life judgment and decision making?",
+  options: [
+    "Coding-Decoding",
+    "Blood Relation",
+    "Syllogism",
+    "Statement–Assumption"
+  ],
+  answer: "Statement–Assumption"
+},
+{
+  question: "32. If CAT = DBU, DOG = EPH then FISH = ?",
+  options: ["GJTI", "GJTI", "GJSI", "GJUI"],
+  answer: "GJTI"
+},
+{
+  question: "33. In a class, Riya is 10th from the top and 15th from the bottom. How many students are in the class?",
+  options: ["23", "24", "25", "26"],
+  answer: "24"
+},
+{
+  question: "34. Which topic checks whether a conclusion logically follows from given facts?",
+  options: [
+    "Direction Sense",
+    "Blood Relations",
+    "Syllogism",
+    "Number Series"
+  ],
+  answer: "Syllogism"
+},
+{
+  question: "35. Find the odd one out: Circle, Square, Triangle, Cube",
+  options: ["Circle", "Square", "Triangle", "Cube"],
+  answer: "Cube"
+},
+{
+  question: "36. Which reasoning topic improves quick thinking during interviews and GD?",
+  options: [
+    "Logical Reasoning",
+    "Mathematics",
+    "General Knowledge",
+    "Vocabulary"
+  ],
+  answer: "Logical Reasoning"
+},
+{
+  question: "37. If NORTH is coded as MROQS, how is SOUTH coded?",
+  options: ["QNRGT", "QNRHT", "QNRFT", "QNRGS"],
+  answer: "QNRGS"
+},
+{
+  question: "38. Which reasoning area deals with directions like left, right, east, west?",
+  options: [
+    "Blood Relation",
+    "Direction Sense",
+    "Non-Verbal Reasoning",
+    "Alphabet Test"
+  ],
+  answer: "Direction Sense"
+},
+{
+  question: "39. Reasoning in exams mainly tests:",
+  options: [
+    "Grammar knowledge",
+    "Physical ability",
+    "Logical and analytical skills",
+    "Programming skills"
+  ],
+  answer: "Logical and analytical skills"
+},
+{
+  question: "40. Why is reasoning important in placements?",
+  options: [
+    "It helps only in exams",
+    "It improves logical problem solving in real work",
+    "It is just formality",
+    "It is used only by engineers"
+  ],
+  answer: "It improves logical problem solving in real work"
+}
 ],
 interview:[
-{q:"Best interview dress?",options:["Casual","Sporty","Formal","Party"],correct:2},
+{
+question: "1. What is the primary purpose of an interview in placements?",
+options: [
+"To check coding only",
+"To judge personality, skills and suitability",
+"To see confidence only",
+"To check English only"
+],
+answer: "To judge personality, skills and suitability"
+},
+{
+question: "2. What should be your first response when interviewer says 'Tell me about yourself'?",
+options: [
+"Start with family background",
+"Start with school memories",
+"Start with professional/academic profile",
+"Start with hobbies"
+],
+answer: "Start with professional/academic profile"
+},
+{
+question: "3. Which of the following creates the FIRST impression in interview?",
+options: [
+"Resume",
+"Handshake",
+"Answer accuracy",
+"Marks"
+],
+answer: "Resume"
+},
+{
+question: "4. What should you avoid while answering questions?",
+options: [
+"Clear explanation",
+"Confidence",
+"Honesty",
+"Over exaggeration and lying"
+],
+answer: "Over exaggeration and lying"
+},
+{
+question: "5. What is HR round mainly for?",
+options: [
+"Technical skills",
+"Behavior, attitude and communication",
+"Coding skills",
+"Mathematical skills"
+],
+answer: "Behavior, attitude and communication"
+},
+{
+question: "6. Which dress code is ideal for interviews?",
+options: [
+"Casual wear",
+"Party wear",
+"Formal wear",
+"Sports wear"
+],
+answer: "Formal wear"
+},
+{
+question: "7. What should you do if you don’t know an answer?",
+options: [
+"Guess randomly",
+"Stay silent",
+"Accept calmly and explain willingness to learn",
+"Change topic"
+],
+answer: "Accept calmly and explain willingness to learn"
+},
+{
+question: "8. What is the best tone while answering?",
+options: [
+"Aggressive",
+"Too soft",
+"Confident and polite",
+"Loud"
+],
+answer: "Confident and polite"
+},
+{
+question: "9. Which skill is MOST evaluated?",
+options: [
+"Communication",
+"Attitude",
+"Problem solving",
+"All of the above"
+],
+answer: "All of the above"
+},
+{
+question: "10. Which round checks technical knowledge?",
+options: [
+"HR round",
+"Managerial round",
+"Technical round",
+"Final round only"
+],
+answer: "Technical round"
+},
+{
+question: "11. What should be the ideal resume length for freshers?",
+options: ["1 page", "3 pages", "5 pages", "No limit"],
+answer: "1 page"
+},
+{
+question: "12. What should you do before attending interview?",
+options: [
+"Nothing",
+"Memorize answers only",
+"Research about company and role",
+"Ask friends only"
+],
+answer: "Research about company and role"
+},
+{
+question: "13. Which is most important in introduction?",
+options: [
+"Family details",
+"Marks only",
+"Skills + Strength + Career goal",
+"Hobbies only"
+],
+answer: "Skills + Strength + Career goal"
+},
+{
+question: "14. What is STAR method used for?",
+options: [
+"Technical solving",
+"Story telling",
+"Answering behavioral questions",
+"Resume formatting"
+],
+answer: "Answering behavioral questions"
+},
+{
+question: "15. What shows professionalism?",
+options: [
+"Arriving late",
+"Not maintaining eye contact",
+"Proper posture and discipline",
+"Arguing with interviewer"
+],
+answer: "Proper posture and discipline"
+},
+{
+question: "16. What does Group Discussion mainly test?",
+options: [
+"Shouting ability",
+"English fluency only",
+"Leadership, clarity and teamwork",
+"Memory"
+],
+answer: "Leadership, clarity and teamwork"
+},
+{
+question: "17. What is the best way to end an interview?",
+options: [
+"Leave silently",
+"Say thank you confidently",
+"Argue last point",
+"Ask personal questions"
+],
+answer: "Say thank you confidently"
+},
+{
+question: "18. What is most important in HR answers?",
+options: [
+"Lengthy answers",
+"Truthfulness and clarity",
+"Fancy English",
+"Jokes"
+],
+answer: "Truthfulness and clarity"
+},
+{
+question: "19. What should you NOT mention as weakness?",
+options: [
+"Overthinking sometimes",
+"Public speaking fear",
+"Being too honest",
+"Negative attitude or laziness"
+],
+answer: "Negative attitude or laziness"
+},
+{
+question: "20. If interviewer asks salary expectation?",
+options: [
+"Demand highest amount",
+"Say no idea",
+"Ask for company standard range",
+"Refuse to answer"
+],
+answer: "Ask for company standard range"
+},
+{
+question: "21. Eye contact in interview should be?",
+options: [
+"None",
+"Staring continuously",
+"Balanced and natural",
+"Looking down"
+],
+answer: "Balanced and natural"
+},
+{
+question: "22. What should your body language show?",
+options: [
+"Nervousness",
+"Arrogance",
+"Confidence and calmness",
+"Carelessness"
+],
+answer: "Confidence and calmness"
+},
+{
+question: "23. Why do interviewers ask 'Why this company?'",
+options: [
+"To test luck",
+"Time pass",
+"To test interest and motivation",
+"To confuse candidate"
+],
+answer: "To test interest and motivation"
+},
+{
+question: "24. What should be your tone while disagreeing?",
+options: [
+"Rude",
+"Aggressive",
+"Respectful and logical",
+"Silent"
+],
+answer: "Respectful and logical"
+},
+{
+question: "25. What must a fresher highlight the most?",
+options: [
+"Past jobs",
+"Family background",
+"Skills, projects, internships",
+"Friends support"
+],
+answer: "Skills, projects, internships"
+},
+{
+question: "26. What should you do if interviewer interrupts?",
+options: [
+"Keep talking",
+"Argue",
+"Listen patiently and respond",
+"Stop interview"
+],
+answer: "Listen patiently and respond"
+},
+{
+question: "27. When asked 'Where do you see yourself in 5 years?'",
+options: [
+"Say CEO",
+"Say no idea",
+"Show growth mindset and learning goal",
+"Joke"
+],
+answer: "Show growth mindset and learning goal"
+},
+{
+question: "28. What should be honest always?",
+options: [
+"Marks",
+"Skills",
+"Experience",
+"All of these"
+],
+answer: "All of these"
+},
+{
+question: "29. What is most important in virtual interview?",
+options: [
+"Noise background",
+"Unstable internet",
+"Good lighting + internet + posture",
+"Camera off"
+],
+answer: "Good lighting + internet + posture"
+},
+{
+question: "30. What helps reduce nervousness?",
+options: [
+"Panicking",
+"No preparation",
+"Practicing mock interviews",
+"Sleeping during interview"
+],
+answer: "Practicing mock interviews"
+},
+{
+question: "31. What should you highlight when asked strengths?",
+options: [
+"Negative habits",
+"Non relevant things",
+"Skills relevant to job",
+"Random topics"
+],
+answer: "Skills relevant to job"
+},
+{
+question: "32. Why do companies ask behavioral questions?",
+options: [
+"Fun only",
+"Time pass",
+"To test real-life handling ability",
+"To check marks"
+],
+answer: "To test real-life handling ability"
+},
+{
+question: "33. What should be avoided in resume?",
+options: [
+"Achievements",
+"Accurate skills",
+"Fake information",
+"Education details"
+],
+answer: "Fake information"
+},
+{
+question: "34. Which of these is GOOD to ask in interview?",
+options: [
+"Salary first",
+"Personal life questions",
+"Growth opportunities and role details",
+"Office gossip"
+],
+answer: "Growth opportunities and role details"
+},
+{
+question: "35. What shows lack of confidence?",
+options: [
+"Straight sitting",
+"Clear voice",
+"Continuous shaking and fumbling",
+"Calm tone"
+],
+answer: "Continuous shaking and fumbling"
+},
+{
+question: "36. What is the best attitude in interviews?",
+options: [
+"Over confident",
+"Fearful",
+"Humble and confident",
+"Casual"
+],
+answer: "Humble and confident"
+},
+{
+question: "37. What does interviewer check in communication?",
+options: [
+"Grammar only",
+"Accent only",
+"Clarity, confidence and understanding",
+"Speed only"
+],
+answer: "Clarity, confidence and understanding"
+},
+{
+question: "38. What should you do after interview?",
+options: [
+"Forget it",
+"Complain",
+"Send a thank you message/email",
+"Call repeatedly"
+],
+answer: "Send a thank you message/email"
+},
+{
+question: "39. Which is MOST important quality?",
+options: [
+"Arrogance",
+"Learning attitude",
+"Laziness",
+"Ego"
+],
+answer: "Learning attitude"
+},
+{
+question: "40. Why are interviews important?",
+options: [
+"Just formality",
+"Only for marks",
+"They help select best suitable candidates",
+"Time pass for companies"
+],
+answer: "They help select best suitable candidates"
+}
 ],
 gd:[
-{q:"GD means?",options:["Group Data","Good Discussion","Group Discussion","General Debate"],correct:2},
+{
+question: "1. What is the main purpose of Group Discussion in placements?",
+options: [
+"To fight and win",
+"To judge communication and teamwork",
+"To memorize theory",
+"To check coding"
+],
+answer: "To judge communication and teamwork"
+},
+{
+question: "2. GD mainly evaluates?",
+options: [
+"Voice loudness",
+"Marks and CGPA",
+"Communication, confidence, thinking ability",
+"Dress only"
+],
+answer: "Communication, confidence, thinking ability"
+},
+{
+question: "3. What is the ideal way to start a GD?",
+options: [
+"Shout to dominate",
+"Stay silent",
+"Give a structured opening with clear understanding",
+"Attack others' opinions"
+],
+answer: "Give a structured opening with clear understanding"
+},
+{
+question: "4. What is MOST important in GD?",
+options: [
+"Talking continuously",
+"Listening and speaking logically",
+"Speaking English fast",
+"Arguing"
+],
+answer: "Listening and speaking logically"
+},
+{
+question: "5. What should you do if others are not allowing you to speak?",
+options: [
+"Shout louder",
+"Get angry",
+"Wait for pause and politely enter",
+"Leave GD"
+],
+answer: "Wait for pause and politely enter"
+},
+{
+question: "6. What should NOT be done in GD?",
+options: [
+"Respecting views",
+"Maintaining calm tone",
+"Personal attacks",
+"Logical arguments"
+],
+answer: "Personal attacks"
+},
+{
+question: "7. Which of the following helps to score better in GD?",
+options: [
+"Reading newspapers",
+"Staying silent",
+"Memorizing answers",
+"Copying others"
+],
+answer: "Reading newspapers"
+},
+{
+question: "8. What shows leadership in GD?",
+options: [
+"Dominating",
+"Helping group reach conclusion",
+"Shouting",
+"Interrupting everyone"
+],
+answer: "Helping group reach conclusion"
+},
+{
+question: "9. What is the best posture in GD?",
+options: [
+"Sleeping posture",
+"Arms folded angrily",
+"Straight, confident and active",
+"Looking down"
+],
+answer: "Straight, confident and active"
+},
+{
+question: "10. If topic is unknown, what should you do?",
+options: [
+"Stay silent completely",
+"Give wrong facts confidently",
+"Listen first then contribute logically",
+"Leave GD"
+],
+answer: "Listen first then contribute logically"
+},
+{
+question: "11. What is most valued in GD?",
+options: [
+"Facts and clarity",
+"Background music",
+"Jokes",
+"Arguments only"
+],
+answer: "Facts and clarity"
+},
+{
+question: "12. Good participant should be?",
+options: [
+"Silent",
+"Aggressive",
+"Balanced speaker & listener",
+"Always arguing"
+],
+answer: "Balanced speaker & listener"
+},
+{
+question: "13. What is the role of examples in GD?",
+options: [
+"Confuse others",
+"Make topic funny",
+"Support and strengthen points",
+"Time pass"
+],
+answer: "Support and strengthen points"
+},
+{
+question: "14. What should be avoided completely?",
+options: [
+"Eye contact",
+"Confidence",
+"Logical reasoning",
+"Rude behavior"
+],
+answer: "Rude behavior"
+},
+{
+question: "15. What should body language show?",
+options: [
+"Fear",
+"Ego",
+"Confidence and openness",
+"Aggression"
+],
+answer: "Confidence and openness"
+},
+{
+question: "16. What is MOST dangerous mistake in GD?",
+options: [
+"Speaking clearly",
+"Disagreeing politely",
+"Wrong facts & rude tone",
+"Sharing ideas"
+],
+answer: "Wrong facts & rude tone"
+},
+{
+question: "17. What helps to contribute better?",
+options: [
+"Talking nonstop",
+"Only disagreeing",
+"Listening and analysing first",
+"Copying others"
+],
+answer: "Listening and analysing first"
+},
+{
+question: "18. What is the ideal speech style in GD?",
+options: [
+"Fast and unclear",
+"Slow and boring",
+"Loud shouting",
+"Clear, confident and meaningful"
+],
+answer: "Clear, confident and meaningful"
+},
+{
+question: "19. What do evaluators observe the MOST?",
+options: [
+"Clothes only",
+"English accent only",
+"Overall thinking + communication + attitude",
+"Hair style"
+],
+answer: "Overall thinking + communication + attitude"
+},
+{
+question: "20. What should you do if GD becomes heated?",
+options: [
+"Fight",
+"Enjoy chaos",
+"Calm everyone and bring discussion back",
+"Stay silent"
+],
+answer: "Calm everyone and bring discussion back"
+},
+{
+question: "21. A good GD participant is?",
+options: [
+"Aggressive",
+"Silent watcher",
+"Supportive and logical speaker",
+"Argument king"
+],
+answer: "Supportive and logical speaker"
+},
+{
+question: "22. What should opening speaker do?",
+options: [
+"Give conclusion",
+"Talk randomly",
+"Set direction and define topic",
+"Start argument"
+],
+answer: "Set direction and define topic"
+},
+{
+question: "23. What is important in conclusion?",
+options: [
+"Fight summary",
+"Personal opinions only",
+"Summarize key points logically",
+"Shout loudly"
+],
+answer: "Summarize key points logically"
+},
+{
+question: "24. What helps improve GD performance?",
+options: [
+"Watching movies",
+"Random talking",
+"Regular practice and reading",
+"Not participating"
+],
+answer: "Regular practice and reading"
+},
+{
+question: "25. Which attitude is best in GD?",
+options: [
+"Egoistic",
+"Aggressive",
+"Respectful and confident",
+"Fearful"
+],
+answer: "Respectful and confident"
+},
+{
+question: "26. Why do companies conduct GD?",
+options: [
+"Time pass",
+"For fun",
+"To check real-world communication skills",
+"To reject students"
+],
+answer: "To check real-world communication skills"
+},
+{
+question: "27. What should you maintain throughout GD?",
+options: [
+"Anger",
+"Silence",
+"Positive & professional attitude",
+"Ego"
+],
+answer: "Positive & professional attitude"
+},
+{
+question: "28. Which of these weakens your point?",
+options: [
+"Facts",
+"Proper examples",
+"Emotional shouting",
+"Logic"
+],
+answer: "Emotional shouting"
+},
+{
+question: "29. What must be avoided while interrupting?",
+options: [
+"Polite entry",
+"Using excuse me",
+"Respectful timing",
+"Cutting mid-sentence aggressively"
+],
+answer: "Cutting mid-sentence aggressively"
+},
+{
+question: "30. What should be done if topic is controversial?",
+options: [
+"Fight",
+"Take extreme sides",
+"Speak balanced and mature",
+"Stay rude"
+],
+answer: "Speak balanced and mature"
+},
+{
+question: "31. What shows leadership quality?",
+options: [
+"Insulting others",
+"Taking control forcefully",
+"Helping group reach meaningful decision",
+"Talking most"
+],
+answer: "Helping group reach meaningful decision"
+},
+{
+question: "32. Which skill is MOST checked?",
+options: [
+"Memory",
+"Drawing",
+"Critical thinking and clarity",
+"Dancing"
+],
+answer: "Critical thinking and clarity"
+},
+{
+question: "33. What should hand movement be?",
+options: [
+"Too much waving",
+"No movement at all",
+"Natural and controlled",
+"Aggressive pointing"
+],
+answer: "Natural and controlled"
+},
+{
+question: "34. What helps you stand out?",
+options: [
+"Shouting",
+"Repeating others",
+"Unique logical inputs",
+"Staying silent"
+],
+answer: "Unique logical inputs"
+},
+{
+question: "35. What happens if you speak too much?",
+options: [
+"Positive impression",
+"Shows domination",
+"Wastes time and reduces impact",
+"Best leadership"
+],
+answer: "Wastes time and reduces impact"
+},
+{
+question: "36. What is best use of data or facts?",
+options: [
+"To insult others",
+"To confuse group",
+"To support points strongly",
+"Not needed"
+],
+answer: "To support points strongly"
+},
+{
+question: "37. What should be your reaction if someone disagrees?",
+options: [
+"Fight back",
+"Ignore",
+"Respectfully counter with logic",
+"Get angry"
+],
+answer: "Respectfully counter with logic"
+},
+{
+question: "38. GD gives companies idea about?",
+options: [
+"Marks only",
+"Family background",
+"Professional behavior and mindset",
+"Hobbies only"
+],
+answer: "Professional behavior and mindset"
+},
+{
+question: "39. When is silence acceptable?",
+options: [
+"Full GD",
+"Never speak",
+"When thinking / giving others chance",
+"When sleeping"
+],
+answer: "When thinking / giving others chance"
+},
+{
+question: "40. What is the final success key in GD?",
+options: [
+"Loud voice",
+"Aggression",
+"Confidence + Clarity + Respect",
+"Luck"
+],
+answer: "Confidence + Clarity + Respect"
+}
 ]
 };
 
@@ -697,6 +2136,7 @@ box.innerHTML=history.length?history.map((s,i)=>`Attempt ${i+1}: ${s} score`).jo
 showHistory();
 </script>
 {% endblock %}
+
 
 
 
