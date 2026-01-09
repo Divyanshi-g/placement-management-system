@@ -37,7 +37,7 @@
     <!-- Fixed Save Score / Previous Result Button -->
     <button id="openHistory" 
         class="fixed right-6 top-28 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
-        📁 Previous Result
+        📁 History
     </button>
 
     <h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
@@ -47,7 +47,7 @@
                 min-h-[380px] flex flex-col justify-between">
 
       <!-- QUESTIONS CONTAINER -->
-      <form id="quizForm" class="space-y-4 overflow-y-auto max-h-[300px] pr-2"></form>
+      <form id="quizForm" class="space-y-4 overflow-y-auto max-h-[600px] pr-2"></form>
 
       <!-- SUBMIT BUTTON -->
       <button id="submitQuiz"
@@ -120,6 +120,7 @@ padding:8px;border-radius:6px;
 <script src="{{ url_for('static', filename='js/practice.js') }}"></script>
 
 {% endblock %}
+
 
 
 
