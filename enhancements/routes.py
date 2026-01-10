@@ -1365,36 +1365,24 @@ def rate():
     user_id = session.get("user_id")
     role = session.get("role")
     # -------------------- POST: Submit / Update Rating --------------------
-    if request.method == "POST":
-        if not user_id:
-            flash("You must be logged in to rate.", "warning")
-            return redirect(url_for("enhancements.login"))
-        rating = int(request.form.get("rating", 0))
-        comment = request.form.get("comment", "").strip()
-        if not (1 <= rating <= 5):
-            flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
-            conn.close()
-            return redirect(url_for("enhancements.rate"))
-        # Check if user already rated
-        existing = cur.execute(
-            "SELECT id FROM feedback WHERE user_id = ?", (user_id,)
-        ).fetchone()
-        if existing:
-            # Update previous rating
-            cur.execute(
-                "UPDATE feedback SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP WHERE user_id = ?",
-                (rating, comment, user_id),
-            )
-            flash("Your feedback has been updated! ⭐", "success")
-        else:
-            # Insert new rating
-            cur.execute(
-                "INSERT INTO feedback (user_id, rating, comment) VALUES (?, ?, ?)",
-                (user_id, rating, comment),
-            )
-            flash("Thanks for your feedback! ⭐", "success")
+   if request.method == "POST":
+    if not user_id:
+        flash("You must be logged in to rate.", "warning")
+        return redirect(url_for("enhancements.login"))
 
-        conn.commit()
+    rating_val = request.form.get("rating")
+
+    # --- Validate Rating Selection ---
+    if not rating_val or not rating_val.isdigit():
+        flash("Please select a rating before submitting ⭐", "danger")
+        conn.close()
+        return redirect(url_for("enhancements.rate"))
+
+    rating = int(rating_val)
+    comment = request.form.get("comment", "").strip()
+
+    if rating < 1 or rating > 5:
+        flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
         conn.close()
         return redirect(url_for("enhancements.rate"))
 
@@ -1434,6 +1422,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
