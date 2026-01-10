@@ -618,23 +618,29 @@ def rate():
     user_id = session.get("user_id")
     role = session.get("role")
 
-    # -------------------- POST: Submit / Update Rating --------------------
     if request.method == "POST":
         if not user_id:
             flash("You must be logged in to rate.", "warning")
             conn.close()
             return redirect(url_for("enhancements.login"))
 
-        # ⭐ Rating Required | Comment Optional
-        rating = int(request.form.get("rating", 0))
-        comment = request.form.get("comment", "").strip()
+        # ⭐ SAFE RATING FETCH (prevents crash)
+        rating_value = request.form.get("rating")
 
-        if not (1 <= rating <= 5):
-            flash("Please select a rating (1 to 5 stars).", "warning")
+        if not rating_value or not rating_value.isdigit():
+            flash("Please select a rating (1–5 stars).", "warning")
             conn.close()
             return redirect(url_for("enhancements.rate"))
 
-        # --- Check if user exists to avoid FOREIGN KEY crash ---
+        rating = int(rating_value)
+        comment = request.form.get("comment", "").strip()
+
+        if not (1 <= rating <= 5):
+            flash("Please select a valid rating (1–5 stars).", "warning")
+            conn.close()
+            return redirect(url_for("enhancements.rate"))
+
+        # Ensure user exists (prevents foreign key error)
         user_exists = cur.execute(
             "SELECT id FROM users WHERE id = ?", (user_id,)
         ).fetchone()
@@ -645,25 +651,22 @@ def rate():
             conn.close()
             return redirect(url_for("enhancements.login"))
 
-        # --- Check if user already rated ---
+        # Check if already rated
         existing = cur.execute(
             "SELECT id FROM feedback WHERE user_id = ?", (user_id,)
         ).fetchone()
 
         if existing:
-            # Update old rating
             cur.execute(
                 """
-                UPDATE feedback 
+                UPDATE feedback
                 SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
                 """,
                 (rating, comment, user_id),
             )
             flash("Your feedback has been updated! ⭐", "success")
-
         else:
-            # Insert new rating
             cur.execute(
                 "INSERT INTO feedback (user_id, rating, comment) VALUES (?, ?, ?)",
                 (user_id, rating, comment),
@@ -674,11 +677,18 @@ def rate():
         conn.close()
         return redirect(url_for("enhancements.rate"))
 
-    # -------------------- GET: Show Ratings --------------------
+    # -------------------- GET PAGE --------------------
+    existing_user_feedback = None
+    if user_id:
+        existing_user_feedback = cur.execute(
+            "SELECT rating, comment FROM feedback WHERE user_id = ?",
+            (user_id,),
+        ).fetchone()
+
     feedbacks = cur.execute(
         """
         SELECT f.id, f.rating, f.comment, f.created_at, u.username
-        FROM feedback f 
+        FROM feedback f
         LEFT JOIN users u ON f.user_id = u.id
         ORDER BY f.created_at DESC
         """
@@ -686,10 +696,13 @@ def rate():
 
     conn.close()
 
-    # -------- Navbar Logic --------
     return render_template(
         "rate.html",
         feedbacks=feedbacks,
+
+        # ⭐ send this to template
+        user_feedback=existing_user_feedback,
+
         show_nav_options=True,
         is_admin=(role == "admin"),
         home_url=(
@@ -1458,6 +1471,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
