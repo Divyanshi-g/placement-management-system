@@ -618,49 +618,50 @@ def rate():
     user_id = session.get("user_id")
     role = session.get("role")
 
-    # -------------------- POST : Submit / Update Rating --------------------
+    # -------------------- POST: Submit / Update Rating --------------------
     if request.method == "POST":
         if not user_id:
             flash("You must be logged in to rate.", "warning")
+            conn.close()
             return redirect(url_for("enhancements.login"))
 
-        # Get safely
-        rating_raw = request.form.get("rating", "").strip()
+        # --- Check if user actually exists (Prevents FOREIGN KEY crash) ---
+        user_exists = cur.execute(
+            "SELECT id FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+
+        if not user_exists:
+            session.clear()
+            flash("Your account session is invalid. Please login again.", "danger")
+            conn.close()
+            return redirect(url_for("enhancements.login"))
+
+        # Get form data
+        rating = int(request.form.get("rating", 0))
         comment = request.form.get("comment", "").strip()
 
-        # ⭐ Validate: Rating selected or not
-        if not rating_raw:
-            flash("Please select a star rating before submitting.", "danger")
+        # Validation
+        if rating == 0:
+            flash("Please select a rating before submitting.", "warning")
             conn.close()
             return redirect(url_for("enhancements.rate"))
 
-        # Convert safely
-        try:
-            rating = int(rating_raw)
-        except ValueError:
-            flash("Invalid rating value.", "danger")
+        if not comment:
+            flash("Feedback cannot be empty. Please write something.", "warning")
             conn.close()
             return redirect(url_for("enhancements.rate"))
 
-        # Validate rating range
         if not (1 <= rating <= 5):
             flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
             conn.close()
             return redirect(url_for("enhancements.rate"))
 
-        # Validate comment (must not be empty)
-        if not comment:
-            flash("Please write a feedback comment before submitting.", "warning")
-            conn.close()
-            return redirect(url_for("enhancements.rate"))
-
-        # Check if user already rated
+        # Check if already rated
         existing = cur.execute(
             "SELECT id FROM feedback WHERE user_id = ?", (user_id,)
         ).fetchone()
 
         if existing:
-            # Update previous feedback
             cur.execute(
                 """
                 UPDATE feedback
@@ -671,7 +672,6 @@ def rate():
             )
             flash("Your feedback has been updated! ⭐", "success")
         else:
-            # Insert new feedback
             cur.execute(
                 "INSERT INTO feedback (user_id, rating, comment) VALUES (?, ?, ?)",
                 (user_id, rating, comment),
@@ -682,11 +682,11 @@ def rate():
         conn.close()
         return redirect(url_for("enhancements.rate"))
 
-    # -------------------- GET : Show Ratings --------------------
+    # -------------------- GET: Show Ratings --------------------
     feedbacks = cur.execute(
         """
         SELECT f.id, f.rating, f.comment, f.created_at, u.username
-        FROM feedback f
+        FROM feedback f 
         LEFT JOIN users u ON f.user_id = u.id
         ORDER BY f.created_at DESC
         """
@@ -1467,6 +1467,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
