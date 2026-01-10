@@ -1358,43 +1358,68 @@ def check_resume():
 
 
 # ------------------ Feedback / Rating ------------------
-
 @enhancements_bp.route("/rate", methods=["GET", "POST"])
 def rate():
     conn = get_db_conn()
     cur = conn.cursor()
-
+    user_id = session.get("user_id")
+    role = session.get("role")
+    # -------------------- POST: Submit / Update Rating --------------------
     if request.method == "POST":
-        rating = int(request.form.get("rating", 0))
-        comment = request.form.get("comment", "").strip()
-        user_id = session.get("user_id")
-
         if not user_id:
             flash("You must be logged in to rate.", "warning")
             return redirect(url_for("enhancements.login"))
-
-        if 1 <= rating <= 5:
+        rating = int(request.form.get("rating", 0))
+        comment = request.form.get("comment", "").strip()
+        if not (1 <= rating <= 5):
+            flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
+            conn.close()
+            return redirect(url_for("enhancements.rate"))
+        # Check if user already rated
+        existing = cur.execute(
+            "SELECT id FROM feedback WHERE user_id = ?", (user_id,)
+        ).fetchone()
+        if existing:
+            # Update previous rating
+            cur.execute(
+                "UPDATE feedback SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                (rating, comment, user_id),
+            )
+            flash("Your feedback has been updated! ⭐", "success")
+        else:
+            # Insert new rating
             cur.execute(
                 "INSERT INTO feedback (user_id, rating, comment) VALUES (?, ?, ?)",
                 (user_id, rating, comment),
             )
-            conn.commit()
             flash("Thanks for your feedback! ⭐", "success")
-        else:
-            flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
 
+        conn.commit()
         conn.close()
         return redirect(url_for("enhancements.rate"))
 
+    # -------------------- GET: Show Ratings --------------------
     feedbacks = cur.execute(
-        "SELECT f.id, f.rating, f.comment, f.created_at, u.username "
-        "FROM feedback f LEFT JOIN users u ON f.user_id = u.id "
-        "ORDER BY f.created_at DESC"
+        """
+        SELECT f.id, f.rating, f.comment, f.created_at, u.username
+        FROM feedback f 
+        LEFT JOIN users u ON f.user_id = u.id
+        ORDER BY f.created_at DESC
+        """
     ).fetchall()
     conn.close()
-
-    return render_template("rate.html", feedbacks=feedbacks)
-
+    # -------- Navbar Logic (same pattern as About page) --------
+    return render_template(
+        "rate.html",
+        feedbacks=feedbacks,
+        show_nav_options=True,
+        is_admin=(role == "admin"),
+        home_url=(
+            url_for("enhancements.admin_dashboard")
+            if role == "admin"
+            else url_for("enhancements.student_dashboard")
+        ),
+    )
 
 # ------------------ Misc -----------------
 
@@ -1409,6 +1434,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
