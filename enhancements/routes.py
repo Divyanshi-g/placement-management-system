@@ -622,28 +622,46 @@ def rate():
     if request.method == "POST":
         if not user_id:
             flash("You must be logged in to rate.", "warning")
+            conn.close()
             return redirect(url_for("enhancements.login"))
 
+        # ⭐ Rating Required | Comment Optional
         rating = int(request.form.get("rating", 0))
         comment = request.form.get("comment", "").strip()
 
         if not (1 <= rating <= 5):
-            flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
+            flash("Please select a rating (1 to 5 stars).", "warning")
             conn.close()
             return redirect(url_for("enhancements.rate"))
 
-        # Check if user already rated
+        # --- Check if user exists to avoid FOREIGN KEY crash ---
+        user_exists = cur.execute(
+            "SELECT id FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+
+        if not user_exists:
+            session.clear()
+            flash("Invalid session. Please login again.", "danger")
+            conn.close()
+            return redirect(url_for("enhancements.login"))
+
+        # --- Check if user already rated ---
         existing = cur.execute(
             "SELECT id FROM feedback WHERE user_id = ?", (user_id,)
         ).fetchone()
 
         if existing:
-            # Update previous rating
+            # Update old rating
             cur.execute(
-                "UPDATE feedback SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                """
+                UPDATE feedback 
+                SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+                """,
                 (rating, comment, user_id),
             )
             flash("Your feedback has been updated! ⭐", "success")
+
         else:
             # Insert new rating
             cur.execute(
@@ -668,12 +686,10 @@ def rate():
 
     conn.close()
 
-    # -------- Navbar Logic (same pattern as About page) --------
+    # -------- Navbar Logic --------
     return render_template(
         "rate.html",
-        
         feedbacks=feedbacks,
-
         show_nav_options=True,
         is_admin=(role == "admin"),
         home_url=(
@@ -1442,6 +1458,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
