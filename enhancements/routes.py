@@ -610,6 +610,102 @@ def about():
         is_admin=is_admin,
         home_url=home_url
     )
+@enhancements_bp.route("/rate", methods=["GET", "POST"])
+def rate():
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    user_id = session.get("user_id")
+    role = session.get("role")
+
+    # -------------------- POST : Submit / Update Rating --------------------
+    if request.method == "POST":
+        if not user_id:
+            flash("You must be logged in to rate.", "warning")
+            return redirect(url_for("enhancements.login"))
+
+        # Get safely
+        rating_raw = request.form.get("rating", "").strip()
+        comment = request.form.get("comment", "").strip()
+
+        # ⭐ Validate: Rating selected or not
+        if not rating_raw:
+            flash("Please select a star rating before submitting.", "danger")
+            conn.close()
+            return redirect(url_for("enhancements.rate"))
+
+        # Convert safely
+        try:
+            rating = int(rating_raw)
+        except ValueError:
+            flash("Invalid rating value.", "danger")
+            conn.close()
+            return redirect(url_for("enhancements.rate"))
+
+        # Validate rating range
+        if not (1 <= rating <= 5):
+            flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
+            conn.close()
+            return redirect(url_for("enhancements.rate"))
+
+        # Validate comment (must not be empty)
+        if not comment:
+            flash("Please write a feedback comment before submitting.", "warning")
+            conn.close()
+            return redirect(url_for("enhancements.rate"))
+
+        # Check if user already rated
+        existing = cur.execute(
+            "SELECT id FROM feedback WHERE user_id = ?", (user_id,)
+        ).fetchone()
+
+        if existing:
+            # Update previous feedback
+            cur.execute(
+                """
+                UPDATE feedback
+                SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+                """,
+                (rating, comment, user_id),
+            )
+            flash("Your feedback has been updated! ⭐", "success")
+        else:
+            # Insert new feedback
+            cur.execute(
+                "INSERT INTO feedback (user_id, rating, comment) VALUES (?, ?, ?)",
+                (user_id, rating, comment),
+            )
+            flash("Thanks for your feedback! ⭐", "success")
+
+        conn.commit()
+        conn.close()
+        return redirect(url_for("enhancements.rate"))
+
+    # -------------------- GET : Show Ratings --------------------
+    feedbacks = cur.execute(
+        """
+        SELECT f.id, f.rating, f.comment, f.created_at, u.username
+        FROM feedback f
+        LEFT JOIN users u ON f.user_id = u.id
+        ORDER BY f.created_at DESC
+        """
+    ).fetchall()
+
+    conn.close()
+
+    # -------- Navbar Logic --------
+    return render_template(
+        "rate.html",
+        feedbacks=feedbacks,
+        show_nav_options=True,
+        is_admin=(role == "admin"),
+        home_url=(
+            url_for("enhancements.admin_dashboard")
+            if role == "admin"
+            else url_for("enhancements.student_dashboard")
+        ),
+    )
 
 
 # ------------------ Admin Pages ------------------
@@ -1357,57 +1453,6 @@ def check_resume():
         return jsonify({"error": str(e)}), 500
 
 
-# ------------------ Feedback / Rating ------------------
-@enhancements_bp.route("/rate", methods=["GET", "POST"])
-def rate():
-    conn = get_db_conn()
-    cur = conn.cursor()
-    user_id = session.get("user_id")
-    role = session.get("role")
-    # -------------------- POST: Submit / Update Rating --------------------
-   if request.method == "POST":
-    if not user_id:
-        flash("You must be logged in to rate.", "warning")
-        return redirect(url_for("enhancements.login"))
-
-    rating_val = request.form.get("rating")
-
-    # --- Validate Rating Selection ---
-    if not rating_val or not rating_val.isdigit():
-        flash("Please select a rating before submitting ⭐", "danger")
-        conn.close()
-        return redirect(url_for("enhancements.rate"))
-
-    rating = int(rating_val)
-    comment = request.form.get("comment", "").strip()
-
-    if rating < 1 or rating > 5:
-        flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
-        conn.close()
-        return redirect(url_for("enhancements.rate"))
-
-    # -------------------- GET: Show Ratings --------------------
-    feedbacks = cur.execute(
-        """
-        SELECT f.id, f.rating, f.comment, f.created_at, u.username
-        FROM feedback f 
-        LEFT JOIN users u ON f.user_id = u.id
-        ORDER BY f.created_at DESC
-        """
-    ).fetchall()
-    conn.close()
-    # -------- Navbar Logic (same pattern as About page) --------
-    return render_template(
-        "rate.html",
-        feedbacks=feedbacks,
-        show_nav_options=True,
-        is_admin=(role == "admin"),
-        home_url=(
-            url_for("enhancements.admin_dashboard")
-            if role == "admin"
-            else url_for("enhancements.student_dashboard")
-        ),
-    )
 
 # ------------------ Misc -----------------
 
