@@ -622,56 +622,30 @@ def rate():
     if request.method == "POST":
         if not user_id:
             flash("You must be logged in to rate.", "warning")
-            conn.close()
             return redirect(url_for("enhancements.login"))
 
-        # --- Check if user actually exists (Prevents FOREIGN KEY crash) ---
-        user_exists = cur.execute(
-            "SELECT id FROM users WHERE id = ?", (user_id,)
-        ).fetchone()
-
-        if not user_exists:
-            session.clear()
-            flash("Your account session is invalid. Please login again.", "danger")
-            conn.close()
-            return redirect(url_for("enhancements.login"))
-
-        # Get form data
         rating = int(request.form.get("rating", 0))
         comment = request.form.get("comment", "").strip()
-
-        # Validation
-        if rating == 0:
-            flash("Please select a rating before submitting.", "warning")
-            conn.close()
-            return redirect(url_for("enhancements.rate"))
-
-        if not comment:
-            flash("Feedback cannot be empty. Please write something.", "warning")
-            conn.close()
-            return redirect(url_for("enhancements.rate"))
 
         if not (1 <= rating <= 5):
             flash("Invalid rating. Please select between 1 and 5 stars.", "danger")
             conn.close()
             return redirect(url_for("enhancements.rate"))
 
-        # Check if already rated
+        # Check if user already rated
         existing = cur.execute(
             "SELECT id FROM feedback WHERE user_id = ?", (user_id,)
         ).fetchone()
 
         if existing:
+            # Update previous rating
             cur.execute(
-                """
-                UPDATE feedback
-                SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP
-                WHERE user_id = ?
-                """,
+                "UPDATE feedback SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP WHERE user_id = ?",
                 (rating, comment, user_id),
             )
             flash("Your feedback has been updated! ⭐", "success")
         else:
+            # Insert new rating
             cur.execute(
                 "INSERT INTO feedback (user_id, rating, comment) VALUES (?, ?, ?)",
                 (user_id, rating, comment),
@@ -694,10 +668,12 @@ def rate():
 
     conn.close()
 
-    # -------- Navbar Logic --------
+    # -------- Navbar Logic (same pattern as About page) --------
     return render_template(
         "rate.html",
+        
         feedbacks=feedbacks,
+
         show_nav_options=True,
         is_admin=(role == "admin"),
         home_url=(
@@ -706,7 +682,6 @@ def rate():
             else url_for("enhancements.student_dashboard")
         ),
     )
-
 
 # ------------------ Admin Pages ------------------
 
@@ -1467,6 +1442,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
