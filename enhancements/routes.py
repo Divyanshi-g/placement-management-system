@@ -792,7 +792,7 @@ def admin_students():
 @enhancements_bp.route("/admin/student/<int:user_id>")
 def view_students(user_id):
     if "user_id" not in session or session.get("role") != "admin":
-        return redirect(url_for("login"))
+        return redirect(url_for("enhancenents.login"))
 
     conn = get_db_conn()
     cursor = conn.cursor()
@@ -1519,6 +1519,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
