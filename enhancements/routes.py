@@ -713,21 +713,33 @@ def rate():
     )
 
 # ------------------ Admin Pages ------------------
-
 @enhancements_bp.route("/admin_dashboard")
 def admin_dashboard():
+    # --- NAVBAR + ACCESS CONTROL LOGIC ---
+    user_id = session.get("user_id")
+    role = session.get("role")
+    username = session.get("username", "Admin")
+
+    # If not logged in
+    if not user_id:
+        flash("Please login to continue.", "warning")
+        return redirect(url_for("enhancements.login"))
+
+    # If logged in but not admin
+    if role != "admin":
+        flash("Access denied! Admins only.", "danger")
+        return redirect(url_for("enhancements.home"))
+
+    # --- DATABASE QUERIES ---
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # Count students
     cur.execute("SELECT COUNT(*) FROM users WHERE role='student'")
     student_count = cur.fetchone()[0]
 
-    # Count placements
     cur.execute("SELECT COUNT(*) FROM placements")
     placement_count = cur.fetchone()[0]
 
-    # Count applications
     cur.execute("SELECT COUNT(*) FROM applications")
     application_count = cur.fetchone()[0]
 
@@ -739,8 +751,15 @@ def admin_dashboard():
         "applications": application_count
     }
 
-    username = session.get("username", "Admin")
-    return render_template("admin_dashboard.html", counts=counts, username=username)
+    # Pass navbar logic + data to template
+    return render_template(
+        "admin_dashboard.html",
+        counts=counts,
+        username=username,
+        is_logged_in=True,
+        is_admin=True
+    )
+
 @enhancements_bp.route("/admin/students")
 def admin_students():
     conn = get_db_conn()
@@ -1471,6 +1490,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
