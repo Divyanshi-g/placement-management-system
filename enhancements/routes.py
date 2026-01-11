@@ -786,7 +786,7 @@ def admin_students():
         "admin/students.html", 
          students=students,
          show_nav_options=True,
-         is_admin=true,
+         is_admin=True,
          home_url=url_for("enhancements.admin_dashboard")
     )
 @enhancements_bp.route("/admin/student/<int:user_id>")
@@ -818,7 +818,7 @@ def view_student(user_id):
         "view_student.html", 
         student=student,
          show_nav_options=True,
-         is_admin=true,
+         is_admin=True,
          home_url=url_for("enhancements.admin_dashboard")
     )
 
@@ -1529,6 +1529,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
