@@ -25,7 +25,7 @@
                 <td>{{ s.phone if s.phone else "Not Added" }}</td>
 
                 <td>
-                    <a href="{{ url_for('admin/view_students', user_id=s.id) }}"
+                    <a href="{{ url_for('enhancements.view_students', user_id=s.id) }}"
                        class="btn btn-primary btn-sm">
                         View Details
                     </a>
@@ -38,5 +38,6 @@
 </div>
 
 {% endblock %}
+
 
 
