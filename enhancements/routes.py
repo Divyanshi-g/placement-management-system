@@ -760,29 +760,40 @@ def admin_dashboard():
         is_logged_in=True,
         is_admin=True
     )
-
 @enhancements_bp.route("/admin/students")
 def admin_students():
+    # --- Security ---
+    if session.get("role") != "admin":
+        flash("Admin access required!", "danger")
+        return redirect(url_for("enhancements.login"))
+
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # Fetch all required student details
     cur.execute("""
         SELECT 
-            id,
-            username,
-            email,
-            phone,
-            skills
-        FROM users
-        WHERE role = 'student'
-        ORDER BY id DESC
+            u.id,
+            u.username,
+            u.email,
+
+            a.phone,
+            a.course
+
+        FROM applications a
+        INNER JOIN users u ON a.user_id = u.id
+        ORDER BY a.id DESC
     """)
 
     students = cur.fetchall()
     conn.close()
 
-    return render_template("admin/students.html", students=students)
+    return render_template(
+        "admin/students.html", 
+         students=students,
+         show_nav_options=True,
+         is_admin=true,
+         home_url=url_for("enhancements.admin_dashboard")
+    )
 
 
 @enhancements_bp.route("/admin/placements")
@@ -1491,6 +1502,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
