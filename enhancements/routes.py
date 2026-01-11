@@ -765,7 +765,7 @@ def admin_students():
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("login"))
 
-    conn = get_db()
+    conn = get_db_conn()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -789,7 +789,7 @@ def view_student(user_id):
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("login"))
 
-    conn = get_db()
+    conn = get_db_conn()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -1522,6 +1522,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
