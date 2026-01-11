@@ -725,11 +725,6 @@ def admin_dashboard():
         flash("Please login to continue.", "warning")
         return redirect(url_for("enhancements.login"))
 
-    # If logged in but not admin
-    if role != "admin":
-        flash("Access denied! Admins only.", "danger")
-        return redirect(url_for("enhancements.register"))
-
     # --- DATABASE QUERIES ---
     conn = get_db_conn()
     cur = conn.cursor()
@@ -1538,6 +1533,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
