@@ -760,7 +760,7 @@ def admin_dashboard():
         is_logged_in=True,
         is_admin=True
     )
-@app.route("/admin/students")
+@enhancements_bp.route("/admin/students")
 def admin_students():
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("login"))
@@ -784,7 +784,7 @@ def admin_students():
          is_admin=true,
          home_url=url_for("enhancements.admin_dashboard")
     )
-@app.route("/admin/student/<int:user_id>")
+@enhancements_bp.route("/admin/student/<int:user_id>")
 def view_student(user_id):
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("login"))
@@ -1522,6 +1522,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
