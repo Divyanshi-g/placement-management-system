@@ -788,15 +788,17 @@ def admin_students():
     )
 @enhancements_bp.route("/admin/student/<int:user_id>")
 def view_student_profile(user_id):
+
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("enhancements.login"))
 
     conn = get_db_conn()
+    conn.row_factory = sqlite3.Row   # <<< IMPORTANT
     cursor = conn.cursor()
 
     cursor.execute("""
         SELECT 
-            users.id,
+            users.id AS user_id,
             users.username,
             users.email,
 
@@ -818,8 +820,10 @@ def view_student_profile(user_id):
             COALESCE(profiles.resume, '') AS resume
 
         FROM users
-        LEFT JOIN profiles ON profiles.user_id = users.id
-        WHERE users.id = ? AND users.role = 'student'
+        LEFT JOIN profiles 
+            ON profiles.user_id = users.id
+        WHERE users.id = ? 
+          AND users.role = 'student'
     """, (user_id,))
 
     student = cursor.fetchone()
@@ -835,7 +839,6 @@ def view_student_profile(user_id):
         is_admin=True,
         home_url=url_for("enhancements.admin_dashboard")
     )
-
 
 @enhancements_bp.route("/admin/placements")
 def admin_placements():
@@ -1533,6 +1536,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
