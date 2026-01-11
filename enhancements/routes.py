@@ -762,24 +762,29 @@ def admin_dashboard():
     )
 @enhancements_bp.route("/admin/students")
 def admin_students():
-    if "user_id" not in session or session.get("role") != "admin":
-        return redirect(url_for("login"))
-
     conn = get_db_conn()
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT users.id, users.name, users.email, profiles.phone
+        SELECT 
+            users.id,
+            COALESCE(profiles.full_name, users.username) AS name,
+            users.email,
+            COALESCE(profiles.phone, 'Not Added') AS phone
         FROM users
-        LEFT JOIN profiles ON users.id = profiles.user_id
+        LEFT JOIN profiles 
+            ON profiles.user_id = users.id
         WHERE users.role = 'student'
         ORDER BY users.id DESC
     """)
+
     students = cursor.fetchall()
 
+    conn.close()
+
     return render_template(
-        "admin_students.html", 
-         students=students,
+        "admin/students.html", 
+         students=students),
          show_nav_options=True,
          is_admin=true,
          home_url=url_for("enhancements.admin_dashboard")
@@ -1524,6 +1529,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
