@@ -2,42 +2,65 @@
 {% block title %}Students Profile{% endblock %}
 {% block content %}
 
-<div class="container mt-4">
-    <h2 class="mb-3">Students Profile</h2>
+<div class="max-w-6xl mx-auto px-4 mt-20">
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th style="width:140px;">Action</th>
-            </tr>
-        </thead>
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-extrabold text-indigo-400">
+      👩‍🎓 Students Profile
+    </h1>
+    <p class="mt-3 text-gray-300">
+      Total Students:
+      <span class="font-semibold text-emerald-400">{{ students|length }}</span>
+    </p>
+  </div>
 
-        <tbody>
-            {% for s in students %}
-            <tr>
-                <td>{{ s.id }}</td>
-                <td>{{ s.name }}</td>
-                <td>{{ s.email }}</td>
-                <td>{{ s.phone if s.phone else "Not Added" }}</td>
+  <!-- Table Container -->
+  <div class="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+    <table class="min-w-full">
+      <thead class="bg-black/30 text-gray-300 uppercase text-sm tracking-wider">
+        <tr>
+          <th class="px-6 py-4 text-left">ID</th>
+          <th class="px-6 py-4 text-left">Name</th>
+          <th class="px-6 py-4 text-left">Email</th>
+          <th class="px-6 py-4 text-left">Phone</th>
+          <th class="px-6 py-4 text-center">Action</th>
+        </tr>
+      </thead>
 
-                <td>
-                    <a href="{{ url_for('enhancements.view_students', user_id=s.id) }}"
-                       class="btn btn-primary btn-sm">
-                        View Details
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+      <tbody>
+        {% for s in students %}
+        <tr class="border-b border-white/10 hover:bg-white/10 transition">
 
+          <td class="px-6 py-4 text-gray-200 font-semibold">
+            {{ s.id }}
+          </td>
+
+          <td class="px-6 py-4 text-indigo-300 font-semibold">
+            {{ s.name }}
+          </td>
+
+          <td class="px-6 py-4 text-gray-200">
+            {{ s.email }}
+          </td>
+
+          <td class="px-6 py-4 text-gray-200">
+            {{ s.phone if s.phone else "Not Added" }}
+          </td>
+
+          <td class="px-6 py-4 text-center">
+            <a href="{{ url_for('enhancements.view_students', user_id=s.id) }}"
+               class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-xl shadow text-white text-sm transition">
+              View Details
+            </a>
+          </td>
+
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
+
 </div>
 
 {% endblock %}
-
-
-
