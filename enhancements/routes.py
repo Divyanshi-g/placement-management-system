@@ -792,15 +792,17 @@ def view_student(user_id):
     conn = get_db_conn()
     cursor = conn.cursor()
 
-    cursor.execute("""
-        SELECT users.id, users.name, users.email,
-               profiles.phone, profiles.full_name, profiles.age,
-               profiles.course, profiles.skills, profiles.address,
-               profiles.resume_path, profiles.profile_pic
-        FROM users
-        LEFT JOIN profiles ON users.id = profiles.user_id
-        WHERE users.id = ?
-    """, (user_id,))
+   cursor.execute("""
+    SELECT users.id,
+           COALESCE(profiles.full_name, 'Not Added') AS name,
+           users.email,
+           profiles.phone
+    FROM users
+    LEFT JOIN profiles ON users.id = profiles.user_id
+    WHERE users.role = 'student'
+    ORDER BY users.id DESC
+""")
+
     
     student = cursor.fetchone()
 
@@ -1522,6 +1524,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
