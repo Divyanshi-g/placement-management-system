@@ -755,6 +755,7 @@ def admin_dashboard():
     return render_template(
         "admin_dashboard.html",
         counts=counts,
+        show_nav_options=True,
         username=username,
         is_logged_in=True,
         is_admin=True
@@ -1490,6 +1491,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
