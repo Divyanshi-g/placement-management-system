@@ -785,7 +785,7 @@ def admin_students():
          home_url=url_for("enhancements.admin_dashboard")
     )
 @app.route("/admin/student/<int:user_id>")
-def admin_student_profile(user_id):
+def view_student(user_id):
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("login"))
 
@@ -808,7 +808,7 @@ def admin_student_profile(user_id):
         return "Student not found", 404
 
     return render_template(
-        "admin_student_profile_view.html", 
+        "view_student.html", 
         student=student,
          show_nav_options=True,
          is_admin=true,
@@ -1522,6 +1522,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
