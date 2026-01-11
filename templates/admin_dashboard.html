@@ -1,17 +1,10 @@
 {% extends "base.html" %}
-{% block nav_options %}
-  <a href="/admin_dashboard" class="hover:text-yellow-300 transition">Home</a>
-  <a href="/about" class="hover:text-yellow-300 transition">About</a>
-  <a href="/rate" class="hover:text-yellow-300 transition">Rate</a>
-  <a href="/logout" class="hover:text-yellow-300 transition">Logout</a>
-{% endblock %}
-
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
 <div class="text-center animate__animated animate__fadeInUp">
   <!-- Welcome Message -->
-  <h1 class="mt-8 text-4xl font-bold cursor-pointer transition transform hover:underline hover:scale-103">
+  <h1 class="mb-8 text-4xl font-bold cursor-pointer transition transform hover:underline hover:scale-103">
     Welcome back, {{ username }} 🏢
   </h1>
 
@@ -108,3 +101,4 @@
   window.onload = typeAdmin;
 </script>
 {% endblock %}
+
