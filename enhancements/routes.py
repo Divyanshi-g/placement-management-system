@@ -792,16 +792,16 @@ def view_student(user_id):
     conn = get_db_conn()
     cursor = conn.cursor()
 
-   cursor.execute("""
-    SELECT users.id,
-           COALESCE(profiles.full_name, 'Not Added') AS name,
-           users.email,
-           profiles.phone
-    FROM users
-    LEFT JOIN profiles ON users.id = profiles.user_id
-    WHERE users.role = 'student'
-    ORDER BY users.id DESC
-""")
+    cursor.execute("""
+     SELECT users.id,
+            COALESCE(profiles.full_name, 'Not Added') AS name,
+            users.email,
+            profiles.phone
+     FROM users
+     LEFT JOIN profiles ON users.id = profiles.user_id
+     WHERE users.role = 'student'
+     ORDER BY users.id DESC
+ """)
 
     
     student = cursor.fetchone()
