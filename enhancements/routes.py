@@ -762,6 +762,9 @@ def admin_dashboard():
     )
 @enhancements_bp.route("/admin/students")
 def admin_students():
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect(url_for("enhancements.login"))
+
     conn = get_db_conn()
     cursor = conn.cursor()
 
@@ -779,15 +782,14 @@ def admin_students():
     """)
 
     students = cursor.fetchall()
-
     conn.close()
 
     return render_template(
-        "admin/students.html", 
-         students=students,
-         show_nav_options=True,
-         is_admin=True,
-         home_url=url_for("enhancements.admin_dashboard")
+        "admin/students.html",
+        students=students,
+        show_nav_options=True,
+        is_admin=True,
+        home_url=url_for("enhancements.admin_dashboard")
     )
 @enhancements_bp.route("/admin/student/<int:user_id>")
 def view_students(user_id):
@@ -798,24 +800,41 @@ def view_students(user_id):
     cursor = conn.cursor()
 
     cursor.execute("""
-     SELECT users.id,
-            COALESCE(profiles.full_name, 'Not Added') AS name,
+        SELECT 
+            users.id,
+            users.username,
             users.email,
-            profiles.phone
-     FROM users
-     LEFT JOIN profiles ON users.id = profiles.user_id
-     WHERE users.role = 'student'
-     ORDER BY users.id DESC
- """)
 
-    
+            COALESCE(profiles.full_name, '') AS full_name,
+            COALESCE(profiles.phone, '') AS phone,
+            COALESCE(profiles.gender, '') AS gender,
+            COALESCE(profiles.course, '') AS course,
+            COALESCE(profiles.branch, '') AS branch,
+            COALESCE(profiles.passing_year, '') AS passing_year,
+            COALESCE(profiles.cgpa, '') AS cgpa,
+            COALESCE(profiles.bio, '') AS bio,
+
+            COALESCE(profiles.skills, '') AS skills,
+            COALESCE(profiles.certifications, '') AS certifications,
+            COALESCE(profiles.linkedin, '') AS linkedin,
+            COALESCE(profiles.github, '') AS github,
+
+            COALESCE(profiles.profile_pic, '') AS profile_pic,
+            COALESCE(profiles.resume, '') AS resume
+
+        FROM users
+        LEFT JOIN profiles ON profiles.user_id = users.id
+        WHERE users.id = ? AND users.role = 'student'
+    """, (user_id,))
+
     student = cursor.fetchone()
+    conn.close()
 
     if not student:
         return "Student not found", 404
 
     return render_template(
-        "admin/view_students.html", 
+        "admin/view_student_profile.html",
         student=student,
         show_nav_options=True,
         is_admin=True,
@@ -1519,6 +1538,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
