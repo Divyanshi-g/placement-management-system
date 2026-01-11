@@ -760,36 +760,56 @@ def admin_dashboard():
         is_logged_in=True,
         is_admin=True
     )
-@enhancements_bp.route("/admin/students")
+@app.route("/admin/students")
 def admin_students():
-    # --- Security ---
-    if session.get("role") != "admin":
-        flash("Admin access required!", "danger")
-        return redirect(url_for("enhancements.login"))
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect(url_for("login"))
 
-    conn = get_db_conn()
-    cur = conn.cursor()
+    conn = get_db()
+    cursor = conn.cursor()
 
-    cur.execute("""
-        SELECT 
-            u.id,
-            u.username,
-            u.email,
-
-            a.phone,
-            a.course
-
-        FROM applications a
-        INNER JOIN users u ON a.user_id = u.id
-        ORDER BY a.id DESC
+    cursor.execute("""
+        SELECT users.id, users.name, users.email, profiles.phone
+        FROM users
+        LEFT JOIN profiles ON users.id = profiles.user_id
+        WHERE users.role = 'student'
+        ORDER BY users.id DESC
     """)
-
-    students = cur.fetchall()
-    conn.close()
+    students = cursor.fetchall()
 
     return render_template(
-        "admin/students.html", 
+        "admin_students.html", 
          students=students,
+         show_nav_options=True,
+         is_admin=true,
+         home_url=url_for("enhancements.admin_dashboard")
+    )
+@app.route("/admin/student/<int:user_id>")
+def admin_student_profile(user_id):
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect(url_for("login"))
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT users.id, users.name, users.email,
+               profiles.phone, profiles.full_name, profiles.age,
+               profiles.course, profiles.skills, profiles.address,
+               profiles.resume_path, profiles.profile_pic
+        FROM users
+        LEFT JOIN profiles ON users.id = profiles.user_id
+        WHERE users.id = ?
+    """, (user_id,))
+    
+    student = cursor.fetchone()
+
+    if not student:
+        return "Student not found", 404
+
+    return render_template(
+        "admin_student_profile_view.html", 
+        student=student,
          show_nav_options=True,
          is_admin=true,
          home_url=url_for("enhancements.admin_dashboard")
@@ -1502,6 +1522,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
