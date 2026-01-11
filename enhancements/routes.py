@@ -784,7 +784,7 @@ def admin_students():
 
     return render_template(
         "admin/students.html", 
-         students=students),
+         students=students,
          show_nav_options=True,
          is_admin=true,
          home_url=url_for("enhancements.admin_dashboard")
@@ -1529,6 +1529,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
