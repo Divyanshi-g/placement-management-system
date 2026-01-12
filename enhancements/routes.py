@@ -409,11 +409,9 @@ def apply(placement_id):
     )
 # ------------------ Profile ------------------
 
+# ------------------ Profile ------------------
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
 def profile():
-    PROFILE_PIC_FOLDER = current_app.config["UPLOAD_FOLDER_PROFILES"]
-    RESUME_FOLDER = current_app.config["UPLOAD_FOLDER_RESUMES"]
-
     if "user_id" not in session:
         return redirect(url_for("enhancements.login"))
 
@@ -428,12 +426,14 @@ def profile():
         flash("User not found. Please login again.", "danger")
         return redirect(url_for("enhancements.login"))
 
-    username = user_row["username"]
-    email = user_row["email"]
+    # -------- FOLDERS --------
+    PROFILE_PIC_FOLDER = os.path.join(current_app.root_path, "static", "uploads", "profile_pics")
+    RESUME_FOLDER = os.path.join(current_app.root_path, "static", "uploads", "resumes")
+    os.makedirs(PROFILE_PIC_FOLDER, exist_ok=True)
+    os.makedirs(RESUME_FOLDER, exist_ok=True)
 
     # -------- PROFILE UPDATE --------
     if request.method == "POST":
-
         fields = {
             "full_name": request.form.get("full_name", "").strip(),
             "phone": request.form.get("phone", "").strip(),
@@ -454,8 +454,6 @@ def profile():
         profile_pic_filename = None
         if profile_pic_file and profile_pic_file.filename:
             profile_pic_filename = secure_filename(profile_pic_file.filename)
-            PROFILE_PIC_FOLDER = os.path.join(current_app.root_path, "static", "uploads", "profile_pics")
-            os.makedirs(PROFILE_PIC_FOLDER, exist_ok=True)  # ensure folder exists
             profile_pic_file.save(os.path.join(PROFILE_PIC_FOLDER, profile_pic_filename))
 
         # -------- RESUME --------
@@ -463,8 +461,6 @@ def profile():
         resume_filename = None
         if resume_file and resume_file.filename:
             resume_filename = secure_filename(resume_file.filename)
-            RESUME_FOLDER = os.path.join(current_app.root_path, "static", "uploads", "resumes")
-            os.makedirs(RESUME_FOLDER, exist_ok=True)  # ensure folder exists
             resume_file.save(os.path.join(RESUME_FOLDER, resume_filename))
 
         # -------- CHECK PROFILE EXISTS --------
@@ -497,7 +493,6 @@ def profile():
                 profile_pic_filename, resume_filename,
                 session["user_id"]
             ))
-
         else:
             cur.execute("""
                 INSERT INTO profiles 
@@ -563,7 +558,6 @@ def profile():
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
-
 
 # ------------------ Practice ------------------
 
@@ -1529,6 +1523,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
