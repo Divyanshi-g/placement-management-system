@@ -25,9 +25,6 @@ def init_app(app):
 # ----------------- Blueprint -----------------
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
 
-PROFILE_PIC_FOLDER = current_app.config["UPLOAD_FOLDER_PROFILES"]
-RESUME_FOLDER = current_app.config["UPLOAD_FOLDER_RESUMES"]
-
 # ------------------ Auth pages ------------------
 @enhancements_bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -411,9 +408,12 @@ def apply(placement_id):
         home_url=url_for("enhancements.student_dashboard")
     )
 # ------------------ Profile ------------------
-# ------------------ Profile ------------------
+
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
 def profile():
+    PROFILE_PIC_FOLDER = current_app.config["UPLOAD_FOLDER_PROFILES"]
+    RESUME_FOLDER = current_app.config["UPLOAD_FOLDER_RESUMES"]
+
     if "user_id" not in session:
         return redirect(url_for("enhancements.login"))
 
@@ -1529,6 +1529,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
