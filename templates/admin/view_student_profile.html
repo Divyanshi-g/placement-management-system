@@ -1,147 +1,205 @@
 {% extends "base.html" %}
 {% block title %}Student Profile{% endblock %}
-
 {% block content %}
-<div class="container py-4">
 
-    <!-- CARD -->
-    <div class="card shadow-lg border-0 rounded-4">
+<style>
+.profile-card{
+    background:#0f172a;
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 0 25px rgba(0,0,0,.6);
+}
 
-        <!-- CARD HEADER -->
-        <div class="card-header text-white fw-bold" style="background:#495057;">
-            Student Profile Details
-        </div>
+.profile-img{
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    object-fit:cover;
+    border:4px solid #4f9cff;
+    box-shadow:0 0 20px rgba(79,156,255,.6);
+}
 
-        <!-- CARD BODY -->
-        <div class="card-body" style="background:#f8f9fa;">
+.info-table th{
+    width: 35%;
+    color:#a1c3ff;
+}
 
-            <div class="row">
+.info-table td{
+    color:white;
+    font-weight:500;
+}
 
-                <!-- LEFT SECTION (IMAGE + BASIC DETAILS) -->
-                <div class="col-md-4 text-center">
+.section-title{
+    color:white;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
 
-                    <div class="mb-3">
+.badge-box{
+    background:#1e293b;
+    padding:10px;
+    border-radius:10px;
+}
 
-                        {% if student.profile_pic %}
-                        <img src="{{ url_for('static', filename='upload/profile_pics/' + student.profile_pic) }}"
-                             alt="Profile Picture"
-                             class="img-fluid rounded shadow"
-                             style="max-width:220px; height:auto; cursor:pointer;"
-                             onclick="openImageModal(this.src)">
-                        {% else %}
-                        <img src="https://via.placeholder.com/220x220?text=No+Image"
-                             class="img-fluid rounded shadow"
-                             style="max-width:220px;">
-                        {% endif %}
+</style>
 
-                    </div>
 
-                    <h5 class="fw-bold">{{ student.full_name or student.username }}</h5>
-                    <p class="text-muted">{{ student.email }}</p>
-                </div>
+<div class="container mt-5 mb-5">
 
-                <!-- RIGHT SECTION -->
-                <div class="col-md-8">
+    <h2 class="text-center text-light fw-bold">
+        👤 Student Profile Details
+    </h2>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <strong>Phone:</strong> {{ student.phone or "Not Provided" }}
-                        </div>
+    <hr class="text-light">
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Gender:</strong> {{ student.gender or "Not Provided" }}
-                        </div>
+    <div class="profile-card mt-4">
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Course:</strong> {{ student.course or "Not Provided" }}
-                        </div>
+        <div class="row align-items-center">
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Branch:</strong> {{ student.branch or "Not Provided" }}
-                        </div>
+            <!-- Profile Picture -->
+            <div class="col-md-4 text-center">
 
-                        <div class="col-md-6 mb-3">
-                            <strong>Passing Year:</strong> {{ student.passing_year or "Not Provided" }}
-                        </div>
+                {% if student.profile_pic %}
+                    <img src="{{ url_for('static', filename='uploads/profile_pics/' ~ student.profile_pic) }}"
+                         class="profile-img"
+                         onclick="openImageModal(this.src)"
+                         style="cursor:pointer;">
+                {% else %}
+                    <img src="{{ url_for('static', filename='default_profile.png') }}"
+                         class="profile-img">
+                {% endif %}
 
-                        <div class="col-md-6 mb-3">
-                            <strong>CGPA:</strong> {{ student.cgpa or "Not Provided" }}
-                        </div>
+                <p class="text-light mt-3 fw-bold">
+                    {{ student.username }}
+                </p>
 
-                        <div class="col-12 mb-3">
-                            <strong>Bio:</strong>
-                            <p>{{ student.bio or "Not Provided" }}</p>
-                        </div>
+                <p class="badge bg-info text-dark p-2">
+                    {{ student.email }}
+                </p>
 
-                        <div class="col-12 mb-3">
-                            <strong>Skills:</strong>
-                            <p>{{ student.skills or "Not Provided" }}</p>
-                        </div>
-
-                        <div class="col-12 mb-3">
-                            <strong>Certifications:</strong>
-                            <p>{{ student.certifications or "Not Provided" }}</p>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <strong>LinkedIn:</strong>
-                            {% if student.linkedin %}
-                            <a href="{{ student.linkedin }}" target="_blank">View Profile</a>
-                            {% else %}
-                            Not Provided
-                            {% endif %}
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <strong>GitHub:</strong>
-                            {% if student.github %}
-                            <a href="{{ student.github }}" target="_blank">View Profile</a>
-                            {% else %}
-                            Not Provided
-                            {% endif %}
-                        </div>
-
-                        <!-- RESUME -->
-                        <div class="col-12 text-center mt-3">
-                            {% if student.resume %}
-                            <a href="{{ url_for('static', filename='upload/resumes/' + student.resume) }}"
-                               class="btn btn-primary"
-                               target="_blank"
-                               download>
-                                Download Resume
-                            </a>
-                            {% else %}
-                            <button class="btn btn-secondary" disabled>No Resume Uploaded</button>
-                            {% endif %}
-                        </div>
-
-                    </div>
-                </div>
             </div>
 
+
+            <!-- Details -->
+            <div class="col-md-8">
+
+                <p class="section-title">📄 Profile Information</p>
+
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered info-table">
+
+                        <tr><th>Phone</th><td>{{ student.phone or "Not Provided" }}</td></tr>
+                        <tr><th>Gender</th><td>{{ student.gender or "Not Provided" }}</td></tr>
+
+                        <tr><th>Course</th><td>{{ student.course or "Not Provided" }}</td></tr>
+                        <tr><th>Branch</th><td>{{ student.branch or "Not Provided" }}</td></tr>
+                        <tr><th>Passing Year</th><td>{{ student.passing_year or "Not Provided" }}</td></tr>
+                        <tr><th>CGPA</th><td>{{ student.cgpa or "Not Provided" }}</td></tr>
+
+                        <tr>
+                            <th>Skills</th>
+                            <td>
+                                {% if student.skills %}
+                                    <div class="badge-box text-light">
+                                        {{ student.skills }}
+                                    </div>
+                                {% else %}
+                                    Not Provided
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Certifications</th>
+                            <td>
+                                {% if student.certifications %}
+                                    <div class="badge-box text-light">
+                                        {{ student.certifications }}
+                                    </div>
+                                {% else %}
+                                    Not Provided
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>LinkedIn</th>
+                            <td>
+                                {% if student.linkedin %}
+                                    <a href="{{ student.linkedin }}" target="_blank"
+                                       class="btn btn-primary btn-sm">
+                                        🔗 Open LinkedIn
+                                    </a>
+                                {% else %} Not Added {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>GitHub</th>
+                            <td>
+                                {% if student.github %}
+                                    <a href="{{ student.github }}" target="_blank"
+                                       class="btn btn-dark btn-sm">
+                                        💻 View GitHub
+                                    </a>
+                                {% else %} Not Added {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Bio</th>
+                            <td>{{ student.bio or "Not Provided" }}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-3 d-flex gap-3">
+
+                    {% if student.resume %}
+                        <a class="btn btn-success"
+                           href="{{ url_for('static', filename='uploads/resumes/' ~ student.resume) }}"
+                           download>
+                           📥 Download Resume
+                        </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('enhancements.admin_students') }}"
+                       class="btn btn-secondary">
+                       ⬅ Back to Student List
+                    </a>
+
+                </div>
+
+            </div>
         </div>
+
     </div>
 </div>
 
-<!-- IMAGE POPUP MODAL -->
-<div id="imgModal" style="
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.85);
-    text-align:center;
-    padding-top:80px;">
-    <img id="modalImage" style="max-width:70%; border-radius:10px;">
+
+
+<!-- Modal Viewer -->
+<div id="imageModal"
+     style="display:none; position:fixed; inset:0;
+            background:rgba(0,0,0,.9); justify-content:center;
+            align-items:center; z-index:9999">
+
+    <img id="modalImg"
+         style="max-width:75%; max-height:80%; border-radius:12px;">
 </div>
+
 
 <script>
 function openImageModal(src){
-    document.getElementById("imgModal").style.display="block";
-    document.getElementById("modalImage").src = src;
+    document.getElementById("modalImg").src = src;
+    document.getElementById("imageModal").style.display = "flex";
 }
-document.getElementById("imgModal").onclick = function(){
-    this.style.display="none";
-}
+document.getElementById("imageModal").onclick = function(){
+    this.style.display = "none";
+};
 </script>
 
 {% endblock %}
