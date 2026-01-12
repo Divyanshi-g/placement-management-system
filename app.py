@@ -12,18 +12,20 @@ from enhancements.db import close_db, init_db
 
 def create_app():
     app = Flask(__name__, static_folder="static", template_folder="templates")
-
     # ---------------- Config ----------------
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key")
     app.config["DATABASE"] = os.environ.get("DATABASE", "placement.db")
     app.config["UPLOAD_FOLDER_RESUMES"] = os.environ.get(
         "UPLOAD_FOLDER_RESUMES", "static/uploads/resumes"
     )
+    app.config["UPLOAD_FOLDER_PROFILES"] = os.environ.get(
+        "UPLOAD_FOLDER_PROFILES", "static/uploads/profile_pics"
+    )
     app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB limit
 
-
-    # Ensure upload folder exists
+    # ---------------- Ensure folders exist ----------------
     os.makedirs(app.config["UPLOAD_FOLDER_RESUMES"], exist_ok=True)
+    os.makedirs(app.config["UPLOAD_FOLDER_PROFILES"], exist_ok=True)
 
     # ---------------- Blueprints ----------------
     init_enhancements(app)
@@ -48,6 +50,7 @@ def create_app():
 app = create_app()
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
