@@ -21,7 +21,7 @@
 
     <!-- Profile Picture -->
     <div class="flex flex-col items-center">
-      <img src="{% if user.profile_pic %}{{ url_for'static', filename='uploads/profile_pics/'~ user.profile_pic) }}{% else %}/static/uploads/profile_pics/default-avatar.png{% endif %}"
+      <img src="{% if user.profile_pic %}{{ url_for('static', filename='uploads/profile_pics/'~ user.profile_pic) }}{% else %}  {{ url_for('static', filename='uploads/profile_pics/default-avatar.png') }}{% endif %}"
            class="w-28 h-28 rounded-full border-4 border-green-400 shadow-lg mb-2"
            style="cursor:pointer;"
            onclick="openImageModal(this.src)">
@@ -173,5 +173,6 @@ document.getElementById("imageModal").onclick = function () {
 </script>
 
 {% endblock %}
+
 
 
