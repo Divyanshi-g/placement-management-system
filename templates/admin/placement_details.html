@@ -106,19 +106,13 @@
         {% else %}
         <p>No Logo Available</p>
         {% endif %}
-    </div>
+    
 
     <h2 class="details-heading">{{ placement.company }}</h2>
-
+</div>
     <form method="POST">
 
         <input type="hidden" name="id" value="{{ placement.id }}">
-
-        <div class="detail-item">
-            <span class="detail-label">Company Name:</span>
-            <span class="detail-value view-text">{{ placement.company }}</span>
-            <input class="edit-input" type="text" name="company" value="{{ placement.company }}">
-        </div>
 
         <div class="detail-item">
             <span class="detail-label">Role:</span>
