@@ -853,42 +853,36 @@ def admin_placements():
         is_admin=True,
         home_url=url_for("enhancements.admin_dashboard")
     )
-@enhancements_bp.route("/placement/<int:id>", methods=["GET", "POST"])
+@enhancements_bp.route("/admin/placement/<int:id>", methods=["GET","POST"])
 def placement_details(id):
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # Fetch placement
+    if request.method == "POST":
+        data = request.form
+
+        update_fields = [
+            "role","location","salary","job_type",
+            "duration","eligibility","description",
+            "deadline","link"
+        ]
+
+        for field in update_fields:
+            value = data.get(field)
+            if value is not None and value.strip() != "":
+                cur.execute(f"UPDATE placements SET {field}=? WHERE id=?", (value,id))
+
+        conn.commit()
+
+        flash("Placement Updated Successfully","success")
+        return redirect(url_for("placement_details", id=id))
+
     cur.execute("SELECT * FROM placements WHERE id = ?", (id,))
     placement = cur.fetchone()
 
-    if not placement:
-        return "Placement Not Found", 404
+    conn.close()
 
-    if request.method == "POST":
-        company = request.form.get("company")
-        role = request.form.get("role")
-        location = request.form.get("location")
-        salary = request.form.get("salary")
-        job_type = request.form.get("job_type")
-        duration = request.form.get("duration")
-        eligibility = request.form.get("eligibility")
-        description = request.form.get("description")
-        deadline = request.form.get("deadline")
-        link = request.form.get("link")
-
-        cur.execute("""
-            UPDATE placements SET 
-                company=?, role=?, location=?, salary=?, job_type=?, duration=?,
-                eligibility=?, description=?, deadline=?, link=?
-            WHERE id=?
-        """, (company, role, location, salary, job_type, duration,
-              eligibility, description, deadline, link, id))
-
-        conn.commit()
-        return redirect(url_for("admin.placement_details", id=id))
-
-    return render_template("admin/placement_details.html",
+    return render_template("placement_details.html", 
                            placement=placement,
                            show_nav_options=True,
                            is_admin=True,
@@ -1464,6 +1458,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
