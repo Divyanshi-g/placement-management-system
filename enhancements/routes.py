@@ -407,7 +407,6 @@ def apply(placement_id):
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
-# ------------------ Profile ------------------
 
 # ------------------ Profile ------------------
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
@@ -830,7 +829,7 @@ def view_student_profile(user_id):
 @enhancements_bp.route("/admin/placements")
 def admin_placements():
     conn = get_db_conn()
-    conn.row_factory = sqlite3.Row   # ⭐ IMPORTANT
+    conn.row_factory = sqlite3.Row
     cur = conn.cursor()
 
     cur.execute("""
@@ -839,8 +838,9 @@ def admin_placements():
             company,
             role,
             location,
-            deadline
+            salary
         FROM placements
+        ORDER BY id DESC
     """)
 
     placements = cur.fetchall()
@@ -848,7 +848,10 @@ def admin_placements():
 
     return render_template(
         "admin/placements.html",
-        placements=placements
+        placements=placements,
+        show_nav_options=True,
+        is_admin=True,
+        home_url=url_for("enhancements.admin_dashboard")
     )
 
 def applications():
@@ -1523,6 +1526,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
