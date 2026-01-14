@@ -761,7 +761,7 @@ def admin_students():
         ON profiles.user_id = users.id
     WHERE users.role = 'student'
     ORDER BY users.id DESC
-""")
+   """)
 
 
     students = cursor.fetchall()
@@ -1460,6 +1460,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
