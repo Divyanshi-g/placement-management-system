@@ -392,7 +392,7 @@ def apply(placement_id):
         # ---------- Insert Application Details ----------
         cur.execute("""
             INSERT INTO applications
-            (application_id, student_name, phone, course, skills, experience, resume_file)
+            (placement_id, student_name, phone, course, skills, experience, resume_file)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (app_id, student_name, phone, course, skills, experience, resume_file))
 
@@ -1458,6 +1458,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
