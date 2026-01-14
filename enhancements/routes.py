@@ -872,24 +872,27 @@ def placement_details(id):
         for field in update_fields:
             value = data.get(field)
             if value is not None and value.strip() != "":
-                cur.execute(f"UPDATE placements SET {field}=? WHERE id=?", (value,id))
+                cur.execute(f"UPDATE placements SET {field}=? WHERE id=?", (value, id))
 
         conn.commit()
+        flash("Placement Updated Successfully", "success")
 
-        flash("Placement Updated Successfully","success")
-        return redirect(url_for("placement_details", id=id))
+        # 🔥 FIX HERE
+        return redirect(url_for("enhancements.placement_details", id=id))
 
     cur.execute("SELECT * FROM placements WHERE id = ?", (id,))
     placement = cur.fetchone()
 
     conn.close()
 
-    return render_template("admin/placement_details.html", 
-                           placement=placement,
-                           show_nav_options=True,
-                           is_admin=True,
-                           home_url=url_for("enhancements.admin_dashboard")
-                          )
+    return render_template(
+        "admin/placement_details.html",
+        placement=placement,
+        show_nav_options=True,
+        is_admin=True,
+        home_url=url_for("enhancements.admin_dashboard")
+    )
+
 
 @enhancements_bp.route("/admin/applications")
 def admin_applications():
@@ -1460,6 +1463,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
