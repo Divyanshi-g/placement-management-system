@@ -855,7 +855,7 @@ def admin_placements():
     )
 @enhancements_bp.route("/placement/<int:id>", methods=["GET", "POST"])
 def placement_details(id):
-    conn = get_db()
+    conn = get_db_conn()
     cur = conn.cursor()
 
     # Fetch placement
@@ -1567,6 +1567,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
