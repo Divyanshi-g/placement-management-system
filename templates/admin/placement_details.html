@@ -3,70 +3,69 @@
 
 <style>
 .details-container{
-    max-width: 900px;
+    max-width: 1100px;
     margin: 30px auto;
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.12);
+    background: linear-gradient(135deg,#f3f6ff,#ffffff);
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 0 18px rgba(0,0,0,0.15);
     transition: 0.3s;
+    min-height: 550px;
 }
 
-.details-container:hover{
-    transform: scale(1.01);
+/* Prevent resize on edit */
+.details-container *{
+    transition: none !important;
 }
 
-.logo-box{
-    text-align:center;
+.top-row{
+    display:flex;
+    align-items:center;
+    gap:25px;
     margin-bottom:20px;
 }
 
 .logo-box img{
-    width:140px;
-    height:140px;
+    width:150px;
+    height:150px;
     object-fit: contain;
-    border-radius:10px;
-    border:1px solid #ddd;
+    border-radius:12px;
+    border:1px solid #bbb;
+    background:white;
 }
 
 .details-heading{
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-align:center;
+    font-size:32px;
+    font-weight:800;
+    margin:0;
 }
 
 .detail-item{
-    margin:10px 0;
-    padding:10px;
+    margin:12px 0;
+    padding:12px;
     border-radius:8px;
-    background:#f7f9ff;
-    transition:0.3s;
-}
-
-.detail-item:hover{
-    background:#eef3ff;
+    background:#eef2ff;
 }
 
 .detail-label{
-    font-weight:600;
-    color:#333;
-}
-
-.detail-value{
-    margin-left:5px;
+    font-weight:700;
+    color:#222;
 }
 
 .edit-input{
     width:100%;
     padding:8px;
     border-radius:6px;
-    border:1px solid #aaa;
+    border:1px solid #666;
     display:none;
 }
 
+textarea.edit-input{
+    height:120px;
+}
+
 .button-area{
-    margin-top:20px;
+    margin-top:25px;
     text-align:center;
 }
 
@@ -75,129 +74,112 @@
     border-radius:8px;
     border:none;
     cursor:pointer;
-    transition:0.3s;
-    font-weight:600;
+    font-weight:700;
 }
 
-.edit-btn{
-    background:#005eff;
-    color:white;
-}
-
-.save-btn{
-    background:green;
-    color:white;
-    display:none;
-}
-
-.cancel-btn{
-    background:red;
-    color:white;
-    display:none;
-}
+.edit-btn{ background:#005eff;color:white;}
+.save-btn{ background:#198754;color:white;display:none;}
+.cancel-btn{ background:#dc3545;color:white;display:none;}
 </style>
 
 
 <div class="details-container">
- 
-    <div class="logo-box">
-        {% if placement.logo %}
-        <img src="{{ url_for('static', filename='uploads/logos/' + placement.logo) }}" alt="Company Logo">
-        {% else %}
-        <p>No Logo Available</p>
-        {% endif %}
-    
 
-    <h2 class="details-heading">{{ placement.company }}</h2>
-</div>
-    <form method="POST">
-
-        <input type="hidden" name="id" value="{{ placement.id }}">
-
-        <div class="detail-item">
-            <span class="detail-label">Role:</span>
-            <span class="detail-value view-text">{{ placement.role }}</span>
-            <input class="edit-input" type="text" name="role" value="{{ placement.role }}">
+    <div class="top-row">
+        <div class="logo-box">
+            {% if placement.logo %}
+            <img src="{{ url_for('static', filename='uploads/logos/' + placement.logo) }}">
+            {% else %}
+            <img src="{{ url_for('static', filename='uploads/logos/default.png') }}">
+            {% endif %}
         </div>
 
-        <div class="detail-item">
-            <span class="detail-label">Location:</span>
-            <span class="detail-value view-text">{{ placement.location }}</span>
-            <input class="edit-input" type="text" name="location" value="{{ placement.location }}">
-        </div>
+        <h2 class="details-heading">{{ placement.company }}</h2>
+    </div>
 
-        <div class="detail-item">
-            <span class="detail-label">Salary:</span>
-            <span class="detail-value view-text">{{ placement.salary }}</span>
-            <input class="edit-input" type="text" name="salary" value="{{ placement.salary }}">
-        </div>
 
-        <div class="detail-item">
-            <span class="detail-label">Job Type:</span>
-            <span class="detail-value view-text">{{ placement.job_type }}</span>
-            <input class="edit-input" type="text" name="job_type" value="{{ placement.job_type }}">
-        </div>
+<form method="POST">
 
-        <div class="detail-item">
-            <span class="detail-label">Duration:</span>
-            <span class="detail-value view-text">{{ placement.duration }}</span>
-            <input class="edit-input" type="text" name="duration" value="{{ placement.duration }}">
-        </div>
+<input type="hidden" name="id" value="{{ placement.id }}">
 
-        <div class="detail-item">
-            <span class="detail-label">Eligibility:</span>
-            <span class="detail-value view-text">{{ placement.eligibility }}</span>
-            <textarea class="edit-input" name="eligibility">{{ placement.eligibility }}</textarea>
-        </div>
-
-        <div class="detail-item">
-            <span class="detail-label">Description:</span>
-            <span class="detail-value view-text">{{ placement.description }}</span>
-            <textarea class="edit-input" name="description">{{ placement.description }}</textarea>
-        </div>
-
-        <div class="detail-item">
-            <span class="detail-label">Deadline:</span>
-            <span class="detail-value view-text">{{ placement.deadline }}</span>
-            <input class="edit-input" type="text" name="deadline" value="{{ placement.deadline }}">
-        </div>
-
-        <div class="detail-item">
-            <span class="detail-label">Apply Link:</span>
-            <span class="detail-value view-text">
-                {% if placement.link %}
-                <a href="{{ placement.link }}" target="_blank">{{ placement.link }}</a>
-                {% else %}
-                No Link Available
-                {% endif %}
-            </span>
-            <input class="edit-input" type="text" name="link" value="{{ placement.link }}">
-        </div>
-
-        <div class="button-area">
-            <button type="button" class="btn-main edit-btn" onclick="enableEdit()">Edit</button>
-            <button type="submit" class="btn-main save-btn">Save Changes</button>
-            <button type="button" class="btn-main cancel-btn" onclick="cancelEdit()">Cancel</button>
-        </div>
-
-    </form>
-
+<div class="detail-item">
+<span class="detail-label">Role:</span>
+<span class="view-text">{{ placement.role }}</span>
+<input class="edit-input" type="text" name="role" value="{{ placement.role }}">
 </div>
 
+<div class="detail-item">
+<span class="detail-label">Location:</span>
+<span class="view-text">{{ placement.location }}</span>
+<input class="edit-input" type="text" name="location" value="{{ placement.location }}">
+</div>
+
+<div class="detail-item">
+<span class="detail-label">Salary:</span>
+<span class="view-text">{{ placement.salary }}</span>
+<input class="edit-input" type="text" name="salary" value="{{ placement.salary }}">
+</div>
+
+<div class="detail-item">
+<span class="detail-label">Job Type:</span>
+<span class="view-text">{{ placement.job_type }}</span>
+<input class="edit-input" type="text" name="job_type" value="{{ placement.job_type }}">
+</div>
+
+<div class="detail-item">
+<span class="detail-label">Duration:</span>
+<span class="view-text">{{ placement.duration }}</span>
+<input class="edit-input" type="text" name="duration" value="{{ placement.duration }}">
+</div>
+
+<div class="detail-item">
+<span class="detail-label">Eligibility:</span>
+<span class="view-text">{{ placement.eligibility }}</span>
+<textarea class="edit-input" name="eligibility">{{ placement.eligibility }}</textarea>
+</div>
+
+<div class="detail-item">
+<span class="detail-label">Description:</span>
+<span class="view-text">{{ placement.description }}</span>
+<textarea class="edit-input" name="description">{{ placement.description }}</textarea>
+</div>
+
+<div class="detail-item">
+<span class="detail-label">Deadline:</span>
+<span class="view-text">{{ placement.deadline }}</span>
+<input class="edit-input" type="text" name="deadline" value="{{ placement.deadline }}">
+</div>
+
+<div class="detail-item">
+<span class="detail-label">Apply Link:</span>
+<span class="view-text">
+{% if placement.link %}
+<a href="{{ placement.link }}" target="_blank">{{ placement.link }}</a>
+{% else %}No Link Available{% endif %}
+</span>
+<input class="edit-input" type="text" name="link" value="{{ placement.link }}">
+</div>
+
+
+<div class="button-area">
+<button type="button" class="btn-main edit-btn" onclick="enableEdit()">Edit</button>
+<button type="submit" class="btn-main save-btn">Save Changes</button>
+<button type="button" class="btn-main cancel-btn" onclick="cancelEdit()">Cancel</button>
+</div>
+
+</form>
+
+</div>
 
 <script>
 function enableEdit(){
-    document.querySelectorAll(".view-text").forEach(e=>e.style.display="none");
-    document.querySelectorAll(".edit-input").forEach(e=>e.style.display="block");
-
-    document.querySelector(".edit-btn").style.display="none";
-    document.querySelector(".save-btn").style.display="inline-block";
-    document.querySelector(".cancel-btn").style.display="inline-block";
+document.querySelectorAll(".view-text").forEach(e=>e.style.display="none");
+document.querySelectorAll(".edit-input").forEach(e=>e.style.display="block");
+document.querySelector(".edit-btn").style.display="none";
+document.querySelector(".save-btn").style.display="inline-block";
+document.querySelector(".cancel-btn").style.display="inline-block";
 }
-
-function cancelEdit(){
-    location.reload();
-}
+function cancelEdit(){ location.reload(); }
 </script>
 
 {% endblock %}
