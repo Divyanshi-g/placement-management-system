@@ -749,18 +749,20 @@ def admin_students():
     conn = get_db_conn()
     cursor = conn.cursor()
 
-    cursor.execute("""
-        SELECT 
-            users.id,
-            COALESCE(profiles.full_name, users.username) AS name,
-            users.email,
-            COALESCE(profiles.phone, 'Not Added') AS phone
-        FROM users
-        LEFT JOIN profiles 
-            ON profiles.user_id = users.id
-        WHERE users.role = 'student'
-        ORDER BY users.id DESC
-    """)
+   cursor.execute("""
+    SELECT 
+        users.id,
+        users.username,                       -- needed
+        users.email,
+        COALESCE(profiles.phone, 'Not Added') AS phone,
+        COALESCE(profiles.course, 'Not Added') AS course
+    FROM users
+    LEFT JOIN profiles 
+        ON profiles.user_id = users.id
+    WHERE users.role = 'student'
+    ORDER BY users.id DESC
+""")
+
 
     students = cursor.fetchall()
     conn.close()
@@ -1458,6 +1460,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
