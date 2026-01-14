@@ -853,7 +853,7 @@ def admin_placements():
         is_admin=True,
         home_url=url_for("enhancements.admin_dashboard")
     )
-@enhancements_bp.route("/admin/placement/<int:id>", methods=["GET","POST"])
+@enhancements_bp.route("/admin/placement_details/<int:id>", methods=["GET","POST"])
 def placement_details(id):
     conn = get_db_conn()
     cur = conn.cursor()
@@ -882,7 +882,7 @@ def placement_details(id):
 
     conn.close()
 
-    return render_template("placement_details.html", 
+    return render_template("admin/placement_details.html", 
                            placement=placement,
                            show_nav_options=True,
                            is_admin=True,
@@ -1458,6 +1458,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
