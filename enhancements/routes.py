@@ -895,12 +895,12 @@ def placement_details(id):
                            home_url=url_for("enhancements.admin_dashboard")
                           )
 
-@app.route("/admin/applications")
+@enhancements_bp.route("/admin/applications")
 def admin_applications():
     if session.get("role") != "admin":
         return redirect("/")
 
-    conn = get_db()
+    conn = get_db_conn()
     cur = conn.cursor()
 
     cur.execute("""
@@ -930,14 +930,14 @@ def admin_applications():
                            is_admin=True,
                            home_url=url_for("enhancements.admin_dashboard")
                           )
-@app.route("/admin/application/status/<int:app_id>", methods=["POST"])
+@enhancements_bp.route("/admin/application/status/<int:app_id>", methods=["POST"])
 def update_application_status(app_id):
     if session.get("role") != "admin":
         return redirect("/")
 
     new_status = request.form.get("status")
 
-    conn = get_db()
+    conn = get_db_conn()
     cur = conn.cursor()
 
     cur.execute("UPDATE applications SET status = ? WHERE id = ?", (new_status, app_id))
@@ -1464,6 +1464,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
