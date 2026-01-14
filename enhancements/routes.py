@@ -895,160 +895,57 @@ def placement_details(id):
                            home_url=url_for("enhancements.admin_dashboard")
                           )
 
-def applications():
-    """
-    Enhanced admin applications view:
-    - supports search (q), status filter
-    - supports pagination (page, per_page)
-    - computes total_applications and status_counts for badges
-    - returns applications as list of dicts with keys used by template
-    """
-    # read query params
-    q = (request.args.get("q") or "").strip()
-    status_filter = (request.args.get("status") or "").strip()
-    try:
-        page = max(1, int(request.args.get("page", 1)))
-    except ValueError:
-        page = 1
-    try:
-        per_page = max(1, int(request.args.get("per_page", 20)))
-    except ValueError:
-        per_page = 20
+@app.route("/admin/applications")
+def admin_applications():
+    if session.get("role") != "admin":
+        return redirect("/")
 
-    offset = (page - 1) * per_page
-
-    conn = get_db_conn()
+    conn = get_db()
     cur = conn.cursor()
 
-    # Build base WHERE and params for both count and fetch queries
-    where_clauses = ["1=1"]
-    params = []
-
-    if q:
-        where_clauses.append("(u.email LIKE ? OR p.company LIKE ? OR p.role LIKE ?)")
-        q_like = f"%{q}%"
-        params.extend([q_like, q_like, q_like])
-
-    if status_filter:
-        where_clauses.append("a.status = ?")
-        params.append(status_filter)
-
-    where_sql = " AND ".join(where_clauses)
-
-    # Total count
-    count_sql = f"""
-        SELECT COUNT(*) AS cnt
-        FROM applications a
-        JOIN users u ON a.user_id = u.id
-        JOIN placements p ON a.placement_id = p.id
-        WHERE {where_sql}
-    """
-    cur.execute(count_sql, params)
-    total_row = cur.fetchone()
-    total_applications = total_row[0] if total_row else 0
-
-    # Status counts (for badges)
-    status_counts_sql = f"""
-        SELECT a.status, COUNT(*) as cnt
-        FROM applications a
-        JOIN users u ON a.user_id = u.id
-        JOIN placements p ON a.placement_id = p.id
-        WHERE {where_sql}
-        GROUP BY a.status
-    """
-    cur.execute(status_counts_sql, params)
-    status_counts_rows = cur.fetchall()
-    status_counts = {}
-    for r in status_counts_rows:
-        # r[0] is status, r[1] is count
-        status_counts[r[0]] = r[1]
-
-    # Fetch paginated application rows, include resume filename and user/profile info
-    fetch_sql = f"""
+    cur.execute("""
         SELECT 
-            a.id,
-            u.id AS user_id,
-            u.email AS student_email,
-            u.profile_pic AS profile_pic,
-            p.company || ' - ' || p.role AS placement_name,
-            COALESCE(a.status, 'Applied') AS status,
-            a.applied_at,
-            r.filename AS resume
-        FROM applications a
-        JOIN users u ON a.user_id = u.id
-        JOIN placements p ON a.placement_id = p.id
-        LEFT JOIN resumes r ON r.user_id = u.id
-        WHERE {where_sql}
-        ORDER BY a.applied_at DESC
-        LIMIT ? OFFSET ?
-    """
-    fetch_params = params + [per_page, offset]
-    cur.execute(fetch_sql, fetch_params)
-    rows = cur.fetchall()
+            applications.id,
+            users.name,
+            users.email,
+            placements.company,
+            placements.role,
+            applications.experience,
+            applications.skills,
+            applications.resume,
+            applications.status,
+            applications.applied_at
+        FROM applications
+        JOIN users ON applications.user_id = users.id
+        JOIN placements ON applications.placement_id = placements.id
+        ORDER BY applications.applied_at DESC
+    """)
 
-    # Convert rows to list of dicts the template expects
-    applications = []
-    for row in rows:
-        # row could be sqlite3.Row (supports both dict-style and index)
-        applied_at = row["applied_at"] if "applied_at" in row.keys() else row[5]
-        # Format applied_at if it's a datetime-like string or object
-        applied_str = ""
-        if applied_at:
-            try:
-                # if it's stored as ISO string, try parse
-                if isinstance(applied_at, str):
-                    # try common formats, else show raw string
-                    try:
-                        dt = datetime.fromisoformat(applied_at)
-                        applied_str = dt.strftime("%Y-%m-%d %H:%M")
-                    except Exception:
-                        applied_str = applied_at
-                else:
-                    # assume datetime-like object
-                    applied_str = applied_at.strftime("%Y-%m-%d %H:%M")
-            except Exception:
-                applied_str = str(applied_at)
+    applications = cur.fetchall()
+    conn.close()
 
-        # build optional student_profile_url if you have such a route (replace name if different)
-        try:
-            profile_url = url_for("enhancements.view_student", student_id=row["user_id"])
-        except Exception:
-            profile_url = None
+    return render_template("admin/applications.html", 
+                           applications=applications,
+                           show_nav_options=True,
+                           is_admin=True,
+                           home_url=url_for("enhancements.admin_dashboard")
+                          )
+@app.route("/admin/application/status/<int:app_id>", methods=["POST"])
+def update_application_status(app_id):
+    if session.get("role") != "admin":
+        return redirect("/")
 
-        applications.append({
-            "id": row["id"],
-            "user_id": row["user_id"],
-            "student_email": row["student_email"],
-            "placement_name": row["placement_name"],
-            "status": row["status"],
-            "applied_at": applied_str,
-            "resume": row["resume"],
-            "profile_pic": row["profile_pic"],
-            "student_profile_url": profile_url
-        })
+    new_status = request.form.get("status")
 
-    # compute pagination helpers
-    page_start = offset + 1 if total_applications > 0 else 0
-    page_end = min(offset + len(applications), total_applications)
+    conn = get_db()
+    cur = conn.cursor()
 
-    has_prev = page > 1
-    has_next = (offset + per_page) < total_applications
+    cur.execute("UPDATE applications SET status = ? WHERE id = ?", (new_status, app_id))
+    conn.commit()
+    conn.close()
 
-    # Close cursor (we rely on teardown_appcontext(close_db) for final connection close)
-    cur.close()
-
-    return render_template(
-        "admin/applications.html",
-        applications=applications,
-        total_applications=total_applications,
-        status_counts=status_counts,
-        page=page,
-        per_page=per_page,
-        page_start=page_start,
-        page_end=page_end,
-        has_prev=has_prev,
-        has_next=has_next
-    )
+    flash("Status updated successfully!", "success")
+    return redirect("/admin/applications")
 
 
 @enhancements_bp.route("/admin/export_applications_csv")
@@ -1567,6 +1464,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
