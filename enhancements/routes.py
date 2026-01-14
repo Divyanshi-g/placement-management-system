@@ -749,20 +749,19 @@ def admin_students():
     conn = get_db_conn()
     cursor = conn.cursor()
 
-   cursor.execute("""
-    SELECT 
-        users.id,
-        users.username,                       -- needed
-        users.email,
-        COALESCE(profiles.phone, 'Not Added') AS phone,
-        COALESCE(profiles.course, 'Not Added') AS course
-    FROM users
-    LEFT JOIN profiles 
-        ON profiles.user_id = users.id
-    WHERE users.role = 'student'
-    ORDER BY users.id DESC
-   """)
-
+    cursor.execute("""
+        SELECT 
+            users.id,
+            users.username,
+            users.email,
+            COALESCE(profiles.phone, 'Not Added') AS phone,
+            COALESCE(profiles.course, 'Not Added') AS course
+        FROM users
+        LEFT JOIN profiles 
+            ON profiles.user_id = users.id
+        WHERE users.role = 'student'
+        ORDER BY users.id DESC
+    """)
 
     students = cursor.fetchall()
     conn.close()
@@ -774,6 +773,7 @@ def admin_students():
         is_admin=True,
         home_url=url_for("enhancements.admin_dashboard")
     )
+
 @enhancements_bp.route("/admin/student/<int:user_id>")
 def view_student_profile(user_id):
 
@@ -1460,6 +1460,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
