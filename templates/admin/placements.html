@@ -1,64 +1,36 @@
 {% extends "base.html" %}
-
-{% block nav_options %}
-  <a href="/admin_dashboard" class="hover:text-emerald-300 transition">Home</a>
-  <a href="/about" class="hover:text-emerald-300 transition">About</a>
-  <a href="/rate" class="hover:text-emerald-300 transition">Rate</a>
-  <a href="/logout" class="hover:text-rose-400 transition">Logout</a>
-{% endblock %}
-
-{% block title %}Manage Placements{% endblock %}
-
+{% block title %}Placement Records{% endblock %}
 {% block content %}
 
 <style>
-  /* Page fade animation */
-  .fade-in {
-    animation: fadeIn 0.9s ease-out forwards;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .fade-in { animation: fadeIn .9s ease-out forwards; }
+  @keyframes fadeIn { from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
-  /* Row hover */
-  .row-hover {
-    transition: all 0.25s ease;
-  }
+  .row-hover { transition:.25s; }
   .row-hover:hover {
-    background: linear-gradient(90deg, rgba(16,185,129,0.15), rgba(99,102,241,0.15));
+    background: rgba(16,185,129,0.12);
     transform: scale(1.01);
   }
 
-  /* Company hover */
-  .company-hover {
-    transition: all 0.2s ease;
+  .btn-details {
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: linear-gradient(to right,#10b981,#6366f1);
+    color:white;
+    font-weight:600;
+    transition:.25s;
   }
-  .company-hover:hover {
-    color: #6ee7b7;
-    transform: scale(1.03);
-  }
-
-  /* Status badge pulse */
-  .pulse {
-    animation: pulse 1.6s infinite;
-  }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
-    70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
-    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
-  }
+  .btn-details:hover { transform: scale(1.08); opacity:.9; }
 </style>
 
 <div class="max-w-7xl mx-auto px-4 mt-20 fade-in">
 
-  <!-- Header -->
   <div class="text-center">
     <h1 class="text-4xl font-extrabold text-emerald-400">
       🏢 Placement Opportunities
     </h1>
     <p class="mt-3 text-gray-300">
-      Admin overview of all companies, roles & deadlines.
+      Admin overview of all companies & roles.
       Total:
       <span class="font-semibold text-amber-300">
         {{ placements|length }}
@@ -66,56 +38,38 @@
     </p>
   </div>
 
-  <!-- Table -->
-  <div class="mt-10 overflow-x-auto bg-white/10 rounded-2xl shadow-xl backdrop-blur fade-in">
+  <div class="mt-10 overflow-x-auto bg-white/15 rounded-2xl shadow-xl backdrop-blur fade-in">
     <table class="min-w-full text-left text-gray-100">
       <thead>
         <tr class="bg-gradient-to-r from-emerald-600 to-indigo-600 text-white text-sm uppercase tracking-wider">
-          <th class="px-5 py-4">#</th>
+          <th class="px-5 py-4">No.</th>
           <th class="px-5 py-4">Company</th>
           <th class="px-5 py-4">Role</th>
           <th class="px-5 py-4">Location</th>
-          <th class="px-5 py-4">Deadline</th>
-          <th class="px-5 py-4">Status</th>
+          <th class="px-5 py-4">Salary</th>
+          <th class="px-5 py-4 text-center">Action</th>
         </tr>
       </thead>
 
       <tbody>
-        {% for placement in placements %}
+        {% for p in placements %}
         <tr class="border-b border-white/10 row-hover">
-          <td class="px-5 py-4 font-semibold text-emerald-300">
-            {{ loop.index }}
-          </td>
-
-          <td class="px-5 py-4 font-medium company-hover">
-            {{ placement.get('company','—') }}
-          </td>
-
-          <td class="px-5 py-4 text-indigo-200">
-            {{ placement.get('role','—') }}
-          </td>
-
-          <td class="px-5 py-4 text-gray-300">
-            {{ placement.get('location','—') }}
-          </td>
-
+          <td class="px-5 py-4 font-semibold text-emerald-300">{{ loop.index }}</td>
+          <td class="px-5 py-4 font-medium text-gray-100">{{ p.company or '—' }}</td>
+          <td class="px-5 py-4 text-indigo-200">{{ p.role or '—' }}</td>
+          <td class="px-5 py-4 text-gray-300">{{ p.location or '—' }}</td>
           <td class="px-5 py-4 text-amber-200">
-            {{ placement.get('deadline','—') }}
+            {{ p.salary or '—' }}
           </td>
 
-          <!-- Status -->
-          <td class="px-5 py-4">
-            {% if placement.get('deadline') %}
-              <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-sm font-semibold pulse">
-                Open
-              </span>
-            {% else %}
-              <span class="inline-flex items-center px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-sm font-semibold">
-                Closed
-              </span>
-            {% endif %}
+          <td class="px-5 py-4 text-center">
+            <a href="{{ url_for('enhancements.placement_details', placement_id=p.id) }}"
+               class="btn-details">
+               Details
+            </a>
           </td>
         </tr>
+
         {% else %}
         <tr>
           <td colspan="6" class="px-6 py-10 text-center text-gray-400">
