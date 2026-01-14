@@ -469,7 +469,7 @@ def profile():
         if profile_exists:
             cur.execute("""
                 UPDATE profiles
-                SET full_name = COALESCE(NULLIF(?, ''), full_name),
+                SET full_name = COALESCE(NULLIF(?, ''), username),
                     phone = COALESCE(NULLIF(?, ''), phone),
                     gender = COALESCE(NULLIF(?, ''), gender),
                     course = COALESCE(NULLIF(?, ''), course),
@@ -1458,6 +1458,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
