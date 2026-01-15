@@ -10,11 +10,11 @@ pdfminer.six
 python-docx
 PyPDF2
 
-# Environment / Openrouter
-OPENROUTER_API_KEY=sk-or-v1-091...105
+
 # Extra
 requests
 
 # Deployment
 gunicorn
+
 
