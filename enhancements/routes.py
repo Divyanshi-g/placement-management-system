@@ -21,16 +21,17 @@ def init_app(app):
     import os
 import requests
 
-OPENROUTER_API_KEY = os.getenv("sk-or-v1-091...105")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 def generate_ai_answer(user_question):
+    if not OPENROUTER_API_KEY:
+        return "⚠️ API key not configured. Please contact admin."
+
     url = "https://openrouter.ai/api/v1/chat/completions"
 
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost",  # required by OpenRouter
-        "X-Title": "Placement Management System"
+        "Content-Type": "application/json"
     }
 
     payload = {
@@ -43,11 +44,14 @@ def generate_ai_answer(user_question):
         "temperature": 0.7
     }
 
-    response = requests.post(url, headers=headers, json=payload)
-    response.raise_for_status()
-
-    return response.json()["choices"][0]["message"]["content"].strip()
-
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        return response.json()["choices"][0]["message"]["content"].strip()
+    except requests.exceptions.HTTPError as e:
+        return f"⚠️ Error: {e}"
+    except Exception as e:
+        return f"⚠️ Something went wrong: {e}"
 
 # ----------------- Blueprint -----------------
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
@@ -1394,6 +1398,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
