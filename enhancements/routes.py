@@ -15,7 +15,6 @@ from flask import (
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from .api_jobs import fetch_api_jobs
 from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
 def init_app(app):
@@ -1395,6 +1394,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
