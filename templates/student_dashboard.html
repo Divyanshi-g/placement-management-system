@@ -91,24 +91,29 @@
     </div>
 
   <!-- RIGHT SIDE IMAGES -->
-<div class="flex flex-col justify-center space-y-15 mt-7 ">
+<div class="flex flex-col justify-center space-y-10  ">
 
   <div class="flex justify-center">
     <img id="slideshow1"
          src="{{ url_for('static', filename='images/student_dashboard.jpg') }}"
-         class="w-5/7 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100">
+         class="w-4/5 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100">
   </div>
 
   <div class="flex justify-center">
     <img id="slideshow2"
          src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}"
-         class="w-5/7 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100">
+         class="w-4/5 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100">
   </div>
 
   <div class="flex justify-center">
     <img id="slideshow3"
          src="{{ url_for('static', filename='images/student_dashboard4.jpg') }}"
-         class="w-5/7 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100">
+         class="w-4/5 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100">
+  </div>
+<div class="flex justify-center">
+    <img id="slideshow4"
+         src="{{ url_for('static', filename='images/student_dashboard3.jpg') }}"
+         class="w-4/5 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100">
   </div>
 
 </div>
@@ -152,6 +157,7 @@
 
   const img1 = document.getElementById("slideshow1");
   const img2 = document.getElementById("slideshow2");
+  const img3 = document.getElementById("slideshow3");
   const img3 = document.getElementById("slideshow3");
 
   function fadeSwap(img, nextSrc) {
@@ -281,6 +287,7 @@
 
 
 {% endblock %}
+
 
 
 
