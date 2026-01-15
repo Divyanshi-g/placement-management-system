@@ -1049,7 +1049,7 @@ def manage_students():
                 a.status,
                 a.applied_at,
                 a.skills,
-                a.eligibility
+                a.experience
             FROM applications a
             JOIN placements p ON p.id = a.placement_id
             WHERE a.user_id = ?
@@ -1072,8 +1072,8 @@ def manage_students():
             "cgpa": s["cgpa"],
             "bio": s["bio"],
             "linkedin": s["linkedin"],
-            "github": s["github"],
-            "eligibility": s["eligibility"],
+            "github": s["github"]
+            
 
             # 🔹 Applications (skills + resume from HERE ONLY)
             "applications": [
@@ -1083,7 +1083,8 @@ def manage_students():
                     "status": a["status"],
                     "applied_at": a["applied_at"],
                     "skills": a["skills"],
-                    "resume": a["resume"]
+                    "resume": a["resume"],
+                    "experience": a["experience"],
                 } for a in applications
             ],
 
@@ -1095,7 +1096,10 @@ def manage_students():
 
     return render_template(
         "manage_students.html",
-        students=students
+         students=students,
+         show_nav_options=True,
+         is_admin=True,
+         home_url=url_for("enhancements.admin_dashboard")
     )
 
 
@@ -1455,6 +1459,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
