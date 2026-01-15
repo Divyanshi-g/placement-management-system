@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS applications (
 
     user_id INTEGER NOT NULL,
     placement_id INTEGER NOT NULL,
-    student_name TEXT,
+    phone TEXT,
     experience TEXT,          -- Student experience
     skills TEXT,              -- Skills / technologies
     resume TEXT,            
@@ -125,6 +125,7 @@ CREATE TABLE IF NOT EXISTS notifications (
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 
