@@ -362,7 +362,7 @@ def apply(placement_id):
     db = get_db_conn()
     cur = db.cursor()
 
-    # Get placement
+    # Fetch placement
     cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
     placement = cur.fetchone()
     if not placement:
@@ -374,7 +374,7 @@ def apply(placement_id):
         db.close()
         return redirect(url_for("auth.login"))
 
-    # Check if already applied
+    # Prevent duplicate application
     cur.execute("""
         SELECT id FROM applications
         WHERE user_id = ? AND placement_id = ?
@@ -384,11 +384,12 @@ def apply(placement_id):
         return redirect(url_for("enhancements.placements"))
 
     if request.method == "POST":
+        phone = request.form.get("phone")
         skills = request.form.get("skills")
         experience = request.form.get("experience")
 
         # -------- Resume Upload --------
-        resume_filename = None
+        resume = None
         file = request.files.get("resume")
 
         if file and file.filename:
@@ -398,31 +399,30 @@ def apply(placement_id):
             resume = secure_filename(file.filename)
             file.save(os.path.join(upload_folder, resume))
 
-        # -------- Insert application (ONE ROW ONLY) --------
+        # -------- Insert Application --------
         cur.execute("""
             INSERT INTO applications
-            (user_id, placement_id, student_name, skills, experience, resume)
+            (user_id, placement_id, phone, experience, skills, resume)
             VALUES (?, ?, ?, ?, ?, ?)
         """, (
             user_id,
             placement_id,
-            skills,
+            phone,
             experience,
+            skills,
             resume
         ))
 
         db.commit()
         db.close()
-
         return redirect(url_for("enhancements.placements"))
 
     db.close()
-    return render_template(
-        "apply.html",
-        placement=placement,
-        show_nav_options=True,
-        is_admin=session.get("role") == "admin",
-        home_url=url_for("enhancements.student_dashboard")
+    return render_template("apply.html", 
+                           placement=placement,
+                           show_nav_options=True,
+                           is_admin=session.get("role") == "admin",
+                           home_url=url_for("enhancements.student_dashboard")
     )
 
 
@@ -1386,6 +1386,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
