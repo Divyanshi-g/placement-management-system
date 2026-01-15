@@ -5,7 +5,7 @@ import json
 import csv
 import sqlite3
 from datetime import datetime
-from openrouter import OpenRouter
+from openai import OpenAI
 
 from datetime import datetime
 from flask import (
@@ -1395,6 +1395,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
