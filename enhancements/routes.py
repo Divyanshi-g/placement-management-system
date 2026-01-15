@@ -17,11 +17,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
-def init_app(app):
-    # Load API key from environment variable
-   OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
 
-  def generate_ai_answer(user_question):
+# ----------------- AI Function -----------------
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # Load once globally
+
+def generate_ai_answer(user_question):
     """Send question to OpenRouter and return answer."""
     if not OPENROUTER_API_KEY:
         return "⚠️ OpenRouter API key is not set."
@@ -52,12 +53,6 @@ def init_app(app):
         return f"⚠️ Error connecting to OpenRouter: {str(e)}"
     except KeyError:
         return "⚠️ Unexpected response from OpenRouter."
-
-
-
-# ----------------- Blueprint -----------------
-enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
-
 # ------------------ Auth pages ------------------
 @enhancements_bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -1414,6 +1409,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
