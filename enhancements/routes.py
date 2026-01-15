@@ -1030,6 +1030,7 @@ def manage_students():
             pr.bio,
             pr.linkedin,
             pr.github,
+            pr.resume
         FROM users u
         LEFT JOIN profiles pr ON pr.user_id = u.id
         WHERE u.role = 'student'
@@ -1048,7 +1049,6 @@ def manage_students():
                 a.status,
                 a.applied_at,
                 a.skills,
-                a.resume,
                 a.eligibility
             FROM applications a
             JOIN placements p ON p.id = a.placement_id
@@ -1455,6 +1455,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
