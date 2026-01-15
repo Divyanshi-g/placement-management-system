@@ -19,9 +19,9 @@ from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
 def init_app(app):
     # Load API key from environment variable
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+   OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-def generate_ai_answer(user_question):
+  def generate_ai_answer(user_question):
     """Send question to OpenRouter and return answer."""
     if not OPENROUTER_API_KEY:
         return "⚠️ OpenRouter API key is not set."
@@ -1414,6 +1414,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
