@@ -77,19 +77,23 @@ CREATE TABLE IF NOT EXISTS applications (
 
     user_id INTEGER NOT NULL,
     placement_id INTEGER NOT NULL,
-    phone TEXT,
-    experience TEXT,          -- Student experience
-    skills TEXT,              -- Skills / technologies
-    resume TEXT,            
+
+    student_name TEXT,
+    course TEXT,
+
+    experience TEXT,
+    skills TEXT,
+
+    resume TEXT,
 
     status TEXT
-        CHECK(status IN ('Applied','Shortlisted','Selected','Rejected'))
+        CHECK(status IN ('Applied', 'Shortlisted', 'Selected', 'Rejected'))
         NOT NULL DEFAULT 'Applied',
 
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(placement_id) REFERENCES placements(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (placement_id) REFERENCES placements(id) ON DELETE CASCADE
 );
 
 
@@ -125,6 +129,7 @@ CREATE TABLE IF NOT EXISTS notifications (
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 
