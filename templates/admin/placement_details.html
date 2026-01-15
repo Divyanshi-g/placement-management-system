@@ -3,22 +3,54 @@
 
 <style>
 .details-container{
-    max-width: 1250px;
-    width: 95%;
-    margin: 30px auto;
-    background: linear-gradient(135deg,#e8f0ff,#ffffff);
-    padding: 35px;
-    border-radius: 16px;
-    box-shadow: 0 0 22px rgba(0,0,0,0.18);
-    min-height: 550px;
+    max-width:1250px;
+    width:95%;
+    margin:30px auto;
+    background:linear-gradient(135deg,#e8f0ff,#ffffff);
+    padding:35px;
+    border-radius:16px;
+    box-shadow:0 0 22px rgba(0,0,0,0.18);
+    min-height:550px;
 }
 
-
-/* Prevent resize on edit */
+/* Prevent resize animation */
 .details-container *{
-    transition: none !important;
+    transition:none !important;
 }
 
+/* Lock layout height */
+.detail-item{
+    margin:12px 0;
+    padding:12px;
+    border-radius:8px;
+    background:#eef2ff;
+    position:relative;
+    min-height:58px;   /* key fix */
+}
+
+/* View text */
+.view-text{
+    display:block;
+}
+
+/* Edit input overlay (same space as text) */
+.edit-input{
+    width:100%;
+    padding:8px;
+    border-radius:6px;
+    border:1px solid #666;
+    position:absolute;
+    left:0;
+    top:32px;
+    display:none;
+}
+
+/* Textarea fixed height */
+textarea.edit-input{
+    height:120px;
+}
+
+/* Top row */
 .top-row{
     display:flex;
     align-items:center;
@@ -29,7 +61,7 @@
 .logo-box img{
     width:150px;
     height:150px;
-    object-fit: contain;
+    object-fit:contain;
     border-radius:12px;
     border:1px solid #bbb;
     background:white;
@@ -41,30 +73,12 @@
     margin:0;
 }
 
-.detail-item{
-    margin:12px 0;
-    padding:12px;
-    border-radius:8px;
-    background:#eef2ff;
-}
-
 .detail-label{
     font-weight:700;
     color:#222;
 }
 
-.edit-input{
-    width:100%;
-    padding:8px;
-    border-radius:6px;
-    border:1px solid #666;
-    display:none;
-}
-
-textarea.edit-input{
-    height:120px;
-}
-
+/* Button area */
 .button-area{
     margin-top:25px;
     text-align:center;
@@ -78,11 +92,10 @@ textarea.edit-input{
     font-weight:700;
 }
 
-.edit-btn{ background:#005eff;color:white;}
-.save-btn{ background:#198754;color:white;display:none;}
-.cancel-btn{ background:#dc3545;color:white;display:none;}
+.edit-btn{background:#005eff;color:white;}
+.save-btn{background:#198754;color:white;display:none;}
+.cancel-btn{background:#dc3545;color:white;display:none;}
 </style>
-
 
 <div class="details-container">
 
@@ -98,9 +111,7 @@ textarea.edit-input{
         <h2 class="details-heading">{{ placement.company }}</h2>
     </div>
 
-
 <form method="POST">
-
 <input type="hidden" name="id" value="{{ placement.id }}">
 
 <div class="detail-item">
@@ -133,13 +144,13 @@ textarea.edit-input{
 <input class="edit-input" type="text" name="duration" value="{{ placement.duration }}">
 </div>
 
-<div class="detail-item">
+<div class="detail-item" style="min-height:155px;">
 <span class="detail-label">Eligibility:</span>
 <span class="view-text">{{ placement.eligibility }}</span>
 <textarea class="edit-input" name="eligibility">{{ placement.eligibility }}</textarea>
 </div>
 
-<div class="detail-item">
+<div class="detail-item" style="min-height:155px;">
 <span class="detail-label">Description:</span>
 <span class="view-text">{{ placement.description }}</span>
 <textarea class="edit-input" name="description">{{ placement.description }}</textarea>
@@ -161,7 +172,6 @@ textarea.edit-input{
 <input class="edit-input" type="text" name="link" value="{{ placement.link }}">
 </div>
 
-
 <div class="button-area">
 <button type="button" class="btn-main edit-btn" onclick="enableEdit()">Edit</button>
 <button type="submit" class="btn-main save-btn">Save Changes</button>
@@ -169,12 +179,11 @@ textarea.edit-input{
 </div>
 
 </form>
-
 </div>
 
 <script>
 function enableEdit(){
-document.querySelectorAll(".view-text").forEach(e=>e.style.display="none");
+document.querySelectorAll(".view-text").forEach(e=>e.style.visibility="hidden");
 document.querySelectorAll(".edit-input").forEach(e=>e.style.display="block");
 document.querySelector(".edit-btn").style.display="none";
 document.querySelector(".save-btn").style.display="inline-block";
