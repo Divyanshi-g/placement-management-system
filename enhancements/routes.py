@@ -22,7 +22,7 @@ def init_app(app):
     import os
 import requests
 
-OPENROUTER_API_KEY = os.getenv("sk-or-v1-091...105")
+OPENROUTER_API_KEY = os.getenv("sk-or-v1-091...105");
 
 def generate_ai_answer(user_question):
     url = "https://openrouter.ai/api/v1/chat/completions"
@@ -1395,4 +1395,5 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
