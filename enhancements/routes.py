@@ -5,7 +5,7 @@ import json
 import csv
 import sqlite3
 from datetime import datetime
-from openai import OpenAI 
+from openrouter import OpenRouter
 
 from datetime import datetime
 from flask import (
@@ -19,8 +19,36 @@ from .api_jobs import fetch_api_jobs
 from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
 def init_app(app):
-    client = OpenAI(api_key=os.getenv("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"))
-    return client
+    import os
+import requests
+
+OPENROUTER_API_KEY = os.getenv("sk-or-v1-091...105")
+
+def generate_ai_answer(user_question):
+    url = "https://openrouter.ai/api/v1/chat/completions"
+
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost",  # required by OpenRouter
+        "X-Title": "Placement Management System"
+    }
+
+    payload = {
+        "model": "openai/gpt-3.5-turbo",
+        "messages": [
+            {"role": "system", "content": "You are a helpful college placement assistant."},
+            {"role": "user", "content": user_question}
+        ],
+        "max_tokens": 300,
+        "temperature": 0.7
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()
+
+    return response.json()["choices"][0]["message"]["content"].strip()
+
 
 # ----------------- Blueprint -----------------
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
@@ -1257,53 +1285,6 @@ def reports():
 
 
 
-@enhancements_bp.route('/api/search_placements')
-def api_search_placements():
-    """
-    API endpoint for live search of placements.
-    Returns JSON results.
-    """
-    query = request.args.get("q", "").strip().lower()
-    conn = get_db_conn()
-    cursor = conn.cursor()
-
-    if query:
-        cursor.execute(
-            "SELECT id, title, company, description FROM placements WHERE lower(title) LIKE ? OR lower(company) LIKE ? OR lower(description) LIKE ?",
-            (f"%{query}%", f"%{query}%", f"%{query}%")
-        )
-    else:
-        cursor.execute("SELECT id, title, company, description FROM placements")
-
-    rows = cursor.fetchall()
-    conn.close()
-
-    results = []
-    for row in rows:
-        results.append({
-            "id": row["id"],
-            "title": row["title"],
-            "company": row["company"],
-            "description": (row["description"][:120] + "...") if row["description"] else ""
-        })
-
-    return jsonify({"results": results})
-
-# ------------------ File Routes ------------------
-
-@enhancements_bp.route('/uploads/profile_pics/<filename>')
-def uploaded_profile_pic(filename):
-    if os.path.exists(os.path.join(PROFILE_PIC_FOLDER, filename)):
-        return send_from_directory(PROFILE_PIC_FOLDER, filename)
-    abort(404)
-
-
-@enhancements_bp.route('/uploads/resumes/<filename>')
-def uploaded_resume(filename):
-    if os.path.exists(os.path.join(RESUME_FOLDER, filename)):
-        return send_from_directory(RESUME_FOLDER, filename)
-    abort(404)
-
 
 # ------------------ Resume Review ------------------
 
@@ -1368,46 +1349,23 @@ def uploaded_file(filename):
     return send_from_directory(folder, filename, as_attachment=False)
 
 
-# ------------------ Chatbot ------------------
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
 @enhancements_bp.route("/ask", methods=["GET", "POST"])
 def ask():
     if request.method == "GET":
         return render_template("ask.html")
 
     data = request.get_json() or {}
-    user_question = data.get("question", "").strip()
+    user_question = (data.get("question") or "").strip()
 
     if not user_question:
         return jsonify({"answer": "⚠️ Please enter a question."})
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful college placement assistant."},
-                {"role": "user", "content": user_question}
-            ],
-            max_tokens=300,
-            temperature=0.7,
-        )
-        answer = response.choices[0].message.content.strip()
+        answer = generate_ai_answer(user_question)
         return jsonify({"answer": answer})
     except Exception as e:
-        return jsonify({"answer": f"⚠️ Error fetching answer: {str(e)}"})
-@enhancements_bp.route('/chat', methods=['POST'])
-def chat_alias():
-    """
-    Backward compatibility route.
-    Proxies requests from /chat to /ask.
-    """
-    data = request.get_json() or {}
-    if "message" in data:
-        data["question"] = data.pop("message")
-    # Reuse ask_question logic
-    return ask()
+        return jsonify({"answer": f"⚠️ Error: {str(e)}"})
+
 
 
 @enhancements_bp.route("/check_resume", methods=["POST"])
@@ -1437,117 +1395,4 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
-
-
-
-# ------------------ Misc -----------------        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
