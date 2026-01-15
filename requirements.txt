@@ -10,12 +10,13 @@ pdfminer.six
 python-docx
 PyPDF2
 
-
+openai
 # Extra
 requests
 
 # Deployment
 gunicorn
+
 
 
 
