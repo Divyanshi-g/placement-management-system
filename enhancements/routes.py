@@ -359,70 +359,78 @@ def placements():
 
 @enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
 def apply(placement_id):
+    if "user_id" not in session:
+        return redirect(url_for("auth.login"))
+
     db = get_db_conn()
     cur = db.cursor()
 
-    # Fetch placement
+    # -------- Get placement --------
     cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
     placement = cur.fetchone()
     if not placement:
         db.close()
         return "Placement not found", 404
 
-    user_id = session.get("user_id")
-    if not user_id:
-        db.close()
-        return redirect(url_for("auth.login"))
+    user_id = session["user_id"]
 
-    # Prevent duplicate application
+    # -------- Prevent duplicate application --------
     cur.execute("""
         SELECT id FROM applications
         WHERE user_id = ? AND placement_id = ?
     """, (user_id, placement_id))
     if cur.fetchone():
         db.close()
+        flash("⚠️ You have already applied for this placement.", "warning")
         return redirect(url_for("enhancements.placements"))
 
+    # ================= POST =================
     if request.method == "POST":
-        phone = request.form.get("phone")
+        student_name = request.form.get("student_name")
+        course = request.form.get("course")
         skills = request.form.get("skills")
         experience = request.form.get("experience")
 
         # -------- Resume Upload --------
-        resume = None
+        resume_filename = None
         file = request.files.get("resume")
 
         if file and file.filename:
             upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
             os.makedirs(upload_folder, exist_ok=True)
 
-            resume = secure_filename(file.filename)
-            file.save(os.path.join(upload_folder, resume))
+            resume_filename = secure_filename(file.filename)
+            file.save(os.path.join(upload_folder, resume_filename))
 
         # -------- Insert Application --------
         cur.execute("""
             INSERT INTO applications
-            (user_id, placement_id, phone, experience, skills, resume)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (user_id, placement_id, student_name, course, skills, experience, resume)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
             user_id,
             placement_id,
-            phone,
-            experience,
+            student_name,
+            course,
             skills,
-            resume
+            experience,
+            resume_filename
         ))
 
         db.commit()
         db.close()
+
+        flash("✅ Application submitted successfully!", "success")
         return redirect(url_for("enhancements.placements"))
 
+    # ================= GET =================
     db.close()
-    return render_template("apply.html", 
-                           placement=placement,
-                           show_nav_options=True,
-                           is_admin=session.get("role") == "admin",
-                           home_url=url_for("enhancements.student_dashboard")
+    return render_template(
+        "apply.html",
+        placement=placement,
+        show_nav_options=True,
+        is_admin=False,
+        home_url=url_for("enhancements.student_dashboard")
     )
 
 
@@ -1386,6 +1394,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
