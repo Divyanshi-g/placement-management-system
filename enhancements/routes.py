@@ -1053,152 +1053,93 @@ def update_application_status(app_id):
     return redirect("/admin/applications")
 
 
-@enhancements_bp.route("/admin/export_applications_csv")
-def export_applications_csv():
-    """
-    Export applications matching the same filters (q, status) to CSV.
-    """
-    q = (request.args.get("q") or "").strip()
-    status_filter = (request.args.get("status") or "").strip()
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    where_clauses = ["1=1"]
-    params = []
-
-    if q:
-        where_clauses.append("(u.email LIKE ? OR p.company LIKE ? OR p.role LIKE ?)")
-        q_like = f"%{q}%"
-        params.extend([q_like, q_like, q_like])
-
-    if status_filter:
-        where_clauses.append("a.status = ?")
-        params.append(status_filter)
-
-    where_sql = " AND ".join(where_clauses)
-
-    fetch_sql = f"""
-        SELECT 
-            a.id,
-            u.id AS user_id,
-            u.email AS student_email,
-            p.company AS company,
-            p.role AS role,
-            COALESCE(a.status, 'Applied') AS status,
-            a.applied_at,
-            r.filename AS resume
-        FROM applications a
-        JOIN users u ON a.user_id = u.id
-        JOIN placements p ON a.placement_id = p.id
-        LEFT JOIN resumes r ON r.user_id = u.id
-        WHERE {where_sql}
-        ORDER BY a.applied_at DESC
-    """
-    cur.execute(fetch_sql, params)
-    rows = cur.fetchall()
-    cur.close()
-
-    # Create CSV in memory
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(["application_id", "user_id", "student_email", "company", "role", "status", "applied_at", "resume_filename"])
-    for r in rows:
-        applied_at = r["applied_at"]
-        if applied_at and not isinstance(applied_at, str):
-            try:
-                applied_at = applied_at.strftime("%Y-%m-%d %H:%M")
-            except Exception:
-                applied_at = str(applied_at)
-        writer.writerow([r["id"], r["user_id"], r["student_email"], r["company"], r["role"], r["status"], applied_at, r["resume"]])
-
-    csv_data = output.getvalue()
-    output.close()
-
-    # Return as file response
-    response = make_response(csv_data)
-    response.headers["Content-Disposition"] = "attachment; filename=applications_export.csv"
-    response.headers["Content-Type"] = "text/csv; charset=utf-8"
-    return response
-
-
-# ---------------- Manage Students ----------------
-from flask import request, redirect, url_for, flash
-
-# ✅ Manage Students (list all)
 @enhancements_bp.route("/manage_students")
 def manage_students():
     conn = get_db_conn()
     cur = conn.cursor()
+
+    # 1️⃣ Fetch all students with profile data (ONLY what is NOT in applications)
     cur.execute("""
-        SELECT id, username, email 
-        FROM users 
-        WHERE role = 'student'
-        ORDER BY created_at DESC
+        SELECT 
+            u.id,
+            u.username,
+            u.email,
+            pr.phone,
+            pr.gender,
+            pr.course,
+            pr.branch,
+            pr.passing_year,
+            pr.cgpa,
+            pr.bio,
+            pr.linkedin,
+            pr.github,
+            pr.eligibility
+        FROM users u
+        LEFT JOIN profiles pr ON pr.user_id = u.id
+        WHERE u.role = 'student'
+        ORDER BY u.created_at DESC
     """)
-    students = cur.fetchall()
+    students_raw = cur.fetchall()
+
+    students = []
+
+    # 2️⃣ For each student → fetch applications (skills + resume ONLY from applications)
+    for s in students_raw:
+        cur.execute("""
+            SELECT 
+                p.company,
+                p.role,
+                a.status,
+                a.applied_at,
+                a.skills,
+                a.resume
+            FROM applications a
+            JOIN placements p ON p.id = a.placement_id
+            WHERE a.user_id = ?
+            ORDER BY a.applied_at DESC
+        """, (s["id"],))
+        applications = cur.fetchall()
+
+        # Merge student + applications
+        students.append({
+            "id": s["id"],
+            "username": s["username"],
+            "email": s["email"],
+
+            # 🔹 Profile-only fields
+            "phone": s["phone"],
+            "gender": s["gender"],
+            "course": s["course"],
+            "branch": s["branch"],
+            "passing_year": s["passing_year"],
+            "cgpa": s["cgpa"],
+            "bio": s["bio"],
+            "linkedin": s["linkedin"],
+            "github": s["github"],
+            "eligibility": s["eligibility"],
+
+            # 🔹 Applications (skills + resume from HERE ONLY)
+            "applications": [
+                {
+                    "company": a["company"],
+                    "role": a["role"],
+                    "status": a["status"],
+                    "applied_at": a["applied_at"],
+                    "skills": a["skills"],
+                    "resume": a["resume"]
+                } for a in applications
+            ],
+
+            # 🔹 Used for search matching in cards
+            "skills": " ".join([a["skills"] or "" for a in applications])
+        })
+
     conn.close()
-    return render_template("manage_students.html", students=students)
 
-
-# ✅ Edit Student
-@enhancements_bp.route("/students/edit_student/<int:student_id>", methods=["GET", "POST"])
-def edit_student(student_id):
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    if request.method == "POST":
-        username = request.form["username"]
-        email = request.form["email"]
-        cur.execute("UPDATE users SET username=?, email=? WHERE id=?", 
-                    (username, email, student_id))
-        conn.commit()
-        conn.close()
-        flash("Student updated successfully!", "success")
-        return redirect(url_for("enhancements.manage_students"))
-
-    cur.execute("SELECT id, username, email FROM users WHERE id=?", (student_id,))
-    student = cur.fetchone()
-    conn.close()
-    return render_template("students/edit_student.html", student=student)
-
-
-# ✅ Delete Student
-@enhancements_bp.route("/students/delete/<int:student_id>", methods=["POST"])
-def delete_student(student_id):
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute("DELETE FROM users WHERE id=?", (student_id,))
-    conn.commit()
-    conn.close()
-    flash("Student deleted successfully!", "success")
-    return redirect(url_for("enhancements.manage_students"))
-
-
-# ✅ View Student Resumes
-@enhancements_bp.route("/students/student_resumes/<int:student_id>")
-def student_resumes(student_id):
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM resumes WHERE user_id=?", (student_id,))
-    resumes = cur.fetchall()
-    conn.close()
-    return render_template("students/student_resumes.html", resumes=resumes)
-# ---------------- Student Applications ----------------
-@enhancements_bp.route("/students/<int:student_id>/applications")
-def student_applications(student_id):   # 🔥 renamed
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute("""
-        SELECT a.id, p.company, p.role, a.status, a.applied_at
-        FROM applications a
-        JOIN placements p ON a.placement_id = p.id
-        WHERE a.user_id = ?
-        ORDER BY a.applied_at DESC
-    """, (student_id,))
-    applications = cur.fetchall()
-    conn.close()
-    return render_template("students/student_applications.html", applications=applications)
+    return render_template(
+        "manage_students.html",
+        students=students
+    )
 
 
 # ---------------- Placement Applications ----------------
@@ -1557,6 +1498,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
