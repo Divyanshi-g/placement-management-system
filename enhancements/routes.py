@@ -1007,7 +1007,11 @@ def update_application_status(app_id):
     conn.close()
 
     flash("Status updated successfully!", "success")
-    return redirect("/admin/applications")
+    return redirect("/admin/applications",
+                    show_nav_options=True,
+                    is_admin=True,
+                    home_url=url_for("enhancements.admin_dashboard")
+                   )
 
 
 @enhancements_bp.route("/manage_students")
@@ -1103,7 +1107,7 @@ def manage_students():
 
 # ---------------- Placement Applications ----------------
 @enhancements_bp.route("/view_applications/<int:pid>", methods=["GET"])
-def view_applications(pid):   # 🔥 renamed
+def view_applications(pid):
     conn = get_db_conn()
     cur = conn.cursor()
 
@@ -1115,16 +1119,22 @@ def view_applications(pid):   # 🔥 renamed
         conn.close()
         return redirect(url_for("enhancements.manage_placements"))
 
-    # Fetch applications + join with users
+    # Fetch applications (resume ONLY from applications table)
     cur.execute("""
-        SELECT a.id, a.status, a.applied_at,
-               u.username, u.email, r.filename AS resume
+        SELECT 
+            a.id,
+            a.status,
+            a.applied_at,
+            a.resume,
+            a.skills,
+            u.username,
+            u.email
         FROM applications a
         JOIN users u ON a.user_id = u.id
-        LEFT JOIN resumes r ON r.user_id = u.id
         WHERE a.placement_id = ?
         ORDER BY a.applied_at DESC
     """, (pid,))
+
     rows = cur.fetchall()
     conn.close()
 
@@ -1135,7 +1145,8 @@ def view_applications(pid):   # 🔥 renamed
             "applied_at": row["applied_at"],
             "username": row["username"],
             "email": row["email"],
-            "resume": row["resume"]
+            "resume": row["resume"],
+            "skills": row["skills"]
         }
         for row in rows
     ]
@@ -1143,13 +1154,11 @@ def view_applications(pid):   # 🔥 renamed
     return render_template(
         "view_applications.html",
         placement=placement,
-        applications=applications
+        applications=applications,
+        show_nav_options=True,
+        is_admin=True,
+        home_url=url_for("enhancements.admin_dashboard")
     )
-
-@enhancements_bp.route("/admin/questions1")
-def admin_questions():
-    return render_template("admin/questions1.html")
-
 
 @enhancements_bp.route("/manage_placements", methods=["GET", "POST"])
 def manage_placements():
@@ -1176,43 +1185,15 @@ def manage_placements():
         return redirect(url_for("enhancements.manage_placements"))
 
     # for GET → fetch all placements
-    cur.execute("SELECT * FROM placements ORDER BY created_at DESC")  # ⚠️ requires created_at column
+    cur.execute("SELECT * FROM placements ORDER BY DESC")  # ⚠️ requires created_at column
     placements = cur.fetchall()
     conn.close()
-    return render_template("manage_placements.html", placements=placements)
-
-
-@enhancements_bp.route("/edit_placement/<int:pid>", methods=["GET", "POST"])
-def edit_placement(pid):
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    if request.method == "POST":
-        company = request.form.get("company")
-        role = request.form.get("role")
-        location = request.form.get("location")
-        eligibility = request.form.get("eligibility")
-        deadline = request.form.get("deadline")
-        description = request.form.get("description")
-        link = request.form.get("link")
-
-        cur.execute("""
-            UPDATE placements 
-            SET company=?, role=?, location=?, eligibility=?, deadline=?, description=?, link=? 
-            WHERE id=?
-        """, (company, role, location, eligibility, deadline, description, link, pid))
-        conn.commit()
-        conn.close()
-
-        flash("✅ Placement updated!", "success")
-        return redirect(url_for("enhancements.manage_placements"))
-
-    cur.execute("SELECT * FROM placements WHERE id=?", (pid,))
-    placement = cur.fetchone()
-    conn.close()
-
-    return render_template("edit_placement.html", p=placement)
-
+    return render_template("manage_placements.html", 
+                           placements=placements,
+                           show_nav_options=True,
+                           is_admin=True,
+                           home_url=url_for("enhancements.admin_dashboard")
+                          )
 
 @enhancements_bp.route("/delete_placement/<int:pid>", methods=["POST"])
 def delete_placement(pid):
@@ -1268,7 +1249,10 @@ def reports():
         total_placements=total_placements,
         total_applications=total_applications,
         status_counts=status_counts,
-        success_rate=round(success_rate, 2)
+        success_rate=round(success_rate, 2),
+        show_nav_options=True,
+        is_admin=True,
+        home_url=url_for("enhancements.admin_dashboard")
     )
 
 
@@ -1457,6 +1441,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
