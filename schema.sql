@@ -112,6 +112,20 @@ CREATE TABLE IF NOT EXISTS chat_logs (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    user_id INTEGER NOT NULL,          -- student/admin
+    type TEXT NOT NULL,                -- application, status_update, profile, ats, practice
+    message TEXT NOT NULL,
+    link TEXT,                         -- redirect URL
+
+    is_read INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 
 
 
