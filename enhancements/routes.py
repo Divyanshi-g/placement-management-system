@@ -18,8 +18,41 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
 def init_app(app):
-    import os
-import requests
+    # Load API key from environment variable
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+def generate_ai_answer(user_question):
+    """Send question to OpenRouter and return answer."""
+    if not OPENROUTER_API_KEY:
+        return "⚠️ OpenRouter API key is not set."
+
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost",
+        "X-Title": "Placement Management System"
+    }
+
+    payload = {
+        "model": "openai/gpt-3.5-turbo",
+        "messages": [
+            {"role": "system", "content": "You are a helpful college placement assistant."},
+            {"role": "user", "content": user_question}
+        ],
+        "max_tokens": 300,
+        "temperature": 0.7
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        response.raise_for_status()
+        return response.json()["choices"][0]["message"]["content"].strip()
+    except requests.exceptions.RequestException as e:
+        return f"⚠️ Error connecting to OpenRouter: {str(e)}"
+    except KeyError:
+        return "⚠️ Unexpected response from OpenRouter."
+
 
 
 # ----------------- Blueprint -----------------
@@ -1321,50 +1354,6 @@ def uploaded_file(filename):
     return send_from_directory(folder, filename, as_attachment=False)
 
 
-# enhancements/routes.py
-import os
-import requests
-from flask import (
-    Blueprint, request, jsonify, render_template,
-    session, current_app
-)
-
-enhancements_bp = Blueprint("enhancements", __name__)
-
-# Load API key from environment variable
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-
-def generate_ai_answer(user_question):
-    """Send question to OpenRouter and return answer."""
-    if not OPENROUTER_API_KEY:
-        return "⚠️ OpenRouter API key is not set."
-
-    url = "https://openrouter.ai/api/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost",
-        "X-Title": "Placement Management System"
-    }
-
-    payload = {
-        "model": "openai/gpt-3.5-turbo",
-        "messages": [
-            {"role": "system", "content": "You are a helpful college placement assistant."},
-            {"role": "user", "content": user_question}
-        ],
-        "max_tokens": 300,
-        "temperature": 0.7
-    }
-
-    try:
-        response = requests.post(url, headers=headers, json=payload, timeout=10)
-        response.raise_for_status()
-        return response.json()["choices"][0]["message"]["content"].strip()
-    except requests.exceptions.RequestException as e:
-        return f"⚠️ Error connecting to OpenRouter: {str(e)}"
-    except KeyError:
-        return "⚠️ Unexpected response from OpenRouter."
 
 # ---------------- Chat Page ----------------
 @enhancements_bp.route("/ask", methods=["GET", "POST"])
@@ -1425,6 +1414,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
