@@ -1185,7 +1185,7 @@ def manage_placements():
         return redirect(url_for("enhancements.manage_placements"))
 
     # for GET → fetch all placements
-    cur.execute("SELECT * FROM placements ORDER BY DESC")  # ⚠️ requires created_at column
+    cur.execute("SELECT * FROM placements ORDER BY created_at DESC")  # ⚠️ requires created_at column
     placements = cur.fetchall()
     conn.close()
     return render_template("manage_placements.html", 
@@ -1441,6 +1441,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
