@@ -4,28 +4,35 @@
 
 <style>
 .profile-card{
-    max-width:1250px;
+    max-width:1400px;   /* increased width */
     margin:auto;
-    background:#e9f1ff;            /* lighter background */
-    border-radius:14px;
-    padding:30px;
-    box-shadow:0 0 25px rgba(0,0,0,.2);
+    background:#e9f1ff;
+    border-radius:16px;
+    padding:35px;
+    box-shadow:0 0 30px rgba(0,0,0,.25);
 }
 
 /* Profile Image */
 .profile-img{
-    width:190px;
-    height:190px;
+    width:200px;
+    height:200px;
     border-radius:50%;
     object-fit:cover;
     border:4px solid #4f9cff;
-    box-shadow:0 0 20px rgba(79,156,255,.4);
+    box-shadow:0 0 22px rgba(79,156,255,.45);
+}
+
+/* Main Heading */
+.main-heading{
+    font-size:36px;
+    font-weight:800;
+    color:#0b1f3a;
 }
 
 /* Section title */
 .section-title{
     color:#0b1f3a;
-    font-size:22px;
+    font-size:24px;
     font-weight:700;
 }
 
@@ -33,12 +40,12 @@
 .info-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:12px 18px;
+    gap:14px 20px;
 }
 
 .info-box{
     background:white;
-    padding:10px 12px;
+    padding:12px 14px;
     border-radius:10px;
     border:1px solid #d9e4ff;
 }
@@ -56,7 +63,7 @@
 /* Badge containers */
 .badge-box{
     background:#e8f1ff;
-    padding:10px;
+    padding:12px;
     border-radius:10px;
     color:#000;
 }
@@ -64,25 +71,25 @@
 /* Resume Button */
 .resume-btn{
     background:#0066ff !important;
-    padding:10px 18px;
+    padding:12px 22px;
     border-radius:10px;
     font-size:16px;
     font-weight:700;
     border:none;
+    display:inline-flex;
+    align-items:center;
 }
 </style>
 
-
-
 <div class="container mb-5">
 
-    <h2 class="text-center text-4x2 fw-bold">
+    <h2 class="text-center main-heading">
         👤 Student Profile Details
     </h2>
 
     <hr class="text-light">
 
-    <div class="profile-card mt-4 align-item-center">
+    <div class="profile-card mt-4">
 
         <div class="row align-items-center">
 
@@ -99,111 +106,108 @@
                          class="profile-img">
                 {% endif %}
 
-                <p class="text-light mt-3 fw-bold">
+                <p class="text-dark mt-3 fw-bold fs-5">
                     {{ student.username }}
                 </p>
 
-                <p class="badge bg-info text-dark p-2">
+                <p class="badge bg-info text-dark p-2 fs-6">
                     {{ student.email }}
                 </p>
 
             </div>
-
 
             <!-- Details -->
             <div class="col-md-8">
 
                 <p class="section-title">📄 Profile Information</p>
 
-<div class="info-grid">
+                <div class="info-grid">
 
-    <div class="info-box">
-        <span class="info-label">Phone</span><br>
-        <span class="info-value">{{ student.phone or "Not Provided" }}</span>
-    </div>
+                    <div class="info-box">
+                        <span class="info-label">Phone</span><br>
+                        <span class="info-value">{{ student.phone or "Not Provided" }}</span>
+                    </div>
 
-    <div class="info-box">
-        <span class="info-label">Gender</span><br>
-        <span class="info-value">{{ student.gender or "Not Provided" }}</span>
-    </div>
+                    <div class="info-box">
+                        <span class="info-label">Gender</span><br>
+                        <span class="info-value">{{ student.gender or "Not Provided" }}</span>
+                    </div>
 
-    <div class="info-box">
-        <span class="info-label">Course</span><br>
-        <span class="info-value">{{ student.course or "Not Provided" }}</span>
-    </div>
+                    <div class="info-box">
+                        <span class="info-label">Course</span><br>
+                        <span class="info-value">{{ student.course or "Not Provided" }}</span>
+                    </div>
 
-    <div class="info-box">
-        <span class="info-label">Branch</span><br>
-        <span class="info-value">{{ student.branch or "Not Provided" }}</span>
-    </div>
+                    <div class="info-box">
+                        <span class="info-label">Branch</span><br>
+                        <span class="info-value">{{ student.branch or "Not Provided" }}</span>
+                    </div>
 
-    <div class="info-box">
-        <span class="info-label">Passing Year</span><br>
-        <span class="info-value">{{ student.passing_year or "Not Provided" }}</span>
-    </div>
+                    <div class="info-box">
+                        <span class="info-label">Passing Year</span><br>
+                        <span class="info-value">{{ student.passing_year or "Not Provided" }}</span>
+                    </div>
 
-    <div class="info-box">
-        <span class="info-label">CGPA</span><br>
-        <span class="info-value">{{ student.cgpa or "Not Provided" }}</span>
-    </div>
-</div>
+                    <div class="info-box">
+                        <span class="info-label">CGPA</span><br>
+                        <span class="info-value">{{ student.cgpa or "Not Provided" }}</span>
+                    </div>
+                </div>
 
-<br>
+                <br>
 
-<div class="badge-box">
-    <b>Skills:</b><br>
-    {{ student.skills or "Not Provided" }}
-</div>
+                <div class="badge-box">
+                    <b>Skills:</b><br>
+                    {{ student.skills or "Not Provided" }}
+                </div>
 
-<br>
+                <br>
 
-<div class="badge-box">
-    <b>Certifications:</b><br>
-    {{ student.certifications or "Not Provided" }}
-</div>
+                <div class="badge-box">
+                    <b>Certifications:</b><br>
+                    {{ student.certifications or "Not Provided" }}
+                </div>
 
-<br>
+                <br>
 
-<div>
-    <b>Bio:</b><br>
-    {{ student.bio or "Not Provided" }}
-</div>
+                <div>
+                    <b>Bio:</b><br>
+                    {{ student.bio or "Not Provided" }}
+                </div>
 
-<br>
+                <br>
 
-<!-- Links -->
-<div class="mt-3 d-flex gap-3">
+                <!-- Links -->
+                <div class="mt-3 d-flex gap-3 flex-wrap">
 
-    {% if student.linkedin %}
-        <a href="{{ student.linkedin }}" target="_blank"
-           class="btn btn-primary">
-           🔗 Open LinkedIn
-        </a>
-    {% endif %}
+                    {% if student.linkedin %}
+                        <a href="{{ student.linkedin }}" target="_blank"
+                           class="btn btn-primary">
+                           🔗 Open LinkedIn
+                        </a>
+                    {% endif %}
 
-    {% if student.github %}
-        <a href="{{ student.github }}" target="_blank"
-           class="btn btn-dark">
-           💻 View GitHub
-        </a>
-    {% endif %}
+                    {% if student.github %}
+                        <a href="{{ student.github }}" target="_blank"
+                           class="btn btn-dark">
+                           💻 View GitHub
+                        </a>
+                    {% endif %}
 
-    {% if student.resume %}
-        <a class="resume-btn text-white"
-           href="{{ url_for('static', filename='uploads/resumes/' ~ student.resume) }}"
-           download>
-           📥 Download Resume
-        </a>
-    {% endif %}
-</div>
+                    {% if student.resume %}
+                        <a class="resume-btn text-white"
+                           href="{{ url_for('static', filename='uploads/resumes/' ~ student.resume) }}"
+                           download>
+                           📥 Download Resume
+                        </a>
+                    {% endif %}
+                </div>
 
             </div>
         </div>
 
     </div>
 </div>
-
-
 
 <!-- Modal Viewer -->
 <div id="imageModal"
@@ -214,7 +218,6 @@
     <img id="modalImg"
          style="max-width:75%; max-height:80%; border-radius:12px;">
 </div>
-
 
 <script>
 function openImageModal(src){
