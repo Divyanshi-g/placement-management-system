@@ -629,45 +629,49 @@ def status():
         show_nav_options=True,
         home_url=url_for("enhancements.student_dashboard")
     )
- @enhancements_bp.route("/admin/update-application-status", methods=["POST"])
+@enhancements_bp.route("/admin/update-application-status", methods=["POST"])
 def update_application_status():
-    if session.get("role") != "admin":
+    if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("enhancements.login"))
 
-    app_id = request.form["application_id"]
-    new_status = request.form["status"]
+    application_id = request.form.get("application_id")
+    new_status = request.form.get("status")
 
     conn = get_db_conn()
     cursor = conn.cursor()
 
+    # Update application status
     cursor.execute("""
         UPDATE applications
         SET status = ?
         WHERE id = ?
-    """, (new_status, app_id))
+    """, (new_status, application_id))
 
-    # fetch student + placement
+    # Fetch user for notification
     cursor.execute("""
-        SELECT user_id, placement_id
+        SELECT user_id
         FROM applications
         WHERE id = ?
-    """, (app_id,))
+    """, (application_id,))
     row = cursor.fetchone()
 
-    cursor.execute("""
-        INSERT INTO notifications (user_id, type, message, link)
-        VALUES (?, 'status_update', ?, ?)
-    """, (
-        row["user_id"],
-        f"Your application status has been updated to {new_status}",
-        "/student/applications"
-    ))
+    if row:
+        cursor.execute("""
+            INSERT INTO notifications (user_id, type, message, link)
+            VALUES (?, ?, ?, ?)
+        """, (
+            row["user_id"],
+            "status_update",
+            f"Your application status has been updated to {new_status}",
+            "/student/applications"
+        ))
 
     conn.commit()
     conn.close()
 
-    flash("Application status updated", "success")
-    return redirect(url_for("enhancements.admin_dashboard"))
+    flash("Application status updated successfully", "success")
+    return redirect(url_for("enhancements.admin_applications"))
+
 
 #--------logout--------
 @enhancements_bp.route("/logout")
@@ -1553,6 +1557,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
