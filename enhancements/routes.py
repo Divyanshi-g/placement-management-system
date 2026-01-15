@@ -366,73 +366,64 @@ def apply(placement_id):
     cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
     placement = cur.fetchone()
     if not placement:
+        db.close()
         return "Placement not found", 404
 
-    user_id = session["user_id"]
+    user_id = session.get("user_id")
+    if not user_id:
+        db.close()
+        return redirect(url_for("auth.login"))
 
     # Check if already applied
     cur.execute("""
         SELECT id FROM applications
         WHERE user_id = ? AND placement_id = ?
     """, (user_id, placement_id))
-    already = cur.fetchone()
-
-    if already:
+    if cur.fetchone():
+        db.close()
         return redirect(url_for("enhancements.placements"))
 
-    # ------------- POST SUBMISSION -------------
     if request.method == "POST":
-        phone = request.form.get("phone")
-        course = request.form.get("course")
+        student_name = request.form.get("student_name")
         skills = request.form.get("skills")
         experience = request.form.get("experience")
 
-        # ---------- Resume Upload ----------
-        resume_file = None
+        # -------- Resume Upload --------
+        resume_filename = None
         file = request.files.get("resume")
 
-        if file and file.filename != "":
+        if file and file.filename:
             upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
             os.makedirs(upload_folder, exist_ok=True)
 
-            filename = secure_filename(file.filename)
-            resume_path = os.path.join(upload_folder, filename)
+            resume_filename = secure_filename(file.filename)
+            file.save(os.path.join(upload_folder, resume_filename))
 
-            file.save(resume_path)
-            resume_file = filename
-
-        # ---------- Ensure user exists ----------
-        cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
-        if not cur.fetchone():
-            db.close()
-            return "User not found in users table.", 400
-
-        # ---------- Insert Applications ----------
-        cur.execute("""
-            INSERT INTO applications (user_id, placement_id)
-            VALUES (?, ?)
-        """, (int(user_id), placement_id))
-
-        app_id = cur.lastrowid
-
-        # ---------- Insert Application Details ----------
+        # -------- Insert application (ONE ROW ONLY) --------
         cur.execute("""
             INSERT INTO applications
-            (placement_id, phone, course, skills, experience, resume_file)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (app_id, phone, course, skills, experience, resume_file))
+            (user_id, placement_id, student_name, skills, experience, resume)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (
+            user_id,
+            placement_id,
+            student_name,
+            skills,
+            experience,
+            resume_filename
+        ))
 
         db.commit()
+        db.close()
+
         return redirect(url_for("enhancements.placements"))
 
-    # ---------- GET REQUEST ----------
+    db.close()
     return render_template(
         "apply.html",
-        placement=placement,
-        show_nav_options=True,
-        is_admin=False,
-        home_url=url_for("enhancements.student_dashboard")
+        placement=placement
     )
+
 
 # ------------------ Profile ------------------
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
@@ -1394,6 +1385,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
