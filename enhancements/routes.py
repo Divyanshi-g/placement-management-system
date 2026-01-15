@@ -567,6 +567,108 @@ def practice():
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
+@enhancements_bp.route("/status")
+def status():
+    if "user_id" not in session or session.get("role") != "student":
+        return redirect(url_for("enhancements.login"))
+
+    user_id = session["user_id"]
+
+    conn = get_db_conn()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT 
+            applications.id,
+            applications.status,
+            applications.applied_at,
+            applications.skills,
+            applications.experience,
+            applications.resume,
+
+            placements.company,
+            placements.role,
+            placements.location,
+            placements.salary,
+            placements.job_type,
+            placements.duration,
+            placements.eligibility,
+            placements.deadline
+        FROM applications
+        JOIN placements ON placements.id = applications.placement_id
+        WHERE applications.user_id = ?
+        ORDER BY applications.applied_at DESC
+    """, (user_id,))
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    applications = []
+    for r in rows:
+        applications.append({
+            "status": r["status"],
+            "applied_at": r["applied_at"],
+            "skills": r["skills"],
+            "experience": r["experience"],
+            "resume": r["resume"],
+            "placement": {
+                "company": r["company"],
+                "role": r["role"],
+                "location": r["location"],
+                "salary": r["salary"],
+                "job_type": r["job_type"],
+                "duration": r["duration"],
+                "eligibility": r["eligibility"],
+                "deadline": r["deadline"]
+            }
+        })
+
+    return render_template(
+        "status.html",
+        applications=applications,
+        show_nav_options=True,
+        home_url=url_for("enhancements.student_dashboard")
+    )
+ @enhancements_bp.route("/admin/update-application-status", methods=["POST"])
+def update_application_status():
+    if session.get("role") != "admin":
+        return redirect(url_for("enhancements.login"))
+
+    app_id = request.form["application_id"]
+    new_status = request.form["status"]
+
+    conn = get_db_conn()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE applications
+        SET status = ?
+        WHERE id = ?
+    """, (new_status, app_id))
+
+    # fetch student + placement
+    cursor.execute("""
+        SELECT user_id, placement_id
+        FROM applications
+        WHERE id = ?
+    """, (app_id,))
+    row = cursor.fetchone()
+
+    cursor.execute("""
+        INSERT INTO notifications (user_id, type, message, link)
+        VALUES (?, 'status_update', ?, ?)
+    """, (
+        row["user_id"],
+        f"Your application status has been updated to {new_status}",
+        "/student/applications"
+    ))
+
+    conn.commit()
+    conn.close()
+
+    flash("Application status updated", "success")
+    return redirect(url_for("enhancements.admin_dashboard"))
+
 #--------logout--------
 @enhancements_bp.route("/logout")
 def logout():
@@ -1450,19 +1552,8 @@ def check_resume():
 
 
 
-# ------------------ Misc -----------------
+# ------------------ Misc -----------------        
 
-
-
-@enhancements_bp.route("/settings")
-def settings():
-    return render_template("settings.html")
-
-
-@enhancements_bp.route("/status")
-def status():
-
-    return render_template("status.html")            
 
 
 
