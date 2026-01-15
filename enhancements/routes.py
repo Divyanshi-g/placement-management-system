@@ -54,10 +54,6 @@ def generate_ai_answer(user_question):
         return f"⚠️ Error connecting to OpenRouter: {str(e)}"
     except KeyError:
         return "⚠️ Unexpected response from OpenRouter."
-@enhancements_bp.route("/test-key")
-def test_key():
-    return str(bool(OPENROUTER_API_KEY))
-
 # ------------------ Auth pages ------------------
 @enhancements_bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -1414,6 +1410,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
