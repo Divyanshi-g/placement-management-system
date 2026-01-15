@@ -1,8 +1,11 @@
 {% extends "base.html" %}
+
+{% block title %}Chat with Assistant{% endblock %}
+
 {% block content %}
 <style>
-/* Right Drawer */
-.history-drawer{
+/* ---------------- Right Drawer ---------------- */
+.history-drawer {
   position: fixed;
   top: 0;
   right: -320px;
@@ -13,35 +16,38 @@
   transition: 0.4s;
   padding: 15px;
   z-index: 999;
+  overflow-y: auto;
 }
-.history-open{ right:0; }
+.history-open { right: 0; }
 
 /* Drawer button */
-.drawer-btn{
+.drawer-btn {
   position: fixed;
   right: 10px;
   top: 40%;
-  background:#2563eb;
-  color:white;
-  padding:12px;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:20px;
-  z-index:1000;
+  background: #2563eb;
+  color: white;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1000;
 }
-.history-item{
-  padding:8px;
-  background:#f3f4f6;
-  margin:6px 0;
-  border-radius:8px;
-  cursor:pointer;
+
+/* Chat history items */
+.history-item {
+  padding: 8px;
+  background: #f3f4f6;
+  margin: 6px 0;
+  border-radius: 8px;
+  cursor: pointer;
 }
-.history-item:hover{ background:#dbeafe; }
+.history-item:hover { background: #dbeafe; }
 </style>
 
-<div class="max-w-4xl mx-auto mt-16 p-6 bg-emerald-100 rounded-2xl shadow-2x1">
+<div class="max-w-4xl mx-auto mt-16 p-6 bg-emerald-100 rounded-2xl shadow-2xl">
   <h1 class="text-4xl font-extrabold text-center mb-8 text-gray-800">
-    ❓ Clear Your Doubts
+    ❓ Ask Your Questions
   </h1>
 
   <!-- Chat Window -->
@@ -54,7 +60,7 @@
     <input id="chat-input" type="text" placeholder="Type your question..."
       class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-400 shadow-sm">
     <button onclick="sendChat()" 
-      class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-r-lg">
+      class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-r-lg hover:scale-105 transition">
       Ask
     </button>
   </div>
@@ -70,65 +76,79 @@
 </div>
 
 <script>
+/* ---------------- Send on Enter ---------------- */
 document.getElementById("chat-input")
   .addEventListener("keypress", function(e){
     if(e.key === "Enter") sendChat();
 });
 
-function toggleDrawer(){
-  document.getElementById("historyDrawer")
-  .classList.toggle("history-open");
+/* ---------------- Toggle History Drawer ---------------- */
+function toggleDrawer() {
+  document.getElementById("historyDrawer").classList.toggle("history-open");
   loadHistory();
 }
 
-async function sendChat(){
-  let input = document.getElementById("chat-input");
-  let msg = input.value.trim();
-  if(!msg) return;
+/* ---------------- Send Chat Message ---------------- */
+async function sendChat() {
+  const input = document.getElementById("chat-input");
+  const msg = input.value.trim();
+  if (!msg) return;
 
-  let win = document.getElementById("chat-window");
+  const win = document.getElementById("chat-window");
   win.innerHTML += `<div class="mb-2"><b class="text-blue-700">You:</b> ${msg}</div>`;
   input.value = "";
-
-  let res = await fetch("/ask",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({question:msg})
-  });
-
-  let data = await res.json();
-  win.innerHTML += `<div class="mb-2"><b class="text-green-700">Bot:</b> ${data.answer}</div>`;
   win.scrollTop = win.scrollHeight;
 
-  loadHistory();
-}
-
-async function loadHistory(){
-  let box = document.getElementById("historyContent");
-  let res = await fetch("/chat/history");
-  let data = await res.json();
-
-  box.innerHTML = "";
-
-  for(let group in data){
-    box.innerHTML += `<h3 class="font-semibold mt-2">${group}</h3>`;
-    data[group].forEach(item=>{
-      box.innerHTML += `<div class="history-item"
-        onclick="loadConversation(${item.id})">${item.message}</div>`;
+  try {
+    const res = await fetch("/ask", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({question: msg})
     });
+    const data = await res.json();
+
+    win.innerHTML += `<div class="mb-2"><b class="text-green-700">Bot:</b> ${data.answer}</div>`;
+    win.scrollTop = win.scrollHeight;
+
+    loadHistory();
+  } catch (err) {
+    win.innerHTML += `<div class="text-red-500">⚠️ Error connecting to server.</div>`;
+    win.scrollTop = win.scrollHeight;
   }
 }
 
-async function loadConversation(id){
-  let win = document.getElementById("chat-window");
+/* ---------------- Load Chat History ---------------- */
+async function loadHistory() {
+  const box = document.getElementById("historyContent");
+  try {
+    const res = await fetch("/chat/history");
+    const data = await res.json();
+
+    box.innerHTML = "";
+    for (let group in data) {
+      box.innerHTML += `<h3 class="font-semibold mt-2">${group}</h3>`;
+      data[group].forEach(item => {
+        box.innerHTML += `<div class="history-item" onclick="loadConversation(${item.id})">${item.message}</div>`;
+      });
+    }
+  } catch(e) {
+    box.innerHTML = "⚠️ Cannot load history.";
+  }
+}
+
+/* ---------------- Load Single Conversation ---------------- */
+async function loadConversation(id) {
+  const win = document.getElementById("chat-window");
   win.innerHTML = "Loading conversation...";
-
-  let res = await fetch(`/chat/history/${id}`);
-  let data = await res.json();
-
-  win.innerHTML = "";
-  win.innerHTML += `<div class="mb-2"><b class="text-blue-700">You:</b> ${data.message}</div>`;
-  win.innerHTML += `<div class="mb-2"><b class="text-green-700">Bot:</b> ${data.answer}</div>`;
+  try {
+    const res = await fetch(`/chat/history/${id}`);
+    const data = await res.json();
+    win.innerHTML = `<div class="mb-2"><b class="text-blue-700">You:</b> ${data.message}</div>`;
+    win.innerHTML += `<div class="mb-2"><b class="text-green-700">Bot:</b> ${data.answer}</div>`;
+    win.scrollTop = win.scrollHeight;
+  } catch(e) {
+    win.innerHTML = "⚠️ Cannot load conversation.";
+  }
 }
 </script>
 {% endblock %}
