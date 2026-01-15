@@ -4,6 +4,7 @@ import os
 import json
 import csv
 import sqlite3
+import request
 from datetime import datetime
 from openai import OpenAI
 
@@ -1409,6 +1410,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
