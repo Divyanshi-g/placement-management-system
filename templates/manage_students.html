@@ -1,71 +1,199 @@
 {% extends "base.html" %}
-{% block nav_options %}
-  <a href="{{ url_for('enhancements.admin_dashboard') }}" class="hover:text-yellow-300 transition">Home</a>
-  <a href="{{ url_for('enhancements.about') }}" class="hover:text-yellow-300 transition">About</a>
-  <a href="{{ url_for('enhancements.rate') }}" class="hover:text-yellow-300 transition">Rate</a>
-  <a href="{{ url_for('enhancements.logout') }}" class="hover:text-yellow-300 transition">Logout</a>
-{% endblock %}
 
 {% block title %}Manage Students{% endblock %}
 
 {% block content %}
-<div data-aos="fade-up" class="mt-20 max-w-5xl mx-auto">
-  <h2 class="text-3xl font-bold text-indigo-600 mb-6 text-center">👩‍🎓 Manage Students</h2>
+<div class="mt-20 max-w-6xl mx-auto px-4">
+    <!-- Page Heading -->
+    <h2 class="text-4xl font-extrabold text-black mb-8 text-center animate-fade-in">👩‍🎓 Manage Students</h2>
 
-  <!-- Add Student Button -->
-  <div class="flex justify-end mb-4">
-    <a href="{{ url_for('enhancements.admin_students') }}" 
-       class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
-       ➕ Add Student
-    </a>
-  </div>
+    <!-- Search Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <input type="text" placeholder="Eligibility" id="searchEligibility" class="glass-input">
+        <input type="text" placeholder="Course" id="searchCourse" class="glass-input">
+        <input type="text" placeholder="Branch" id="searchBranch" class="glass-input">
+        <input type="text" placeholder="CGPA / Skill" id="searchCgpaSkill" class="glass-input">
+    </div>
+    <div class="flex justify-end mb-8">
+        <button id="searchBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">Search</button>
+    </div>
 
-  <!-- Students Table -->
-  <div class="overflow-x-auto bg-white/10 p-6 rounded-lg shadow-lg">
-    {% if students %}
-    <table class="w-full border-collapse">
-      <thead>
-        <tr class="bg-indigo-600 text-white">
-          <th class="px-4 py-2">#</th>
-          <th class="px-4 py-2">Name</th>
-          <th class="px-4 py-2">Email</th>
-          <th class="px-4 py-2">Resumes</th>
-          <th class="px-4 py-2">Applications</th>
-          <th class="px-4 py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-100">
+    <!-- Student Cards -->
+    <div id="studentContainer" class="space-y-6">
         {% for s in students %}
-        <tr class="border-b border-gray-700 hover:bg-white/5">
-          <td class="px-4 py-2">{{ loop.index }}</td>
-          <td class="px-4 py-2">{{ s['username'] }}</td>
-          <td class="px-4 py-2">{{ s['email'] }}</td>
-          <td class="px-4 py-2">
-            <a href="{{ url_for('enhancements.student_resumes', student_id=s['id']) }}" 
-   class="text-blue-900 hover:underline">View</a>
+        <div class="student-card glass-card p-6 rounded-xl shadow-lg relative" 
+             data-eligibility="{{ s['eligibility']|default('') }}" 
+             data-course="{{ s['course']|default('') }}" 
+             data-branch="{{ s['branch']|default('') }}" 
+             data-cgpa="{{ s['cgpa']|default('') }}" 
+             data-skills="{{ s['skills']|default('') }}">
+            
+            <!-- Basic Info -->
+            <div class="flex justify-between items-start">
+                <div class="space-y-1">
+                    <h3 class="text-xl font-bold">{{ s['username'] }}</h3>
+                    <p class="text-gray-700">{{ s['email'] }}</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="details-btn bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded transition">Details</button>
+                    <button class="remove-btn bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded transition">Remove</button>
+                </div>
+            </div>
 
-          </td>
-          <td class="px-4 py-2">
-            <a href="{{ url_for('enhancements.student_applications', student_id=s['id']) }}" class="text-green-900 hover:underline">History</a>
-          </td>
-         <td>
-<a href="{{ url_for('enhancements.edit_student', student_id=s['id']) }}" 
-   class="text-yellow-800 hover:underline">Edit</a> |
+            <!-- Fields shown based on search -->
+            <div class="mt-4 grid grid-cols-2 gap-4">
+                <p class="field eligibility"><span class="font-bold">Eligibility:</span> {{ s['eligibility']|default('N/A') }}</p>
+                <p class="field course"><span class="font-bold">Course:</span> {{ s['course']|default('N/A') }}</p>
+                <p class="field branch"><span class="font-bold">Branch:</span> {{ s['branch']|default('N/A') }}</p>
+                <p class="field cgpa-skill"><span class="font-bold">CGPA / Skills:</span> {{ s['cgpa']|default('') }} / {{ s['skills']|default('') }}</p>
+            </div>
 
-<a href="{{ url_for('enhancements.delete_student', student_id=s['id']) }}" 
-   class="text-red-900 hover:underline"
-   onclick="return confirm('Are you sure you want to remove this student?');">
-   Remove
-</a>
+            <!-- Details Panel -->
+            <div class="details-panel mt-4 p-4 rounded-lg bg-white/50 shadow-lg hidden">
+                <h4 class="font-bold text-lg mb-2">Profile Info:</h4>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <p><span class="font-bold">Username:</span> {{ s['username'] }}</p>
+                    <p><span class="font-bold">Email:</span> {{ s['email'] }}</p>
+                    <p><span class="font-bold">Phone:</span> {{ s['phone']|default('N/A') }}</p>
+                    <p><span class="font-bold">Gender:</span> {{ s['gender']|default('N/A') }}</p>
+                    <p><span class="font-bold">Course:</span> {{ s['course']|default('N/A') }}</p>
+                    <p><span class="font-bold">Branch:</span> {{ s['branch']|default('N/A') }}</p>
+                    <p><span class="font-bold">Passing Year:</span> {{ s['passing_year']|default('N/A') }}</p>
+                    <p><span class="font-bold">CGPA:</span> {{ s['cgpa']|default('N/A') }}</p>
+                    <p class="col-span-2"><span class="font-bold">Bio:</span> {{ s['bio']|default('N/A') }}</p>
+                    <p><span class="font-bold">LinkedIn:</span> <a href="{{ s['linkedin']|default('#') }}" target="_blank">{{ s['linkedin']|default('N/A') }}</a></p>
+                    <p><span class="font-bold">GitHub:</span> <a href="{{ s['github']|default('#') }}" target="_blank">{{ s['github']|default('N/A') }}</a></p>
+                </div>
 
-          </td>
-        </tr>
+                <h4 class="font-bold text-lg mb-2">Applications:</h4>
+                <table class="w-full text-sm border-collapse border border-gray-300">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="border px-2 py-1">Company</th>
+                            <th class="border px-2 py-1">Role</th>
+                            <th class="border px-2 py-1">Status</th>
+                            <th class="border px-2 py-1">Applied At</th>
+                            <th class="border px-2 py-1">Skills</th>
+                            <th class="border px-2 py-1">Resume</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in s['applications'] %}
+                        <tr>
+                            <td class="border px-2 py-1">{{ a['company'] }}</td>
+                            <td class="border px-2 py-1">{{ a['role'] }}</td>
+                            <td class="border px-2 py-1">{{ a['status'] }}</td>
+                            <td class="border px-2 py-1">{{ a['applied_at'] }}</td>
+                            <td class="border px-2 py-1">{{ a['skills'] }}</td>
+                            <td class="border px-2 py-1">{{ a['resume']|default('N/A') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
         {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-      <p class="text-gray-300">No students found.</p>
-    {% endif %}
-  </div>
+    </div>
 </div>
+
+<style>
+/* Glass input */
+.glass-input {
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(10px);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.6);
+    outline: none;
+    font-size: 14px;
+}
+
+/* Card glass effect */
+.glass-card {
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Highlighted field */
+.field.highlight {
+    background: #fef3c7;
+    border-radius: 5px;
+    padding: 1px 3px;
+}
+
+/* Animation fade in */
+@keyframes fadeIn { from {opacity:0} to {opacity:1} }
+.animate-fade-in { animation: fadeIn 0.8s ease forwards; }
+
+/* Remove button animation */
+.student-card.removed { animation: fadeOut 0.5s ease forwards; opacity:0; height:0; margin:0; padding:0; }
+@keyframes fadeOut { from {opacity:1;height:auto} to {opacity:0;height:0} }
+</style>
+
+<script>
+// Search and highlight
+const searchBtn = document.getElementById('searchBtn');
+searchBtn.addEventListener('click', () => {
+    const eligibility = document.getElementById('searchEligibility').value.toLowerCase();
+    const course = document.getElementById('searchCourse').value.toLowerCase();
+    const branch = document.getElementById('searchBranch').value.toLowerCase();
+    const cgpaSkill = document.getElementById('searchCgpaSkill').value.toLowerCase();
+
+    const cards = document.querySelectorAll('.student-card');
+
+    cards.forEach(card => {
+        let match = false;
+        // Reset highlights
+        card.querySelectorAll('.field').forEach(f => f.classList.remove('highlight'));
+
+        // Fields
+        const fEligibility = card.dataset.eligibility.toLowerCase();
+        const fCourse = card.dataset.course.toLowerCase();
+        const fBranch = card.dataset.branch.toLowerCase();
+        const fCgpa = card.dataset.cgpa.toLowerCase();
+        const fSkills = card.dataset.skills.toLowerCase();
+
+        // Check each
+        if (eligibility && fEligibility.includes(eligibility)) {
+            card.querySelector('.field.eligibility').classList.add('highlight'); match=true;
+        }
+        if (course && fCourse.includes(course)) {
+            card.querySelector('.field.course').classList.add('highlight'); match=true;
+        }
+        if (branch && fBranch.includes(branch)) {
+            card.querySelector('.field.branch').classList.add('highlight'); match=true;
+        }
+        if (cgpaSkill && (fCgpa.includes(cgpaSkill) || fSkills.includes(cgpaSkill))) {
+            card.querySelector('.field.cgpa-skill').classList.add('highlight'); match=true;
+        }
+
+        // Show card only if any field matches or search is empty
+        if (!eligibility && !course && !branch && !cgpaSkill) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = match ? 'block' : 'none';
+        }
+    });
+});
+
+// Details toggle
+document.querySelectorAll('.details-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const card = e.target.closest('.student-card');
+        const panel = card.querySelector('.details-panel');
+        panel.classList.toggle('hidden');
+    });
+});
+
+// Remove card animation
+document.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const card = e.target.closest('.student-card');
+        card.classList.add('removed');
+        setTimeout(()=> card.remove(), 500);
+    });
+});
+</script>
+
 {% endblock %}
