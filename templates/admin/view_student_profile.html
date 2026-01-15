@@ -4,27 +4,26 @@
 
 <style>
 .profile-card{
-    max-width:1400px;   /* increased width */
+    max-width:1550px;      /* wider card */
     margin:auto;
     background:#e9f1ff;
     border-radius:16px;
-    padding:35px;
-    box-shadow:0 0 30px rgba(0,0,0,.25);
+    padding:24px 30px;     /* reduced vertical padding */
+    box-shadow:0 0 28px rgba(0,0,0,.25);
 }
 
 /* Profile Image */
 .profile-img{
-    width:200px;
-    height:200px;
+    width:190px;
+    height:190px;
     border-radius:50%;
     object-fit:cover;
     border:4px solid #4f9cff;
-    box-shadow:0 0 22px rgba(79,156,255,.45);
 }
 
 /* Main Heading */
 .main-heading{
-    font-size:36px;
+    font-size:38px;
     font-weight:800;
     color:#0b1f3a;
 }
@@ -32,20 +31,21 @@
 /* Section title */
 .section-title{
     color:#0b1f3a;
-    font-size:24px;
+    font-size:22px;
     font-weight:700;
+    margin-bottom:10px;
 }
 
 /* Info Grid */
 .info-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:14px 20px;
+    gap:10px 18px;      /* reduced gap */
 }
 
 .info-box{
     background:white;
-    padding:12px 14px;
+    padding:8px 12px;   /* reduced height */
     border-radius:10px;
     border:1px solid #d9e4ff;
 }
@@ -53,35 +53,37 @@
 .info-label{
     font-weight:700;
     color:#2b4c7e;
+    font-size:14px;
 }
 
 .info-value{
     color:#000;
     font-weight:600;
+    font-size:14px;
 }
 
 /* Badge containers */
 .badge-box{
     background:#e8f1ff;
-    padding:12px;
+    padding:8px 12px;   /* reduced */
     border-radius:10px;
     color:#000;
+    font-size:14px;
 }
 
 /* Resume Button */
 .resume-btn{
     background:#0066ff !important;
-    padding:12px 22px;
+    padding:10px 20px;
     border-radius:10px;
-    font-size:16px;
+    font-size:15px;
     font-weight:700;
     border:none;
-    display:inline-flex;
-    align-items:center;
+    white-space:nowrap;
 }
 </style>
 
-<div class="container mb-5">
+<div class="container mb-4">
 
     <h2 class="text-center main-heading">
         👤 Student Profile Details
@@ -89,9 +91,9 @@
 
     <hr class="text-light">
 
-    <div class="profile-card mt-4">
+    <div class="profile-card mt-3">
 
-        <div class="row align-items-center">
+        <div class="row align-items-start">
 
             <!-- Profile Picture -->
             <div class="col-md-4 text-center">
@@ -106,11 +108,11 @@
                          class="profile-img">
                 {% endif %}
 
-                <p class="text-dark mt-3 fw-bold fs-5">
+                <p class="fw-bold mt-2 mb-1">
                     {{ student.username }}
                 </p>
 
-                <p class="badge bg-info text-dark p-2 fs-6">
+                <p class="badge bg-info text-dark px-2 py-1">
                     {{ student.email }}
                 </p>
 
@@ -154,43 +156,32 @@
                     </div>
                 </div>
 
-                <br>
-
-                <div class="badge-box">
-                    <b>Skills:</b><br>
-                    {{ student.skills or "Not Provided" }}
+                <div class="badge-box mt-2">
+                    <b>Skills:</b> {{ student.skills or "Not Provided" }}
                 </div>
 
-                <br>
-
-                <div class="badge-box">
-                    <b>Certifications:</b><br>
-                    {{ student.certifications or "Not Provided" }}
+                <div class="badge-box mt-2">
+                    <b>Certifications:</b> {{ student.certifications or "Not Provided" }}
                 </div>
 
-                <br>
-
-                <div>
-                    <b>Bio:</b><br>
-                    {{ student.bio or "Not Provided" }}
+                <div class="mt-2">
+                    <b>Bio:</b> {{ student.bio or "Not Provided" }}
                 </div>
 
-                <br>
-
-                <!-- Links -->
-                <div class="mt-3 d-flex gap-3 flex-wrap">
+                <!-- Links (always visible) -->
+                <div class="mt-3 d-flex gap-2 flex-wrap align-items-center">
 
                     {% if student.linkedin %}
                         <a href="{{ student.linkedin }}" target="_blank"
-                           class="btn btn-primary">
-                           🔗 Open LinkedIn
+                           class="btn btn-sm btn-primary">
+                           🔗 LinkedIn
                         </a>
                     {% endif %}
 
                     {% if student.github %}
                         <a href="{{ student.github }}" target="_blank"
-                           class="btn btn-dark">
-                           💻 View GitHub
+                           class="btn btn-sm btn-dark">
+                           💻 GitHub
                         </a>
                     {% endif %}
 
