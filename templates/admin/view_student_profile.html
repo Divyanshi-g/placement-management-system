@@ -185,13 +185,18 @@
                         </a>
                     {% endif %}
 
-                    {% if student.resume %}
+                   {% if student.resume %}
                         <a class="resume-btn text-white"
                            href="{{ url_for('static', filename='uploads/resumes/' ~ student.resume) }}"
                            download>
                            📥 Download Resume
                         </a>
+                    {% else %}
+                        <span class="resume-missing">
+                            📄 Resume Not Uploaded
+                        </span>
                     {% endif %}
+
                 </div>
 
             </div>
