@@ -355,7 +355,6 @@ def apply(placement_id):
 
     # ------------- POST SUBMISSION -------------
     if request.method == "POST":
-        student_name = request.form.get("student_name")
         phone = request.form.get("phone")
         course = request.form.get("course")
         skills = request.form.get("skills")
@@ -392,9 +391,9 @@ def apply(placement_id):
         # ---------- Insert Application Details ----------
         cur.execute("""
             INSERT INTO applications
-            (placement_id, student_name, phone, course, skills, experience, resume_file)
+            (placement_id, phone, course, skills, experience, resume_file)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (app_id, student_name, phone, course, skills, experience, resume_file))
+        """, (app_id, phone, course, skills, experience, resume_file))
 
         db.commit()
         return redirect(url_for("enhancements.placements"))
@@ -1456,6 +1455,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
