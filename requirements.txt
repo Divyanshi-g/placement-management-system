@@ -4,7 +4,7 @@ Flask-Login
 Flask-WTF
 Werkzeug
 Jinja2
-
+python-dotenv
 # Resume Parsing
 pdfminer.six
 python-docx
@@ -16,5 +16,6 @@ requests
 
 # Deployment
 gunicorn
+
 
 
