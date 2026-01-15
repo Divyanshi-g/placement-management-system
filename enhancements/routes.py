@@ -1072,9 +1072,7 @@ def manage_students():
             "cgpa": s["cgpa"],
             "bio": s["bio"],
             "linkedin": s["linkedin"],
-            "github": s["github"]
-            
-
+            "github": s["github"],
             # 🔹 Applications (skills + resume from HERE ONLY)
             "applications": [
                 {
@@ -1459,6 +1457,7 @@ def check_resume():
 
 
 # ------------------ Misc -----------------        
+
 
 
 
