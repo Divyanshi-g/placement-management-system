@@ -407,10 +407,9 @@ def apply(placement_id):
         """, (
             user_id,
             placement_id,
-            student_name,
             skills,
             experience,
-            resume_filename
+            resume
         ))
 
         db.commit()
@@ -1385,6 +1384,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
