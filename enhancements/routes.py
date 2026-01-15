@@ -905,7 +905,7 @@ def admin_applications():
     cur.execute("""
         SELECT 
             applications.id,
-            users.name,
+            users.username,
             users.email,
             placements.company,
             placements.role,
@@ -1463,6 +1463,7 @@ def settings():
 def status():
 
     return render_template("status.html")            
+
 
 
 
