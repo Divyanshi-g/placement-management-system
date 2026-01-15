@@ -20,13 +20,12 @@
 <body class="min-h-screen flex flex-col text-slate-900"
       style="
         background:
-          radial-gradient(at 88% 82%, rgba(220,160,40,0.85) 0px, transparent 52%), /* TURMERIC */
-          radial-gradient(at 12% 18%, rgba(220,70,120,0.85) 0px, transparent 52%), /* ROSE */
-          radial-gradient(at 82% 20%, rgba(70,110,220,0.6) 0px, transparent 55%),  /* BLUE (controlled) */
-          radial-gradient(at 28% 75%, rgba(110,80,200,0.75) 0px, transparent 55%); /* PURPLE / INDIGO */
+          radial-gradient(at 88% 82%, rgba(220,160,40,0.85) 0px, transparent 52%),
+          radial-gradient(at 12% 18%, rgba(220,70,120,0.85) 0px, transparent 52%),
+          radial-gradient(at 82% 20%, rgba(70,110,220,0.6) 0px, transparent 55%),
+          radial-gradient(at 28% 75%, rgba(110,80,200,0.75) 0px, transparent 55%);
         background-color: #14162a;
       ">
-
 
   <!-- NAVBAR -->
   <nav class="fixed top-0 w-full z-50 bg-white/45 backdrop-blur-xl shadow-sm">
@@ -51,7 +50,8 @@
       </div>
 
       {% if show_nav_options %}
-      <div class="flex items-center gap-6 text-1x1 font-medium text-slate-900">
+      <div class="flex items-center gap-6 text-1x1 font-medium text-slate-900 relative">
+
         <a href="{{ home_url }}"
            class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
           Home
@@ -67,16 +67,48 @@
           Rate
         </a>
 
-        <a href="/settings"
-           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
-          Settings
-        </a>
+        <!-- NOTIFICATION ICON (HIDDEN BY DEFAULT) -->
+        <button id="notifBell"
+                class="hidden text-xl hover:text-indigo-700 transition relative">
+          <i class="fa-solid fa-bell"></i>
+        </button>
+
+        <!-- SETTINGS DROPDOWN -->
+        <div class="relative">
+          <button onclick="toggleSettings()"
+                  class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition flex items-center gap-1">
+            <i class="fa-solid fa-gear"></i> Settings
+          </button>
+
+          <!-- DROPDOWN -->
+          <div id="settingsMenu"
+               class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
+
+            <!-- Notifications Toggle -->
+            <div class="px-4 py-3 flex items-center justify-between hover:bg-gray-100">
+              <span class="text-sm font-medium">Notifications</span>
+              <input type="checkbox"
+                     id="notifToggle"
+                     onchange="toggleNotificationBell()"
+                     class="accent-indigo-600 cursor-pointer">
+            </div>
+
+            <hr>
+
+            <!-- Logout -->
+            <a href="{{ url_for('enhancements.logout') }}"
+               class="block px-4 py-3 text-sm text-red-600 hover:bg-red-50">
+              <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+            </a>
+          </div>
+        </div>
+
       </div>
       {% endif %}
     </div>
   </nav>
 
-  <!-- BACK BUTTON (TRUE LEFT) -->
+  <!-- BACK BUTTON -->
   <div class="pt-20 pl-6">
     <button onclick="history.back()"
             class="inline-flex items-center gap-2
@@ -88,6 +120,7 @@
       ← Back
     </button>
   </div>
+
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div class="max-w-4xl mx-auto px-4">
@@ -102,67 +135,44 @@
       {% endfor %}
     </div>
   {% endif %}
-{% endwith %}
-
+  {% endwith %}
 
   <!-- MAIN CONTENT -->
-  <main class="flex-1 max-w-7xl mx-auto px-6 ">
+  <main class="flex-1 max-w-7xl mx-auto px-6">
     {% block content %}{% endblock %}
   </main>
 
   <!-- FOOTER -->
   <footer class="bg-white/30 backdrop-blur-md text-black text-center py-6">
-  <div class="flex justify-center gap-6 mb-3 text-2xl">
-    
-    <a href="https://www.facebook.com"
-       target="_blank"
-       class="hover:text-blue-600 transition">
-      <i class="fa-brands fa-facebook-f"></i>
-    </a>
+    <div class="flex justify-center gap-6 mb-3 text-2xl">
+      <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" class="hover:text-pink-600 transition"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" class="hover:text-green-600 transition"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="#" class="hover:text-blue-700 transition"><i class="fa-brands fa-linkedin-in"></i></a>
+    </div>
+    © 2025 HireHub · Placement Management System
+  </footer>
 
-    <a href="https://www.instagram.com"
-       target="_blank"
-       class="hover:text-pink-600 transition">
-      <i class="fa-brands fa-instagram"></i>
-    </a>
+  <!-- SETTINGS + NOTIFICATION SCRIPT -->
+  <script>
+    function toggleSettings() {
+      document.getElementById("settingsMenu").classList.toggle("hidden");
+    }
 
-    <a href="https://wa.me/91XXXXXXXXXX"
-       target="_blank"
-       class="hover:text-green-600 transition">
-      <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    function toggleNotificationBell() {
+      const bell = document.getElementById("notifBell");
+      const toggle = document.getElementById("notifToggle");
+      toggle.checked ? bell.classList.remove("hidden") : bell.classList.add("hidden");
+    }
 
-    <a href="https://www.linkedin.com"
-       target="_blank"
-       class="hover:text-blue-700 transition">
-      <i class="fa-brands fa-linkedin-in"></i>
-    </a>
-
-  </div>
-
-  © 2025 HireHub · Placement Management System
-</footer>
+    // Close dropdown on outside click
+    window.addEventListener("click", function (e) {
+      const menu = document.getElementById("settingsMenu");
+      if (!e.target.closest(".relative")) {
+        menu?.classList.add("hidden");
+      }
+    });
+  </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
