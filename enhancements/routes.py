@@ -384,7 +384,6 @@ def apply(placement_id):
         return redirect(url_for("enhancements.placements"))
 
     if request.method == "POST":
-        student_name = request.form.get("student_name")
         skills = request.form.get("skills")
         experience = request.form.get("experience")
 
@@ -396,8 +395,8 @@ def apply(placement_id):
             upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
             os.makedirs(upload_folder, exist_ok=True)
 
-            resume_filename = secure_filename(file.filename)
-            file.save(os.path.join(upload_folder, resume_filename))
+            resume = secure_filename(file.filename)
+            file.save(os.path.join(upload_folder, resume))
 
         # -------- Insert application (ONE ROW ONLY) --------
         cur.execute("""
@@ -420,7 +419,10 @@ def apply(placement_id):
     db.close()
     return render_template(
         "apply.html",
-        placement=placement
+        placement=placement,
+        show_nav_options=True,
+        is_admin=session.get("role") == "admin",
+        home_url=url_for("enhancements.student_dashboard")
     )
 
 
@@ -1384,6 +1386,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
