@@ -159,7 +159,7 @@
   const img1 = document.getElementById("slideshow1");
   const img2 = document.getElementById("slideshow2");
   const img3 = document.getElementById("slideshow3");
-  const img3 = document.getElementById("slideshow4");
+  const img4 = document.getElementById("slideshow4");
 
   function fadeSwap(img, nextSrc) {
     img.classList.remove("opacity-100");
@@ -176,7 +176,7 @@
     index1 = (index1 + 1) % images.length;
     index2 = (index2 + 1) % images.length;
     index3 = (index3 + 1) % images.length;
-    index3 = (index4 + 1) % images.length;
+    index4 = (index4 + 1) % images.length;
 
     fadeSwap(img1, images[index1]);
     fadeSwap(img2, images[index2]);
@@ -290,6 +290,7 @@
 
 
 {% endblock %}
+
 
 
 
