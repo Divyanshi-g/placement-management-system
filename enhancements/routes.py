@@ -21,37 +21,6 @@ def init_app(app):
     import os
 import requests
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-
-def generate_ai_answer(user_question):
-    if not OPENROUTER_API_KEY:
-        return "⚠️ API key not configured. Please contact admin."
-
-    url = "https://openrouter.ai/api/v1/chat/completions"
-
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json"
-    }
-
-    payload = {
-        "model": "openai/gpt-3.5-turbo",
-        "messages": [
-            {"role": "system", "content": "You are a helpful college placement assistant."},
-            {"role": "user", "content": user_question}
-        ],
-        "max_tokens": 300,
-        "temperature": 0.7
-    }
-
-    try:
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-        return response.json()["choices"][0]["message"]["content"].strip()
-    except requests.exceptions.HTTPError as e:
-        return f"⚠️ Error: {e}"
-    except Exception as e:
-        return f"⚠️ Something went wrong: {e}"
 
 # ----------------- Blueprint -----------------
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
@@ -1352,6 +1321,52 @@ def uploaded_file(filename):
     return send_from_directory(folder, filename, as_attachment=False)
 
 
+# enhancements/routes.py
+import os
+import requests
+from flask import (
+    Blueprint, request, jsonify, render_template,
+    session, current_app
+)
+
+enhancements_bp = Blueprint("enhancements", __name__)
+
+# Load API key from environment variable
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+def generate_ai_answer(user_question):
+    """Send question to OpenRouter and return answer."""
+    if not OPENROUTER_API_KEY:
+        return "⚠️ OpenRouter API key is not set."
+
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "http://localhost",
+        "X-Title": "Placement Management System"
+    }
+
+    payload = {
+        "model": "openai/gpt-3.5-turbo",
+        "messages": [
+            {"role": "system", "content": "You are a helpful college placement assistant."},
+            {"role": "user", "content": user_question}
+        ],
+        "max_tokens": 300,
+        "temperature": 0.7
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        response.raise_for_status()
+        return response.json()["choices"][0]["message"]["content"].strip()
+    except requests.exceptions.RequestException as e:
+        return f"⚠️ Error connecting to OpenRouter: {str(e)}"
+    except KeyError:
+        return "⚠️ Unexpected response from OpenRouter."
+
+# ---------------- Chat Page ----------------
 @enhancements_bp.route("/ask", methods=["GET", "POST"])
 def ask():
     if request.method == "GET":
@@ -1363,13 +1378,25 @@ def ask():
     if not user_question:
         return jsonify({"answer": "⚠️ Please enter a question."})
 
-    try:
-        answer = generate_ai_answer(user_question)
-        return jsonify({"answer": answer})
-    except Exception as e:
-        return jsonify({"answer": f"⚠️ Error: {str(e)}"})
+    answer = generate_ai_answer(user_question)
+    return jsonify({"answer": answer})
 
+# ---------------- Chat History (Example) ----------------
+# You can later connect to DB to store real chats
+chat_history_data = []
+chat_id_counter = 1
 
+@enhancements_bp.route("/chat/history", methods=["GET"])
+def chat_history():
+    grouped = {"Today": [{"id": c["id"], "message": c["message"]} for c in chat_history_data]}
+    return jsonify(grouped)
+
+@enhancements_bp.route("/chat/history/<int:id>", methods=["GET"])
+def chat_history_detail(id):
+    conv = next((c for c in chat_history_data if c["id"] == id), None)
+    if conv:
+        return jsonify({"message": conv["message"], "answer": conv["answer"]})
+    return jsonify({"message": "", "answer": ""})
 
 @enhancements_bp.route("/check_resume", methods=["POST"])
 def check_resume():
@@ -1398,6 +1425,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
