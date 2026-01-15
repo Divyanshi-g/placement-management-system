@@ -3,18 +3,18 @@
 {% block title %}Manage Students{% endblock %}
 
 {% block content %}
-<div class="mt-20 max-w-6xl mx-auto px-4">
+<div class="mb-10 max-w-6xl mx-auto px-4">
     <!-- Page Heading -->
     <h2 class="text-4xl font-extrabold text-black mb-8 text-center animate-fade-in">👩‍🎓 Manage Students</h2>
 
     <!-- Search Section -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <input type="text" placeholder="Eligibility" id="searchEligibility" class="glass-input">
-        <input type="text" placeholder="Course" id="searchCourse" class="glass-input">
+        <input type="text" placeholder="Experience" id="searchExperience" class="glass-input">
+        <input type="text" placeholder="Course" id="searchCourse" class="glass-input"> <hr>
         <input type="text" placeholder="Branch" id="searchBranch" class="glass-input">
         <input type="text" placeholder="CGPA / Skill" id="searchCgpaSkill" class="glass-input">
     </div>
-    <div class="flex justify-end mb-8">
+    <div class="flex justify-center mb-8">
         <button id="searchBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">Search</button>
     </div>
 
@@ -22,7 +22,7 @@
     <div id="studentContainer" class="space-y-6">
         {% for s in students %}
         <div class="student-card glass-card p-6 rounded-xl shadow-lg relative" 
-             data-eligibility="{{ s['eligibility']|default('') }}" 
+             data-eligibility="{{ s['Eperience']|default('') }}" 
              data-course="{{ s['course']|default('') }}" 
              data-branch="{{ s['branch']|default('') }}" 
              data-cgpa="{{ s['cgpa']|default('') }}" 
@@ -42,7 +42,7 @@
 
             <!-- Fields shown based on search -->
             <div class="mt-4 grid grid-cols-2 gap-4">
-                <p class="field eligibility"><span class="font-bold">Eligibility:</span> {{ s['eligibility']|default('N/A') }}</p>
+                <p class="field experience"><span class="font-bold">Experience:</span> {{ s['experience']|default('N/A') }}</p>
                 <p class="field course"><span class="font-bold">Course:</span> {{ s['course']|default('N/A') }}</p>
                 <p class="field branch"><span class="font-bold">Branch:</span> {{ s['branch']|default('N/A') }}</p>
                 <p class="field cgpa-skill"><span class="font-bold">CGPA / Skills:</span> {{ s['cgpa']|default('') }} / {{ s['skills']|default('') }}</p>
@@ -197,3 +197,4 @@ document.querySelectorAll('.remove-btn').forEach(btn => {
 </script>
 
 {% endblock %}
+
