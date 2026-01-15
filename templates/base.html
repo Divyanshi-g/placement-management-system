@@ -67,18 +67,18 @@
           Rate
         </a>
 
-
+     <!-- NOTIFICATION ICON (HIDDEN BY DEFAULT) -->
+        <button id="notifBell"
+                class="hidden text-xl hover:text-indigo-700 transition relative">
+          <i class="fa-solid fa-bell"></i>
+        </button>
         <!-- SETTINGS DROPDOWN -->
         <div class="relative">
           <button onclick="toggleSettings()"
                   class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition flex items-center gap-1">
             <i class="fa-solid fa-gear"></i> Settings
           </button>
-            <!-- NOTIFICATION ICON (HIDDEN BY DEFAULT) -->
-        <button id="notifBell"
-                class="hidden text-xl hover:text-indigo-700 transition relative">
-          <i class="fa-solid fa-bell"></i>
-        </button>
+            
           <!-- DROPDOWN -->
           <div id="settingsMenu"
                class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
@@ -175,5 +175,6 @@
 
 </body>
 </html>
+
 
 
