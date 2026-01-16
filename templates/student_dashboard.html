@@ -142,6 +142,40 @@
                text-white text-2xl shadow-lg hover:scale-110 transition z-50">
   💬
 </button>
+    <style>
+      @media (max-width: 768px) {
+    .grid-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+        .card:hover {
+        transform: scale(1.02);
+    }
+         .right-side img {
+        width: 100%;
+    }
+        .chat-button {
+        width: 48px;
+        height: 48px;
+        bottom: 16px;
+        right: 12px;
+    }
+        #chatbot {
+        width: 90vw; /* fills almost full width */
+        right: 5vw;
+        bottom: 16px;
+    }
+        h1 {
+        font-size: 2rem; /* smaller than 4xl */
+    }
+    h2 {
+        font-size: 1.25rem; /* smaller than 2xl */
+    }
+    p {
+        font-size: 0.875rem; /* smaller than default */
+    }
+}
+    </style>
 <script>
   const images = [
     "{{ url_for('static', filename='images/student_dashboard.jpg') }}",
@@ -290,6 +324,7 @@
 
 
 {% endblock %}
+
 
 
 
