@@ -499,45 +499,37 @@ def placements():
         home_url=url_for("enhancements.student_dashboard")
     )
 
-@enhancements_bp.route("/apply/<int:placement_id>")
+@app.route("/apply/<int:placement_id>")
 def apply(placement_id):
-    if "user_id" not in session or session.get("role") != "student":
-        return redirect(url_for("enhancements.login"))
+    if "user_id" not in session:
+        return redirect(url_for("login"))
 
-    conn = get_db_conn()
-    cur = conn.cursor()
+    user_id = session["user_id"]
 
-    # FETCH placement
-    cur.execute("""
-        SELECT company, role
-        FROM placements
-        WHERE id = ?
-    """, (placement_id,))
-    placement = cur.fetchone()
+    cur = get_db().cursor()
 
-    if not placement:
-        conn.close()
-        flash("Placement not found", "error")
-        return redirect(url_for("enhancements.student_dashboard"))
+    # Check placement exists
+    cur.execute("SELECT id FROM placements WHERE id = ?", (placement_id,))
+    if not cur.fetchone():
+        abort(404, "Placement not found")
 
-    # 🔴 THESE TWO LINES MUST EXIST BEFORE NOTIFICATION
-    company = placement["company"]
-    role = placement["role"]
+    # Check user exists
+    cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
+    if not cur.fetchone():
+        abort(403, "Invalid user")
 
-    # INSERT application
+    # Insert application
     cur.execute("""
         INSERT INTO applications (user_id, placement_id, status)
         VALUES (?, ?, 'Applied')
-    """, (session["user_id"], placement_id))
+    """, (user_id, placement_id))
 
-    conn.commit()
-    conn.close()
-
-    
-
-    flash("Application submitted successfully!", "success")
-    return redirect(url_for("enhancements.status"))
-
+    get_db().commit()
+    return render_template("apply.html",
+                            show_nav_options=True,
+                            is_admin=session.get("role") == "admin",
+                            home_url=url_for("enhancements.student_dashboard")
+                           )
 
 # ------------------ Profile ------------------
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
@@ -1442,5 +1434,6 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
