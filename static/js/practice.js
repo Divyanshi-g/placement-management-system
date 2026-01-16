@@ -2252,4 +2252,34 @@ function showHistory(){
  </div>
  `).join("");
 }
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".deleteAttempt").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const attemptId = btn.getAttribute("data-id");
+
+      if (!confirm("Are you sure you want to delete this attempt?")) return;
+
+      try {
+        const response = await fetch("/delete-attempt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: attemptId })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          // Remove attempt from DOM
+          btn.closest("div").remove();
+        } else {
+          alert("Failed to delete attempt.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error deleting attempt.");
+      }
+    });
+  });
+});
 
