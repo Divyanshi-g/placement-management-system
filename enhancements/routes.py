@@ -7,7 +7,6 @@ import sqlite3
 import requests
 from datetime import datetime
 from openai import OpenAI
-
 from datetime import datetime
 from flask import (
     Blueprint, request, jsonify, render_template, make_response,
@@ -54,10 +53,6 @@ def generate_ai_answer(user_question):
         return f"⚠️ Error connecting to OpenRouter: {str(e)}"
     except KeyError:
         return "⚠️ Unexpected response from OpenRouter."
-    import os, json, requests
-from datetime import datetime
-from flask import request, jsonify, render_template, session
-from werkzeug.utils import secure_filename
 
 HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 HF_MODEL = "google/flan-t5-base"
@@ -513,7 +508,7 @@ def apply(placement_id):
      user_id=session["user_id"],
      role="student",
      n_type="application",
-     message=f"You applied for {company} – {role}.",
+     message=f"You applied for {placements.company} – {placements.role}.",
      link=url_for("enhancements.status")
     )
 
@@ -539,35 +534,21 @@ def apply(placement_id):
 
     # ================= POST =================
     if request.method == "POST":
-        student_name = request.form.get("student_name")
         course = request.form.get("course")
         skills = request.form.get("skills")
         experience = request.form.get("experience")
 
-        # -------- Resume Upload --------
-        resume = None
-        file = request.files.get("resume")
-
-        if file and file.filename:
-            upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
-            os.makedirs(upload_folder, exist_ok=True)
-
-            resume = secure_filename(file.filename)
-            file.save(os.path.join(upload_folder, resume))
-
         # -------- Insert Application --------
         cur.execute("""
             INSERT INTO applications
-            (user_id, placement_id, student_name, course, skills, experience, resume)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            (user_id, placement_id, course, skills, experience)
+            VALUES (?, ?, ?, ?, ?)
         """, (
             user_id,
             placement_id,
-            student_name,
             course,
             skills,
-            experience,
-            resume
+            experience
         ))
 
         db.commit()
@@ -1567,6 +1548,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
