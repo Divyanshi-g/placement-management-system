@@ -522,32 +522,39 @@ def apply(placement_id):
 
     user_id = session["user_id"]
 
-    # -------- Prevent duplicate application --------
-    cur.execute("""
-        SELECT id FROM applications
-        WHERE user_id = ? AND placement_id = ?
-    """, (user_id, placement_id))
-    if cur.fetchone():
-        db.close()
-        flash("⚠️ You have already applied for this placement.", "warning")
-        return redirect(url_for("enhancements.placements"))
-
-    # ================= POST =================
+   # ================= POST =================
     if request.method == "POST":
+        student_name = request.form.get("student_name")
         course = request.form.get("course")
         skills = request.form.get("skills")
         experience = request.form.get("experience")
 
+        # -------- Resume Upload --------
+        resume = None
+        file = request.files.get("resume")
+
+        if file and file.filename:
+            upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
+            os.makedirs(upload_folder, exist_ok=True)
+
+            resume = secure_filename(file.filename)
+            file.save(os.path.join(upload_folder, resume))
+
         # -------- Insert Application --------
         cur.execute("""
             INSERT INTO applications
+            (user_id, placement_id, student_name, course, skills, experience, resume)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             (user_id, placement_id, course, skills, experience)
             VALUES (?, ?, ?, ?, ?)
         """, (
             user_id,
             placement_id,
+            student_name,
             course,
             skills,
+            experience,
+            resume
             experience
         ))
 
@@ -1548,6 +1555,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
