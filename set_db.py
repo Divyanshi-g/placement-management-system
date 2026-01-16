@@ -4,7 +4,7 @@ def init_db():
     with open("schema.sql", "r") as f:
         schema = f.read()
 
-    conn = sqlite3.connect("placement.db")
+    conn = sqlite3.connect("placements.db")
     cur = conn.cursor()
     cur.executescript(schema)
     conn.commit()
@@ -13,3 +13,4 @@ def init_db():
 
 if __name__ == "__main__":
     init_db()
+
