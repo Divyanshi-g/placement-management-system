@@ -129,6 +129,68 @@
 /* Remove button animation */
 .student-card.removed { animation: fadeOut 0.5s ease forwards; opacity:0; height:0; margin:0; padding:0; }
 @keyframes fadeOut { from {opacity:1;height:auto} to {opacity:0;height:0} }
+    /* ================= MOBILE RESPONSIVENESS FIX ================= */
+@media (max-width: 768px) {
+
+  /* Page heading */
+  h2 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+
+  /* Search inputs */
+  .glass-input {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  /* Reduce card padding */
+  .student-card {
+    padding: 14px !important;
+  }
+
+  /* Buttons wrap nicely */
+  .student-card > div:first-child {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .student-card .flex.gap-2 {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .student-card button {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  /* Fields grid → single column */
+  .student-card .grid.grid-cols-2 {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  /* Details panel spacing */
+  .details-panel {
+    padding: 12px;
+  }
+
+  /* Applications table — prevent overflow */
+  .details-panel table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .details-panel th,
+  .details-panel td {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+}
+
 </style>
 
 <script>
@@ -197,6 +259,7 @@ document.querySelectorAll('.remove-btn').forEach(btn => {
 </script>
 
 {% endblock %}
+
 
 
 
