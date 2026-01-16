@@ -82,6 +82,22 @@ def call_huggingface(prompt):
         return data[0].get("generated_text", "")
     return "Unable to analyze resume."
 
+# =======================
+# NOTIFICATION HELPER
+# =======================
+def create_notification(user_id, role, n_type, message, link=None):
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO notifications (user_id, role, type, message, link)
+        VALUES (?, ?, ?, ?, ?)
+    """, (user_id, role, n_type, message, link))
+
+    conn.commit()
+    conn.close()
+
+
 @enhancements_bp.route("/resume_review", methods=["GET", "POST"])
 def resume_review():
     if request.method == "GET":
@@ -141,6 +157,12 @@ Resume text:
     )
     conn.commit()
     conn.close()
+    create_notification(
+     session["user_id"],
+     "student",
+     "ats",
+     "Your resume ATS score has been generated."
+    )
 
     return jsonify({
         "score": local_result.get("score_percent"),
@@ -397,6 +419,31 @@ def app_chat():
         )
     })
 
+@enhancements_bp.route("/notifications")
+def notifications():
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT message, type, link, created_at
+        FROM notifications
+        WHERE user_id = ? AND role = ?
+        ORDER BY created_at DESC
+    """, (session["user_id"], session["role"]))
+
+    notifications = cur.fetchall()
+    conn.close()
+
+    return render_template(
+        "notifications.html",
+        notifications=notifications,
+        show_nav_options=True
+    )
+
+
 # ------------------ Placement search & apply ------------------
 @enhancements_bp.route("/placements")
 def placements():
@@ -461,6 +508,15 @@ def apply(placement_id):
 
     db = get_db_conn()
     cur = db.cursor()
+        # After successful insert into applications table
+    create_notification(
+     user_id=session["user_id"],
+     role="student",
+     n_type="application",
+     message=f"You applied for {company_name} – {role}.",
+     link=url_for("enhancements.status")
+    )
+
 
     # -------- Get placement --------
     cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
@@ -539,6 +595,13 @@ def profile():
 
     conn = get_db_conn()
     cur = conn.cursor()
+    create_notification(
+     user_id=session["user_id"],
+     role="student",
+     n_type="profile",
+     message="Your profile has been updated successfully."
+    )
+
 
     # -------- NAVBAR + USER VALIDATION --------
     cur.execute("SELECT id, role, username, email FROM users WHERE id = ?", (session["user_id"],))
@@ -685,6 +748,13 @@ def profile():
 
 @enhancements_bp.route("/practice")
 def practice():
+    create_notification(
+     session["user_id"],
+     "student",
+     "quiz",
+     "Your quiz result is available."
+    )
+
     return render_template("practice.html",
         show_nav_options=True,
         is_admin=False,
@@ -725,6 +795,24 @@ def status():
 
     rows = cursor.fetchall()
     conn.close()
+    # Notify student
+    create_notification(
+     user_id=student_id,
+     role="student",
+     n_type="application",
+     message=f"Your application status changed to {new_status}.",
+     link=url_for("enhancements.status")
+    )
+
+# Notify admin
+    create_notification(
+     user_id=session["user_id"],
+     role="admin",
+     n_type="application",
+     message="You updated a student's application status."
+    )
+
+
 
     applications = []
     for r in rows:
@@ -787,6 +875,13 @@ def about():
 def rate():
     conn = get_db_conn()
     cur = conn.cursor()
+    create_notification(
+     session["user_id"],
+     "student",
+     "rating",
+     "Thanks for submitting your rating."
+    )
+
 
     user_id = session.get("user_id")
     role = session.get("role")
@@ -970,6 +1065,13 @@ def view_student_profile(user_id):
     conn = get_db_conn()
     conn.row_factory = sqlite3.Row   # <<< IMPORTANT
     cursor = conn.cursor()
+    create_notification(
+     admin_id,
+     "admin",
+     "student",
+     "A new student has registered."
+    )
+
 
     cursor.execute("""
         SELECT 
@@ -1046,6 +1148,12 @@ def admin_placements():
 def placement_details(id):
     conn = get_db_conn()
     cur = conn.cursor()
+    create_notification(
+     admin_id,
+     "admin",
+     "company",
+     "A company profile has been updated."
+    )
 
     if request.method == "POST":
         data = request.form
@@ -1088,6 +1196,13 @@ def admin_applications():
 
     conn = get_db_conn()
     cur = conn.cursor()
+    create_notification(
+     admin_id,
+     "admin",
+     "application",
+     "Student application status updated."
+    )
+
 
     cur.execute("""
         SELECT 
@@ -1142,6 +1257,13 @@ def update_application_status(app_id):
 def manage_students():
     conn = get_db_conn()
     cur = conn.cursor()
+    create_notification(
+     admin_id,
+     "admin",
+     "student",
+     "A student record was deleted."
+    )
+
 
     # 1️⃣ Fetch all students with profile data (ONLY what is NOT in applications)
     cur.execute("""
@@ -1335,6 +1457,13 @@ def delete_placement(pid):
 def reports():
     conn = get_db_conn()
     cur = conn.cursor()
+    create_notification(
+     admin_id,
+     "admin",
+     "report",
+     "Reports count has changed."
+    )
+
 
     # Total counts
     cur.execute("SELECT COUNT(*) FROM users WHERE role='student'")
@@ -1438,6 +1567,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
