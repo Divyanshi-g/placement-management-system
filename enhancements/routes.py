@@ -1431,34 +1431,6 @@ def chat_history_detail(id):
         return jsonify({"message": conv["message"], "answer": conv["answer"]})
     return jsonify({"message": "", "answer": ""})
 
-@enhancements_bp.route("/check_resume", methods=["POST"])
-def check_resume():
-    try:
-        if "resume" not in request.files:
-            return jsonify({"error": "No resume uploaded"}), 400
-
-        file = request.files["resume"]
-
-        try:
-            text = file.read().decode("utf-8", errors="ignore")
-        except Exception as e:
-            return jsonify({"error": f"Failed to read file: {str(e)}"}), 400
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are an ATS (Applicant Tracking System)."},
-                {"role": "user", "content": f"Analyze this resume:\n\n{text}"}
-            ]
-        )
-
-        feedback = response.choices[0].message.content
-        return jsonify({"result": feedback})
-
-    except Exception as e:
-        print("❌ Error in check_resume:", str(e))
-        return jsonify({"error": str(e)}), 500
-
 @enhancements_bp.route("/admin/questions1", methods=["GET"])
 def admin_questions1():
     # Optional: protect admin-only access
@@ -1482,6 +1454,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
