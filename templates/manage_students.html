@@ -147,6 +147,7 @@
   /* Reduce card padding */
   .student-card {
     padding: 14px !important;
+    overflow: hidden;
   }
 
   /* Buttons wrap nicely */
@@ -174,14 +175,18 @@
   /* Details panel spacing */
   .details-panel {
     padding: 12px;
+      max-width: 100%;
+    overflow-x: hidden;
   }
 
   /* Applications table — prevent overflow */
   .details-panel table {
     display: block;
     width: 100%;
+    max-width: 100%;
     overflow-x: auto;
     white-space: nowrap;
+    border-collapse: collapse;
   }
 
   .details-panel th,
@@ -189,6 +194,9 @@
     font-size: 12px;
     padding: 6px 8px;
   }
+    .details-panel tbody,
+  .details-panel thead {
+    width: max-content;
 }
 
 </style>
@@ -259,6 +267,7 @@ document.querySelectorAll('.remove-btn').forEach(btn => {
 </script>
 
 {% endblock %}
+
 
 
 
