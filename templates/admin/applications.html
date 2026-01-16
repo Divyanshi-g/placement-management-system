@@ -25,26 +25,70 @@
   }
 
   /* MOBILE FIX — SIMPLE & CLEAN */
-  @media (max-width: 768px) {
+ /* ================= MOBILE STACKED TABLE ================= */
+@media (max-width: 768px) {
 
-    /* Bigger heading on phone */
-    h2.glass-heading {
-      font-size: 1.8rem;
-      letter-spacing: 1.5px;
-    }
-
-    /* Slightly tighter table */
-    table th, table td {
-      padding: 10px 8px;
-      font-size: 14px;
-    }
-
-    /* Allow smooth horizontal scroll */
-    .table-responsive {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+  /* Hide table header */
+  table thead {
+    display: none;
   }
+
+  /* Each row becomes a card */
+  table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 10px;
+  }
+
+  /* Each cell becomes a row */
+  table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 6px;
+    border: none;
+    font-size: 14px;
+  }
+
+  /* Label before data */
+  table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #555;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  /* Remove index column */
+  table tbody td:first-child {
+    display: none;
+  }
+
+  /* Status form full width */
+  table tbody td form {
+    width: 100%;
+  }
+
+  /* Update button – real button look */
+  table tbody td button {
+    background: #198754;
+    color: white;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  table tbody td button:hover {
+    background: #157347;
+    transform: scale(1.05);
+  }
+}
+
 </style>
 
 
@@ -120,7 +164,7 @@
                 <option value="Rejected" {% if app[8]=='Rejected' %}selected{% endif %}>Rejected</option>
               </select>
 
-              <button type="submit" class="btn btn-success btn-sm w-100">
+              <button type="submit" class="btn btn-success btn-sm w-100 border-black-2x1-round hover:zoom">
                 Update
               </button>
             </form>
@@ -140,4 +184,5 @@
 </div>
 
 {% endblock %}
+
 
