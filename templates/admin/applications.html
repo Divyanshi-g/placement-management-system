@@ -2,53 +2,51 @@
 {% block content %}
 
 <style>
-  /* Heading enhancement */
+  /* Heading */
   .glass-heading {
     font-weight: 800;
-    letter-spacing: 1px;
-    transition: transform .3s ease, color .3s ease;
+    letter-spacing: 1.2px;
+    transition: color .3s ease;
   }
   .glass-heading:hover {
-    transform: scale(1.05);
     color: #0d6efd;
   }
 
   /* Glass table background */
   .glass-table {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
   }
 
-  /* Table cell spacing */
+  /* Table spacing (desktop unchanged) */
   table th, table td {
     padding: 14px 12px;
     vertical-align: middle;
   }
 
-  /* Mobile optimizations */
+  /* MOBILE FIX — SIMPLE & CLEAN */
   @media (max-width: 768px) {
+
+    /* Bigger heading on phone */
     h2.glass-heading {
-      font-size: 1.4rem;
+      font-size: 1.8rem;
+      letter-spacing: 1.5px;
     }
 
+    /* Slightly tighter table */
     table th, table td {
-      padding: 8px 6px;
-      font-size: 13px;
+      padding: 10px 8px;
+      font-size: 14px;
     }
 
-    /* Hide less important columns on mobile */
-    th:nth-child(5),
-    td:nth-child(5),
-    th:nth-child(6),
-    td:nth-child(6) {
-      display: none;
-    }
-
+    /* Allow smooth horizontal scroll */
     .table-responsive {
-      border-radius: 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
   }
 </style>
+
 
 <div class="container-fluid px-3 px-md-4 mt-4">
 
@@ -142,3 +140,4 @@
 </div>
 
 {% endblock %}
+
