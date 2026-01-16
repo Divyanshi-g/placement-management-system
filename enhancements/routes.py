@@ -1386,6 +1386,30 @@ def check_resume():
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
 
+@enhancements.route("/admin/questions1", methods=["GET"])
+def admin_questions1():
+    # Optional: protect admin-only access
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect(url_for("enhancements.login"))
+
+    return render_template("questions1.html",
+                          show_nav_options=True,
+                          is_admin=True,
+                          home_url=url_for("enhancements.admin_dashboard")
+                         )
+
+@enhancements.route("/admin/questions1/message", methods=["POST"])
+def admin_questions1_message():
+    data = request.json
+    user_message = data.get("message")
+
+    # Example logic (replace with AI / DB later)
+    reply = f"You asked about: {user_message}. Backend logic will be added."
+
+    return jsonify({"reply": reply})
+
+    
+
 
 
 
