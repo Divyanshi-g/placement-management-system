@@ -392,6 +392,56 @@ def app_chat():
             "Try rephrasing your question."
         )
     })
+ @enhancements_bp.route("/change-password", methods=["POST"])
+ def change_password():
+   if "user_id" not in session:
+        flash("⚠️ Please login first.", "error")
+        return redirect(url_for("enhancements.login"))
+
+    user_id = session["user_id"]
+    old_password = request.form.get("old_password")
+    new_password = request.form.get("new_password")
+    confirm_password = request.form.get("confirm_password")
+
+    if not old_password or not new_password or not confirm_password:
+        flash("⚠️ All fields are required.", "warning")
+        return redirect(request.referrer)
+
+    if new_password != confirm_password:
+        flash("⚠️ New passwords do not match.", "warning")
+        return redirect(request.referrer)
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT password FROM users WHERE id=?", (user_id,))
+    user = cur.fetchone()
+
+    if not user or not check_password_hash(user[0], old_password):
+        flash("⚠️ Old password is incorrect.", "error")
+        conn.close()
+        return redirect(request.referrer)
+
+    hashed = generate_password_hash(new_password)
+    cur.execute("UPDATE users SET password=? WHERE id=?", (hashed, user_id))
+    conn.commit()
+    conn.close()
+
+    flash("✅ Password changed successfully!", "success")
+    return redirect(request.referrer)
+
+@enhancements_bp.route("/toggle-theme", methods=["POST"])
+def toggle_theme():
+    if "user_id" not in session:
+        return jsonify({"status": "error"})
+
+    user_id = session["user_id"]
+    theme = request.json.get("theme")  # "light" or "dark"
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET theme=? WHERE id=?", (theme, user_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success"})
 
 # ------------------ Placement search & apply ------------------
 @enhancements_bp.route("/placements")
@@ -1372,6 +1422,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
