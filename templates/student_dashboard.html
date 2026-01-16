@@ -118,30 +118,6 @@
 
 </div>
 
-<!-- CHATBOT -->
-<div id="chatbot"
-     class="hidden fixed bottom-20 right-10 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50">
-  <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 font-bold">
-    Student Assistant
-  </div>
-  <div class="h-64 p-4 overflow-y-auto text-sm" id="chat-content">
-    <p class="text-gray-500">👋 Hi! Ask me about the app.</p>
-  </div>
-  <div class="flex border-t">
-    <input id="chat-input" type="text"
-           class="flex-1 px-3 py-2 focus:outline-none">
-    <button onclick="sendMessage()"
-            class="px-4 text-indigo-500 font-bold hover:text-indigo-700">➤</button>
-  </div>
-</div>
-
-<!-- FLOAT BUTTON -->
-<button onclick="toggleChat()"
-        class="fixed bottom-5 right-5 w-14 h-14 rounded-full
-               bg-gradient-to-r from-indigo-500 to-purple-600
-               text-white text-2xl shadow-lg hover:scale-110 transition z-50">
-  💬
-</button>
     <style>
       @media (max-width: 768px) {
     .grid-container {
@@ -153,17 +129,6 @@
     }
          .right-side img {
         width: 100%;
-    }
-        .chat-button {
-        width: 48px;
-        height: 48px;
-        bottom: 16px;
-        right: 12px;
-    }
-        #chatbot {
-        width: 90vw; /* fills almost full width */
-        right: 5vw;
-        bottom: 16px;
     }
         h1 {
         font-size: 2rem; /* smaller than 4xl */
@@ -249,81 +214,11 @@
     }
   });
 
-  /* -------------------------------
-     CHATBOT UI TOGGLE
-  -------------------------------- */
-  function toggleChat() {
-    const chat = document.getElementById("chatbot");
-    if (!chat) return;
-    chat.classList.toggle("hidden");
-  }
-
-  /* -------------------------------
-     CHAT MESSAGE HANDLING (BACKEND CONNECTED)
-  -------------------------------- */
-  async function sendMessage() {
-    const input = document.getElementById("chat-input");
-    const content = document.getElementById("chat-content");
-
-    if (!input || !content) return;
-
-    const text = input.value.trim();
-    if (text === "") return;
-
-    /* User Message */
-    const userMsg = document.createElement("div");
-    userMsg.className = "text-right mb-2";
-    userMsg.innerHTML = `
-      <span class="inline-block bg-rose-100 text-gray-800 px-3 py-2 rounded-lg">
-        🧑 ${text}
-      </span>`;
-    content.appendChild(userMsg);
-
-    input.value = "";
-    content.scrollTop = content.scrollHeight;
-
-    /* Typing Indicator */
-    const typingMsg = document.createElement("div");
-    typingMsg.className = "text-left mb-2 text-sm text-gray-500";
-    typingMsg.textContent = "🤖 typing...";
-    content.appendChild(typingMsg);
-    content.scrollTop = content.scrollHeight;
-
-    try {
-      const response = await fetch("/app-chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ message: text })
-      });
-
-      const data = await response.json();
-
-      typingMsg.remove();
-
-      const botMsg = document.createElement("div");
-      botMsg.className = "text-left mb-2";
-      botMsg.innerHTML = `
-        <span class="inline-block bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg">
-          🤖 ${data.reply}
-        </span>`;
-      content.appendChild(botMsg);
-
-      content.scrollTop = content.scrollHeight;
-    } catch (error) {
-      typingMsg.remove();
-
-      const errMsg = document.createElement("p");
-      errMsg.className = "text-red-500 text-sm";
-      errMsg.textContent = "🤖 Sorry, I couldn't connect right now.";
-      content.appendChild(errMsg);
-    }
-  }
 </script>
 
 
 {% endblock %}
+
 
 
 
