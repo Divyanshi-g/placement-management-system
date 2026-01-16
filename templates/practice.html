@@ -86,8 +86,19 @@
         <button id="closeHistory" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Close</button>
       </div>
       <div id="historyList" class="space-y-2 text-sm">
-        No previous attempts yet...
-      </div>
+  {% for attempt in attempts %}
+    <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
+      <span>Score: {{ attempt.score }} | Date: {{ attempt.date }}</span>
+      <button class="deleteAttempt px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+              data-id="{{ attempt.id }}">
+        Delete
+      </button>
+    </div>
+  {% else %}
+    No previous attempts yet...
+  {% endfor %}
+</div>
+
     </div>
 
   </div>
@@ -131,6 +142,7 @@ padding:8px;border-radius:6px;
 <script src="{{ url_for('static', filename='js/practice.js') }}"></script>
 
 {% endblock %}
+
 
 
 
