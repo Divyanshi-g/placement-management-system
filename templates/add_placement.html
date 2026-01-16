@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Add New Company{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 mt-10">
+
+  <h2 class="text-3xl font-extrabold text-center mb-8">
+    ➕ Add a New Company
+  </h2>
+
+  <form method="POST" class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
+
+    <input name="company" required placeholder="Company Name"
+           class="w-full p-3 border rounded-lg">
+
+    <input name="role" required placeholder="Role / Job Title"
+           class="w-full p-3 border rounded-lg">
+
+    <input name="location" required placeholder="Location"
+           class="w-full p-3 border rounded-lg">
+
+    <input name="salary" placeholder="Salary / Stipend"
+           class="w-full p-3 border rounded-lg">
+
+    <input name="deadline" type="date"
+           class="w-full p-3 border rounded-lg">
+
+    <textarea name="eligibility" placeholder="Eligibility"
+              class="w-full p-3 border rounded-lg"></textarea>
+
+    <textarea name="description" placeholder="Job Description"
+              class="w-full p-3 border rounded-lg"></textarea>
+
+    <button type="submit"
+            class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition">
+      ✅ Add Company
+    </button>
+
+  </form>
+</div>
+{% endblock %}
