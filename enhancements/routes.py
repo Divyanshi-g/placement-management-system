@@ -1189,11 +1189,7 @@ def update_application_status(app_id):
     conn.close()
 
     flash("Status updated successfully!", "success")
-    return redirect("/admin/applications",
-                    show_nav_options=True,
-                    is_admin=True,
-                    home_url=url_for("enhancements.admin_dashboard")
-                   )
+    return redirect("/admin/applications")
 
 
 @enhancements_bp.route("/manage_students")
@@ -1454,6 +1450,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
