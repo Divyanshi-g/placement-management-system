@@ -81,6 +81,34 @@
     border:none;
     white-space:nowrap;
 }
+
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 16px 12px;
+        width: 100%;
+    }
+    .profile-img {
+        width: 140px;
+        height: 140px;
+    }
+    .main-heading {
+        font-size: 26px;
+    }
+    .info-grid {
+        grid-template-columns: 1fr;  /* 1 column for mobile */
+        gap: 8px 10px;
+    }
+    .resume-btn {
+        padding: 8px 15px;
+        font-size: 14px;
+        width: 100%;  /* Full width on mobile */
+        text-align: center;
+    }
+    .badge-box {
+        padding: 6px 8px;
+        font-size: 13px;
+    }
+}
 </style>
 
 <div class="container mb-4">
