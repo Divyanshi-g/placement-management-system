@@ -5,7 +5,7 @@
 <div class="mb-8 text-center animate__animated animate__fadeInUp">
   <!-- Welcome Message -->
   <h1 class="text-4xl font-bold cursor-pointer transition transform hover:underline hover:scale-103">
-    Welcome back, {{ username }} 🏢
+    Welcome back, {{ username }} 👋
   </h1>
 
   <!-- Motivation Message (typing loop) -->
@@ -16,7 +16,7 @@
     <!-- Students -->
     <a href="/admin/students" 
        class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-xl shadow-lg hover:scale-105 transition block">
-      <h3 class="text-lg font-bold">👩‍🎓 Students Records</h3>
+      <h3 class="text-lg font-bold">🎓 Students Records</h3>
       <p class="text-2xl font-extrabold mt-2">{{ counts.students }}</p>
       <p class="mt-1 text-sm opacity-80">Total registered students</p>
     </a>
@@ -24,7 +24,7 @@
     <!-- Placements -->
     <a href="/admin/placements" 
        class="bg-gradient-to-r from-green-600 to-emerald-700 text-white p-6 rounded-xl shadow-lg hover:scale-105 transition block">
-      <h3 class="text-lg font-bold">🏢 Placements Details </h3>
+      <h3 class="text-lg font-bold">📊 Placements Details </h3>
       <p class="text-2xl font-extrabold mt-2">{{ counts.placements }}</p>
       <p class="mt-1 text-sm opacity-80">Total Placements</p>
     </a>
@@ -32,7 +32,7 @@
     <!-- Applications -->
     <a href="/admin/applications" 
        class="bg-gradient-to-r from-purple-600 to-pink-700 text-white p-6 rounded-xl shadow-lg hover:scale-105 transition block">
-      <h3 class="text-lg font-bold">📊 Applications Status</h3>
+      <h3 class="text-lg font-bold">📝 Applications Status</h3>
       <p class="text-2xl font-extrabold mt-2">{{ counts.applications }}</p>
       <p class="mt-1 text-sm opacity-80">Track student applications</p>
     </a>
@@ -41,7 +41,7 @@
   <!-- Management Grid -->
   <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mx-auto">
 <div class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg transform transition hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp">
-      <h2 class="text-2xl font-bold mb-2">👩‍🎓 Manage Students</h2>
+      <h2 class="text-2xl font-bold mb-2">🧑‍🎓 Manage Students</h2>
       <p class="text-sm">View, add, and manage student records efficiently.</p>
       <a href="/manage_students" class="inline-block mt-4 px-4 py-2 bg-white text-indigo-600 rounded-lg font-semibold hover:bg-gray-100 transition">Go</a>
     </div>
@@ -62,7 +62,7 @@
 
     <!-- Reports -->
     <div class="bg-gradient-to-r from-teal-500 to-emerald-600 text-white p-6 rounded-2xl shadow-lg transform transition hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp animate__delay-3s">
-      <h2 class="text-2xl font-bold mb-3">📊 Reports & Analytics</h2>
+      <h2 class="text-2xl font-bold mb-3">📈 Reports & Analytics</h2>
       <p class="text-sm">Generate placement and student performance reports.</p>
       <a href="/reports" class="inline-block mt-4 px-4 py-2 bg-white text-teal-600 rounded-lg font-semibold hover:bg-gray-100 transition">View</a>
     </div>              
@@ -101,6 +101,7 @@
   window.onload = typeAdmin;
 </script>
 {% endblock %}
+
 
 
 
