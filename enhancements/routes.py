@@ -513,7 +513,7 @@ def apply(placement_id):
      user_id=session["user_id"],
      role="student",
      n_type="application",
-     message=f"You applied for {company_name} – {role}.",
+     message=f"You applied for {company} – {role}.",
      link=url_for("enhancements.status")
     )
 
@@ -1567,6 +1567,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
