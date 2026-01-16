@@ -568,13 +568,13 @@ def apply(placement_id):
         INSERT INTO applications (
             user_id, placement_id,
             student_name, phone, course,
-            skills, experience, resume, status
+            skills, experience, resume
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Applied')
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         user_id, placement_id,
         student_name, phone, course,
-        skills, experience, resume_filename, status
+        skills, experience, resume_filename
     ))
 
     conn.commit()
@@ -1460,6 +1460,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
