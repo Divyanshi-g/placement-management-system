@@ -16,37 +16,37 @@
   </div>
 
   <!-- Table Container -->
-  <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl overflow-x-auto border border-white/10">
+  <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl overflow-x-auto border border-white/10 w-full">
 
-    <table class="min-w-full text-sm text-gray-200">
+    <table class="min-w-full text-sm text-gray-200 table-auto">
       <thead>
         <tr class="uppercase text-gray-300 text-xs tracking-wider bg-white/5">
-          <th class="px-6 py-4 text-left">ID</th>
-          <th class="px-6 py-4 text-left">Name</th>
-          <th class="px-6 py-4 text-left">Email</th>
-          <th class="px-6 py-4 text-left">Phone</th>
-          <th class="px-6 py-4 text-left">Course</th>
-          <th class="px-6 py-4 text-center">Action</th>
+          <th class="px-4 py-2 text-left break-words">ID</th>
+          <th class="px-4 py-2 text-left break-words">Name</th>
+          <th class="px-4 py-2 text-left break-words">Email</th>
+          <th class="px-4 py-2 text-left break-words">Phone</th>
+          <th class="px-4 py-2 text-left break-words">Course</th>
+          <th class="px-4 py-2 text-center break-words">Action</th>
         </tr>
       </thead>
 
       <tbody>
         {% for s in students %}
-        <tr class="hover:bg-white/10 transition border-b border-white/5">
+        <tr class="hover:bg-white/10 transition border-b border-white/5 text-xs sm:text-sm">
 
-          <td class="px-6 py-4 sm:px-3 sm:py-2 text-gray-300 font-semibold">
+          <td class="px-2 py-1 sm:px-4 sm:py-2 text-gray-300 font-semibold">
             {{ s.id }}
           </td>
 
-          <td class="px-6 py-4 sm:px-3 sm:py-2 text-indigo-300 font-semibold">
+          <td class="px-2 py-1 sm:px-4 sm:py-2 text-indigo-300 font-semibold">
             {{ s.username }}
           </td>
 
-          <td class="px-6 py-4 sm:px-3 sm:py-2">
+          <td class="px-2 py-1 sm:px-4 sm:py-2 break-words">
             {{ s.email }}
           </td>
 
-          <td class="px-6 py-4 sm:px-3 sm:py-2">
+          <td class="px-2 py-1 sm:px-4 sm:py-2 break-words">
             {% if s.phone %}
               <span class="text-emerald-400 font-medium">{{ s.phone }}</span>
             {% else %}
@@ -54,21 +54,21 @@
             {% endif %}
           </td>
 
-          <td class="px-6 py-4 sm:px-3 sm:py-2 text-gray-300 font-semibold">
+          <td class="px-2 py-1 sm:px-4 sm:py-2 text-gray-300 font-semibold">
             {{ s.course }}
           </td>
 
-          <td class="px-6 py-4 sm:px-3 sm:py-2 text-center">
+          <td class="px-2 py-1 sm:px-4 sm:py-2 text-center">
             <a href="{{ url_for('enhancements.view_student_profile', user_id=s.id) }}"
-               class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl shadow-md transition transform hover:scale-105">
-              View Details
+               class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-xl shadow-md transition transform hover:scale-105">
+               View Details
             </a>
           </td>
 
         </tr>
         {% else %}
         <tr>
-          <td colspan="6" class="px-6 py-10 text-center text-gray-400">
+          <td colspan="6" class="px-2 py-4 sm:px-6 text-center text-gray-400">
             No student profiles found.
           </td>
         </tr>
@@ -81,6 +81,3 @@
 </div>
 
 {% endblock %}
-
-
-
