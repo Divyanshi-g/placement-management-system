@@ -31,7 +31,7 @@
   <nav class="fixed top-0 w-full z-50 bg-white/45 backdrop-blur-xl shadow-sm">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
-      <!-- LOGO -->
+      <!-- LOGO (UNCHANGED) -->
       <div class="group flex items-center gap-3 cursor-pointer">
         <div class="w-10 h-10 rounded-full
                     bg-gradient-to-br from-purple-700 to-indigo-700
@@ -50,7 +50,8 @@
       </div>
 
       {% if show_nav_options %}
-      <div class="flex items-center gap-6 text-1x1 font-medium text-slate-900 relative">
+      <!-- DESKTOP NAV (UNCHANGED) -->
+      <div class="hidden md:flex items-center gap-6 text-1x1 font-medium text-slate-900 relative">
 
         <a href="{{ home_url }}"
            class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
@@ -66,31 +67,75 @@
            class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
           Rate
         </a>
-   </button>
-        <!-- SETTINGS DROPDOWN -->
+
+        <!-- SETTINGS -->
         <div class="relative">
           <button onclick="toggleSettings()"
                   class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition flex items-center gap-1">
             <i class="fa-solid fa-gear"></i> Settings
           </button>
-            
-          <!-- DROPDOWN -->
+
           <div id="settingsMenu"
                class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
-            <!-- Logout -->
+
+            <a href="/change-password"
+               class="block px-4 py-3 text-sm hover:bg-slate-100">
+              <i class="fa-solid fa-key mr-2"></i> Change Password
+            </a>
+
+            <button onclick="toggleTheme()"
+                    class="w-full text-left px-4 py-3 text-sm hover:bg-slate-100">
+              <i class="fa-solid fa-moon mr-2"></i> Toggle Theme
+            </button>
+
             <a href="{{ url_for('enhancements.logout') }}"
                class="block px-4 py-3 text-sm text-red-600 hover:bg-red-50">
               <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
             </a>
           </div>
         </div>
-
       </div>
+
+      <!-- MOBILE MENU BUTTON -->
+      <button onclick="toggleMobileMenu()"
+              class="md:hidden text-2xl text-slate-900">
+        <i class="fa-solid fa-bars"></i>
+      </button>
       {% endif %}
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div id="mobileMenu"
+         class="hidden md:hidden bg-white/80 backdrop-blur-xl shadow-lg">
+      <div class="flex flex-col px-6 py-4 gap-4 text-slate-900 font-medium">
+
+        <a href="{{ home_url }}">Home</a>
+        <a href="/about">About</a>
+        <a href="/rate">Rate</a>
+
+        <hr>
+
+        <button onclick="toggleSettingsMobile()" class="flex items-center gap-2">
+          <i class="fa-solid fa-gear"></i> Settings
+        </button>
+
+        <div id="settingsMenuMobile" class="hidden pl-4 flex flex-col gap-2">
+          <a href="/change-password" class="text-sm">Change Password</a>
+
+          <button onclick="toggleTheme()" class="text-sm text-left">
+            Toggle Theme
+          </button>
+
+          <a href="{{ url_for('enhancements.logout') }}"
+             class="text-sm text-red-600">
+            Logout
+          </a>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- BACK BUTTON -->
+  <!-- BACK BUTTON (UNCHANGED) -->
   <div class="pt-20 pl-6">
     <button onclick="history.back()"
             class="inline-flex items-center gap-2
@@ -119,12 +164,12 @@
   {% endif %}
   {% endwith %}
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN CONTENT (UNCHANGED) -->
   <main class="flex-1 max-w-7xl mx-auto px-6">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (UNCHANGED) -->
   <footer class="bg-white/30 backdrop-blur-md text-black text-center py-6">
     <div class="flex justify-center gap-6 mb-3 text-2xl">
       <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
@@ -135,22 +180,25 @@
     © 2025 HireHub · Placement Management System
   </footer>
 
-  <!-- SETTINGS + NOTIFICATION SCRIPT -->
+  <!-- SCRIPTS -->
   <script>
+    function toggleSettings() {
+      document.getElementById("settingsMenu").classList.toggle("hidden");
+    }
 
-    // Close dropdown on outside click
-    window.addEventListener("click", function (e) {
-      const menu = document.getElementById("settingsMenu");
-      if (!e.target.closest(".relative")) {
-        menu?.classList.add("hidden");
-      }
-    });
+    function toggleMobileMenu() {
+      document.getElementById("mobileMenu").classList.toggle("hidden");
+    }
+
+    function toggleSettingsMobile() {
+      document.getElementById("settingsMenuMobile").classList.toggle("hidden");
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("bg-black");
+      document.body.classList.toggle("text-white");
+    }
   </script>
 
 </body>
 </html>
-
-
-
-
-
