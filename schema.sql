@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS applications (
 
     student_name TEXT,
     course TEXT,
+    phone TEXT,
 
     experience TEXT,
     skills TEXT,
@@ -131,6 +132,7 @@ CREATE TABLE IF NOT EXISTS notifications (
 
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 
