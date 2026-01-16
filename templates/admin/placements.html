@@ -21,6 +21,24 @@
     transition:.25s;
   }
   .btn-details:hover { transform: scale(1.08); opacity:.9; }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    table thead th:nth-child(4), /* Location */
+    table thead th:nth-child(5), /* Salary */
+    table tbody td:nth-child(4),
+    table tbody td:nth-child(5) {
+      display: none;
+    }
+
+    table {
+      font-size: 12px;
+    }
+
+    table td, table th {
+      padding: 4px 6px;
+    }
+  }
 </style>
 
 <div class="max-w-8xl mx-auto px-2 sm:px-4 md:px-6 mb-10 fade-in">
@@ -39,34 +57,32 @@
   </div>
 
   <div class="mt-6 overflow-x-auto bg-white/15 rounded-2xl shadow-xl backdrop-blur fade-in">
-    <table class="w-full min-w-[600px] sm:min-w-full text-left text-gray-100 table-auto">
+    <table class="w-full text-left text-gray-100 table-auto">
       <thead>
         <tr class="bg-gradient-to-r from-emerald-600 to-indigo-600 text-white text-xs sm:text-sm uppercase tracking-wider">
-          <th class="px-2 sm:px-5 py-1 sm:py-4">No.</th>
-          <th class="px-2 sm:px-5 py-1 sm:py-4">Company</th>
-          <th class="px-2 sm:px-5 py-1 sm:py-4">Role</th>
-          <th class="px-2 sm:px-5 py-1 sm:py-4">Location</th>
-          <th class="px-2 sm:px-5 py-1 sm:py-4">Salary</th>
-          <th class="px-2 sm:px-5 py-1 sm:py-4 text-center">Action</th>
+          <th class="px-2 sm:px-5 py-2">No.</th>
+          <th class="px-2 sm:px-5 py-2">Company</th>
+          <th class="px-2 sm:px-5 py-2">Role</th>
+          <th class="px-2 sm:px-5 py-2">Location</th>
+          <th class="px-2 sm:px-5 py-2">Salary</th>
+          <th class="px-2 sm:px-5 py-2 text-center">Action</th>
         </tr>
       </thead>
 
       <tbody>
         {% for p in placements %}
         <tr class="border-b border-white/10 row-hover text-xs sm:text-sm">
-          <td class="px-2 sm:px-5 py-1 sm:py-4 font-semibold text-emerald-300">{{ loop.index }}</td>
-          <td class="px-2 sm:px-5 py-1 sm:py-4 font-medium text-gray-100">{{ p.company or '—' }}</td>
-          <td class="px-2 sm:px-5 py-1 sm:py-4 text-indigo-200">{{ p.role or '—' }}</td>
-          <td class="px-2 sm:px-5 py-1 sm:py-4 text-gray-300">{{ p.location or '—' }}</td>
-          <td class="px-2 sm:px-5 py-1 sm:py-4 text-amber-200">{{ p.salary or '—' }}</td>
-
-          <td class="px-2 sm:px-5 py-1 sm:py-4 text-center">
+          <td class="px-2 sm:px-5 py-2 font-semibold text-emerald-300">{{ loop.index }}</td>
+          <td class="px-2 sm:px-5 py-2 font-medium text-gray-100">{{ p.company or '—' }}</td>
+          <td class="px-2 sm:px-5 py-2 text-indigo-200">{{ p.role or '—' }}</td>
+          <td class="px-2 sm:px-5 py-2 text-gray-300">{{ p.location or '—' }}</td>
+          <td class="px-2 sm:px-5 py-2 text-amber-200">{{ p.salary or '—' }}</td>
+          <td class="px-2 sm:px-5 py-2 text-center">
             <a href="{{ url_for('enhancements.placement_details', id=p.id) }}" class="btn-details">
                Details
             </a>
           </td>
         </tr>
-
         {% else %}
         <tr>
           <td colspan="6" class="px-2 sm:px-5 py-4 text-center text-gray-400">
