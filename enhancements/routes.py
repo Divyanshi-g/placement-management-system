@@ -571,7 +571,7 @@ def apply(placement_id):
     conn.close()
 
     flash("✅ Application submitted successfully!")
-    return redirect(url_for("enhancements.placements.html"))
+    return redirect(url_for("enhancements.placements"))
 
 # ------------------ Profile ------------------
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
@@ -1454,6 +1454,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
