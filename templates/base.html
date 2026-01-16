@@ -137,16 +137,22 @@
 
   <!-- BACK BUTTON (UNCHANGED) -->
   <div class="pt-20 pl-6">
-    <button onclick="history.back()"
-            class="inline-flex items-center gap-2
-                   px-4 py-1.5 rounded-md
-                   border-2 border-black/50
-                   text-sm font-medium text-slate-900
-                   hover:bg-black/10
-                   transition-all duration-200">
-      ← Back
-    </button>
-  </div>
+  <button onclick="history.back()"
+          class="inline-flex items-center gap-2
+                 px-4 py-1.5 rounded-md
+                 border-2 border-black/50
+                 text-sm font-medium text-slate-900
+                 hover:bg-black/10
+                 transition-all duration-200">
+
+    <!-- Icon always visible -->
+    <span class="text-lg">←</span>
+
+    <!-- Text visible only on md+ screens -->
+    <span class="hidden md:inline">Back</span>
+
+  </button>
+</div>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -202,3 +208,4 @@
 
 </body>
 </html>
+
