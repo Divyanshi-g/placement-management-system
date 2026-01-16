@@ -160,12 +160,7 @@ Resume text:
     )
     conn.commit()
     conn.close()
-    create_notification(
-     session["user_id"],
-     "student",
-     "ats",
-     "Your resume ATS score has been generated."
-    )
+    
 
     return jsonify({
         "score": local_result.get("score_percent"),
@@ -538,14 +533,7 @@ def apply(placement_id):
     conn.commit()
     conn.close()
 
-    # CREATE notification
-    create_notification(
-        user_id=session["user_id"],
-        role="student",
-        n_type="application",
-        message=f"You applied for {company} – {role}.",
-        link=url_for("enhancements.status")
-    )
+    
 
     flash("Application submitted successfully!", "success")
     return redirect(url_for("enhancements.status"))
@@ -559,12 +547,7 @@ def profile():
 
     conn = get_db_conn()
     cur = conn.cursor()
-    create_notification(
-     user_id=session["user_id"],
-     role="student",
-     n_type="profile",
-     message="Your profile has been updated successfully."
-    )
+    
 
 
     # -------- NAVBAR + USER VALIDATION --------
@@ -712,13 +695,6 @@ def profile():
 
 @enhancements_bp.route("/practice")
 def practice():
-    create_notification(
-     session["user_id"],
-     "student",
-     "quiz",
-     "Your quiz result is available."
-    )
-
     return render_template("practice.html",
         show_nav_options=True,
         is_admin=False,
@@ -759,25 +735,6 @@ def status():
 
     rows = cursor.fetchall()
     conn.close()
-    # Notify student
-    create_notification(
-     user_id=student_id,
-     role="student",
-     n_type="application",
-     message=f"Your application status changed to {new_status}.",
-     link=url_for("enhancements.status")
-    )
-
-# Notify admin
-    create_notification(
-     user_id=session["user_id"],
-     role="admin",
-     n_type="application",
-     message="You updated a student's application status."
-    )
-
-
-
     applications = []
     for r in rows:
         applications.append({
@@ -839,14 +796,6 @@ def about():
 def rate():
     conn = get_db_conn()
     cur = conn.cursor()
-    create_notification(
-     session["user_id"],
-     "student",
-     "rating",
-     "Thanks for submitting your rating."
-    )
-
-
     user_id = session.get("user_id")
     role = session.get("role")
 
@@ -1029,14 +978,6 @@ def view_student_profile(user_id):
     conn = get_db_conn()
     conn.row_factory = sqlite3.Row   # <<< IMPORTANT
     cursor = conn.cursor()
-    create_notification(
-     admin_id,
-     "admin",
-     "student",
-     "A new student has registered."
-    )
-
-
     cursor.execute("""
         SELECT 
             users.id AS user_id,
@@ -1112,13 +1053,6 @@ def admin_placements():
 def placement_details(id):
     conn = get_db_conn()
     cur = conn.cursor()
-    create_notification(
-     admin_id,
-     "admin",
-     "company",
-     "A company profile has been updated."
-    )
-
     if request.method == "POST":
         data = request.form
 
@@ -1160,14 +1094,6 @@ def admin_applications():
 
     conn = get_db_conn()
     cur = conn.cursor()
-    create_notification(
-     admin_id,
-     "admin",
-     "application",
-     "Student application status updated."
-    )
-
-
     cur.execute("""
         SELECT 
             applications.id,
@@ -1221,14 +1147,6 @@ def update_application_status(app_id):
 def manage_students():
     conn = get_db_conn()
     cur = conn.cursor()
-    create_notification(
-     admin_id,
-     "admin",
-     "student",
-     "A student record was deleted."
-    )
-
-
     # 1️⃣ Fetch all students with profile data (ONLY what is NOT in applications)
     cur.execute("""
         SELECT 
@@ -1421,13 +1339,6 @@ def delete_placement(pid):
 def reports():
     conn = get_db_conn()
     cur = conn.cursor()
-    create_notification(
-     admin_id,
-     "admin",
-     "report",
-     "Reports count has changed."
-    )
-
 
     # Total counts
     cur.execute("SELECT COUNT(*) FROM users WHERE role='student'")
@@ -1531,15 +1442,5 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
-
-
-
-
-
-
-
-
-
-
 
 
