@@ -543,6 +543,16 @@ def apply(placement_id):
     course = request.form["course"]
     skills = request.form.get("skills")
     experience = request.form.get("experience")
+    resume_file = request.files.get("resume")
+        resume_filename = None
+
+        if resume_file and resume_file.filename:
+            resume_filename = secure_filename(resume_file.filename)
+            resume_path = os.path.join(
+                "static/uploads/resumes",
+                resume_filename
+            )
+            resume_file.save(resume_path)
 
     # ✅ Prevent duplicate applications
     cur.execute("""
@@ -558,13 +568,13 @@ def apply(placement_id):
         INSERT INTO applications (
             user_id, placement_id,
             student_name, phone, course,
-            skills, experience, status
+            skills, experience, resume, status
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, 'Applied')
     """, (
         user_id, placement_id,
         student_name, phone, course,
-        skills, experience
+        skills, experience, resume_filename
     ))
 
     conn.commit()
@@ -1450,6 +1460,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
