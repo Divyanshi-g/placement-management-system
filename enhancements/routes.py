@@ -147,9 +147,6 @@ Resume text:
         "verdict": local_result.get("verdict"),
         "feedback": hf_feedback,
         "suggestions": local_result.get("suggestions"),
-        show_nav_options=True,  # hide dashboard links
-        is_admin=False,          # safe default
-        home_url=url_for("enhancements.student_dashboard")
     })
 
 # ------------------ Auth pages ------------------
@@ -1441,5 +1438,6 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
