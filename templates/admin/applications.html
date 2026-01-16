@@ -3,7 +3,9 @@
 
 <div class="container mt-4">
 
-<h2 class="text-center mb-4">Student Applications</h2>
+<h2 class="text-center mb-4 fw-bold display-6 glass-heading">
+    STUDENT APPLICATIONS
+</h2>
 
 <table class="table table-hover shadow-lg">
 <thead class="table-dark">
@@ -49,31 +51,20 @@
     </td>
 
     <td>
-        <form action="/admin/application/status/{{ app[0] }}" method="POST">
-            <select name="status" class="form-select" onchange="this.form.submit()">
+       <form action="/admin/application/status/{{ app[0] }}" method="POST" class="d-flex gap-2 flex-column flex-md-row">
 
-                <option value="Applied" 
-                    {% if app[8]=='Applied' %}selected{% endif %}>
-                    Applied
-                </option>
+    <select name="status" class="form-select form-select-sm">
+        <option value="Applied" {% if app[8]=='Applied' %}selected{% endif %}>Applied</option>
+        <option value="Shortlisted" {% if app[8]=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
+        <option value="Selected" {% if app[8]=='Selected' %}selected{% endif %}>Selected</option>
+        <option value="Rejected" {% if app[8]=='Rejected' %}selected{% endif %}>Rejected</option>
+    </select>
 
-                <option value="Shortlisted" 
-                    {% if app[8]=='Shortlisted' %}selected{% endif %}>
-                    Shortlisted
-                </option>
+    <button type="submit" class="btn btn-success btn-sm">
+        Update Result
+    </button>
+</form>
 
-                <option value="Selected" 
-                    {% if app[8]=='Selected' %}selected{% endif %}>
-                    Selected
-                </option>
-
-                <option value="Rejected" 
-                    {% if app[8]=='Rejected' %}selected{% endif %}>
-                    Rejected
-                </option>
-
-            </select>
-        </form>
     </td>
 
     <td>{{ app[9] }}</td>
@@ -87,4 +78,5 @@
 </div>
 
 {% endblock %}
+
 
