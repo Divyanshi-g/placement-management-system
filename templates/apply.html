@@ -14,6 +14,19 @@
     <form method="POST" enctype="multipart/form-data">
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <!-- Name -->
+        <div>
+          <label class="font-medium">👤 Full Name</label>
+          <input type="text" name="student_name" required
+            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label class="font-medium">📞 Phone Number</label>
+          <input type="text" name="phone" required
+            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+        </div>
 
         <!-- Course -->
         <div>
@@ -50,4 +63,5 @@
 
 </div>
 {% endblock %}
+
 
