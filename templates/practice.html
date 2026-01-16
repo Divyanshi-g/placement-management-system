@@ -115,11 +115,23 @@ padding:8px;border-radius:6px;
 .averageResult{background:#e0f2fe;border-left:6px solid #0ea5e9;}
 .badResult{background:#fee2e2;border-left:6px solid #ef4444;}
 .bestResult{background:#fef3c7;border-left:6px solid #f59e0b;}
+            @media (max-width: 480px) {
+  #openHistory {
+    position: relative;      /* no longer fixed */
+    top: auto;               /* reset top */
+    right: auto;             /* reset right */
+    display: block;          /* full-width button */
+    margin: 0 auto 1rem;     /* center above card with margin-bottom */
+    width: 90%;              /* slightly smaller than card */
+    text-align: center;
+  }
+}
 </style>
 
 <script src="{{ url_for('static', filename='js/practice.js') }}"></script>
 
 {% endblock %}
+
 
 
 
