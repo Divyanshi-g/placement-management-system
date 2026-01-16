@@ -574,8 +574,8 @@ def apply(placement_id):
     """, (
         user_id, placement_id,
         student_name, phone, course,
-        skills, experience, resume_filename
-    ))
+        skills, experience, resume_filename)
+    )
 
     conn.commit()
     conn.close()
@@ -1460,6 +1460,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
