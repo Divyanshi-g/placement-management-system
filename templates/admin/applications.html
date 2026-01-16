@@ -1,82 +1,100 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container mt-4">
+<div class="container-fluid px-3 px-md-4 mt-4">
 
-<h2 class="text-center mb-4 fw-bold display-6 glass-heading">
+  <h2 class="text-center mb-4 fw-bold display-6 glass-heading">
     STUDENT APPLICATIONS
-</h2>
+  </h2>
 
-<table class="table table-hover shadow-lg">
-<thead class="table-dark">
-<tr>
-    <th>#</th>
-    <th>Student</th>
-    <th>Company</th>
-    <th>Role</th>
-    <th>Experience</th>
-    <th>Skills</th>
-    <th>Resume</th>
-    <th>Status</th>
-    <th>Applied On</th>
-</tr>
-</thead>
+  <!-- Table Wrapper -->
+  <div class="table-responsive shadow-lg rounded-4 bg-white">
 
-<tbody>
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark text-nowrap">
+        <tr>
+          <th>#</th>
+          <th>Student</th>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Experience</th>
+          <th>Skills</th>
+          <th>Resume</th>
+          <th>Status</th>
+          <th>Applied On</th>
+        </tr>
+      </thead>
 
-{% for app in applications %}
-<tr>
-    <td>{{ loop.index }}</td>
+      <tbody>
+        {% for app in applications %}
+        <tr>
 
-    <td>
-        <strong>{{ app[1] }}</strong><br>
-        <small>{{ app[2] }}</small>
-    </td>
+          <td class="fw-semibold">{{ loop.index }}</td>
 
-    <td>{{ app[3] }}</td>
-    <td>{{ app[4] }}</td>
+          <!-- Student -->
+          <td>
+            <strong>{{ app[1] }}</strong><br>
+            <small class="text-muted">{{ app[2] }}</small>
+          </td>
 
-    <td>{{ app[5] or "Not Provided" }}</td>
-    <td>{{ app[6] or "Not Provided" }}</td>
+          <!-- Company / Role -->
+          <td>{{ app[3] }}</td>
+          <td>{{ app[4] }}</td>
 
-    <td>
-        {% if app[7] %}
-        <a href="{{ url_for('static', filename='uploads/resumes/' + app[7]) }}" 
-           class="btn btn-sm btn-primary" download>
-           Download
-        </a>
-        {% else %}
-        <span class="text-muted">No Resume</span>
-        {% endif %}
-    </td>
+          <!-- Experience / Skills -->
+          <td class="text-nowrap">
+            {{ app[5] or "Not Provided" }}
+          </td>
 
-    <td>
-       <form action="/admin/application/status/{{ app[0] }}" method="POST" class="d-flex gap-2 flex-column flex-md-row">
+          <td style="max-width:180px;">
+            <span class="d-inline-block text-truncate w-100">
+              {{ app[6] or "Not Provided" }}
+            </span>
+          </td>
 
-    <select name="status" class="form-select form-select-sm">
-        <option value="Applied" {% if app[8]=='Applied' %}selected{% endif %}>Applied</option>
-        <option value="Shortlisted" {% if app[8]=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
-        <option value="Selected" {% if app[8]=='Selected' %}selected{% endif %}>Selected</option>
-        <option value="Rejected" {% if app[8]=='Rejected' %}selected{% endif %}>Rejected</option>
-    </select>
+          <!-- Resume -->
+          <td class="text-center">
+            {% if app[7] %}
+              <a href="{{ url_for('static', filename='uploads/resumes/' + app[7]) }}"
+                 class="btn btn-sm btn-primary">
+                Download
+              </a>
+            {% else %}
+              <span class="text-muted">No Resume</span>
+            {% endif %}
+          </td>
 
-    <button type="submit" class="btn btn-success btn-sm">
-        Update Result
-    </button>
-</form>
+          <!-- Status Update -->
+          <td>
+            <form action="/admin/application/status/{{ app[0] }}"
+                  method="POST"
+                  class="d-flex flex-column gap-2">
 
-    </td>
+              <select name="status" class="form-select form-select-sm">
+                <option value="Applied" {% if app[8]=='Applied' %}selected{% endif %}>Applied</option>
+                <option value="Shortlisted" {% if app[8]=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                <option value="Selected" {% if app[8]=='Selected' %}selected{% endif %}>Selected</option>
+                <option value="Rejected" {% if app[8]=='Rejected' %}selected{% endif %}>Rejected</option>
+              </select>
 
-    <td>{{ app[9] }}</td>
+              <button type="submit" class="btn btn-success btn-sm w-100">
+                Update
+              </button>
+            </form>
+          </td>
 
-</tr>
-{% endfor %}
+          <!-- Applied On -->
+          <td class="text-nowrap">
+            {{ app[9] }}
+          </td>
 
-</tbody>
-</table>
+        </tr>
+        {% endfor %}
+      </tbody>
 
+    </table>
+
+  </div>
 </div>
 
 {% endblock %}
-
-
