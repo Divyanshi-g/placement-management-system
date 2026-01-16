@@ -510,44 +510,68 @@ def apply(placement_id):
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # ✅ Check placement exists
-    cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
+    # ✅ Verify placement exists
+    cur.execute(
+        "SELECT company, role FROM placements WHERE id = ?",
+        (placement_id,)
+    )
     placement = cur.fetchone()
     if not placement:
         abort(404, "Placement not found")
 
-    # ✅ POST → insert data
-    if request.method == "POST":
-        student_name = request.form["student_name"]
-        phone = request.form["phone"]
-        course = request.form["course"]
-        skills = request.form.get("skills")
-        experience = request.form.get("experience")
+    # ✅ Verify user exists
+    cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
+    if not cur.fetchone():
+        abort(403, "Invalid user")
 
-        cur.execute("""
-            INSERT INTO applications (
-                user_id, placement_id,
-                student_name, phone, course,
-                skills, experience, status
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'Applied')
-        """, (
+    # ================= GET =================
+    if request.method == "GET":
+        return render_template(
+            "apply.html",
+            placement={
+                "company": placement["company"],
+                "role": placement["role"]
+            },
+            show_nav_options=True,
+            is_admin=session.get("role") == "admin",
+            home_url=url_for("enhancements.student_dashboard")
+        )
+
+    # ================= POST =================
+    student_name = request.form["student_name"]
+    phone = request.form["phone"]
+    course = request.form["course"]
+    skills = request.form.get("skills")
+    experience = request.form.get("experience")
+
+    # ✅ Prevent duplicate applications
+    cur.execute("""
+        SELECT id FROM applications
+        WHERE user_id = ? AND placement_id = ?
+    """, (user_id, placement_id))
+    if cur.fetchone():
+        flash("⚠️ You have already applied for this placement.")
+        return redirect(request.url)
+
+    # ✅ Safe insert
+    cur.execute("""
+        INSERT INTO applications (
             user_id, placement_id,
             student_name, phone, course,
-            skills, experience
-        ))
+            skills, experience, status
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'Applied')
+    """, (
+        user_id, placement_id,
+        student_name, phone, course,
+        skills, experience
+    ))
 
-        conn.commit()
-        return redirect(url_for("enhancements.status"))
+    conn.commit()
+    conn.close()
 
-    # ✅ GET → show form
-    return render_template(
-        "apply.html",
-        placement=placement,
-        show_nav_options=True,
-        is_admin=session.get("role") == "admin",
-        home_url=url_for("enhancements.student_dashboard")
-    )
+    flash("✅ Application submitted successfully!")
+    return redirect(url_for("enhancements.student_dashboard"))
 
 # ------------------ Profile ------------------
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
@@ -1458,6 +1482,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
