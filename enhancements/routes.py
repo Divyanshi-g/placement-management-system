@@ -526,7 +526,7 @@ def apply(placement_id):
         VALUES (?, ?, 'Applied')
     """, (user_id, placement_id))
 
-    get_db().commit()
+    get_db_conn().commit()
     return render_template("apply.html",
                             show_nav_options=True,
                             is_admin=session.get("role") == "admin",
@@ -1442,6 +1442,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
