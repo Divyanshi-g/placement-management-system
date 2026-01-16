@@ -462,12 +462,12 @@ def apply(placement_id):
     # Check placement exists
     cur.execute("SELECT id FROM placements WHERE id = ?", (placement_id,))
     if not cur.fetchone():
-        abort(404, "Placement not found")
+        print(404, "Placement not found")
 
     # Check user exists
     cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
     if not cur.fetchone():
-        abort(403, "Invalid user")
+        print(403, "Invalid user")
 
     # Insert application
     cur.execute("""
@@ -1372,6 +1372,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
