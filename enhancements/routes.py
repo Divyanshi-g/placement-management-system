@@ -499,7 +499,7 @@ def placements():
         home_url=url_for("enhancements.student_dashboard")
     )
 
-@app.route("/apply/<int:placement_id>")
+@enhancements_bp.route("/apply/<int:placement_id>")
 def apply(placement_id):
     if "user_id" not in session:
         return redirect(url_for("login"))
@@ -1434,6 +1434,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
