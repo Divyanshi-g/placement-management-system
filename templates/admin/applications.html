@@ -1,18 +1,68 @@
 {% extends "base.html" %}
 {% block content %}
 
+<style>
+  /* Heading enhancement */
+  .glass-heading {
+    font-weight: 800;
+    letter-spacing: 1px;
+    transition: transform .3s ease, color .3s ease;
+  }
+  .glass-heading:hover {
+    transform: scale(1.05);
+    color: #0d6efd;
+  }
+
+  /* Glass table background */
+  .glass-table {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+  }
+
+  /* Table cell spacing */
+  table th, table td {
+    padding: 14px 12px;
+    vertical-align: middle;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    h2.glass-heading {
+      font-size: 1.4rem;
+    }
+
+    table th, table td {
+      padding: 8px 6px;
+      font-size: 13px;
+    }
+
+    /* Hide less important columns on mobile */
+    th:nth-child(5),
+    td:nth-child(5),
+    th:nth-child(6),
+    td:nth-child(6) {
+      display: none;
+    }
+
+    .table-responsive {
+      border-radius: 12px;
+    }
+  }
+</style>
+
 <div class="container-fluid px-3 px-md-4 mt-4">
 
-  <h2 class="text-center mb-4 fw-bold display-6 glass-heading">
+  <!-- Heading -->
+  <h2 class="text-center mb-4 display-5 glass-heading">
     STUDENT APPLICATIONS
   </h2>
 
   <!-- Table Wrapper -->
-  <div class="table-responsive shadow-lg rounded-3 bg-white">
+  <div class="table-responsive shadow-lg rounded-3 glass-table">
 
-    <table class="table table-bordered table-striped align-middle mb-0">
-      <thead class="table-dark text-nowrap">
-        <tr class="text-center">
+    <table class="table table-bordered table-striped align-middle mb-0 text-nowrap">
+      <thead class="table-dark text-center">
+        <tr>
           <th>#</th>
           <th>Student</th>
           <th>Company</th>
@@ -29,7 +79,7 @@
         {% for app in applications %}
         <tr>
 
-          <td class="text-center fw-semibold">{{ loop.index }}</td>
+          <td class="fw-semibold text-center">{{ loop.index }}</td>
 
           <td>
             <strong>{{ app[1] }}</strong><br>
@@ -78,7 +128,7 @@
             </form>
           </td>
 
-          <td class="text-center text-nowrap">
+          <td class="text-center">
             {{ app[9] }}
           </td>
 
