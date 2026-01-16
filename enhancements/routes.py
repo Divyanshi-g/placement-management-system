@@ -521,7 +521,14 @@ def apply(placement_id):
         return "Placement not found", 404
 
     user_id = session["user_id"]
-
+    cur.execute("""
+        SELECT id FROM applications
+        WHERE user_id = ? AND placement_id = ?
+    """, (user_id, placement_id))
+    if cur.fetchone():
+        db.close()
+        flash("⚠️ You have already applied for this placement.", "warning")
+        return redirect(url_for("enhancements.placements"))
    # ================= POST =================
     if request.method == "POST":
         student_name = request.form.get("student_name")
@@ -1555,6 +1562,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
