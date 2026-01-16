@@ -84,6 +84,13 @@ def create_notification(user_id, role, n_type, message, link=None):
     conn = get_db_conn()
     cur = conn.cursor()
 
+    # ✅ VERIFY USER EXISTS
+    cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
+    if not cur.fetchone():
+        conn.close()
+        print("⚠️ Notification skipped: invalid user_id", user_id)
+        return
+
     cur.execute("""
         INSERT INTO notifications (user_id, role, type, message, link)
         VALUES (?, ?, ?, ?, ?)
@@ -91,6 +98,7 @@ def create_notification(user_id, role, n_type, message, link=None):
 
     conn.commit()
     conn.close()
+
 
 
 @enhancements_bp.route("/resume_review", methods=["GET", "POST"])
@@ -496,90 +504,51 @@ def placements():
         home_url=url_for("enhancements.student_dashboard")
     )
 
-@enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
+@enhancements_bp.route("/apply/<int:placement_id>")
 def apply(placement_id):
-    if "user_id" not in session:
-        return redirect(url_for("auth.login"))
+    if "user_id" not in session or session.get("role") != "student":
+        return redirect(url_for("enhancements.login"))
 
-    db = get_db_conn()
-    cur = db.cursor()
-        # After successful insert into applications table
-    create_notification(
-     user_id=session["user_id"],
-     role="student",
-     n_type="application",
-     message=f"You applied for {company} – {role}.",
-     link=url_for("enhancements.status")
-    )
+    conn = get_db_conn()
+    cur = conn.cursor()
 
-
-    # -------- Get placement --------
-    cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
-    placement = cur.fetchone()
-    if not placement:
-        db.close()
-        return "Placement not found", 404
-
-    user_id = session["user_id"]
+    # FETCH placement
     cur.execute("""
-        SELECT id FROM applications
-        WHERE user_id = ? AND placement_id = ?
-    """, (user_id, placement_id))
-    if cur.fetchone():
-        db.close()
-        flash("⚠️ You have already applied for this placement.", "warning")
-        return redirect(url_for("enhancements.placements"))
-   # ================= POST =================
-    if request.method == "POST":
-        student_name = request.form.get("student_name")
-        course = request.form.get("course")
-        skills = request.form.get("skills")
-        experience = request.form.get("experience")
+        SELECT company, role
+        FROM placements
+        WHERE id = ?
+    """, (placement_id,))
+    placement = cur.fetchone()
 
-        # -------- Resume Upload --------
-        resume = None
-        file = request.files.get("resume")
+    if not placement:
+        conn.close()
+        flash("Placement not found", "error")
+        return redirect(url_for("enhancements.student_dashboard"))
 
-        if file and file.filename:
-            upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
-            os.makedirs(upload_folder, exist_ok=True)
+    # 🔴 THESE TWO LINES MUST EXIST BEFORE NOTIFICATION
+    company = placement["company"]
+    role = placement["role"]
 
-            resume = secure_filename(file.filename)
-            file.save(os.path.join(upload_folder, resume))
+    # INSERT application
+    cur.execute("""
+        INSERT INTO applications (user_id, placement_id, status)
+        VALUES (?, ?, 'Applied')
+    """, (session["user_id"], placement_id))
 
-        # -------- Insert Application --------
-        cur.execute("""
-            INSERT INTO applications
-            (user_id, placement_id, student_name, course, skills, experience, resume)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-            (user_id, placement_id, course, skills, experience)
-            VALUES (?, ?, ?, ?, ?)
-        """, (
-            user_id,
-            placement_id,
-            student_name,
-            course,
-            skills,
-            experience,
-            resume,
-            experience
-        ))
+    conn.commit()
+    conn.close()
 
-        db.commit()
-        db.close()
-
-        flash("✅ Application submitted successfully!", "success")
-        return redirect(url_for("enhancements.placements"))
-
-    # ================= GET =================
-    db.close()
-    return render_template(
-        "apply.html",
-        placement=placement,
-        show_nav_options=True,
-        is_admin=False,
-        home_url=url_for("enhancements.student_dashboard")
+    # CREATE notification
+    create_notification(
+        user_id=session["user_id"],
+        role="student",
+        n_type="application",
+        message=f"You applied for {company} – {role}.",
+        link=url_for("enhancements.status")
     )
+
+    flash("Application submitted successfully!", "success")
+    return redirect(url_for("enhancements.status"))
 
 
 # ------------------ Profile ------------------
@@ -1562,6 +1531,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
