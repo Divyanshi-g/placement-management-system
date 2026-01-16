@@ -489,15 +489,15 @@ def apply(placement_id):
         experience = request.form.get("experience")
 
         # -------- Resume Upload --------
-        resume_filename = None
+        resume = None
         file = request.files.get("resume")
 
         if file and file.filename:
             upload_folder = current_app.config["UPLOAD_FOLDER_RESUMES"]
             os.makedirs(upload_folder, exist_ok=True)
 
-            resume_filename = secure_filename(file.filename)
-            file.save(os.path.join(upload_folder, resume_filename))
+            resume = secure_filename(file.filename)
+            file.save(os.path.join(upload_folder, resume))
 
         # -------- Insert Application --------
         cur.execute("""
@@ -511,7 +511,7 @@ def apply(placement_id):
             course,
             skills,
             experience,
-            resume_filename
+            resume
         ))
 
         db.commit()
@@ -1438,6 +1438,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
