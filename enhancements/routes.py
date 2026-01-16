@@ -77,30 +77,6 @@ def call_huggingface(prompt):
         return data[0].get("generated_text", "")
     return "Unable to analyze resume."
 
-# =======================
-# NOTIFICATION HELPER
-# =======================
-def create_notification(user_id, role, n_type, message, link=None):
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    # ✅ VERIFY USER EXISTS
-    cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
-    if not cur.fetchone():
-        conn.close()
-        print("⚠️ Notification skipped: invalid user_id", user_id)
-        return
-
-    cur.execute("""
-        INSERT INTO notifications (user_id, role, type, message, link)
-        VALUES (?, ?, ?, ?, ?)
-    """, (user_id, role, n_type, message, link))
-
-    conn.commit()
-    conn.close()
-
-
-
 @enhancements_bp.route("/resume_review", methods=["GET", "POST"])
 def resume_review():
     if request.method == "GET":
@@ -416,31 +392,6 @@ def app_chat():
             "Try rephrasing your question."
         )
     })
-
-@enhancements_bp.route("/notifications")
-def notifications():
-    if "user_id" not in session:
-        return redirect(url_for("enhancements.login"))
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    cur.execute("""
-        SELECT message, type, link, created_at
-        FROM notifications
-        WHERE user_id = ? AND role = ?
-        ORDER BY created_at DESC
-    """, (session["user_id"], session["role"]))
-
-    notifications = cur.fetchall()
-    conn.close()
-
-    return render_template(
-        "notifications.html",
-        notifications=notifications,
-        show_nav_options=True
-    )
-
 
 # ------------------ Placement search & apply ------------------
 @enhancements_bp.route("/placements")
@@ -1434,6 +1385,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
