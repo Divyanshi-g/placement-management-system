@@ -17,7 +17,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 </head>
 
-<body class="min-h-screen flex flex-col text-slate-900"
+<body class="min-h-screen flex flex-col text-slate-900
+             transition-colors duration-300"
       style="
         background:
           radial-gradient(at 88% 82%, rgba(220,160,40,0.85) 0px, transparent 52%),
@@ -31,7 +32,7 @@
   <nav class="fixed top-0 w-full z-50 bg-white/45 backdrop-blur-xl shadow-sm">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
-      <!-- LOGO (UNCHANGED) -->
+      <!-- LOGO -->
       <div class="group flex items-center gap-3 cursor-pointer">
         <div class="w-10 h-10 rounded-full
                     bg-gradient-to-br from-purple-700 to-indigo-700
@@ -40,7 +41,6 @@
                     group-hover:scale-110">
           H
         </div>
-
         <span class="max-w-0 overflow-hidden whitespace-nowrap
                      text-3xl font-extrabold text-indigo-900
                      transition-all duration-500
@@ -50,19 +50,17 @@
       </div>
 
       {% if show_nav_options %}
-      <!-- DESKTOP NAV (UNCHANGED) -->
+      <!-- DESKTOP NAV -->
       <div class="hidden md:flex items-center gap-6 text-1x1 font-medium text-slate-900 relative">
 
         <a href="{{ home_url }}"
            class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
           Home
         </a>
-
         <a href="/about"
            class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
           About
         </a>
-
         <a href="/rate"
            class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
           Rate
@@ -78,16 +76,30 @@
           <div id="settingsMenu"
                class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
 
-            <a href="/change-password"
-               class="block px-4 py-3 text-sm hover:bg-slate-100">
-              <i class="fa-solid fa-key mr-2"></i> Change Password
-            </a>
-
-            <button onclick="toggleTheme()"
-                    class="w-full text-left px-4 py-3 text-sm hover:bg-slate-100">
-              <i class="fa-solid fa-moon mr-2"></i> Toggle Theme
+            <!-- Change Password -->
+            <button onclick="toggleChangePassword()"
+                    class="w-full text-left px-4 py-3 text-sm hover:bg-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-key"></i> Change Password
             </button>
 
+            <!-- Theme Switch -->
+            <div class="flex items-center justify-between px-4 py-3 hover:bg-slate-100 cursor-pointer">
+              <span><i class="fa-solid fa-moon mr-2"></i> Theme</span>
+              <label class="inline-flex relative items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" id="themeSwitch">
+                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600
+                            peer-focus:ring-2 peer-focus:ring-indigo-300 transition-all"></div>
+                <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full
+                            peer-checked:translate-x-5 transition-all"></div>
+              </label>
+            </div>
+
+            <!-- Assistant -->
+            <button onclick="toggleChat()" class="w-full text-left px-4 py-3 text-sm hover:bg-slate-100 flex items-center gap-2">
+              <i class="fa-solid fa-robot"></i> HireHub Helper
+            </button>
+
+            <!-- Logout -->
             <a href="{{ url_for('enhancements.logout') }}"
                class="block px-4 py-3 text-sm text-red-600 hover:bg-red-50">
               <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
@@ -97,16 +109,14 @@
       </div>
 
       <!-- MOBILE MENU BUTTON -->
-      <button onclick="toggleMobileMenu()"
-              class="md:hidden text-2xl text-slate-900">
+      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-slate-900">
         <i class="fa-solid fa-bars"></i>
       </button>
       {% endif %}
     </div>
 
     <!-- MOBILE MENU -->
-    <div id="mobileMenu"
-         class="hidden md:hidden bg-white/80 backdrop-blur-xl shadow-lg">
+    <div id="mobileMenu" class="hidden md:hidden bg-white/80 backdrop-blur-xl shadow-lg">
       <div class="flex flex-col px-6 py-4 gap-4 text-slate-900 font-medium">
 
         <a href="{{ home_url }}">Home</a>
@@ -120,39 +130,41 @@
         </button>
 
         <div id="settingsMenuMobile" class="hidden pl-4 flex flex-col gap-2">
-          <a href="/change-password" class="text-sm">Change Password</a>
-
-          <button onclick="toggleTheme()" class="text-sm text-left">
-            Toggle Theme
+          <button onclick="toggleChangePassword()" class="text-sm flex items-center gap-2">
+            <i class="fa-solid fa-key"></i> Change Password
           </button>
 
-          <a href="{{ url_for('enhancements.logout') }}"
-             class="text-sm text-red-600">
-            Logout
-          </a>
+          <!-- Theme Switch -->
+          <div class="flex items-center justify-between text-sm">
+            <span>Theme</span>
+            <label class="inline-flex relative items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer" id="themeSwitchMobile">
+              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 transition-all"></div>
+              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-all"></div>
+            </label>
+          </div>
+
+          <!-- Assistant -->
+          <button onclick="toggleChat()" class="text-sm flex items-center gap-2">
+            <i class="fa-solid fa-robot"></i> HireHub Helper
+          </button>
+
+          <a href="{{ url_for('enhancements.logout') }}" class="text-sm text-red-600">Logout</a>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- BACK BUTTON (UNCHANGED) -->
+  <!-- BACK BUTTON -->
   <div class="pt-16 md:pt-20 pl-6">
-  <button onclick="history.back()"
-          class="inline-flex items-center gap-2
-                 px-4 py-1.5 rounded-md
-                 border-2 border-black/50
-                 text-sm font-medium text-slate-900
-                 hover:bg-black/10
-                 transition-all duration-200">
-
-    <!-- Icon always visible -->
-    <span class="text-lg">←</span>
-
-    <!-- Text visible only on md+ screens -->
-    <span class="hidden md:inline">Back</span>
-
-  </button>
-</div>
+    <button onclick="history.back()"
+            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-md
+                   border-2 border-black/50 text-sm font-medium text-slate-900
+                   hover:bg-black/10 transition-all duration-200">
+      <span class="text-lg">←</span>
+      <span class="hidden md:inline">Back</span>
+    </button>
+  </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -170,12 +182,12 @@
   {% endif %}
   {% endwith %}
 
-  <!-- MAIN CONTENT (UNCHANGED) -->
+  <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-7xl mx-auto px-6">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- FOOTER (UNCHANGED) -->
+  <!-- FOOTER -->
   <footer class="bg-white/30 backdrop-blur-md text-black text-center py-6">
     <div class="flex justify-center gap-6 mb-3 text-2xl">
       <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
@@ -186,27 +198,115 @@
     © 2025 HireHub · Placement Management System
   </footer>
 
+  <!-- CHANGE PASSWORD MODAL -->
+  <div id="changePasswordPanel" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+        bg-white rounded-xl shadow-2xl p-6 w-80 md:w-96 z-50">
+    <h2 class="text-xl font-bold mb-4">Change Password</h2>
+    <form id="changePasswordForm">
+      <div class="mb-3">
+        <label class="block text-sm font-medium mb-1">Old Password</label>
+        <input type="password" name="old_password" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium mb-1">New Password</label>
+        <input type="password" name="new_password" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1">Confirm New Password</label>
+        <input type="password" name="confirm_password" class="w-full border rounded px-3 py-2" required>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="toggleChangePassword()" class="px-4 py-2 rounded bg-gray-300">Cancel</button>
+        <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white">Change</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ASSISTANT PANEL -->
+  <div id="chatbot"
+       class="hidden fixed bottom-20 right-10 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50">
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 font-bold">
+      HireHub Helper
+    </div>
+    <div class="h-64 p-4 overflow-y-auto text-sm" id="chat-content">
+      <p class="text-gray-500">👋 Hi! Ask me about the app.</p>
+    </div>
+    <div class="flex border-t">
+      <input id="chat-input" type="text"
+             class="flex-1 px-3 py-2 focus:outline-none">
+      <button onclick="sendMessage()"
+              class="px-4 text-indigo-500 font-bold hover:text-indigo-700">➤</button>
+    </div>
+  </div>
+
   <!-- SCRIPTS -->
   <script>
-    function toggleSettings() {
-      document.getElementById("settingsMenu").classList.toggle("hidden");
-    }
+    // Settings toggles
+    function toggleSettings() { document.getElementById("settingsMenu").classList.toggle("hidden"); }
+    function toggleMobileMenu() { document.getElementById("mobileMenu").classList.toggle("hidden"); }
+    function toggleSettingsMobile() { document.getElementById("settingsMenuMobile").classList.toggle("hidden"); }
+    function toggleChangePassword() { document.getElementById("changePasswordPanel").classList.toggle("hidden"); }
 
-    function toggleMobileMenu() {
-      document.getElementById("mobileMenu").classList.toggle("hidden");
-    }
-
-    function toggleSettingsMobile() {
-      document.getElementById("settingsMenuMobile").classList.toggle("hidden");
-    }
-
+    // Theme toggle
     function toggleTheme() {
       document.body.classList.toggle("bg-black");
       document.body.classList.toggle("text-white");
+    }
+    const themeSwitch = document.getElementById('themeSwitch');
+    if(themeSwitch) themeSwitch.addEventListener('change', toggleTheme);
+    const themeSwitchMobile = document.getElementById('themeSwitchMobile');
+    if(themeSwitchMobile) themeSwitchMobile.addEventListener('change', toggleTheme);
+
+    // Assistant toggle
+    function toggleChat() {
+      const chat = document.getElementById("chatbot");
+      if(chat) chat.classList.toggle("hidden");
+    }
+
+    // Chat logic
+    async function sendMessage() {
+      const input = document.getElementById("chat-input");
+      const content = document.getElementById("chat-content");
+      if(!input || !content) return;
+
+      const text = input.value.trim();
+      if(text==="") return;
+
+      const userMsg = document.createElement("div");
+      userMsg.className = "text-right mb-2";
+      userMsg.innerHTML = `<span class="inline-block bg-rose-100 text-gray-800 px-3 py-2 rounded-lg">🧑 ${text}</span>`;
+      content.appendChild(userMsg);
+      input.value = "";
+      content.scrollTop = content.scrollHeight;
+
+      const typingMsg = document.createElement("div");
+      typingMsg.className = "text-left mb-2 text-sm text-gray-500";
+      typingMsg.textContent = "🤖 typing...";
+      content.appendChild(typingMsg);
+      content.scrollTop = content.scrollHeight;
+
+      try {
+        const response = await fetch("/app-chat", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({ message: text })
+        });
+        const data = await response.json();
+        typingMsg.remove();
+        const botMsg = document.createElement("div");
+        botMsg.className = "text-left mb-2";
+        botMsg.innerHTML = `<span class="inline-block bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg">🤖 ${data.reply}</span>`;
+        content.appendChild(botMsg);
+        content.scrollTop = content.scrollHeight;
+      } catch(e){
+        typingMsg.remove();
+        const errMsg = document.createElement("p");
+        errMsg.className = "text-red-500 text-sm";
+        errMsg.textContent = "🤖 Sorry, I couldn't connect right now.";
+        content.appendChild(errMsg);
+      }
     }
   </script>
 
 </body>
 </html>
-
-
