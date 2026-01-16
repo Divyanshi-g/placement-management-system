@@ -54,6 +54,104 @@ def generate_ai_answer(user_question):
         return f"⚠️ Error connecting to OpenRouter: {str(e)}"
     except KeyError:
         return "⚠️ Unexpected response from OpenRouter."
+    import os, json, requests
+from datetime import datetime
+from flask import request, jsonify, render_template, session
+from werkzeug.utils import secure_filename
+
+HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+HF_MODEL = "google/flan-t5-base"
+
+def call_huggingface(prompt):
+    url = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
+    headers = {
+        "Authorization": f"Bearer {HUGGINGFACE_API_KEY}"
+    }
+    payload = {
+        "inputs": prompt,
+        "parameters": {
+            "max_new_tokens": 300
+        }
+    }
+
+    r = requests.post(url, headers=headers, json=payload, timeout=30)
+    r.raise_for_status()
+    data = r.json()
+
+    if isinstance(data, list):
+        return data[0].get("generated_text", "")
+    return "Unable to analyze resume."
+
+@enhancements_bp.route("/resume_review", methods=["GET", "POST"])
+def resume_review():
+    if request.method == "GET":
+        return render_template("resume_review.html")
+
+    if "resume" not in request.files:
+        return jsonify({"error": "No resume uploaded"}), 400
+
+    file = request.files["resume"]
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"error": "Login required"}), 401
+
+    filename = secure_filename(file.filename)
+    save_path = os.path.join(
+        get_upload_folder(),
+        f"{int(datetime.utcnow().timestamp())}_{filename}"
+    )
+    file.save(save_path)
+
+    # Extract text (reuse your existing logic)
+    from enhancements.resume_checker import analyze_resume
+    local_result = analyze_resume(save_path)
+
+    # Hugging Face ATS prompt
+    prompt = f"""
+You are an ATS resume checker.
+Give feedback in bullet points and improvement suggestions.
+
+Resume text:
+{json.dumps(local_result)}
+"""
+
+    try:
+        hf_feedback = call_huggingface(prompt)
+    except Exception as e:
+        hf_feedback = "ATS analysis failed. Showing basic checks only."
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO resumes (user_id, filename, storage_path, verdict, details)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            user_id,
+            filename,
+            save_path,
+            local_result.get("verdict"),
+            json.dumps({
+                "basic": local_result,
+                "hf_feedback": hf_feedback
+            })
+        )
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "score": local_result.get("score_percent"),
+        "verdict": local_result.get("verdict"),
+        "feedback": hf_feedback,
+        "suggestions": local_result.get("suggestions"),
+        show_nav_options=True,  # hide dashboard links
+        is_admin=False,          # safe default
+        home_url=url_for("enhancements.student_dashboard")
+    })
+
 # ------------------ Auth pages ------------------
 @enhancements_bp.route("/register", methods=["GET", "POST"])
 def register():
@@ -1284,73 +1382,6 @@ def reports():
         home_url=url_for("enhancements.admin_dashboard")
     )
 
-
-
-
-# ------------------ Resume Review ------------------
-
-def allowed_file(filename):
-    return os.path.splitext(filename)[1].lower() in ALLOWED_EXT
-
-
-@enhancements_bp.route("/resume_review", methods=["GET", "POST"])
-def resume_review():
-    if request.method == "GET":
-        return render_template("resume_review.html")
-
-    file = request.files.get("resume")
-    user_id = session.get("user_id")
-
-    if not file or file.filename == "":
-        return jsonify({"error": "No file selected"}), 400
-    filename = secure_filename(file.filename)
-    if not allowed_file(filename):
-        return jsonify({"error": "File type not allowed"}), 400
-
-    save_path = os.path.join(
-        get_upload_folder(),
-        f"{int(datetime.utcnow().timestamp())}_{filename}"
-    )
-    file.save(save_path)
-
-    result = analyze_resume(save_path)
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute(
-        "INSERT INTO resumes (user_id, filename, storage_path, verdict, details) VALUES (?, ?, ?, ?, ?)",
-        (user_id, filename, save_path, result.get("verdict"), json.dumps(result))
-    )
-    conn.commit()
-    conn.close()
-
-    return jsonify({"result": result})
-
-
-@enhancements_bp.route("/update_status/<int:app_id>", methods=["POST"])
-def update_status(app_id):
-    status = request.form.get("status")
-    if status not in ["Applied", "Shortlisted", "Selected", "Rejected"]:
-        flash("⚠️ Invalid status.", "danger")
-        return redirect(request.referrer or url_for("enhancements.admin_dashboard"))
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute("UPDATE applications SET status = ? WHERE id = ?", (status, app_id))
-    conn.commit()
-    conn.close()
-
-    flash("✅ Application status updated.", "success")
-    return redirect(request.referrer or url_for("enhancements.admin_dashboard"))
-
-
-@enhancements_bp.route('/uploads/<path:filename>')
-def uploaded_file(filename):
-    folder = current_app.config.get('RESUME_UPLOAD_FOLDER', 'uploads/resumes')
-    return send_from_directory(folder, filename, as_attachment=False)
-
-
-
 # ---------------- Chat Page ----------------
 @enhancements_bp.route("/ask", methods=["GET", "POST"])
 def ask():
@@ -1410,22 +1441,5 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
