@@ -457,7 +457,7 @@ def apply(placement_id):
 
     user_id = session["user_id"]
 
-    cur = get_db().cursor()
+    cur = get_db_conn().cursor()
 
     # Check placement exists
     cur.execute("SELECT id FROM placements WHERE id = ?", (placement_id,))
@@ -1372,6 +1372,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
