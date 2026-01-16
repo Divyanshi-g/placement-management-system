@@ -66,14 +66,7 @@
            class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
           Rate
         </a>
-
-     <!-- NOTIFICATION ICON (HIDDEN BY DEFAULT) -->
-        <button id="notifBell"
-                class="hidden text-xl hover:text-indigo-700 transition relative">
-          <a href="{{ url_for('enhancements.notifications') }}">
-   <i class="fa-solid fa-bell"></i>
-</a>
-        </button>
+   </button>
         <!-- SETTINGS DROPDOWN -->
         <div class="relative">
           <button onclick="toggleSettings()"
@@ -84,18 +77,6 @@
           <!-- DROPDOWN -->
           <div id="settingsMenu"
                class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
-
-            <!-- Notifications Toggle -->
-            <div class="px-4 py-3 flex items-center justify-between hover:bg-gray-100">
-              <span class="text-sm font-medium">Notifications</span>
-              <input type="checkbox"
-                     id="notifToggle"
-                     onchange="toggleNotificationBell()"
-                     class="accent-indigo-600 cursor-pointer">
-            </div>
-
-            <hr>
-
             <!-- Logout -->
             <a href="{{ url_for('enhancements.logout') }}"
                class="block px-4 py-3 text-sm text-red-600 hover:bg-red-50">
@@ -156,15 +137,6 @@
 
   <!-- SETTINGS + NOTIFICATION SCRIPT -->
   <script>
-    function toggleSettings() {
-      document.getElementById("settingsMenu").classList.toggle("hidden");
-    }
-
-    function toggleNotificationBell() {
-      const bell = document.getElementById("notifBell");
-      const toggle = document.getElementById("notifToggle");
-      toggle.checked ? bell.classList.remove("hidden") : bell.classList.add("hidden");
-    }
 
     // Close dropdown on outside click
     window.addEventListener("click", function (e) {
@@ -177,6 +149,7 @@
 
 </body>
 </html>
+
 
 
 
