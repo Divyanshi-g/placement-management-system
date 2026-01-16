@@ -79,6 +79,26 @@
   {% endif %}
 
 </div>
+<style>
+  @media (max-width: 480px){
+  .application-card {
+    padding: 1rem; /* smaller padding */
+  }
+  h2 {
+    font-size: 1.75rem; /* smaller heading for phones */
+  }
+  h3 {
+    font-size: 1.25rem;
+  }
+  p {
+    font-size: 0.875rem;
+  }
+  .progress-bar-container {
+    height: 1.5rem; /* optional for narrow screens */
+  }
+}
+
+</style>
 
 <!-- Optional: Auto-refresh for live status -->
 <script>
@@ -97,3 +117,4 @@
 </script>
 
 {% endblock %}
+
