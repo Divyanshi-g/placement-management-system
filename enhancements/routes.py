@@ -1174,97 +1174,25 @@ def manage_students():
          is_admin=True,
          home_url=url_for("enhancements.admin_dashboard")
     )
-
-
-# ---------------- Placement Applications ----------------
-@enhancements_bp.route("/view_applications/<int:pid>", methods=["GET"])
-def view_applications(pid):
-    conn = get_db_conn()
-    cur = conn.cursor()
-
-    # Fetch placement
-    cur.execute("SELECT * FROM placements WHERE id = ?", (pid,))
-    placement = cur.fetchone()
-    if not placement:
-        flash("❌ Placement not found.", "danger")
-        conn.close()
-        return redirect(url_for("enhancements.manage_placements"))
-
-    # Fetch applications (resume ONLY from applications table)
-    cur.execute("""
-        SELECT 
-            a.id,
-            a.status,
-            a.applied_at,
-            a.resume,
-            a.skills,
-            u.username,
-            u.email
-        FROM applications a
-        JOIN users u ON a.user_id = u.id
-        WHERE a.placement_id = ?
-        ORDER BY a.applied_at DESC
-    """, (pid,))
-
-    rows = cur.fetchall()
-    conn.close()
-
-    applications = [
-        {
-            "id": row["id"],
-            "status": row["status"],
-            "applied_at": row["applied_at"],
-            "username": row["username"],
-            "email": row["email"],
-            "resume": row["resume"],
-            "skills": row["skills"]
-        }
-        for row in rows
-    ]
-
-    return render_template(
-        "view_applications.html",
-        placement=placement,
-        applications=applications,
-        show_nav_options=True,
-        is_admin=True,
-        home_url=url_for("enhancements.admin_dashboard")
-    )
-
-@enhancements_bp.route("/manage_placements", methods=["GET", "POST"])
+@enhancements_bp.route("/manage_placements", methods=["GET"])
 def manage_placements():
     conn = get_db_conn()
     cur = conn.cursor()
 
-    if request.method == "POST":
-        company = request.form.get("company")
-        role = request.form.get("role")
-        location = request.form.get("location")
-        description = request.form.get("description")
-        link = request.form.get("link")
-
-        if company and role and location:
-            cur.execute("""
-                INSERT INTO placements (company, role, location, description, link)
-                VALUES (?, ?, ?, ?, ?)
-            """, (company, role, location, description, link))
-            conn.commit()
-            flash("✅ Placement added successfully!", "success")
-        else:
-            flash("⚠️ Company, Role, and Location are required.", "danger")
-
-        return redirect(url_for("enhancements.manage_placements"))
-
-    # for GET → fetch all placements
-    cur.execute("SELECT * FROM placements ORDER BY created_at DESC")  # ⚠️ requires created_at column
+    cur.execute("""
+        SELECT * FROM placements
+        ORDER BY created_at DESC
+    """)
     placements = cur.fetchall()
     conn.close()
-    return render_template("manage_placements.html", 
-                           placements=placements,
-                           show_nav_options=True,
-                           is_admin=True,
-                           home_url=url_for("enhancements.admin_dashboard")
-                          )
+
+    return render_template(
+        "manage_placements.html",
+        placements=placements,
+        show_nav_options=True,
+        is_admin=True,
+        home_url=url_for("enhancements.admin_dashboard")
+    )
 
 @enhancements_bp.route("/delete_placement/<int:pid>", methods=["POST"])
 def delete_placement(pid):
@@ -1276,6 +1204,41 @@ def delete_placement(pid):
     flash("❌ Placement deleted.", "info")
     return redirect(url_for("enhancements.manage_placements"))
 
+
+@enhancements_bp.route("/add_placement", methods=["GET", "POST"])
+def add_placement():
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    if request.method == "POST":
+        data = (
+            request.form.get("company"),
+            request.form.get("role"),
+            request.form.get("location"),
+            request.form.get("description"),
+            request.form.get("eligibility"),
+            request.form.get("salary"),
+            request.form.get("deadline"),
+        )
+
+        if not data[0] or not data[1] or not data[2]:
+            flash("⚠️ Company, Role and Location are required.", "danger")
+            return redirect(url_for("enhancements.add_placement"))
+
+        cur.execute("""
+            INSERT INTO placements
+            (company, role, location, description, eligibility, salary, deadline)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, data)
+
+        conn.commit()
+        conn.close()
+        flash("✅ Company added successfully!", "success")
+        return redirect(url_for("enhancements.manage_placements"))
+
+    return render_template("add_placement.html",
+                           show_nav_options=True,
+                           is_admin=True)
 
 
 @enhancements_bp.route("/reports")
@@ -1409,6 +1372,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
