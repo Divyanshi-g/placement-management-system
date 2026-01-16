@@ -7,7 +7,7 @@ from flask import g, current_app
 # -------------------------------------------------
 def get_db_conn():
     if "db_conn" not in g:
-        db_path = current_app.config.get("DATABASE", "placements.db")
+        db_path = current_app.config.get("DATABASE", "placement.db")
 
         # store DB inside instance folder if relative
         if not os.path.isabs(db_path):
@@ -282,6 +282,7 @@ def init_db():
         ])
 
     db.commit()
+
 
 
 
