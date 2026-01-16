@@ -130,35 +130,45 @@
 .student-card.removed { animation: fadeOut 0.5s ease forwards; opacity:0; height:0; margin:0; padding:0; }
 @keyframes fadeOut { from {opacity:1;height:auto} to {opacity:0;height:0} }
     /* ================= MOBILE RESPONSIVENESS FIX ================= */
+/* ================= MOBILE RESPONSIVENESS (FINAL) ================= */
 @media (max-width: 768px) {
+
+  /* Prevent page-level horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
 
   /* Page heading */
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     line-height: 1.3;
+    margin-bottom: 1.5rem;
   }
 
   /* Search inputs */
   .glass-input {
     font-size: 13px;
     padding: 8px 10px;
+    width: 100%;
   }
 
-  /* Reduce card padding */
+  /* Student card */
   .student-card {
     padding: 14px !important;
+    max-width: 100%;
     overflow: hidden;
   }
 
-  /* Buttons wrap nicely */
+  /* Header section stack */
   .student-card > div:first-child {
     flex-direction: column;
     gap: 10px;
   }
 
+  /* Buttons full-width */
   .student-card .flex.gap-2 {
     width: 100%;
-    justify-content: flex-start;
+    flex-direction: column;
   }
 
   .student-card button {
@@ -168,35 +178,51 @@
 
   /* Fields grid → single column */
   .student-card .grid.grid-cols-2 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 8px;
   }
 
-  /* Details panel spacing */
+  /* ================= DETAILS PANEL ================= */
+
   .details-panel {
+    width: 100%;
+    max-width: 100%;
     padding: 12px;
-      max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-sizing: border-box;
   }
 
-  /* Applications table — prevent overflow */
+  /* Profile info grid → single column */
+  .details-panel .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+  }
+
+  /* ================= APPLICATIONS TABLE ================= */
+
   .details-panel table {
     display: block;
     width: 100%;
     max-width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
+    table-layout: fixed;
     border-collapse: collapse;
+  }
+
+  .details-panel thead,
+  .details-panel tbody {
+    display: table;
+    width: 100%;
   }
 
   .details-panel th,
   .details-panel td {
     font-size: 12px;
-    padding: 6px 8px;
+    padding: 6px;
+    white-space: normal;
+    word-break: break-word;
+    text-align: left;
   }
-    .details-panel tbody,
-  .details-panel thead {
-    width: max-content;
 }
 
 </style>
@@ -267,6 +293,7 @@ document.querySelectorAll('.remove-btn').forEach(btn => {
 </script>
 
 {% endblock %}
+
 
 
 
