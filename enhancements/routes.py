@@ -501,37 +501,53 @@ def placements():
         home_url=url_for("enhancements.student_dashboard")
     )
 
-@enhancements_bp.route("/apply/<int:placement_id>")
+@enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
 def apply(placement_id):
     if "user_id" not in session:
         return redirect(url_for("login"))
 
     user_id = session["user_id"]
+    conn = get_db_conn()
+    cur = conn.cursor()
 
-    cur = get_db_conn().cursor()
+    # ✅ Check placement exists
+    cur.execute("SELECT * FROM placements WHERE id = ?", (placement_id,))
+    placement = cur.fetchone()
+    if not placement:
+        abort(404, "Placement not found")
 
-    # Check placement exists
-    cur.execute("SELECT id FROM placements WHERE id = ?", (placement_id,))
-    if not cur.fetchone():
-        print(404, "Placement not found")
+    # ✅ POST → insert data
+    if request.method == "POST":
+        student_name = request.form["student_name"]
+        phone = request.form["phone"]
+        course = request.form["course"]
+        skills = request.form.get("skills")
+        experience = request.form.get("experience")
 
-    # Check user exists
-    cur.execute("SELECT id FROM users WHERE id = ?", (user_id,))
-    if not cur.fetchone():
-        print(403, "Invalid user")
+        cur.execute("""
+            INSERT INTO applications (
+                user_id, placement_id,
+                student_name, phone, course,
+                skills, experience, status
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'Applied')
+        """, (
+            user_id, placement_id,
+            student_name, phone, course,
+            skills, experience
+        ))
 
-    # Insert application
-    cur.execute("""
-        INSERT INTO applications (user_id, placement_id, status)
-        VALUES (?, ?, 'Applied')
-    """, (user_id, placement_id))
+        conn.commit()
+        return redirect(url_for("enhancements.status"))
 
-    get_db_conn().commit()
-    return render_template("apply.html",
-                            show_nav_options=True,
-                            is_admin=session.get("role") == "admin",
-                            home_url=url_for("enhancements.student_dashboard")
-                           )
+    # ✅ GET → show form
+    return render_template(
+        "apply.html",
+        placement=placement,
+        show_nav_options=True,
+        is_admin=session.get("role") == "admin",
+        home_url=url_for("enhancements.student_dashboard")
+    )
 
 # ------------------ Profile ------------------
 @enhancements_bp.route("/profile", methods=["GET", "POST"])
@@ -1442,6 +1458,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
