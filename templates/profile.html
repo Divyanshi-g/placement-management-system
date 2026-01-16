@@ -152,7 +152,37 @@
             justify-content:center; align-items:center; z-index:9999;">
     <img id="modalImg" style="max-width:70%; max-height:80%; border-radius:12px;">
 </div>
+<style>
+  /* Profile pic smaller on tiny phones */
+@media (max-width: 360px) {
+  .profile-pic {
+    width: 5rem;
+    height: 5rem;
+  }
+}
 
+/* Modal width */
+@media (max-width: 480px) {
+  #modalImg {
+    max-width: 90%;
+    max-height: 80%;
+  }
+}
+
+/* Reduce form padding on mobile */
+@media (max-width: 480px) {
+  form {
+    padding: 1rem;
+  }
+}
+
+/* Font size for inputs + textareas */
+@media (max-width: 480px) {
+  input, textarea {
+    font-size: 0.875rem;
+  }
+}
+</style>
 <script>
 function enableEdit() {
   document.querySelectorAll(".editableField").forEach(el => {
@@ -173,6 +203,7 @@ document.getElementById("imageModal").onclick = function () {
 </script>
 
 {% endblock %}
+
 
 
 
