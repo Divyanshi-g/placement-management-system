@@ -694,6 +694,25 @@ def practice():
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard")
     )
+
+@enhancements_bp.route("/delete-attempt", methods=["POST"])
+def delete_attempt():
+    data = request.get_json()
+    attempt_id = data.get("id")
+
+    if not attempt_id:
+        return jsonify({"success": False, "error": "No ID provided"})
+
+    try:
+        conn = sqlite3.connect("database.db")
+        cur = conn.cursor()
+        cur.execute("DELETE FROM attempts WHERE id = ?", (attempt_id,))
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True})
+    except Exception as e:
+        print(e)
+        return jsonify({"success": False, "error": str(e)})
 @enhancements_bp.route("/status")
 def status():
     if "user_id" not in session or session.get("role") != "student":
@@ -1423,6 +1442,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
