@@ -85,7 +85,18 @@
                             <td class="border px-2 py-1">{{ a['status'] }}</td>
                             <td class="border px-2 py-1">{{ a['applied_at'] }}</td>
                             <td class="border px-2 py-1">{{ a['skills'] }}</td>
-                            <td class="border px-2 py-1">{{ a['resume']|default('N/A') }}</td>
+                          <td class="border px-2 py-1 text-center">
+  {% if a['resume'] %}
+    <a href="{{ url_for('static', filename='uploads/resumes/' ~ a['resume']) }}"
+       class="resume-btn"
+       download>
+      Download
+    </a>
+  {% else %}
+    <span class="text-muted">N/A</span>
+  {% endif %}
+</td>
+
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -121,6 +132,22 @@
     border-radius: 5px;
     padding: 1px 3px;
 }
+    .resume-btn {
+  background: #2563eb;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 2px solid #1d4ed8;
+  transition: all 0.3s ease;
+}
+
+.resume-btn:hover {
+  background: #1d4ed8;
+  transform: scale(1.08);
+}
+
 
 /* Animation fade in */
 @keyframes fadeIn { from {opacity:0} to {opacity:1} }
@@ -293,6 +320,7 @@ document.querySelectorAll('.remove-btn').forEach(btn => {
 </script>
 
 {% endblock %}
+
 
 
 
