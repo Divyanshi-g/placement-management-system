@@ -561,7 +561,7 @@ def apply(placement_id):
             course,
             skills,
             experience,
-            resume
+            resume,
             experience
         ))
 
@@ -1562,6 +1562,7 @@ def check_resume():
     except Exception as e:
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
+
 
 
 
