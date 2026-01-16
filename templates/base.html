@@ -70,7 +70,9 @@
      <!-- NOTIFICATION ICON (HIDDEN BY DEFAULT) -->
         <button id="notifBell"
                 class="hidden text-xl hover:text-indigo-700 transition relative">
-          <i class="fa-solid fa-bell"></i>
+          <a href="{{ url_for('enhancements.notifications') }}">
+   <i class="fa-solid fa-bell"></i>
+</a>
         </button>
         <!-- SETTINGS DROPDOWN -->
         <div class="relative">
@@ -175,6 +177,7 @@
 
 </body>
 </html>
+
 
 
 
