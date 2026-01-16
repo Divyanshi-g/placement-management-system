@@ -1220,8 +1220,7 @@ def manage_students():
             pr.cgpa,
             pr.bio,
             pr.linkedin,
-            pr.github,
-            pr.resume
+            pr.github
         FROM users u
         LEFT JOIN profiles pr ON pr.user_id = u.id
         WHERE u.role = 'student'
@@ -1240,7 +1239,8 @@ def manage_students():
                 a.status,
                 a.applied_at,
                 a.skills,
-                a.experience
+                a.experience,
+                a.resume
             FROM applications a
             JOIN placements p ON p.id = a.placement_id
             WHERE a.user_id = ?
@@ -1460,6 +1460,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
