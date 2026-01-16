@@ -544,15 +544,15 @@ def apply(placement_id):
     skills = request.form.get("skills")
     experience = request.form.get("experience")
     resume_file = request.files.get("resume")
-        resume_filename = None
+    resume_filename = None
 
-        if resume_file and resume_file.filename:
-            resume_filename = secure_filename(resume_file.filename)
-            resume_path = os.path.join(
-                "static/uploads/resumes",
-                resume_filename
-            )
-            resume_file.save(resume_path)
+    if resume_file and resume_file.filename:
+        resume_filename = secure_filename(resume_file.filename)
+        resume_path = os.path.join(
+            "static/uploads/resumes",
+             resume_filename
+         )
+        resume_file.save(resume_path)
 
     # ✅ Prevent duplicate applications
     cur.execute("""
@@ -1460,6 +1460,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
