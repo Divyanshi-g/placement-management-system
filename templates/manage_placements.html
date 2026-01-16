@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="overflow-x-hidden">
+<div class="overflow-x-hidden mb-8">
 
   <!-- Top Header Row -->
-  <div class="max-w-6xl mx-auto flex justify-between items-center mb-6 px-2">
+  <div class="max-w-6xl mx-auto flex justify-between items-center mb-6 px-5">
     <h2 class="text-3xl font-extrabold text-black">
       📌 Manage Placements
     </h2>
@@ -97,3 +97,4 @@ function filterPlacements(){
 document.querySelectorAll("input").forEach(i=>i.addEventListener("input", filterPlacements));
 </script>
 {% endblock %}
+
