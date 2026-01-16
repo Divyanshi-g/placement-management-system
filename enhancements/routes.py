@@ -1386,7 +1386,7 @@ def check_resume():
         print("❌ Error in check_resume:", str(e))
         return jsonify({"error": str(e)}), 500
 
-@enhancements.route("/admin/questions1", methods=["GET"])
+@enhancements_bp.route("/admin/questions1", methods=["GET"])
 def admin_questions1():
     # Optional: protect admin-only access
     if "user_id" not in session or session.get("role") != "admin":
@@ -1398,7 +1398,7 @@ def admin_questions1():
                           home_url=url_for("enhancements.admin_dashboard")
                          )
 
-@enhancements.route("/admin/questions1/message", methods=["POST"])
+@enhancements_bp.route("/admin/questions1/message", methods=["POST"])
 def admin_questions1_message():
     data = request.json
     user_message = data.get("message")
@@ -1409,6 +1409,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
