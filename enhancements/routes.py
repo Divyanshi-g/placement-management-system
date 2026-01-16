@@ -392,9 +392,10 @@ def app_chat():
             "Try rephrasing your question."
         )
     })
- @enhancements_bp.route("/change-password", methods=["POST"])
- def change_password():
-   if "user_id" not in session:
+
+@enhancements_bp.route("/change-password", methods=["POST"])
+def change_password():
+    if "user_id" not in session:
         flash("⚠️ Please login first.", "error")
         return redirect(url_for("enhancements.login"))
 
@@ -1422,6 +1423,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
