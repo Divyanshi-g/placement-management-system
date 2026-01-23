@@ -14,7 +14,8 @@
     <form method="POST" enctype="multipart/form-data">
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-           <!-- Name -->
+
+        <!-- Name -->
         <div>
           <label class="font-medium">👤 Full Name</label>
           <input type="text" name="student_name" required
@@ -28,36 +29,85 @@
             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
         </div>
 
-        <!-- Course -->
+        <!-- Course (Dropdown + Type) -->
         <div>
           <label class="font-medium">🎓 Course</label>
-          <input type="text" name="course" required
+          <input type="text" name="course" list="courseList" required
+            placeholder="Select or type your course"
             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+
+          <datalist id="courseList">
+            <option value="B.Tech">
+            <option value="B.E">
+            <option value="B.Sc">
+            <option value="BCA">
+            <option value="MCA">
+            <option value="M.Tech">
+            <option value="MBA">
+            <option value="Diploma">
+            <option value="Other">
+          </datalist>
         </div>
 
-        <!-- Skills -->
+        <!-- Skills (Multi + Type + Dropdown) -->
         <div>
           <label class="font-medium">🛠 Skills</label>
-          <input type="text" name="skills"
-            placeholder="Python, SQL, React"
+          <input type="text" name="skills" list="skillsList"
+            placeholder="Python, SQL, React (type or select multiple)"
             class="w-full mt-2 px-4 py-2 border rounded-lg">
+
+          <datalist id="skillsList">
+            <option value="Python">
+            <option value="Java">
+            <option value="C++">
+            <option value="SQL">
+            <option value="HTML">
+            <option value="CSS">
+            <option value="JavaScript">
+            <option value="React">
+            <option value="Node.js">
+            <option value="Flask">
+            <option value="Django">
+            <option value="Machine Learning">
+            <option value="Data Analysis">
+            <option value="AWS">
+            <option value="Docker">
+            <option value="Git">
+            <option value="Communication">
+            <option value="Leadership">
+          </datalist>
+
+          <p class="text-sm text-gray-500 mt-1">
+            Separate multiple skills with commas
+          </p>
         </div>
 
       </div>
 
-      <!-- Experience -->
+      <!-- Experience (Dropdown + Optional typing) -->
       <div class="mt-6">
-        <label class="font-medium">💼 Experience (if any)</label>
-        <textarea name="experience" rows="3"
-          class="w-full mt-2 px-4 py-2 border rounded-lg"></textarea>
+        <label class="font-medium">💼 Experience</label>
+        <input type="text" name="experience" list="expList"
+          placeholder="Select or describe your experience"
+          class="w-full mt-2 px-4 py-2 border rounded-lg">
+
+        <datalist id="expList">
+          <option value="Fresher">
+          <option value="Internship experience">
+          <option value="0–1 years">
+          <option value="1–2 years">
+          <option value="2+ years">
+          <option value="Project-based experience">
+        </datalist>
       </div>
-     <!-- Resume Upload -->
-<div class="mt-6">
-  <label class="font-medium">📄 Upload Resume</label>
-  <input type="file" name="resume" accept=".pdf,.doc,.docx" required
-    class="w-full mt-2 px-4 py-2 border rounded-lg bg-white">
-  <p class="text-sm text-gray-500 mt-1">PDF / DOC / DOCX only</p>
-</div>
+
+      <!-- Resume Upload -->
+      <div class="mt-6">
+        <label class="font-medium">📄 Upload Resume</label>
+        <input type="file" name="resume" accept=".pdf,.doc,.docx" required
+          class="w-full mt-2 px-4 py-2 border rounded-lg bg-white">
+        <p class="text-sm text-gray-500 mt-1">PDF / DOC / DOCX only</p>
+      </div>
 
       <!-- Submit -->
       <button type="submit"
@@ -70,6 +120,3 @@
 
 </div>
 {% endblock %}
-
-
-
