@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %}Placements{% endblock %}
@@ -15,13 +16,12 @@
   <!-- Search Section -->
   <form method="GET" class="flex flex-col md:flex-row gap-4 justify-center mb-12">
 
-    <!-- Search -->
     <input type="text" name="q"
       value="{{ request.args.get('q','') }}"
       placeholder="🔍 Company, role or skill"
       class="w-full md:w-72 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
 
-    <!-- Location Dropdown + Typing -->
+      <!-- Location Dropdown + Typing -->
     <input type="text"
            name="location"
            list="locations"
@@ -44,7 +44,7 @@
       <option value="Remote">
     </datalist>
 
-    <!-- Job Type -->
+
     <select name="job_type"
       class="w-full md:w-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
       <option value="">🧩 Job Type</option>
@@ -54,7 +54,6 @@
       <option value="Remote">🏠 Remote</option>
     </select>
 
-    <!-- Search Button -->
     <button
       class="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
       🔎 Search
@@ -68,6 +67,7 @@
     {% for j in jobs %}
     <div class="bg-white rounded-2xl shadow-lg p-6 relative">
 
+      <!-- Card Info -->
       <div class="flex items-center gap-4 mb-4">
         <img
           src="{{ url_for('static', filename='uploads/logos/' ~ (j.logo or 'default.png')) }}"
@@ -102,7 +102,12 @@
           ❌
         </button>
 
-        <h2 class="text-2xl font-bold mb-4">🏢 {{ j.company }}</h2>
+        <div class="flex items-center gap-4 mb-6">
+          <img
+            src="{{ url_for('static', filename='uploads/logos/' ~ (j.logo or 'default.png')) }}"
+            class="w-20 h-20 object-contain">
+          <h2 class="text-2xl font-bold">🏢 {{ j.company }}</h2>
+        </div>
 
         <p>👨‍💻 <strong>Role:</strong> {{ j.role }}</p>
         <p>📍 <strong>Location:</strong> {{ j.location }}</p>
@@ -119,18 +124,30 @@
         <p class="mt-2">📅 <strong>Deadline:</strong> {{ j.deadline }}</p>
 
         <div class="flex gap-4 mt-8">
-          {% if j.id in applied %}
-            <button class="bg-green-600 text-white px-4 py-2 rounded cursor-not-allowed">
-              ✅ Already Applied
-            </button>
-          {% else %}
-            <a href="{{ url_for('enhancements.apply', placement_id=j.id) }}"
-               class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
-              Apply Now 🚀
-            </a>
+          {% if j.link %}
+          <a href="{{ j.link }}" target="_blank"
+             class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+            🌐 External Link
+          </a>
           {% endif %}
-        </div>
+{% if request.args.get('status') == 'success' %}
+<div class="bg-green-100 text-green-800 px-4 py-3 rounded-lg mb-4">
+  ✔ Application submitted successfully!
+</div>
+{% endif %}
 
+        {% if j.id in applied %}
+<button class="bg-green-600 text-white px-4 py-2 rounded cursor-not-allowed">
+  ✅ Already Applied
+</button>
+{% else %}
+<a href="{{ url_for('enhancements.apply', placement_id=j.id) }}"
+   class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
+  Apply Now 🚀
+</a>
+{% endif %}
+
+        </div>
       </div>
     </div>
 
@@ -145,6 +162,7 @@
 
 </div>
 
+<!-- Slide animation -->
 <style>
 @keyframes slideUp {
   from { transform: translateY(100%); }
@@ -154,5 +172,5 @@
   animation: slideUp 0.4s ease-out;
 }
 </style>
+{% endblock %}         
 
-{% endblock %}
