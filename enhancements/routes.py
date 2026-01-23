@@ -500,7 +500,6 @@ def placements():
         is_admin=session.get("role") == "admin",
         home_url=url_for("enhancements.student_dashboard")
     )
-
 @enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
 def apply(placement_id):
     if "user_id" not in session:
@@ -541,7 +540,13 @@ def apply(placement_id):
     student_name = request.form["student_name"]
     phone = request.form["phone"]
     course = request.form["course"]
-    skills = request.form.get("skills")
+
+    # ✅ CLEAN SKILLS (dropdown + typing safe)
+    raw_skills = request.form.get("skills", "")
+    skills = ", ".join(
+        [s.strip() for s in raw_skills.split(",") if s.strip()]
+    )
+
     experience = request.form.get("experience")
     resume_file = request.files.get("resume")
     resume_filename = None
@@ -550,8 +555,8 @@ def apply(placement_id):
         resume_filename = secure_filename(resume_file.filename)
         resume_path = os.path.join(
             "static/uploads/resumes",
-             resume_filename
-         )
+            resume_filename
+        )
         resume_file.save(resume_path)
 
     # ✅ Prevent duplicate applications
@@ -1460,6 +1465,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
