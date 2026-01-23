@@ -2,138 +2,110 @@
 {% block content %}
 
 <style>
-  /* Heading */
+  /* ================= HEADING ================= */
   .glass-heading {
-    font-weight: 800;
-    letter-spacing: 1.2px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    font-size: 2.8rem; /* BIG heading */
     transition: color .3s ease;
-    font-size:13px;
   }
-  /* ================= BUTTON STYLES ================= */
-
-/* Download Resume Button */
-.resume-btn {
-  background-color: #0d6efd;        /* Blue */
-  color: #fff;
-  border: 2px solid #0a58ca;
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.resume-btn:hover {
-  background-color: #0a58ca;
-  color: #fff;
-  transform: scale(1.08);
-  box-shadow: 0 4px 10px rgba(13,110,253,0.4);
-}
-
-/* Update Button */
-.update-btn {
-  background-color: #198754;        /* Green */
-  color: #fff;
-  border: 2px solid #146c43;
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.update-btn:hover {
-  background-color: #146c43;
-  transform: scale(1.08);
-  box-shadow: 0 4px 10px rgba(25,135,84,0.4);
-}
 
   .glass-heading:hover {
     color: #0d6efd;
   }
 
-  /* Glass table background */
+  /* ================= BUTTON STYLES ================= */
+
+  /* Download Resume Button */
+  .resume-btn {
+    background-color: #0d6efd;
+    color: #fff;
+    border: 2px solid #0a58ca;
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .resume-btn:hover {
+    background-color: #0a58ca;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(13,110,253,0.45);
+  }
+
+  /* Update Button */
+  .update-btn {
+    background-color: #198754;
+    color: #fff;
+    border: 2px solid #146c43;
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .update-btn:hover {
+    background-color: #146c43;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(25,135,84,0.45);
+  }
+
+  /* ================= TABLE ================= */
   .glass-table {
     background: rgba(255,255,255,0.25);
     backdrop-filter: blur(10px);
   }
 
-  /* Table spacing (desktop unchanged) */
   table th, table td {
     padding: 14px 12px;
     vertical-align: middle;
   }
 
-  /* MOBILE FIX — SIMPLE & CLEAN */
- /* ================= MOBILE STACKED TABLE ================= */
-@media (max-width: 768px) {
+  /* ================= MOBILE STACKED VIEW ================= */
+  @media (max-width: 768px) {
 
-  /* Hide table header */
-  table thead {
-    display: none;
+    table thead {
+      display: none;
+    }
+
+    table tbody tr {
+      display: block;
+      margin-bottom: 1rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      padding: 12px;
+    }
+
+    table tbody td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 6px;
+      border: none;
+      font-size: 14px;
+    }
+
+    table tbody td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #555;
+    }
+
+    table tbody td:first-child {
+      display: none;
+    }
+
+    table tbody td form {
+      width: 100%;
+    }
   }
-
-  /* Each row becomes a card */
-  table tbody tr {
-    display: block;
-    margin-bottom: 1rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    padding: 10px;
-  }
-
-  /* Each cell becomes a row */
-  table tbody td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 6px;
-    border: none;
-    font-size: 14px;
-  }
-
-  /* Label before data */
-  table tbody td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: #555;
-    padding-right: 10px;
-    white-space: nowrap;
-  }
-
-  /* Remove index column */
-  table tbody td:first-child {
-    display: none;
-  }
-
-  /* Status form full width */
-  table tbody td form {
-    width: 100%;
-  }
-
-  /* Update button – real button look */
-  table tbody td button {
-    background: #198754;
-    color: white;
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: none;
-  }
-
-  table tbody td button:hover {
-    background: #157347;
-    transform: scale(1.05);
-  }
-}
-
 </style>
-
 
 <div class="container-fluid px-3 px-md-4 mt-4">
 
   <!-- Heading -->
-  <h2 class="text-center mb-4 display-5 glass-heading">
+  <h2 class="text-center mb-4 glass-heading">
     STUDENT APPLICATIONS
   </h2>
 
@@ -161,28 +133,28 @@
 
           <td class="fw-semibold text-center">{{ loop.index }}</td>
 
-          <td>
+          <td data-label="Student">
             <strong>{{ app[1] }}</strong><br>
             <small class="text-muted">{{ app[2] }}</small>
           </td>
 
-          <td>{{ app[3] }}</td>
-          <td>{{ app[4] }}</td>
+          <td data-label="Company">{{ app[3] }}</td>
+          <td data-label="Role">{{ app[4] }}</td>
 
-          <td class="text-center">
+          <td data-label="Experience">
             {{ app[5] or "Not Provided" }}
           </td>
 
-          <td style="max-width:180px;">
+          <td data-label="Skills">
             <span class="d-inline-block text-truncate w-100">
               {{ app[6] or "Not Provided" }}
             </span>
           </td>
 
-          <td class="text-center">
+          <td data-label="Resume" class="text-center">
             {% if app[7] %}
               <a href="{{ url_for('static', filename='uploads/resumes/' + app[7]) }}"
-                 class="btn btn-sm btn-primary">
+                 class="resume-btn text-decoration-none">
                 Download
               </a>
             {% else %}
@@ -190,7 +162,7 @@
             {% endif %}
           </td>
 
-          <td>
+          <td data-label="Status">
             <form action="/admin/application/status/{{ app[0] }}"
                   method="POST"
                   class="d-flex flex-column gap-2">
@@ -202,27 +174,22 @@
                 <option value="Rejected" {% if app[8]=='Rejected' %}selected{% endif %}>Rejected</option>
               </select>
 
-              <button type="submit" class="btn btn-success btn-sm w-100 border-black-2x1-round hover:zoom">
+              <button type="submit" class="update-btn w-100">
                 Update
               </button>
             </form>
           </td>
 
-          <td class="text-center">
+          <td data-label="Applied On" class="text-center">
             {{ app[9] }}
           </td>
 
         </tr>
         {% endfor %}
       </tbody>
-
     </table>
 
   </div>
 </div>
 
 {% endblock %}
-
-
-
-
