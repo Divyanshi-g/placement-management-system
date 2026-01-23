@@ -4,7 +4,42 @@
 
 {% block content %}
 <style>
-/* ---------------- Right Drawer ---------------- */
+/* ================= MAIN CHAT CARD ================= */
+.chat-card {
+  max-width: 900px;
+  margin: auto;
+  background: linear-gradient(135deg, #ecfeff, #d1fae5);
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* ================= CHAT WINDOW ================= */
+#chat-window {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 16px;
+  height: 420px;
+  overflow-y: auto;
+}
+
+/* Message bubbles */
+.chat-user {
+  background: #dbeafe;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  max-width: 80%;
+}
+
+.chat-bot {
+  background: #dcfce7;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  max-width: 80%;
+}
+
+/* ================= DRAWER ================= */
 .history-drawer {
   position: fixed;
   top: 0;
@@ -12,7 +47,7 @@
   width: 320px;
   height: 100%;
   background: #ffffff;
-  box-shadow: -3px 0px 10px rgba(0,0,0,0.2);
+  box-shadow: -3px 0 10px rgba(0,0,0,0.2);
   transition: 0.4s;
   padding: 15px;
   z-index: 999;
@@ -23,29 +58,45 @@
 /* Drawer button */
 .drawer-btn {
   position: fixed;
-  right: 10px;
-  top:20%;
+  right: 14px;
+  top: 35%;
   background: #2563eb;
   color: white;
-  padding: 12px;
+  padding: 14px;
   border-radius: 50%;
   cursor: pointer;
   font-size: 20px;
   z-index: 1000;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
 }
 
-/* Chat history items */
-.history-item {
-  padding: 8px;
-  background: #f3f4f6;
-  margin: 6px 0;
-  border-radius: 8px;
-  cursor: pointer;
+/* ================= MOBILE FIX ================= */
+@media (max-width: 768px) {
+
+  .chat-card {
+    padding: 14px !important;
+    border-radius: 14px;
+  }
+
+  #chat-window {
+    height: 320px;
+  }
+
+  .drawer-btn {
+    right: 10px;
+    top: auto;
+    bottom: 20px;
+  }
+
+  .history-drawer {
+    width: 100%;
+  }
 }
-.history-item:hover { background: #dbeafe; }
 </style>
 
-<div class="max-w-4xl mx-auto mb-15 p-6 bg-emerald-100 rounded-2xl shadow-2xl">
+</style>
+
+<div class="max-w-4xl mx-auto mb-15 p-6 bg-emerald-100 rounded-2xl shadow-2xl chat-card">
   <h1 class="text-4xl font-extrabold text-center mb-8 text-gray-800">
     ❓ Ask Your Questions
   </h1>
@@ -152,5 +203,6 @@ async function loadConversation(id) {
 }
 </script>
 {% endblock %}
+
 
 
