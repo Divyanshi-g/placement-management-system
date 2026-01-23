@@ -10,25 +10,102 @@
 
   <form method="POST" class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
 
+    <!-- Company -->
     <input name="company" required placeholder="Company Name"
            class="w-full p-3 border rounded-lg">
 
-    <input name="role" required placeholder="Role / Job Title"
+    <!-- Role / Job Title (Dropdown + Typing) -->
+    <input type="text"
+           name="role"
+           list="roles"
+           required
+           placeholder="Role / Job Title (select or type)"
            class="w-full p-3 border rounded-lg">
 
-    <input name="location" required placeholder="Location"
+    <datalist id="roles">
+      <!-- Tech Roles -->
+      <option value="Software Engineer">
+      <option value="Full Stack Developer">
+      <option value="Backend Developer">
+      <option value="Frontend Developer">
+      <option value="Data Analyst">
+      <option value="Data Scientist">
+      <option value="Machine Learning Engineer">
+      <option value="AI Engineer">
+      <option value="DevOps Engineer">
+      <option value="Cloud Engineer">
+      <option value="Cyber Security Analyst">
+      <option value="QA / Test Engineer">
+
+      <!-- Non-Tech Roles -->
+      <option value="HR Executive">
+      <option value="Recruitment Specialist">
+      <option value="Business Analyst">
+      <option value="Product Manager">
+      <option value="Project Manager">
+      <option value="Operations Executive">
+      <option value="Marketing Executive">
+      <option value="Digital Marketing Specialist">
+      <option value="Content Writer">
+      <option value="Sales Executive">
+      <option value="Customer Support Executive">
+      <option value="Finance Analyst">
+      <option value="Accountant">
+    </datalist>
+
+    <!-- Location (Dropdown + Typing) -->
+    <input type="text"
+           name="location"
+           list="locations"
+           required
+           placeholder="Location (select or type)"
            class="w-full p-3 border rounded-lg">
 
+    <datalist id="locations">
+      <option value="Bangalore">
+      <option value="Hyderabad">
+      <option value="Chennai">
+      <option value="Pune">
+      <option value="Mumbai">
+      <option value="Delhi">
+      <option value="Noida">
+      <option value="Gurgaon">
+      <option value="Kolkata">
+      <option value="Ahmedabad">
+      <option value="Remote">
+    </datalist>
+
+    <!-- Duration -->
+    <select name="duration"
+            class="w-full p-3 border rounded-lg">
+      <option value="">Select Job Duration</option>
+      <option value="Internship (1–3 Months)">Internship (1–3 Months)</option>
+      <option value="Internship (3–6 Months)">Internship (3–6 Months)</option>
+      <option value="Internship (6+ Months)">Internship (6+ Months)</option>
+      <option value="Contract (6 Months)">Contract (6 Months)</option>
+      <option value="Contract (1 Year)">Contract (1 Year)</option>
+      <option value="Full-time">Full-time</option>
+      <option value="Part-time">Part-time</option>
+    </select>
+
+    <!-- Salary -->
     <input name="salary" placeholder="Salary / Stipend"
            class="w-full p-3 border rounded-lg">
 
-    <input name="deadline" type="date"
+    <!-- Deadline (Calendar) -->
+    <input name="deadline"
+           type="date"
+           min="{{ date }}"
            class="w-full p-3 border rounded-lg">
 
-    <textarea name="eligibility" placeholder="Eligibility"
+    <!-- Eligibility -->
+    <textarea name="eligibility"
+              placeholder="Eligibility (skills, degree, year, etc.)"
               class="w-full p-3 border rounded-lg"></textarea>
 
-    <textarea name="description" placeholder="Job Description"
+    <!-- Description -->
+    <textarea name="description"
+              placeholder="Job Description"
               class="w-full p-3 border rounded-lg"></textarea>
 
     <button type="submit"
