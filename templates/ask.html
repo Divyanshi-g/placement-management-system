@@ -19,7 +19,7 @@
   background: #f9fafb;
   border-radius: 14px;
   padding: 14px;
-  height: 320px;              /* ✅ Reduced height */
+  height: 320px;
   overflow-y: auto;
 }
 
@@ -83,7 +83,6 @@
 
 /* ================= MOBILE FIX ================= */
 @media (max-width: 768px) {
-
   .chat-card {
     padding: 16px;
     border-radius: 14px;
@@ -123,6 +122,10 @@
       class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-r-lg hover:scale-105 transition">
       Ask
     </button>
+    <button onclick="newChat()"
+      class="ml-2 px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+      🆕 New Chat
+    </button>
   </div>
 </div>
 
@@ -136,11 +139,20 @@
 </div>
 
 <script>
+let currentConversationId = null;
+
 /* ================= TOGGLE DRAWER ================= */
 function toggleDrawer() {
   const drawer = document.getElementById("historyDrawer");
   drawer.classList.toggle("history-open");
   loadHistory();
+}
+
+/* ================= NEW CHAT ================= */
+function newChat() {
+  currentConversationId = null;
+  const win = document.getElementById("chat-window");
+  win.innerHTML = `<p class="text-gray-400 text-center">💬 Start your new chat...</p>`;
 }
 
 /* ================= SEND CHAT ================= */
@@ -150,35 +162,27 @@ async function sendChat() {
   if (!msg) return;
 
   const win = document.getElementById("chat-window");
-
-  win.innerHTML += `
-    <div class="chat-user"><b>You:</b> ${msg}</div>
-  `;
+  win.innerHTML += `<div class="chat-user"><b>You:</b> ${msg}</div>`;
   input.value = "";
   win.scrollTop = win.scrollHeight;
 
   const loadingId = "loading-" + Date.now();
-  win.innerHTML += `
-    <div id="${loadingId}" class="chat-bot text-gray-500">
-      <b>Bot:</b> typing...
-    </div>
-  `;
+  win.innerHTML += `<div id="${loadingId}" class="chat-bot text-gray-500"><b>Bot:</b> typing...</div>`;
   win.scrollTop = win.scrollHeight;
 
   try {
     const res = await fetch("/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: msg })
+      body: JSON.stringify({ question: msg, conversation_id: currentConversationId })
     });
-
     const data = await res.json();
-    document.getElementById(loadingId).innerHTML =
-      `<b>Bot:</b> ${data.answer}`;
+
+    document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ${data.answer}`;
+    currentConversationId = data.conversation_id;
 
   } catch (err) {
-    document.getElementById(loadingId).innerHTML =
-      `<b>Bot:</b> ⚠️ Server error.`;
+    document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ⚠️ Server error.`;
   }
 
   win.scrollTop = win.scrollHeight;
@@ -192,15 +196,12 @@ async function loadHistory() {
     const data = await res.json();
 
     box.innerHTML = "";
-    for (let group in data) {
-      box.innerHTML += `<h3 class="font-semibold mt-3">${group}</h3>`;
-      data[group].forEach(item => {
-        box.innerHTML += `
-          <div class="history-item"
-               onclick="loadConversation(${item.id})">
-            ${item.message}
-          </div>`;
-      });
+    for (let conv of data) {
+      box.innerHTML += `
+        <div class="history-item"
+             onclick="loadConversation('${conv.conversation_id}')">
+          ${conv.preview}
+        </div>`;
     }
   } catch (e) {
     box.innerHTML = "⚠️ Cannot load history.";
@@ -208,21 +209,25 @@ async function loadHistory() {
 }
 
 /* ================= LOAD SINGLE CHAT ================= */
-async function loadConversation(id) {
+async function loadConversation(conversationId) {
+  currentConversationId = conversationId;
   const win = document.getElementById("chat-window");
   win.innerHTML = "Loading conversation...";
+
   try {
-    const res = await fetch(`/chat/history/${id}`);
+    const res = await fetch(`/chat/history/${conversationId}`);
     const data = await res.json();
 
-    win.innerHTML = `
-      <div class="chat-user"><b>You:</b> ${data.message}</div>
-      <div class="chat-bot"><b>Bot:</b> ${data.answer}</div>
-    `;
+    win.innerHTML = "";
+    for (let msg of data) {
+      const cls = msg.role === "user" ? "chat-user" : "chat-bot";
+      win.innerHTML += `<div class="${cls}"><b>${msg.role === "user" ? 'You' : 'Bot'}:</b> ${msg.content}</div>`;
+    }
+    win.scrollTop = win.scrollHeight;
+
   } catch {
     win.innerHTML = "⚠️ Cannot load conversation.";
   }
 }
 </script>
-
 {% endblock %}
