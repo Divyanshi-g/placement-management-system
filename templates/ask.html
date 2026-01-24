@@ -133,11 +133,12 @@ async function sendChat() {
   win.scrollTop = win.scrollHeight;
 
   try {
-    const res = await fetch("/ask", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({question: msg})
-    });
+    const res = await fetch("/ask/message", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ question: msg })
+});
+
 
     const data = await res.json();
     document.getElementById(loadingId).innerHTML =
@@ -186,3 +187,4 @@ document.getElementById("chat-input")
   });
 </script>
 {% endblock %}
+
