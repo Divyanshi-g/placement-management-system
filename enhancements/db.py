@@ -149,13 +149,14 @@ def init_db():
        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
-    CREATE TABLE IF NOT EXISTS chat_logs (
-       id INTEGER PRIMARY KEY AUTOINCREMENT,
-       user_id INTEGER,
-       message TEXT,
-       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-       FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-    );
+CREATE TABLE IF NOT EXISTS chat_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
     CREATE TABLE IF NOT EXISTS notifications (
        id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -282,6 +283,7 @@ def init_db():
         ])
 
     db.commit()
+
 
 
 
