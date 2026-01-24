@@ -1423,7 +1423,7 @@ def ask():
         return redirect(url_for("enhancements.login"))
 
     return render_template("ask.html")
-@bp.route("/ask/message", methods=["POST"])
+@enhacements_bp.route("/ask/message", methods=["POST"])
 def ask_message():
     if "user_id" not in session:
         return jsonify({"error": "Login required"}), 401
@@ -1558,6 +1558,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
