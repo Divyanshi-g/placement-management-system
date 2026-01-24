@@ -1417,7 +1417,7 @@ def reports():
 
 # ---------------- Chat Page ----------------
 @enhancements_bp.route("/ask", methods=["GET"])
-def ask_page():
+def ask():
     if "user_id" not in session:
         return redirect(url_for("enhancements.login"))
 
@@ -1538,6 +1538,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
