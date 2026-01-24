@@ -1419,35 +1419,25 @@ def reports():
 @enhancements_bp.route("/ask", methods=["POST"])
 def ask():
     if "user_id" not in session:
-        return jsonify({"answer": "⚠️ Login required."})
+        return jsonify({"error": "Unauthorized"}), 401
 
-    data = request.get_json() or {}
-    user_question = (data.get("question") or "").strip()
-    conversation_id = data.get("conversation_id") or str(uuid.uuid4())  # new chat if not provided
+    data = request.get_json()
+    question = data.get("question")
 
-    if not user_question:
-        return jsonify({"answer": "⚠️ Please enter a question."})
+    if not question:
+        return jsonify({"error": "Empty question"}), 400
 
-    answer = generate_ai_answer(user_question)
+    answer = get_bot_answer(question)  # whatever logic you use
 
-    # Save user message
-    conn = get_db_conn()
-    cur = conn.cursor()
+    # save to DB (question + answer)
+    cur = get_db().cursor()
     cur.execute("""
-        INSERT INTO chat_logs (conversation_id, user_id, role, content)
-        VALUES (?, ?, 'user', ?)
-    """, (conversation_id, session["user_id"], user_question))
+        INSERT INTO chat_logs (user_id, question, answer)
+        VALUES (?, ?, ?)
+    """, (session["user_id"], question, answer))
+    get_db().commit()
 
-    # Save bot response
-    cur.execute("""
-        INSERT INTO chat_logs (conversation_id, user_id, role, content)
-        VALUES (?, ?, 'bot', ?)
-    """, (conversation_id, session["user_id"], answer))
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({"answer": answer, "conversation_id": conversation_id})
+    return jsonify({"answer": answer})
 
 # ---------------- Chat History ----------------
 @enhancements_bp.route("/chat/history", methods=["GET"])
@@ -1541,6 +1531,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
