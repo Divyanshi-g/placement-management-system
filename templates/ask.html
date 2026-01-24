@@ -137,8 +137,6 @@
   <div id="historyContent">Loading...</div>
 </div>
 <script>
-let currentConversationId = null;
-
 /* ================= TOGGLE HISTORY DRAWER ================= */
 function toggleDrawer() {
   const drawer = document.getElementById("historyDrawer");
@@ -148,7 +146,6 @@ function toggleDrawer() {
 
 /* ================= NEW CHAT ================= */
 function newChat() {
-  currentConversationId = null; // reset conversation
   const win = document.getElementById("chat-window");
   win.innerHTML = `<p class="text-gray-400 text-center">💬 Start your new chat...</p>`;
 }
@@ -166,7 +163,7 @@ async function sendChat() {
   input.value = "";
   win.scrollTop = win.scrollHeight;
 
-  // Show bot loading
+  // Bot typing
   const loadingId = "loading-" + Date.now();
   win.innerHTML += `<div id="${loadingId}" class="chat-bot text-gray-500"><b>Bot:</b> typing...</div>`;
   win.scrollTop = win.scrollHeight;
@@ -175,16 +172,11 @@ async function sendChat() {
     const res = await fetch("/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        question: msg,
-        conversation_id: currentConversationId // send current conversation
-      })
+      body: JSON.stringify({ question: msg })
     });
-    const data = await res.json();
 
-    // Show bot answer
+    const data = await res.json();
     document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ${data.answer}`;
-    currentConversationId = data.conversation_id; // update conversation
 
   } catch (err) {
     document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ⚠️ Server error.`;
@@ -194,18 +186,22 @@ async function sendChat() {
   win.scrollTop = win.scrollHeight;
 }
 
-/* ================= LOAD HISTORY ================= */
+/* ================= LOAD CHAT HISTORY ================= */
 async function loadHistory() {
   const box = document.getElementById("historyContent");
+
   try {
     const res = await fetch("/chat/history");
     const data = await res.json();
 
     box.innerHTML = "";
-    for (let conv of data) {
+
+    const chats = data["Your Chats"] || [];
+    for (let chat of chats) {
       box.innerHTML += `
-        <div class="history-item" onclick="loadConversation('${conv.conversation_id}')">
-          ${conv.preview}
+        <div class="history-item"
+             onclick="loadConversation(${chat.id})">
+          ${chat.message}
         </div>`;
     }
 
@@ -216,34 +212,32 @@ async function loadHistory() {
 }
 
 /* ================= LOAD SINGLE CHAT ================= */
-async function loadConversation(conversationId) {
-  currentConversationId = conversationId; // switch conversation
+async function loadConversation(id) {
   const win = document.getElementById("chat-window");
-  win.innerHTML = `<p class="text-gray-400 text-center">Loading conversation...</p>`;
+  win.innerHTML = `<p class="text-gray-400 text-center">Loading...</p>`;
 
   try {
-    const res = await fetch(`/chat/history/${conversationId}`);
+    const res = await fetch(`/chat/history/${id}`);
     const data = await res.json();
 
-    win.innerHTML = ""; // clear window
-    for (let msg of data) {
-      const cls = msg.role === "user" ? "chat-user" : "chat-bot";
-      win.innerHTML += `<div class="${cls}"><b>${msg.role === "user" ? 'You' : 'Bot'}:</b> ${msg.content}</div>`;
-    }
-
-    win.scrollTop = win.scrollHeight;
+    win.innerHTML = `
+      <div class="chat-user"><b>You:</b> ${data.message}</div>
+      <div class="chat-bot"><b>Bot:</b> ${data.answer}</div>
+    `;
 
   } catch (err) {
-    win.innerHTML = "⚠️ Cannot load conversation.";
+    win.innerHTML = "⚠️ Cannot load chat.";
     console.error(err);
   }
 }
 
 /* ================= SEND ON ENTER ================= */
-document.getElementById("chat-input").addEventListener("keypress", function(e){
-  if(e.key === "Enter") sendChat();
+document.getElementById("chat-input").addEventListener("keypress", function (e) {
+  if (e.key === "Enter") sendChat();
 });
 </script>
 
+
 {% endblock %}
+
 
