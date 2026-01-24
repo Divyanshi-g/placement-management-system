@@ -4,7 +4,7 @@
 {% block content %}
 <style>
 .chat-card {
-  max-width: 880px;
+  max-width: 1100px;
   margin: auto;
   background: linear-gradient(135deg, #ecfeff, #d1fae5);
   border-radius: 18px;
@@ -73,7 +73,7 @@
 .history-item:hover { background: #e0e7ff; }
 </style>
 
-<div class="chat-card mt-6 mb-10">
+<div class="chat-card mt-6 mb-20">
   <h1 class="text-3xl font-extrabold text-center mb-6">❓ Ask Your Questions</h1>
 
   <div id="chat-window">
@@ -99,7 +99,7 @@
   </div>
 </div>
 
-<div class="drawer-btn" onclick="toggleDrawer()">📜</div>
+<div class="drawer-btn" onclick="toggleDrawer() mt-0">📜</div>
 
 <div id="historyDrawer" class="history-drawer">
   <h2 class="font-bold text-xl mb-3">Chat History</h2>
@@ -187,4 +187,5 @@ document.getElementById("chat-input")
   });
 </script>
 {% endblock %}
+
 
