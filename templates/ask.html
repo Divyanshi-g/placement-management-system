@@ -5,8 +5,7 @@
 <style>
 /* ================= MAIN CHAT CARD ================= */
 .chat-card {
-  width: 95%;
-  max-width: 1700px; /* max width on large screens */
+  max-width: 95%;
   margin: auto;
   background: linear-gradient(135deg, #ecfeff, #d1fae5);
   border-radius: 18px;
@@ -50,7 +49,6 @@
   background: #ffffff;
   box-shadow: -3px 0 10px rgba(0,0,0,0.2);
   transition: right 0.35s ease;
-  padding: 16px;
   z-index: 999;
   overflow-y: auto;
 }
@@ -94,6 +92,7 @@
   .chat-card {
     width: 90%;
     padding: 20px;
+    margin-top: 5px;
   }
 
   #chat-window {
@@ -293,6 +292,7 @@ document.getElementById("chat-input")
 </script>
 
 {% endblock %}
+
 
 
 
