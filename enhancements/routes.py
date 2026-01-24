@@ -1450,7 +1450,7 @@ def ask_message():
         VALUES (?, ?, 'user', ?)
     """, (session["user_id"], conversation_id, question))
 
-    answer = get_bot_reply(question)  # your AI logic
+    answer = generate_ai_answer(user_question)  # your AI logic
 
     # save bot message
     cur.execute("""
@@ -1558,6 +1558,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
