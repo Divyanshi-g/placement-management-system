@@ -16,8 +16,6 @@
       <span class="hidden sm:inline font-semibold">Add New Company</span>
     </a>
   </div>
-
-  <!-- 🔍 Search Filters -->
   <!-- 🔍 Search Filters -->
 <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 px-2">
 
@@ -46,9 +44,9 @@
   <!-- Location (input + datalist) -->
   <input list="locationOptions" id="searchLocation" placeholder="Location" class="p-3 border rounded-lg">
   <datalist id="locationOptions">
-    <option value="New York">
-    <option value="San Francisco">
-    <option value="Seattle">
+    <option value="Pune">
+    <option value="Kolkata">
+    <option value="Noida">
     <option value="Bangalore">
     <option value="Hyderabad">
     <option value="Delhi">
@@ -59,10 +57,10 @@
   <!-- Eligibility (input + datalist) -->
   <input list="eligibilityOptions" id="searchEligibility" placeholder="Eligibility" class="p-3 border rounded-lg">
   <datalist id="eligibilityOptions">
-    <option value="10th">
-    <option value="12th">
-    <option value="UG">
-    <option value="PG">
+    <option value="BCA">
+    <option value="MCA">
+    <option value="B.Tech">
+    <option value="MBA">
     <option value="Any">
   </datalist>
 
@@ -145,5 +143,6 @@ function filterPlacements(){
 document.querySelectorAll("input").forEach(i=>i.addEventListener("input", filterPlacements));
 </script>
 {% endblock %}
+
 
 
