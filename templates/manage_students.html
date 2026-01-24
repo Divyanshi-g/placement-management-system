@@ -8,12 +8,59 @@
     <h2 class="text-4xl font-extrabold text-black mb-8 text-center animate-fade-in">👩‍🎓 Manage Students</h2>
 
     <!-- Search Section -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <input type="text" placeholder="Experience" id="searchExperience" class="glass-input">
-        <input type="text" placeholder="Course" id="searchCourse" class="glass-input">
-        <input type="text" placeholder="Branch" id="searchBranch" class="glass-input">
-        <input type="text" placeholder="CGPA / Skill" id="searchCgpaSkill" class="glass-input">
-    </div>
+   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+
+  <!-- Experience -->
+  <input list="experienceOptions" type="text" placeholder="Experience" id="searchExperience" class="glass-input">
+  <datalist id="experienceOptions">
+    <option value="0-1 years">
+    <option value="1-2 years">
+    <option value="2-3 years">
+    <option value="3-5 years">
+    <option value="5+ years">
+  </datalist>
+
+  <!-- Course -->
+  <input list="courseOptions" type="text" placeholder="Course" id="searchCourse" class="glass-input">
+  <datalist id="courseOptions">
+    <option value="B.Tech">
+    <option value="M.Tech">
+    <option value="B.Sc">
+    <option value="M.Sc">
+    <option value="BBA">
+    <option value="MBA">
+    <option value="Diploma">
+  </datalist>
+
+  <!-- Branch -->
+  <input list="branchOptions" type="text" placeholder="Branch" id="searchBranch" class="glass-input">
+  <datalist id="branchOptions">
+    <option value="Computer Science">
+    <option value="Electrical">
+    <option value="Mechanical">
+    <option value="Civil">
+    <option value="Electronics">
+    <option value="Chemical">
+    <option value="Information Technology">
+    <option value="Biotechnology">
+  </datalist>
+
+  <!-- CGPA / Skill -->
+  <input list="cgpaSkillOptions" type="text" placeholder="CGPA / Skill" id="searchCgpaSkill" class="glass-input">
+  <datalist id="cgpaSkillOptions">
+    <option value="8.0+ CGPA">
+    <option value="7.0+ CGPA">
+    <option value="6.0+ CGPA">
+    <option value="Python">
+    <option value="Java">
+    <option value="C++">
+    <option value="Web Development">
+    <option value="Data Science">
+    <option value="Machine Learning">
+  </datalist>
+
+</div>
+
     <div class="flex justify-center mb-8">
         <button id="searchBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">Search</button>
     </div>
@@ -320,6 +367,7 @@ document.querySelectorAll('.remove-btn').forEach(btn => {
 </script>
 
 {% endblock %}
+
 
 
 
