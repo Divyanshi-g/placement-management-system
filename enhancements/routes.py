@@ -1434,7 +1434,7 @@ def ask_message():
     if not question:
         return jsonify({"error": "Empty question"}), 400
 
-    conn = get_db()
+    conn = get_db_conn()
     cur = conn.cursor()
 
     # verify user exists
@@ -1558,6 +1558,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
