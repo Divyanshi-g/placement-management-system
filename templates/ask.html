@@ -127,82 +127,54 @@
 </div>
 
 <script>
-/* ---------------- Send on Enter ---------------- */
-document.getElementById("chat-input")
-  .addEventListener("keypress", function(e){
-    if(e.key === "Enter") sendChat();
-});
-
-/* ---------------- Toggle History Drawer ---------------- */
-function toggleDrawer() {
-  document.getElementById("historyDrawer").classList.toggle("history-open");
-  loadHistory();
-}
-
-/* ---------------- Send Chat Message ---------------- */
 async function sendChat() {
   const input = document.getElementById("chat-input");
   const msg = input.value.trim();
   if (!msg) return;
 
   const win = document.getElementById("chat-window");
-  win.innerHTML += `<div class="mb-2"><b class="text-blue-700">You:</b> ${msg}</div>`;
+
+  // User message
+  win.innerHTML += `
+    <div class="mb-2">
+      <b class="text-blue-700">You:</b> ${msg}
+    </div>`;
   input.value = "";
+  win.scrollTop = win.scrollHeight;
+
+  // Bot loading indicator
+  const loadingId = "loading-" + Date.now();
+  win.innerHTML += `
+    <div id="${loadingId}" class="mb-2 text-gray-500">
+      <b>Bot:</b> typing...
+    </div>`;
   win.scrollTop = win.scrollHeight;
 
   try {
     const res = await fetch("/ask", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({question: msg})
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: msg })
     });
+
     const data = await res.json();
 
-    win.innerHTML += `<div class="mb-2"><b class="text-green-700">Bot:</b> ${data.answer}</div>`;
-    win.scrollTop = win.scrollHeight;
-
-    loadHistory();
+    document.getElementById(loadingId).innerHTML = `
+      <b class="text-green-700">Bot:</b> ${data.answer}
+    `;
   } catch (err) {
-    win.innerHTML += `<div class="text-red-500">⚠️ Error connecting to server.</div>`;
-    win.scrollTop = win.scrollHeight;
+    document.getElementById(loadingId).innerHTML = `
+      <b class="text-red-600">Bot:</b> ⚠️ Server error. Try again.
+    `;
   }
-}
 
-/* ---------------- Load Chat History ---------------- */
-async function loadHistory() {
-  const box = document.getElementById("historyContent");
-  try {
-    const res = await fetch("/chat/history");
-    const data = await res.json();
-
-    box.innerHTML = "";
-    for (let group in data) {
-      box.innerHTML += `<h3 class="font-semibold mt-2">${group}</h3>`;
-      data[group].forEach(item => {
-        box.innerHTML += `<div class="history-item" onclick="loadConversation(${item.id})">${item.message}</div>`;
-      });
-    }
-  } catch(e) {
-    box.innerHTML = "⚠️ Cannot load history.";
-  }
-}
-
-/* ---------------- Load Single Conversation ---------------- */
-async function loadConversation(id) {
-  const win = document.getElementById("chat-window");
-  win.innerHTML = "Loading conversation...";
-  try {
-    const res = await fetch(`/chat/history/${id}`);
-    const data = await res.json();
-    win.innerHTML = `<div class="mb-2"><b class="text-blue-700">You:</b> ${data.message}</div>`;
-    win.innerHTML += `<div class="mb-2"><b class="text-green-700">Bot:</b> ${data.answer}</div>`;
-    win.scrollTop = win.scrollHeight;
-  } catch(e) {
-    win.innerHTML = "⚠️ Cannot load conversation.";
-  }
+  win.scrollTop = win.scrollHeight;
+  loadHistory();
 }
 </script>
+
 {% endblock %}
+
 
 
 
