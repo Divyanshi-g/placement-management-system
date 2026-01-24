@@ -18,14 +18,62 @@
   </div>
 
   <!-- 🔍 Search Filters -->
-  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 px-2">
-    <input id="searchCompany" placeholder="Company" class="p-3 border rounded-lg">
-    <input id="searchRole" placeholder="Role / Job Type" class="p-3 border rounded-lg">
-    <input id="searchLocation" placeholder="Location" class="p-3 border rounded-lg">
-    <input id="searchEligibility" placeholder="Eligibility" class="p-3 border rounded-lg">
-    <input id="searchSalary" placeholder="Salary / Stipend" class="p-3 border rounded-lg">
-    <input id="searchDeadline" placeholder="Deadline (YYYY-MM-DD)" class="p-3 border rounded-lg">
-  </div>
+  <!-- 🔍 Search Filters -->
+<div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 px-2">
+
+  <!-- Company (input + datalist) -->
+  <input list="companyOptions" id="searchCompany" placeholder="Company" class="p-3 border rounded-lg">
+  <datalist id="companyOptions">
+    <option value="Google">
+    <option value="Microsoft">
+    <option value="Amazon">
+    <option value="Facebook">
+    <option value="Apple">
+    <option value="Infosys">
+    <option value="TCS">
+    <option value="Wipro">
+  </datalist>
+
+  <!-- Role / Job Type (input + datalist) -->
+  <input list="roleOptions" id="searchRole" placeholder="Role / Job Type" class="p-3 border rounded-lg">
+  <datalist id="roleOptions">
+    <option value="Internship">
+    <option value="Full-time">
+    <option value="Part-time">
+    <option value="Contract">
+  </datalist>
+
+  <!-- Location (input + datalist) -->
+  <input list="locationOptions" id="searchLocation" placeholder="Location" class="p-3 border rounded-lg">
+  <datalist id="locationOptions">
+    <option value="New York">
+    <option value="San Francisco">
+    <option value="Seattle">
+    <option value="Bangalore">
+    <option value="Hyderabad">
+    <option value="Delhi">
+    <option value="Mumbai">
+    <option value="Chennai">
+  </datalist>
+
+  <!-- Eligibility (input + datalist) -->
+  <input list="eligibilityOptions" id="searchEligibility" placeholder="Eligibility" class="p-3 border rounded-lg">
+  <datalist id="eligibilityOptions">
+    <option value="10th">
+    <option value="12th">
+    <option value="UG">
+    <option value="PG">
+    <option value="Any">
+  </datalist>
+
+  <!-- Salary / Stipend (free text) -->
+  <input id="searchSalary" placeholder="Salary / Stipend" class="p-3 border rounded-lg">
+
+  <!-- Deadline (date picker) -->
+  <input id="searchDeadline" type="date" class="p-3 border rounded-lg">
+
+</div>
+
 
   <!-- 📦 Placement Cards -->
   <div class="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto px-2" id="placementsContainer">
@@ -97,4 +145,5 @@ function filterPlacements(){
 document.querySelectorAll("input").forEach(i=>i.addEventListener("input", filterPlacements));
 </script>
 {% endblock %}
+
 
