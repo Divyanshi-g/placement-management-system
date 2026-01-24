@@ -181,7 +181,7 @@ def register():
 
         # 3️⃣ Admin verification
         if role == "admin":
-            ADMIN_SECRET_CODE = "ADMIN2025"  # change anytime
+            ADMIN_SECRET_CODE = "ADMIN2026"  # change anytime
 
             if not admin_code:
                 flash("Admin verification code is required.", "error")
@@ -220,7 +220,7 @@ def register():
         show_nav_options=False,  # hide dashboard links
         is_admin=False,          # safe default
         home_url=None,           # not needed here
-        current_year=2025
+        current_year=2026
     )
 
 @enhancements_bp.route("/login", methods=["GET", "POST"])
@@ -274,7 +274,7 @@ def login():
         show_nav_options=False,
         is_admin=False,
         home_url=None,
-        current_year=2025
+        current_year=2026
     )
 
 # ------------------ Student Dashboard ------------------
@@ -1523,6 +1523,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
