@@ -23,7 +23,6 @@ enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templa
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # Load once globally
 
 def generate_ai_answer(user_question):
-    """Send question to OpenRouter and return answer."""
     if not OPENROUTER_API_KEY:
         return "⚠️ OpenRouter API key is not set."
 
@@ -31,12 +30,12 @@ def generate_ai_answer(user_question):
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
-        "HTTP-Referer": "http://localhost",
+        "HTTP-Referer": "https://your-deployed-site.com",  # 🔴 change this
         "X-Title": "Placement Management System"
     }
 
     payload = {
-        "model": "openai/gpt-3.5-turbo",
+        "model": "openai/gpt-4o-mini",   # ✅ FIXED MODEL
         "messages": [
             {"role": "system", "content": "You are a helpful college placement assistant."},
             {"role": "user", "content": user_question}
@@ -46,13 +45,19 @@ def generate_ai_answer(user_question):
     }
 
     try:
-        response = requests.post(url, headers=headers, json=payload, timeout=10)
-        response.raise_for_status()
-        return response.json()["choices"][0]["message"]["content"].strip()
+        response = requests.post(url, headers=headers, json=payload, timeout=15)
+
+        # 🔍 DEBUG (important)
+        if response.status_code != 200:
+            return f"⚠️ OpenRouter Error {response.status_code}: {response.text}"
+
+        data = response.json()
+        return data["choices"][0]["message"]["content"].strip()
+
     except requests.exceptions.RequestException as e:
-        return f"⚠️ Error connecting to OpenRouter: {str(e)}"
-    except KeyError:
-        return "⚠️ Unexpected response from OpenRouter."
+        return f"⚠️ Network error: {str(e)}"
+    except (KeyError, IndexError):
+        return "⚠️ Unexpected response format from OpenRouter."
 
 HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 HF_MODEL = "google/flan-t5-base"
@@ -1413,6 +1418,9 @@ def reports():
 # ---------------- Chat Page ----------------
 @enhancements_bp.route("/ask", methods=["GET", "POST"])
 def ask():
+    if "user_id" not in session:
+        return jsonify({"answer": "⚠️ Login required."})
+
     if request.method == "GET":
         return render_template("ask.html")
 
@@ -1423,6 +1431,17 @@ def ask():
         return jsonify({"answer": "⚠️ Please enter a question."})
 
     answer = generate_ai_answer(user_question)
+
+    # ✅ SAVE CHAT
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO chat_logs (user_id, question, answer)
+        VALUES (?, ?, ?)
+    """, (session["user_id"], user_question, answer))
+    conn.commit()
+    conn.close()
+
     return jsonify({"answer": answer})
 
 # ---------------- Chat History (Example) ----------------
@@ -1432,15 +1451,54 @@ chat_id_counter = 1
 
 @enhancements_bp.route("/chat/history", methods=["GET"])
 def chat_history():
-    grouped = {"Today": [{"id": c["id"], "message": c["message"]} for c in chat_history_data]}
-    return jsonify(grouped)
+    if "user_id" not in session:
+        return jsonify({})
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT id, question
+        FROM chat_logs
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+    """, (session["user_id"],))
+
+    chats = cur.fetchall()
+    conn.close()
+
+    return jsonify({
+        "Your Chats": [
+            {"id": c["id"], "message": c["question"]}
+            for c in chats
+        ]
+    })
 
 @enhancements_bp.route("/chat/history/<int:id>", methods=["GET"])
 def chat_history_detail(id):
-    conv = next((c for c in chat_history_data if c["id"] == id), None)
-    if conv:
-        return jsonify({"message": conv["message"], "answer": conv["answer"]})
-    return jsonify({"message": "", "answer": ""})
+    if "user_id" not in session:
+        return jsonify({"message": "", "answer": ""})
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT question, answer
+        FROM chat_logs
+        WHERE id = ? AND user_id = ?
+    """, (id, session["user_id"]))
+
+    chat = cur.fetchone()
+    conn.close()
+
+    if not chat:
+        return jsonify({"message": "", "answer": ""})
+
+    return jsonify({
+        "message": chat["question"],
+        "answer": chat["answer"]
+    })
+
 
 @enhancements_bp.route("/admin/questions1", methods=["GET"])
 def admin_questions1():
@@ -1465,6 +1523,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
