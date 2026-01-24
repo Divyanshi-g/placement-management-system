@@ -23,7 +23,7 @@ enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templa
 # ----------------- AI Function -----------------
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # Load once globally
 
-def generate_ai_answer(user_question):
+def generate_ai_answer(question):
     if not OPENROUTER_API_KEY:
         return "⚠️ OpenRouter API key is not set."
 
@@ -39,7 +39,7 @@ def generate_ai_answer(user_question):
         "model": "openai/gpt-4o-mini",   # ✅ FIXED MODEL
         "messages": [
             {"role": "system", "content": "You are a helpful college placement assistant."},
-            {"role": "user", "content": user_question}
+            {"role": "user", "content": question}
         ],
         "max_tokens": 300,
         "temperature": 0.7
@@ -1450,7 +1450,7 @@ def ask_message():
         VALUES (?, ?, 'user', ?)
     """, (session["user_id"], conversation_id, question))
 
-    answer = generate_ai_answer(user_question)  # your AI logic
+    answer = generate_ai_answer(question)  # your AI logic
 
     # save bot message
     cur.execute("""
@@ -1558,6 +1558,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
