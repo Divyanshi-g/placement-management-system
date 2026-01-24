@@ -1423,47 +1423,47 @@ def ask():
         return redirect(url_for("enhancements.login"))
 
     return render_template("ask.html")
-@enhancements_bp.route("/ask/message", methods=["POST"])
+@bp.route("/ask/message", methods=["POST"])
 def ask_message():
     if "user_id" not in session:
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": "Login required"}), 401
 
-    data = request.get_json() or {}
-    question = (data.get("question") or "").strip()
-    conversation_id = data.get("conversation_id")
+    data = request.get_json()
+    question = data.get("question")
 
     if not question:
         return jsonify({"error": "Empty question"}), 400
 
-    # Create new conversation if not exists
-    if not conversation_id:
-        conversation_id = str(uuid.uuid4())
-
-    answer = generate_ai_answer(question)
-
-    conn = get_db_conn()
+    conn = get_db()
     cur = conn.cursor()
 
-    # ✅ Save USER message
+    # verify user exists
+    cur.execute("SELECT id FROM users WHERE id = ?", (session["user_id"],))
+    if not cur.fetchone():
+        return jsonify({"error": "Invalid user"}), 401
+
+    conversation_id = data.get("conversation_id") or str(uuid.uuid4())
+
+    # save user message
     cur.execute("""
         INSERT INTO chat_logs (user_id, conversation_id, role, content)
         VALUES (?, ?, 'user', ?)
     """, (session["user_id"], conversation_id, question))
 
-    # ✅ Save BOT message
+    answer = get_bot_reply(question)  # your AI logic
+
+    # save bot message
     cur.execute("""
         INSERT INTO chat_logs (user_id, conversation_id, role, content)
         VALUES (?, ?, 'bot', ?)
     """, (session["user_id"], conversation_id, answer))
 
     conn.commit()
-    conn.close()
 
     return jsonify({
         "answer": answer,
         "conversation_id": conversation_id
     })
-
 
 # ---------------- Chat History ----------------
 @enhancements_bp.route("/chat/history", methods=["GET"])
@@ -1558,6 +1558,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
