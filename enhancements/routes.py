@@ -83,73 +83,80 @@ def call_huggingface(prompt):
         return data[0].get("generated_text", "")
     return "Unable to analyze resume."
 
-@enhancements_bp.route("/resume_review", methods=["GET", "POST"])
-def resume_review():
-    if request.method == "GET":
-        return render_template("resume_review.html")
+@enhancements_bp.route("/check_resume", methods=["POST"])
+def check_resume():
+    try:
+        if "resume" not in request.files:
+            return jsonify({"error": "No resume uploaded"}), 400
 
-    if "resume" not in request.files:
-        return jsonify({"error": "No resume uploaded"}), 400
+        user_id = session.get("user_id")
+        if not user_id:
+            return jsonify({"error": "Login required"}), 401
 
-    file = request.files["resume"]
-    user_id = session.get("user_id")
+        file = request.files["resume"]
+        filename = secure_filename(file.filename)
 
-    if not user_id:
-        return jsonify({"error": "Login required"}), 401
+        save_path = os.path.join(
+            get_upload_folder(),
+            f"{int(datetime.utcnow().timestamp())}_{filename}"
+        )
+        file.save(save_path)
 
-    filename = secure_filename(file.filename)
-    save_path = os.path.join(
-        get_upload_folder(),
-        f"{int(datetime.utcnow().timestamp())}_{filename}"
-    )
-    file.save(save_path)
+        # ---- BASIC LOCAL ANALYSIS ----
+        from enhancements.resume_checker import analyze_resume
+        local_result = analyze_resume(save_path)
 
-    # Extract text (reuse your existing logic)
-    from enhancements.resume_checker import analyze_resume
-    local_result = analyze_resume(save_path)
-
-    # Hugging Face ATS prompt
-    prompt = f"""
+        # ---- HUGGINGFACE ATS ----
+        hf_feedback = "AI feedback unavailable."
+        if HUGGINGFACE_API_KEY:
+            prompt = f"""
 You are an ATS resume checker.
 Give feedback in bullet points and improvement suggestions.
 
-Resume text:
+Resume analysis:
 {json.dumps(local_result)}
 """
+            try:
+                hf_feedback = call_huggingface(prompt)
+            except Exception:
+                pass  # silently fail AI, do NOT break UI
 
-    try:
-        hf_feedback = call_huggingface(prompt)
-    except Exception as e:
-        hf_feedback = "ATS analysis failed. Showing basic checks only."
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute(
-        """
-        INSERT INTO resumes (user_id, filename, storage_path, verdict, details)
-        VALUES (?, ?, ?, ?, ?)
-        """,
-        (
-            user_id,
-            filename,
-            save_path,
-            local_result.get("verdict"),
-            json.dumps({
-                "basic": local_result,
-                "hf_feedback": hf_feedback
-            })
+        # ---- SAVE TO DB ----
+        conn = get_db_conn()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO resumes (user_id, filename, storage_path, verdict, details)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                filename,
+                save_path,
+                local_result.get("verdict"),
+                json.dumps({
+                    "basic": local_result,
+                    "hf_feedback": hf_feedback
+                })
+            )
         )
-    )
-    conn.commit()
-    conn.close()
-    
+        conn.commit()
+        conn.close()
 
-    return jsonify({
-        "score": local_result.get("score_percent"),
-        "verdict": local_result.get("verdict"),
-        "feedback": hf_feedback,
-        "suggestions": local_result.get("suggestions"),
-    })
+        # ---- RESPONSE MATCHES JS ----
+        return jsonify({
+            "result": f"""
+ATS Verdict: {local_result.get("verdict")}
+
+Score: {local_result.get("score_percent", "N/A")}%
+
+AI Feedback:
+{hf_feedback}
+"""
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ------------------ Auth pages ------------------
 @enhancements_bp.route("/register", methods=["GET", "POST"])
@@ -1562,6 +1569,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
