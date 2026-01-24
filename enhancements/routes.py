@@ -1502,24 +1502,7 @@ def chat_history_detail(conversation_id):
 
 
 
-# ---------------- New Chat Option ----------------
-@enhancements_bp.route("/chat/new", methods=["GET"])
-def chat_new():
-    if "user_id" not in session:
-        flash("⚠️ Login required.", "warning")
-        return redirect(url_for("enhancements.login"))
 
-    # Generate a new conversation_id (optional: can also generate in JS)
-    new_conversation_id = str(uuid.uuid4())
-
-    return render_template(
-        "ask.html",
-        show_nav_options=True,
-        is_admin=session.get("role") == "admin",
-        home_url=url_for("enhancements.student_dashboard"),
-        new_chat=True,
-        conversation_id=new_conversation_id  # pass to JS to start new chat
-    )
 
 
 @enhancements_bp.route("/admin/questions1", methods=["GET"])
@@ -1545,6 +1528,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
