@@ -1416,28 +1416,35 @@ def reports():
     )
 
 # ---------------- Chat Page ----------------
-@enhancements_bp.route("/ask", methods=["POST"])
-def ask():
+@enhancements_bp.route("/ask", methods=["GET"])
+def ask_page():
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
+
+    return render_template("ask.html")
+@enhancements_bp.route("/ask/message", methods=["POST"])
+def ask_message():
     if "user_id" not in session:
         return jsonify({"error": "Unauthorized"}), 401
 
-    data = request.get_json()
-    question = data.get("question")
-
+    data = request.get_json() or {}
+    question = (data.get("question") or "").strip()
     if not question:
         return jsonify({"error": "Empty question"}), 400
 
-    answer = get_bot_answer(question)  # whatever logic you use
+    answer = generate_ai_answer(question)
 
-    # save to DB (question + answer)
-    cur = get_db().cursor()
+    conn = get_db_conn()
+    cur = conn.cursor()
     cur.execute("""
         INSERT INTO chat_logs (user_id, question, answer)
         VALUES (?, ?, ?)
     """, (session["user_id"], question, answer))
-    get_db().commit()
+    conn.commit()
+    conn.close()
 
     return jsonify({"answer": answer})
+
 
 # ---------------- Chat History ----------------
 @enhancements_bp.route("/chat/history", methods=["GET"])
@@ -1531,6 +1538,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
