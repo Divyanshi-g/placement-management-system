@@ -1,10 +1,8 @@
 {% extends "base.html" %}
-
 {% block title %}Chat with Assistant{% endblock %}
 
 {% block content %}
 <style>
-/* ================= MAIN CHAT CARD ================= */
 .chat-card {
   max-width: 880px;
   margin: auto;
@@ -14,7 +12,6 @@
   padding: 24px;
 }
 
-/* ================= CHAT WINDOW ================= */
 #chat-window {
   background: #f9fafb;
   border-radius: 14px;
@@ -23,7 +20,6 @@
   overflow-y: auto;
 }
 
-/* Message bubbles */
 .chat-user {
   background: #dbeafe;
   padding: 10px 14px;
@@ -40,7 +36,6 @@
   max-width: 80%;
 }
 
-/* ================= DRAWER ================= */
 .history-drawer {
   position: fixed;
   top: 0;
@@ -56,7 +51,6 @@
 }
 .history-open { right: 0; }
 
-/* Drawer button */
 .drawer-btn {
   position: fixed;
   right: 14px;
@@ -68,10 +62,7 @@
   cursor: pointer;
   font-size: 20px;
   z-index: 1000;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
 }
-
-/* History items */
 .history-item {
   padding: 8px;
   background: #f3f4f6;
@@ -80,77 +71,53 @@
   cursor: pointer;
 }
 .history-item:hover { background: #e0e7ff; }
-
-/* ================= MOBILE FIX ================= */
-@media (max-width: 768px) {
-  .chat-card {
-    padding: 16px;
-    border-radius: 14px;
-  }
-
-  #chat-window {
-    height: 260px;
-  }
-
-  .drawer-btn {
-    right: 10px;
-    top: auto;
-    bottom: 20px;
-  }
-
-  .history-drawer {
-    width: 100%;
-  }
-}
 </style>
 
 <div class="chat-card mt-6 mb-10">
-  <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-6 text-gray-800">
-    ❓ Ask Your Questions
-  </h1>
+  <h1 class="text-3xl font-extrabold text-center mb-6">❓ Ask Your Questions</h1>
 
-  <!-- Chat Window -->
   <div id="chat-window">
     <p class="text-gray-400 text-center">💬 Start asking your questions...</p>
   </div>
 
-  <!-- Input Bar -->
-  <div class="flex mt-4">
-    <input id="chat-input" type="text" placeholder="Type your question..."
-      class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-400">
-    <button onclick="sendChat()"
-      class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-r-lg hover:scale-105 transition">
+  <div class="flex gap-2 mt-4">
+    <input id="chat-input" type="text"
+           placeholder="Type your question..."
+           class="flex-1 px-4 py-3 border rounded-lg">
+
+    <button type="button"
+            onclick="sendChat()"
+            class="px-6 py-3 bg-blue-600 text-white rounded-lg">
       Ask
     </button>
-   <button type="button" id="new-chat-btn"
-          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-    + New Chat
-  </button>
+
+    <button type="button"
+            onclick="newChat()"
+            class="px-4 py-3 bg-green-600 text-white rounded-lg">
+      + New Chat
+    </button>
+  </div>
 </div>
 
-<!-- Drawer Button -->
 <div class="drawer-btn" onclick="toggleDrawer()">📜</div>
 
-<!-- History Drawer -->
 <div id="historyDrawer" class="history-drawer">
   <h2 class="font-bold text-xl mb-3">Chat History</h2>
   <div id="historyContent">Loading...</div>
 </div>
+
 <script>
-/* ================= TOGGLE HISTORY DRAWER ================= */
 function toggleDrawer() {
-  const drawer = document.getElementById("historyDrawer");
-  drawer.classList.toggle("history-open");
+  document.getElementById("historyDrawer")
+          .classList.toggle("history-open");
   loadHistory();
 }
 
-/* ================= NEW CHAT ================= */
 function newChat() {
-  const win = document.getElementById("chat-window");
-  win.innerHTML = `<p class="text-gray-400 text-center">💬 Start your new chat...</p>`;
+  document.getElementById("chat-window").innerHTML =
+    `<p class="text-gray-400 text-center">💬 Start your new chat...</p>`;
 }
 
-/* ================= SEND CHAT ================= */
 async function sendChat() {
   const input = document.getElementById("chat-input");
   const msg = input.value.trim();
@@ -158,86 +125,64 @@ async function sendChat() {
 
   const win = document.getElementById("chat-window");
 
-  // Show user message
   win.innerHTML += `<div class="chat-user"><b>You:</b> ${msg}</div>`;
   input.value = "";
-  win.scrollTop = win.scrollHeight;
 
-  // Bot typing
   const loadingId = "loading-" + Date.now();
-  win.innerHTML += `<div id="${loadingId}" class="chat-bot text-gray-500"><b>Bot:</b> typing...</div>`;
+  win.innerHTML += `<div id="${loadingId}" class="chat-bot">Bot: typing...</div>`;
   win.scrollTop = win.scrollHeight;
 
   try {
     const res = await fetch("/ask", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: msg })
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({question: msg})
     });
 
     const data = await res.json();
-    document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ${data.answer}`;
-
-  } catch (err) {
-    document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ⚠️ Server error.`;
-    console.error(err);
+    document.getElementById(loadingId).innerHTML =
+      `<b>Bot:</b> ${data.answer}`;
+  } catch {
+    document.getElementById(loadingId).innerHTML =
+      "⚠️ Server error";
   }
-
-  win.scrollTop = win.scrollHeight;
 }
 
-/* ================= LOAD CHAT HISTORY ================= */
 async function loadHistory() {
   const box = document.getElementById("historyContent");
+  box.innerHTML = "";
 
   try {
     const res = await fetch("/chat/history");
     const data = await res.json();
-
-    box.innerHTML = "";
-
-    const chats = data["Your Chats"] || [];
-    for (let chat of chats) {
-      box.innerHTML += `
-        <div class="history-item"
-             onclick="loadConversation(${chat.id})">
-          ${chat.message}
-        </div>`;
-    }
-
-  } catch (e) {
-    box.innerHTML = "⚠️ Cannot load history.";
-    console.error(e);
+    (data["Your Chats"] || []).forEach(c => {
+      box.innerHTML +=
+        `<div class="history-item"
+              onclick="loadConversation(${c.id})">${c.message}</div>`;
+    });
+  } catch {
+    box.innerHTML = "⚠️ Cannot load history";
   }
 }
 
-/* ================= LOAD SINGLE CHAT ================= */
 async function loadConversation(id) {
   const win = document.getElementById("chat-window");
-  win.innerHTML = `<p class="text-gray-400 text-center">Loading...</p>`;
+  win.innerHTML = "Loading...";
 
-  try {
-    const res = await fetch(`/chat/history/${id}`);
-    const data = await res.json();
+  const res = await fetch(`/chat/history/${id}`);
+  const data = await res.json();
 
-    win.innerHTML = `
-      <div class="chat-user"><b>You:</b> ${data.message}</div>
-      <div class="chat-bot"><b>Bot:</b> ${data.answer}</div>
-    `;
-
-  } catch (err) {
-    win.innerHTML = "⚠️ Cannot load chat.";
-    console.error(err);
-  }
+  win.innerHTML = `
+    <div class="chat-user"><b>You:</b> ${data.message}</div>
+    <div class="chat-bot"><b>Bot:</b> ${data.answer}</div>`;
 }
 
-/* ================= SEND ON ENTER ================= */
-document.getElementById("chat-input").addEventListener("keypress", function (e) {
-  if (e.key === "Enter") sendChat();
-});
+document.getElementById("chat-input")
+  .addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendChat();
+    }
+  });
 </script>
-
-
 {% endblock %}
-
-
