@@ -122,11 +122,10 @@
       class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-r-lg hover:scale-105 transition">
       Ask
     </button>
-    <button onclick="newChat()"
-      class="ml-2 px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
-      🆕 New Chat
-    </button>
-  </div>
+   <button type="button" id="new-chat-btn"
+          class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+    + New Chat
+  </button>
 </div>
 
 <!-- Drawer Button -->
@@ -137,11 +136,10 @@
   <h2 class="font-bold text-xl mb-3">Chat History</h2>
   <div id="historyContent">Loading...</div>
 </div>
-
 <script>
 let currentConversationId = null;
 
-/* ================= TOGGLE DRAWER ================= */
+/* ================= TOGGLE HISTORY DRAWER ================= */
 function toggleDrawer() {
   const drawer = document.getElementById("historyDrawer");
   drawer.classList.toggle("history-open");
@@ -150,7 +148,7 @@ function toggleDrawer() {
 
 /* ================= NEW CHAT ================= */
 function newChat() {
-  currentConversationId = null;
+  currentConversationId = null; // reset conversation
   const win = document.getElementById("chat-window");
   win.innerHTML = `<p class="text-gray-400 text-center">💬 Start your new chat...</p>`;
 }
@@ -162,10 +160,13 @@ async function sendChat() {
   if (!msg) return;
 
   const win = document.getElementById("chat-window");
+
+  // Show user message
   win.innerHTML += `<div class="chat-user"><b>You:</b> ${msg}</div>`;
   input.value = "";
   win.scrollTop = win.scrollHeight;
 
+  // Show bot loading
   const loadingId = "loading-" + Date.now();
   win.innerHTML += `<div id="${loadingId}" class="chat-bot text-gray-500"><b>Bot:</b> typing...</div>`;
   win.scrollTop = win.scrollHeight;
@@ -174,15 +175,20 @@ async function sendChat() {
     const res = await fetch("/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: msg, conversation_id: currentConversationId })
+      body: JSON.stringify({ 
+        question: msg,
+        conversation_id: currentConversationId // send current conversation
+      })
     });
     const data = await res.json();
 
+    // Show bot answer
     document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ${data.answer}`;
-    currentConversationId = data.conversation_id;
+    currentConversationId = data.conversation_id; // update conversation
 
   } catch (err) {
     document.getElementById(loadingId).innerHTML = `<b>Bot:</b> ⚠️ Server error.`;
+    console.error(err);
   }
 
   win.scrollTop = win.scrollHeight;
@@ -198,36 +204,46 @@ async function loadHistory() {
     box.innerHTML = "";
     for (let conv of data) {
       box.innerHTML += `
-        <div class="history-item"
-             onclick="loadConversation('${conv.conversation_id}')">
+        <div class="history-item" onclick="loadConversation('${conv.conversation_id}')">
           ${conv.preview}
         </div>`;
     }
+
   } catch (e) {
     box.innerHTML = "⚠️ Cannot load history.";
+    console.error(e);
   }
 }
 
 /* ================= LOAD SINGLE CHAT ================= */
 async function loadConversation(conversationId) {
-  currentConversationId = conversationId;
+  currentConversationId = conversationId; // switch conversation
   const win = document.getElementById("chat-window");
-  win.innerHTML = "Loading conversation...";
+  win.innerHTML = `<p class="text-gray-400 text-center">Loading conversation...</p>`;
 
   try {
     const res = await fetch(`/chat/history/${conversationId}`);
     const data = await res.json();
 
-    win.innerHTML = "";
+    win.innerHTML = ""; // clear window
     for (let msg of data) {
       const cls = msg.role === "user" ? "chat-user" : "chat-bot";
       win.innerHTML += `<div class="${cls}"><b>${msg.role === "user" ? 'You' : 'Bot'}:</b> ${msg.content}</div>`;
     }
+
     win.scrollTop = win.scrollHeight;
 
-  } catch {
+  } catch (err) {
     win.innerHTML = "⚠️ Cannot load conversation.";
+    console.error(err);
   }
 }
+
+/* ================= SEND ON ENTER ================= */
+document.getElementById("chat-input").addEventListener("keypress", function(e){
+  if(e.key === "Enter") sendChat();
+});
 </script>
+
 {% endblock %}
+
