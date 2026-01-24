@@ -3,53 +3,69 @@
 
 {% block content %}
 <style>
+/* ================= ROOT SAFETY ================= */
+* {
+  box-sizing: border-box;
+}
+
 /* ================= MAIN CHAT CARD ================= */
 .chat-card {
-  max-width: 95%;
-  margin: auto;
+  width: min(96%, 1400px);
+  margin: 20px auto 120px;
   background: linear-gradient(135deg, #ecfeff, #d1fae5);
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.14);
-  padding: 24px;
+  padding: 26px;
 }
 
 /* ================= CHAT WINDOW ================= */
 #chat-window {
   background: #f9fafb;
-  border-radius: 14px;
-  padding: 14px;
-  height: 320px;
+  border-radius: 16px;
+  padding: 16px;
+  height: 360px;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 /* ================= MESSAGE BUBBLES ================= */
+.chat-user,
+.chat-bot {
+  padding: 12px 16px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  max-width: 78%;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
 .chat-user {
   background: #dbeafe;
-  padding: 10px 14px;
-  border-radius: 12px;
-  margin-bottom: 6px;
-  max-width: 80%;
+  margin-left: auto;
 }
 
 .chat-bot {
   background: #dcfce7;
-  padding: 10px 14px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  max-width: 80%;
+  margin-right: auto;
+}
+
+/* ================= INPUT ROW ================= */
+.chat-card input {
+  min-width: 0;
 }
 
 /* ================= HISTORY DRAWER ================= */
 .history-drawer {
   position: fixed;
   top: 0;
-  right: -320px;
-  width: 320px;
-  height: 100%;
+  right: -360px;
+  width: 360px;
+  height: 100vh;
   background: #ffffff;
-  box-shadow: -3px 0 10px rgba(0,0,0,0.2);
+  box-shadow: -4px 0 18px rgba(0,0,0,0.25);
   transition: right 0.35s ease;
   z-index: 999;
+  padding: 18px;
   overflow-y: auto;
 }
 
@@ -60,92 +76,113 @@
 /* ================= DRAWER BUTTON ================= */
 .drawer-btn {
   position: fixed;
-  right: 20px;
-  top: 90px; /* below navbar */
+  right: 18px;
+  top: 88px; /* safely below navbar */
   background: #2563eb;
-  color: white;
-  padding: 14px;
+  color: #fff;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
   cursor: pointer;
-  font-size: 20px;
   z-index: 1000;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
 }
 
 /* ================= HISTORY ITEMS ================= */
 .history-item {
-  padding: 8px;
+  padding: 10px 12px;
   background: #f3f4f6;
-  margin: 6px 0;
-  border-radius: 8px;
+  margin-bottom: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .history-item:hover {
   background: #e0e7ff;
 }
 
-/* ================= MEDIA QUERIES ================= */
-
-/* Tablet */
+/* ================= TABLET ================= */
 @media (max-width: 1024px) {
   .chat-card {
-    width: 90%;
-    padding: 20px;
-    margin-top: 5px;
+    padding: 22px;
   }
 
   #chat-window {
-    height: 280px;
+    height: 300px;
+  }
+
+  .history-drawer {
+    width: 320px;
   }
 
   .drawer-btn {
     top: 80px;
-    right: 16px;
   }
 }
 
-/* Mobile */
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
   .chat-card {
-    width: 95%;
-    padding: 16px;
-    border-radius: 14px;
+    width: 96%;
+    padding: 18px;
+    border-radius: 16px;
   }
 
   #chat-window {
-    height: 240px;
+    height: 260px;
+  }
+
+  .chat-user,
+  .chat-bot {
+    max-width: 90%;
+    font-size: 14px;
   }
 
   .drawer-btn {
-    top: 70px;
-    right: 12px;
+    top: 72px;
+    right: 14px;
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
   }
 
   .history-drawer {
-    width: 100%; /* full width on mobile */
+    width: 100%;
+    right: -100%;
+  }
+
+  .history-open {
+    right: 0;
   }
 }
 
-/* Small mobile */
+/* ================= SMALL MOBILE ================= */
 @media (max-width: 480px) {
   .chat-card {
-    padding: 12px;
+    padding: 14px;
   }
 
   #chat-window {
-    height: 200px;
+    height: 220px;
   }
 
   .drawer-btn {
-    top: 60px;
-    right: 10px;
-    padding: 12px;
+    top: 66px;
+    width: 42px;
+    height: 42px;
     font-size: 18px;
+  }
+
+  .history-item {
+    font-size: 13px;
   }
 }
 </style>
-
 
 <div class="chat-card mb-20">
   <h1 class="text-3xl font-extrabold text-center mb-6">❓ Ask Your Questions</h1>
@@ -292,6 +329,7 @@ document.getElementById("chat-input")
 </script>
 
 {% endblock %}
+
 
 
 
