@@ -1416,106 +1416,109 @@ def reports():
     )
 
 # ---------------- Chat Page ----------------
-@enhancements_bp.route("/ask", methods=["GET", "POST"])
+@enhancements_bp.route("/ask", methods=["POST"])
 def ask():
-    # 0️⃣ Require login
     if "user_id" not in session:
-        flash("⚠️ Login required to chat.", "warning")
-        return redirect(url_for("enhancements.login"))
+        return jsonify({"answer": "⚠️ Login required."})
 
-    # 1️⃣ GET — show chat page
-    if request.method == "GET":
-        return render_template(
-            "ask.html",
-            show_nav_options=True,                     # Navbar options visible
-            is_admin=session.get("role") == "admin",  # Show admin links if admin
-            home_url=url_for("enhancements.student_dashboard")
-        )
-
-    # 2️⃣ POST — receive user question
     data = request.get_json() or {}
     user_question = (data.get("question") or "").strip()
+    conversation_id = data.get("conversation_id") or str(uuid.uuid4())  # new chat if not provided
+
     if not user_question:
         return jsonify({"answer": "⚠️ Please enter a question."})
 
-    # 3️⃣ Call AI
     answer = generate_ai_answer(user_question)
 
-    # 4️⃣ Save chat to DB
+    # Save user message
     conn = get_db_conn()
     cur = conn.cursor()
     cur.execute("""
-        INSERT INTO chat_logs (user_id, question, answer)
-        VALUES (?, ?, ?)
-    """, (session["user_id"], user_question, answer))
+        INSERT INTO chat_logs (conversation_id, user_id, role, content)
+        VALUES (?, ?, 'user', ?)
+    """, (conversation_id, session["user_id"], user_question))
+
+    # Save bot response
+    cur.execute("""
+        INSERT INTO chat_logs (conversation_id, user_id, role, content)
+        VALUES (?, ?, 'bot', ?)
+    """, (conversation_id, session["user_id"], answer))
+
     conn.commit()
     conn.close()
 
-    return jsonify({"answer": answer})
-
+    return jsonify({"answer": answer, "conversation_id": conversation_id})
 
 # ---------------- Chat History ----------------
 @enhancements_bp.route("/chat/history", methods=["GET"])
 def chat_history():
-    # Only show logged-in user's chats
     if "user_id" not in session:
-        return jsonify({})
+        return jsonify([])
 
     conn = get_db_conn()
     cur = conn.cursor()
+
+    # Fetch distinct conversation IDs for this user
     cur.execute("""
-        SELECT id, question
+        SELECT conversation_id, MAX(created_at) as last_msg
         FROM chat_logs
         WHERE user_id = ?
-        ORDER BY created_at DESC
+        GROUP BY conversation_id
+        ORDER BY last_msg DESC
     """, (session["user_id"],))
-    chats = cur.fetchall()
+
+    conversations = cur.fetchall()
     conn.close()
 
-    return jsonify({
-        "Your Chats": [{"id": c["id"], "message": c["question"]} for c in chats]
-    })
+    # Return preview (latest message) for each conversation
+    result = []
+    for c in conversations:
+        result.append({
+            "conversation_id": c["conversation_id"],
+            "preview": "Latest message"  # optional: fetch latest content for preview
+        })
+
+    return jsonify(result)
 
 
-@enhancements_bp.route("/chat/history/<int:id>", methods=["GET"])
-def chat_history_detail(id):
-    # Only allow logged-in user to view their own chat
+@enhancements_bp.route("/chat/history/<conversation_id>", methods=["GET"])
+def chat_history_detail(conversation_id):
     if "user_id" not in session:
-        return jsonify({"message": "", "answer": ""})
+        return jsonify([])
 
     conn = get_db_conn()
     cur = conn.cursor()
     cur.execute("""
-        SELECT question, answer
+        SELECT role, content
         FROM chat_logs
-        WHERE id = ? AND user_id = ?
-    """, (id, session["user_id"]))
-    chat = cur.fetchone()
+        WHERE conversation_id = ? AND user_id = ?
+        ORDER BY created_at
+    """, (conversation_id, session["user_id"]))
+
+    messages = cur.fetchall()
     conn.close()
 
-    if not chat:
-        return jsonify({"message": "", "answer": ""})
+    return jsonify([{"role": m["role"], "content": m["content"]} for m in messages])
 
-    return jsonify({
-        "message": chat["question"],
-        "answer": chat["answer"]
-    })
 
 
 # ---------------- New Chat Option ----------------
 @enhancements_bp.route("/chat/new", methods=["GET"])
 def chat_new():
-    # Start a fresh chat (no previous chats loaded)
     if "user_id" not in session:
         flash("⚠️ Login required.", "warning")
         return redirect(url_for("enhancements.login"))
+
+    # Generate a new conversation_id (optional: can also generate in JS)
+    new_conversation_id = str(uuid.uuid4())
 
     return render_template(
         "ask.html",
         show_nav_options=True,
         is_admin=session.get("role") == "admin",
         home_url=url_for("enhancements.student_dashboard"),
-        new_chat=True  # can be used in JS to clear previous chat window
+        new_chat=True,
+        conversation_id=new_conversation_id  # pass to JS to start new chat
     )
 
 
@@ -1542,6 +1545,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
