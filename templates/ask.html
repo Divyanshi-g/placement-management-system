@@ -4,8 +4,7 @@
 {% block content %}
 <style>
 .chat-card {
-  max-width: 1100px;
-  margin: auto;
+  max-width: 1700px;
   background: linear-gradient(135deg, #ecfeff, #d1fae5);
   border-radius: 18px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.14);
@@ -99,7 +98,7 @@
   </div>
 </div>
 
-<div class="drawer-btn" onclick="toggleDrawer() mt-0">📜</div>
+<div class="drawer-btn mt-0" onclick="toggleDrawer()" >📜</div>
 
 <div id="historyDrawer" class="history-drawer">
   <h2 class="font-bold text-xl mb-3">Chat History</h2>
@@ -187,5 +186,6 @@ document.getElementById("chat-input")
   });
 </script>
 {% endblock %}
+
 
 
