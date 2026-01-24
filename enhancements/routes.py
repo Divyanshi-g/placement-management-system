@@ -1500,6 +1500,19 @@ def chat_history_detail(conversation_id):
 
     return jsonify([{"role": m["role"], "content": m["content"]} for m in messages])
 
+@enhancements_bp.route("/chat/new", methods=["GET"])
+def chat_new():
+    if "user_id" not in session:
+        flash("⚠️ Login required.", "warning")
+        return redirect(url_for("enhancements.login"))
+
+    return render_template(
+        "ask.html",
+        show_nav_options=True,
+        is_admin=session.get("role") == "admin",
+        home_url=url_for("enhancements.student_dashboard"),
+        new_chat=True
+    )
 
 
 
@@ -1528,6 +1541,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
