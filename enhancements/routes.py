@@ -1422,7 +1422,11 @@ def ask():
     if "user_id" not in session:
         return redirect(url_for("enhancements.login"))
 
-    return render_template("ask.html")
+    return render_template("ask.html",
+                           show_nav_options=True,
+                           is_admin=True,
+                           home_url=url_for("enhancements.student_dashboard")
+                          )
 @enhancements_bp.route("/ask/message", methods=["POST"])
 def ask_message():
     if "user_id" not in session:
@@ -1558,6 +1562,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
