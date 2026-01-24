@@ -1418,21 +1418,30 @@ def reports():
 # ---------------- Chat Page ----------------
 @enhancements_bp.route("/ask", methods=["GET", "POST"])
 def ask():
+    # 0️⃣ Require login
     if "user_id" not in session:
-        return jsonify({"answer": "⚠️ Login required."})
+        flash("⚠️ Login required to chat.", "warning")
+        return redirect(url_for("enhancements.login"))
 
+    # 1️⃣ GET — show chat page
     if request.method == "GET":
-        return render_template("ask.html")
+        return render_template(
+            "ask.html",
+            show_nav_options=True,                     # Navbar options visible
+            is_admin=session.get("role") == "admin",  # Show admin links if admin
+            home_url=url_for("enhancements.student_dashboard")
+        )
 
+    # 2️⃣ POST — receive user question
     data = request.get_json() or {}
     user_question = (data.get("question") or "").strip()
-
     if not user_question:
         return jsonify({"answer": "⚠️ Please enter a question."})
 
+    # 3️⃣ Call AI
     answer = generate_ai_answer(user_question)
 
-    # ✅ SAVE CHAT
+    # 4️⃣ Save chat to DB
     conn = get_db_conn()
     cur = conn.cursor()
     cur.execute("""
@@ -1444,50 +1453,43 @@ def ask():
 
     return jsonify({"answer": answer})
 
-# ---------------- Chat History (Example) ----------------
-# You can later connect to DB to store real chats
-chat_history_data = []
-chat_id_counter = 1
 
+# ---------------- Chat History ----------------
 @enhancements_bp.route("/chat/history", methods=["GET"])
 def chat_history():
+    # Only show logged-in user's chats
     if "user_id" not in session:
         return jsonify({})
 
     conn = get_db_conn()
     cur = conn.cursor()
-
     cur.execute("""
         SELECT id, question
         FROM chat_logs
         WHERE user_id = ?
         ORDER BY created_at DESC
     """, (session["user_id"],))
-
     chats = cur.fetchall()
     conn.close()
 
     return jsonify({
-        "Your Chats": [
-            {"id": c["id"], "message": c["question"]}
-            for c in chats
-        ]
+        "Your Chats": [{"id": c["id"], "message": c["question"]} for c in chats]
     })
+
 
 @enhancements_bp.route("/chat/history/<int:id>", methods=["GET"])
 def chat_history_detail(id):
+    # Only allow logged-in user to view their own chat
     if "user_id" not in session:
         return jsonify({"message": "", "answer": ""})
 
     conn = get_db_conn()
     cur = conn.cursor()
-
     cur.execute("""
         SELECT question, answer
         FROM chat_logs
         WHERE id = ? AND user_id = ?
     """, (id, session["user_id"]))
-
     chat = cur.fetchone()
     conn.close()
 
@@ -1498,6 +1500,23 @@ def chat_history_detail(id):
         "message": chat["question"],
         "answer": chat["answer"]
     })
+
+
+# ---------------- New Chat Option ----------------
+@enhancements_bp.route("/chat/new", methods=["GET"])
+def chat_new():
+    # Start a fresh chat (no previous chats loaded)
+    if "user_id" not in session:
+        flash("⚠️ Login required.", "warning")
+        return redirect(url_for("enhancements.login"))
+
+    return render_template(
+        "ask.html",
+        show_nav_options=True,
+        is_admin=session.get("role") == "admin",
+        home_url=url_for("enhancements.student_dashboard"),
+        new_chat=True  # can be used in JS to clear previous chat window
+    )
 
 
 @enhancements_bp.route("/admin/questions1", methods=["GET"])
@@ -1523,6 +1542,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
