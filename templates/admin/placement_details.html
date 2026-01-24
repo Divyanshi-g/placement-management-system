@@ -118,30 +118,66 @@ textarea.edit-input{
 <span class="detail-label">Role:</span>
 <span class="view-text">{{ placement.role }}</span>
 <input class="edit-input" type="text" name="role" value="{{ placement.role }}">
+    <datalist id="roleOptions">
+  <option value="Software Engineer">
+  <option value="Data Analyst">
+  <option value="Web Developer">
+  <option value="Backend Developer">
+  <option value="Frontend Developer">
+  <option value="Machine Learning Engineer">
+</datalist>
 </div>
 
 <div class="detail-item">
 <span class="detail-label">Location:</span>
 <span class="view-text">{{ placement.location }}</span>
 <input class="edit-input" type="text" name="location" value="{{ placement.location }}">
+    <datalist id="locationOptions">
+  <option value="Bangalore">
+  <option value="Hyderabad">
+  <option value="Pune">
+  <option value="Mumbai">
+  <option value="Chennai">
+  <option value="Delhi">
+  <option value="Remote">
+</datalist>
 </div>
 
 <div class="detail-item">
 <span class="detail-label">Salary:</span>
 <span class="view-text">{{ placement.salary }}</span>
 <input class="edit-input" type="text" name="salary" value="{{ placement.salary }}">
+    <datalist id="salaryOptions">
+  <option value="Not Disclosed">
+  <option value="3 – 5 LPA">
+  <option value="5 – 8 LPA">
+  <option value="8 – 12 LPA">
+  <option value="Stipend Based">
+</datalist>
 </div>
 
 <div class="detail-item">
 <span class="detail-label">Job Type:</span>
 <span class="view-text">{{ placement.job_type }}</span>
 <input class="edit-input" type="text" name="job_type" value="{{ placement.job_type }}">
+    <datalist id="jobTypeOptions">
+  <option value="Full Time">
+  <option value="Internship">
+  <option value="Part Time">
+  <option value="Contract">
+</datalist>
 </div>
 
 <div class="detail-item">
 <span class="detail-label">Duration:</span>
 <span class="view-text">{{ placement.duration }}</span>
 <input class="edit-input" type="text" name="duration" value="{{ placement.duration }}">
+    <datalist id="durationOptions">
+  <option value="6 Months">
+  <option value="12 Months">
+  <option value="2 Years">
+  <option value="Permanent">
+</datalist>
 </div>
 
 <div class="detail-item" style="min-height:155px;">
@@ -159,7 +195,7 @@ textarea.edit-input{
 <div class="detail-item">
 <span class="detail-label">Deadline:</span>
 <span class="view-text">{{ placement.deadline }}</span>
-<input class="edit-input" type="text" name="deadline" value="{{ placement.deadline }}">
+<input class="edit-input" type="date" name="deadline" value="{{ placement.deadline }}">
 </div>
 
 <div class="detail-item">
