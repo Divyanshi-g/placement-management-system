@@ -1429,21 +1429,39 @@ def ask_message():
 
     data = request.get_json() or {}
     question = (data.get("question") or "").strip()
+    conversation_id = data.get("conversation_id")
+
     if not question:
         return jsonify({"error": "Empty question"}), 400
+
+    # Create new conversation if not exists
+    if not conversation_id:
+        conversation_id = str(uuid.uuid4())
 
     answer = generate_ai_answer(question)
 
     conn = get_db_conn()
     cur = conn.cursor()
+
+    # ✅ Save USER message
     cur.execute("""
-        INSERT INTO chat_logs (user_id, question, answer)
-        VALUES (?, ?, ?)
-    """, (session["user_id"], question, answer))
+        INSERT INTO chat_logs (user_id, conversation_id, role, content)
+        VALUES (?, ?, 'user', ?)
+    """, (session["user_id"], conversation_id, question))
+
+    # ✅ Save BOT message
+    cur.execute("""
+        INSERT INTO chat_logs (user_id, conversation_id, role, content)
+        VALUES (?, ?, 'bot', ?)
+    """, (session["user_id"], conversation_id, answer))
+
     conn.commit()
     conn.close()
 
-    return jsonify({"answer": answer})
+    return jsonify({
+        "answer": answer,
+        "conversation_id": conversation_id
+    })
 
 
 # ---------------- Chat History ----------------
@@ -1455,28 +1473,24 @@ def chat_history():
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # Fetch distinct conversation IDs for this user
     cur.execute("""
-        SELECT conversation_id, MAX(created_at) as last_msg
+        SELECT conversation_id, MAX(created_at) as last_time
         FROM chat_logs
         WHERE user_id = ?
         GROUP BY conversation_id
-        ORDER BY last_msg DESC
+        ORDER BY last_time DESC
     """, (session["user_id"],))
 
-    conversations = cur.fetchall()
+    rows = cur.fetchall()
     conn.close()
 
-    # Return preview (latest message) for each conversation
-    result = []
-    for c in conversations:
-        result.append({
-            "conversation_id": c["conversation_id"],
-            "preview": "Latest message"  # optional: fetch latest content for preview
-        })
-
-    return jsonify(result)
-
+    return jsonify([
+        {
+            "conversation_id": r["conversation_id"],
+            "preview": "Open chat"
+        }
+        for r in rows
+    ])
 
 @enhancements_bp.route("/chat/history/<conversation_id>", methods=["GET"])
 def chat_history_detail(conversation_id):
@@ -1485,17 +1499,22 @@ def chat_history_detail(conversation_id):
 
     conn = get_db_conn()
     cur = conn.cursor()
+
     cur.execute("""
         SELECT role, content
         FROM chat_logs
-        WHERE conversation_id = ? AND user_id = ?
+        WHERE user_id = ? AND conversation_id = ?
         ORDER BY created_at
-    """, (conversation_id, session["user_id"]))
+    """, (session["user_id"], conversation_id))
 
-    messages = cur.fetchall()
+    rows = cur.fetchall()
     conn.close()
 
-    return jsonify([{"role": m["role"], "content": m["content"]} for m in messages])
+    return jsonify([
+        {"role": r["role"], "content": r["content"]}
+        for r in rows
+    ])
+
 
 @enhancements_bp.route("/chat/new", methods=["GET"])
 def chat_new():
@@ -1538,6 +1557,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
