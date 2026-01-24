@@ -4,7 +4,7 @@
 {% block content %}
 <style>
 .chat-card {
-  max-width: 1700px;
+  max-width: 95%;
   background: linear-gradient(135deg, #ecfeff, #d1fae5);
   border-radius: 18px;
   box-shadow: 0 12px 32px rgba(0,0,0,0.14);
@@ -53,7 +53,7 @@
 .drawer-btn {
   position: fixed;
   right: 14px;
-  top: 40%;
+  top: 10%;
   background: #2563eb;
   color: white;
   padding: 14px;
@@ -106,17 +106,23 @@
 </div>
 
 <script>
+let currentConversationId = null;
+
+/* ================= TOGGLE HISTORY ================= */
 function toggleDrawer() {
   document.getElementById("historyDrawer")
-          .classList.toggle("history-open");
+    .classList.toggle("history-open");
   loadHistory();
 }
 
+/* ================= NEW CHAT ================= */
 function newChat() {
+  currentConversationId = null;
   document.getElementById("chat-window").innerHTML =
     `<p class="text-gray-400 text-center">💬 Start your new chat...</p>`;
 }
 
+/* ================= SEND CHAT ================= */
 async function sendChat() {
   const input = document.getElementById("chat-input");
   const msg = input.value.trim();
@@ -133,21 +139,27 @@ async function sendChat() {
 
   try {
     const res = await fetch("/ask/message", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ question: msg })
-});
-
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: msg,
+        conversation_id: currentConversationId
+      })
+    });
 
     const data = await res.json();
     document.getElementById(loadingId).innerHTML =
       `<b>Bot:</b> ${data.answer}`;
+
+    currentConversationId = data.conversation_id;
+
   } catch {
     document.getElementById(loadingId).innerHTML =
       "⚠️ Server error";
   }
 }
 
+/* ================= LOAD HISTORY ================= */
 async function loadHistory() {
   const box = document.getElementById("historyContent");
   box.innerHTML = "";
@@ -155,28 +167,46 @@ async function loadHistory() {
   try {
     const res = await fetch("/chat/history");
     const data = await res.json();
-    (data["Your Chats"] || []).forEach(c => {
-      box.innerHTML +=
-        `<div class="history-item"
-              onclick="loadConversation(${c.id})">${c.message}</div>`;
+
+    data.forEach(c => {
+      box.innerHTML += `
+        <div class="history-item"
+             onclick="loadConversation('${c.conversation_id}')">
+          ${c.preview}
+        </div>`;
     });
+
   } catch {
     box.innerHTML = "⚠️ Cannot load history";
   }
 }
 
-async function loadConversation(id) {
+/* ================= LOAD CONVERSATION ================= */
+async function loadConversation(conversationId) {
+  currentConversationId = conversationId;
   const win = document.getElementById("chat-window");
   win.innerHTML = "Loading...";
 
-  const res = await fetch(`/chat/history/${id}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(`/chat/history/${conversationId}`);
+    const data = await res.json();
 
-  win.innerHTML = `
-    <div class="chat-user"><b>You:</b> ${data.message}</div>
-    <div class="chat-bot"><b>Bot:</b> ${data.answer}</div>`;
+    win.innerHTML = "";
+    data.forEach(m => {
+      const cls = m.role === "user" ? "chat-user" : "chat-bot";
+      const name = m.role === "user" ? "You" : "Bot";
+      win.innerHTML += `
+        <div class="${cls}">
+          <b>${name}:</b> ${m.content}
+        </div>`;
+    });
+
+  } catch {
+    win.innerHTML = "⚠️ Cannot load conversation";
+  }
 }
 
+/* ================= ENTER KEY ================= */
 document.getElementById("chat-input")
   .addEventListener("keydown", e => {
     if (e.key === "Enter") {
@@ -185,7 +215,9 @@ document.getElementById("chat-input")
     }
   });
 </script>
+
 {% endblock %}
+
 
 
 
