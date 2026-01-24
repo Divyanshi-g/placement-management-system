@@ -136,8 +136,6 @@ def init_db():
        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
        FOREIGN KEY (placement_id) REFERENCES placements(id) ON DELETE CASCADE
     );
-
-
     CREATE TABLE IF NOT EXISTS resumes (
        id INTEGER PRIMARY KEY AUTOINCREMENT,
        user_id INTEGER NOT NULL,
@@ -156,23 +154,6 @@ def init_db():
        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
-
-    CREATE TABLE IF NOT EXISTS notifications (
-       id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-       user_id INTEGER NOT NULL,
-       role TEXT CHECK(role IN ('student','admin')) NOT NULL,
-
-       type TEXT NOT NULL,
-       message TEXT NOT NULL,
-       link TEXT,
-
-       is_read INTEGER DEFAULT 0,
-       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-        FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-    );
-
     """)
 
     # ---------------- SEED DATA ----------------
@@ -282,6 +263,7 @@ def init_db():
         ])
 
     db.commit()
+
 
 
 
