@@ -103,7 +103,7 @@ def check_resume():
         file.save(save_path)
 
         # ---- BASIC LOCAL ANALYSIS ----
-        from enhancements.resume_checker import analyze_resume
+        from enhancements.check_resume import analyze_resume
         local_result = analyze_resume(save_path)
 
         # ---- HUGGINGFACE ATS ----
@@ -1569,6 +1569,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
