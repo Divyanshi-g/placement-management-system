@@ -325,7 +325,7 @@ def init_db():
        ("Reliance Industries", "Supply Chain Coordinator", "Jamnagar",
         "Coordinate logistics, inventory, and supplier communications.",
         "Any Graduate", "₹5–8 LPA", "Full-Time", "Onsite", "2025-10-20",
-        "reliance.png", "https://www.ril.com/Careers"),
+        "relience.png", "https://www.ril.com/Careers"),
 
        ("Accenture", "Digital Marketing Executive", "Gurgaon",
         "Manage digital campaigns, SEO, and performance marketing strategies.",
@@ -353,6 +353,7 @@ def init_db():
       "meesho.png", "https://careers.meesho.com")
     ])
     db.commit()
+
 
 
 
