@@ -260,7 +260,7 @@ def init_db():
         ("Zoho", "Product Engineer", "Chennai",
          "Develop scalable SaaS products and collaborate with cross-functional teams.",
          "B.Tech CS", "₹8–14 LPA", "Full-Time", "NA", "2025-12-27",
-         "zoho.png", "https://www.zoho.com/careers")
+         "zoho.png", "https://www.zoho.com/careers"),
 
         ("Tata Consultancy Services", "Software Developer", "Bangalore",
          "Build, test, and maintain enterprise-level software applications.",
@@ -300,7 +300,7 @@ def init_db():
          ("Wipro", "HR Executive", "Chennai",
           "Handle recruitment, employee engagement, and HR operations.",
           "BBA / MBA (HR)", "₹4–7 LPA", "Full-Time", "NA", "2025-09-10",
-          "wipro.png", "https://careers.wipro.com")
+          "wipro.png", "https://careers.wipro.com"),
 
         ("Microsoft", "Cloud Support Engineer", "Noida",
          "Provide technical support for Azure cloud services and enterprise clients.",
@@ -353,6 +353,7 @@ def init_db():
       "meesho.png", "https://careers.meesho.com")
     ])
     db.commit()
+
 
 
 
