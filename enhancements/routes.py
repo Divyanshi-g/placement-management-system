@@ -1471,7 +1471,7 @@ def ask():
 
     return render_template("ask.html",
                            show_nav_options=True,
-                           is_admin=True,
+                           is_admin=False,
                            home_url=url_for("enhancements.student_dashboard")
                           )
 @enhancements_bp.route("/ask/message", methods=["POST"])
@@ -1577,7 +1577,7 @@ def chat_new():
     return render_template(
         "ask.html",
         show_nav_options=True,
-        is_admin=session.get("role") == "admin",
+        is_admin=False,
         home_url=url_for("enhancements.student_dashboard"),
         new_chat=True
     )
@@ -1589,7 +1589,11 @@ def admin_questions1():
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("enhancements.login"))
 
-    return render_template("admin/questions1.html")
+    return render_template("admin/questions1.html",
+                            show_nav_options=True,
+                            is_admin=session.get("role") == "admin",
+                            home_url=url_for("enhancements.admin_dashboard")
+                          )
 @enhancements_bp.route("/admin/questions1/message", methods=["POST"])
 def admin_questions1_message():
     if "user_id" not in session or session.get("role") != "admin":
@@ -1600,6 +1604,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
