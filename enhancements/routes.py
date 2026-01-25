@@ -1601,24 +1601,17 @@ def admin_questions1_message():
     user_message = data.get("message")
 
     from enhancements.chatbot import chat_with_ai
-    reply = chat_with_ai(user_message, role="admin")
+
+    try:
+        reply = chat_with_ai(user_message, role="admin")
+    except Exception as e:
+        print("Chatbot error:", e)
+        reply = "⚠️ AI service is temporarily unavailable. Please try again."
 
     return jsonify({"reply": reply})
 
+
  
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
