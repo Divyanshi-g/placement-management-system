@@ -1586,7 +1586,7 @@ def admin_questions1():
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("enhancements.login"))
 
-    return render_template("questions1.html",
+    return render_template("admin/questions1.html",
                             show_nav_options=True,
                             is_admin=True,
                             home_url=url_for("enhancements.admin_dashboard")
@@ -1606,6 +1606,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
  
+
 
 
 
