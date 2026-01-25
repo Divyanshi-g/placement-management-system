@@ -1578,50 +1578,24 @@ def chat_new():
 
 
 
-
-
 @enhancements_bp.route("/admin/questions1", methods=["GET"])
 def admin_questions1():
-    # Optional: protect admin-only access
     if "user_id" not in session or session.get("role") != "admin":
         return redirect(url_for("enhancements.login"))
 
-    return render_template("admin/questions1.html",
-                            show_nav_options=True,
-                            is_admin=True,
-                            home_url=url_for("enhancements.admin_dashboard")
-                          )
-
+    return render_template("admin/questions1.html")
 @enhancements_bp.route("/admin/questions1/message", methods=["POST"])
 def admin_questions1_message():
     if "user_id" not in session or session.get("role") != "admin":
         return jsonify({"error": "Unauthorized"}), 401
 
-    data = request.json
+    data = request.get_json()
     user_message = data.get("message")
 
     from enhancements.chatbot import chat_with_ai
-
-    try:
-        reply = chat_with_ai(user_message, role="admin")
-    except Exception as e:
-        print("Chatbot error:", e)
-        reply = "⚠️ AI service is temporarily unavailable. Please try again."
+    reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
-
-
- 
-
-
-
-
-
-
-
-
-
-
 
 
 
