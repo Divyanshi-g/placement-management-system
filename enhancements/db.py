@@ -179,7 +179,7 @@ def init_db():
 
         ("Microsoft", "Cloud Support Engineer", "Pune",
          "Provide enterprise-level technical support for Azure cloud services and assist customers globally.",
-         "B.Tech CS/IT", "₹12–18 LPA", "Full-Time", "NA", "2025-12-15",
+         "MCA", "₹12–18 LPA", "Full-Time", "2 Years", "2025-12-15",
          "microsoft.png", "https://careers.microsoft.com"),
 
         ("TCS", "System Analyst", "Mumbai",
@@ -189,27 +189,27 @@ def init_db():
 
         ("Infosys", "Java Developer", "Hyderabad",
          "Develop backend enterprise applications using Java, Spring Boot, and microservices architecture.",
-         "B.Tech IT/CS", "₹7–11 LPA", "Full-Time", "NA", "2025-12-18",
+         "BCA", "₹7–11 LPA", "Full-Time", "NA", "2025-12-18",
          "infosys.png", "https://www.infosys.com"),
 
         ("Accenture", "Business Technology Analyst", "Bangalore",
          "Support consulting projects involving data analysis, business process optimization, and technology solutions.",
-         "B.Tech/MBA", "₹8–12 LPA", "Full-Time", "NA", "2025-12-22",
+         "MBA", "₹8–12 LPA", "Full-Time", "NA", "2025-12-22",
          "accenture.png", "https://www.accenture.com"),
 
         ("IBM", "Software Developer", "Pune",
          "Develop enterprise-grade software solutions using modern frameworks and cloud-native technologies.",
-         "B.Tech CS", "₹9–14 LPA", "Full-Time", "NA", "2025-12-08",
+         "BCA", "₹9–14 LPA", "Full-Time", "NA", "2025-12-08",
          "ibm.png", "https://www.ibm.com"),
 
         ("Deloitte", "Technology Consultant", "Bangalore",
          "Assist clients with digital transformation, analytics, and system integration solutions.",
-         "B.Tech/MBA", "₹10–15 LPA", "Full-Time", "NA", "2025-12-05",
+         "BBA", "₹10–15 LPA", "Full-Time", "NA", "2025-12-05",
          "deloitte.png", "https://www.deloitte.com"),
 
         ("Capgemini", "DevOps Engineer", "Kolkata",
          "Implement CI/CD pipelines, automate deployments, and manage cloud infrastructure.",
-         "B.Tech CS", "₹8–13 LPA", "Full-Time", "NA", "2025-12-25",
+         "MCA", "₹8–13 LPA", "Part-Time", "NA", "2025-12-25",
          "capgemini.png", "https://www.capgemini.com"),
 
         ("Adobe", "UX Design Intern", "Noida",
@@ -224,17 +224,17 @@ def init_db():
 
         ("Paytm", "Mobile App Developer", "Noida",
          "Develop Android/iOS features for Paytm ecosystem using modern frameworks.",
-         "B.Tech CS", "₹9–14 LPA", "Full-Time", "NA", "2025-12-22",
+         "M.Tech", "₹9–14 LPA", "Full-Time", "NA", "2025-12-22",
          "paytm.png", "https://paytm.com/careers"),
 
         ("Wipro", "Cybersecurity Analyst", "Noida",
          "Monitor enterprise infrastructure, detect threats, and implement security best practices.",
-         "B.Tech CS", "₹7–12 LPA", "Full-Time", "NA", "2025-12-20",
+         "BCA", "₹7–12 LPA", "Full-Time", "NA", "2025-12-20",
          "wipro.png", "https://careers.wipro.com"),
 
         ("Zomato", "ML Engineer", "Gurgaon",
          "Develop recommendation engines and optimize logistics using machine learning models.",
-         "B.Tech CS/Data", "₹14–20 LPA", "Full-Time", "NA", "2025-12-12",
+         "MCA", "₹14–20 LPA", "Full-Time", "NA", "2025-12-12",
          "zomato.png", "https://www.zomato.com/careers"),
 
         ("ISRO", "Research Scientist", "Ahmedabad",
@@ -261,9 +261,99 @@ def init_db():
          "Develop scalable SaaS products and collaborate with cross-functional teams.",
          "B.Tech CS", "₹8–14 LPA", "Full-Time", "NA", "2025-12-27",
          "zoho.png", "https://www.zoho.com/careers")
-        ])
 
+        ("Tata Consultancy Services", "Software Developer", "Bangalore",
+         "Build, test, and maintain enterprise-level software applications.",
+         "B.Tech / MCA", "₹6–9 LPA", "Full-Time", "NA", "2025-10-05",
+         "tcs.png", "https://www.tcs.com/careers"),
+
+        ("Infosys", "Business Analyst", "Pune",
+         "Analyze business requirements and bridge the gap between clients and technical teams.",
+         "BBA / MBA / Any Graduate", "₹5–8 LPA", "Full-Time", "NA", "2025-09-20",
+         "infosys.png", "https://www.infosys.com/careers"),
+
+        ("Google", "Data Scientist", "Hyderabad",
+         "Work on large-scale data analysis, predictive modeling, and AI-driven insights.",
+         "B.Tech / M.Tech / PhD", "₹25–35 LPA", "Full-Time", "NA", "2025-11-15",
+         "google.png", "https://careers.google.com"),
+  
+        ("Amazon", "Operations Manager", "Delhi NCR",
+         "Manage supply chain operations and optimize warehouse performance.",
+         "Any Graduate / MBA", "₹10–15 LPA", "Full-Time", "NA", "2025-08-30",
+         "amazon.png", "https://www.amazon.jobs"),
+
+        ("Deloitte", "Cyber Security Analyst", "Mumbai",
+          "Monitor security systems, assess risks, and implement security measures.",
+          "B.Tech / M.Tech", "₹8–12 LPA", "Full-Time", "NA", "2025-10-18",
+          "deloitte.png", "https://www2.deloitte.com/careers"),
+
+         ("Byju’s", "Academic Counselor", "Bangalore",
+          "Guide students and parents on learning programs and career paths.",
+          "Any Graduate", "₹4–6 LPA", "Full-Time", "NA", "2025-07-25",
+          "byjus.png", "https://byjus.com/careers"),
+
+         ("Flipkart", "Product Manager", "Bangalore",
+          "Define product vision, work with engineering teams, and drive product launches.",
+          "B.Tech / MBA", "₹18–25 LPA", "Full-Time", "NA", "2025-12-01",
+          "flipkart.png", "https://www.flipkartcareers.com"),
+
+         ("Wipro", "HR Executive", "Chennai",
+          "Handle recruitment, employee engagement, and HR operations.",
+          "BBA / MBA (HR)", "₹4–7 LPA", "Full-Time", "NA", "2025-09-10",
+          "wipro.png", "https://careers.wipro.com")
+
+        ("Microsoft", "Cloud Support Engineer", "Noida",
+         "Provide technical support for Azure cloud services and enterprise clients.",
+         "B.Tech / MCA", "₹12–18 LPA", "Full-Time", "Hybrid", "2025-11-05",
+         "microsoft.png", "https://careers.microsoft.com"),
+
+        ("Swiggy", "Operations Analyst", "Bangalore",
+         "Analyze delivery metrics and improve operational efficiency.",
+         "Any Graduate", "₹7–10 LPA", "Full-Time", "Onsite", "2025-08-12",
+         "swiggy.png", "https://careers.swiggy.com"),
+
+       ("Paytm", "UI/UX Designer", "Noida",
+        "Design intuitive user interfaces and improve customer experience.",
+        "Any Graduate / Design Degree", "₹6–10 LPA", "Full-Time", "Onsite", "2025-09-02",
+        "paytm.png", "https://paytm.com/careers"),
+
+       ("IBM", "AI Research Intern", "Bangalore",
+        "Assist in AI research projects and build experimental ML models.",
+        "B.Tech / M.Tech", "₹25,000/month", "Internship", "Onsite", "2025-07-15",
+        "ibm.png", "https://www.ibm.com/careers"),
+
+       ("Reliance Industries", "Supply Chain Coordinator", "Jamnagar",
+        "Coordinate logistics, inventory, and supplier communications.",
+        "Any Graduate", "₹5–8 LPA", "Full-Time", "Onsite", "2025-10-20",
+        "reliance.png", "https://www.ril.com/Careers"),
+
+       ("Accenture", "Digital Marketing Executive", "Gurgaon",
+        "Manage digital campaigns, SEO, and performance marketing strategies.",
+        "Any Graduate / MBA", "₹4–6 LPA", "Full-Time", "Hybrid", "2025-08-05",
+        "accenture.png", "https://www.accenture.com/careers"),
+
+      ("Intel", "Embedded Systems Engineer", "Bangalore",
+       "Develop firmware and low-level software for embedded platforms.",
+       "B.Tech / M.Tech", "₹14–22 LPA", "Full-Time", "Onsite", "2025-12-10",
+       "intel.png", "https://jobs.intel.com"),
+
+      ("HUL", "Sales & Distribution Trainee", "Kolkata",
+       "Handle distributor networks and market expansion initiatives.",
+       "Any Graduate / MBA", "₹3–5 LPA", "Full-Time", "Field Work", "2025-07-30",
+       "hul.png", "https://www.hul.co.in/careers"),
+
+      ("Zoho", "Technical Support Engineer", "Chennai",
+       "Assist customers with product issues and provide technical solutions.",
+       "Any Graduate", "₹5–7 LPA", "Full-Time", "Onsite", "2025-09-18",
+       "zoho.png", "https://www.zoho.com/careers"),
+
+     ("Meesho", "Content Operations Associate", "Remote",
+      "Manage product content quality and catalog operations.",
+      "Any Graduate", "₹4–6 LPA", "Part-Time", "Remote", "2025-08-22",
+      "meesho.png", "https://careers.meesho.com")
+    ])
     db.commit()
+
 
 
 
