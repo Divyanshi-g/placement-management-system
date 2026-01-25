@@ -31,7 +31,7 @@
     </div>
 
     <!-- Input Box -->
-    <div class="<div class="p-3 sm:p-4 bg-gray-100 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 flex items-center space-x-3">
+    <div class="p-3 sm:p-4 bg-gray-100 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 flex items-center space-x-3">
       <input id="user-input" type="text" placeholder="Type your question..."
              class="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-800 dark:text-gray-100">
       <button onclick="sendMessage()" 
@@ -44,48 +44,38 @@
 
 <!-- Chatbot Script -->
 <script>
-  function sendMessage() {
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
-    if (!message) return;
+async function sendMessage() {
+  const input = document.getElementById("user-input");
+  const message = input.value.trim();
+  if (!message) return;
 
-    const chatBox = document.getElementById("chat-box");
+  const chatBox = document.getElementById("chat-box");
 
-    // Add user message
-    const userMsg = document.createElement("div");
-    userMsg.className = "flex items-start justify-end space-x-3";
-    userMsg.innerHTML = `
-      <div class="bg-indigo-500 text-white p-4 rounded-xl shadow-md max-w-md">
-        ${message}
-      </div>
-      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold">
-        U
-      </div>
-    `;
-    chatBox.appendChild(userMsg);
+  chatBox.innerHTML += `
+    <div class="flex justify-end space-x-3">
+      <div class="bg-indigo-500 text-white p-4 rounded-xl max-w-md">${message}</div>
+    </div>
+  `;
+  chatBox.scrollTop = chatBox.scrollHeight;
+  input.value = "";
 
-    // Auto-scroll
-    chatBox.scrollTop = chatBox.scrollHeight;
+  const res = await fetch("/admin/questions1/message", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
 
-    // Clear input
-    input.value = "";
+  const data = await res.json();
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botMsg = document.createElement("div");
-      botMsg.className = "flex items-start space-x-3";
-      botMsg.innerHTML = `
-        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold">
-          A
-        </div>
-        <div class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4 rounded-xl shadow-md max-w-md">
-          This is a placeholder response. (You can connect backend logic here!)
-        </div>
-      `;
-      chatBox.appendChild(botMsg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }, 800);
-  }
+  chatBox.innerHTML += `
+    <div class="flex items-start space-x-3">
+      <div class="bg-gray-100 p-4 rounded-xl max-w-md">${data.reply}</div>
+    </div>
+  `;
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 </script>
+
 {% endblock %}
+
 
