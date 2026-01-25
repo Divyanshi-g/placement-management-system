@@ -30,72 +30,74 @@
       </div>
     </div>
 
-    <!-- Input Box -->
     <div class="p-3 sm:p-4 bg-gray-100 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 flex items-center space-x-3">
-      <input id="user-input" type="text" placeholder="Type your question..."
-             class="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-800 dark:text-gray-100">
-      <button onclick="sendMessage()" 
-              class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-lg shadow-md hover:scale-105 transition">
-        Send
-      </button>
-    </div>
+  <input id="user-input" type="text" placeholder="Type your question..."
+         class="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-800 dark:text-gray-100">
+  <button type="button" onclick="sendMessage()" 
+          class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-lg shadow-md hover:scale-105 transition">
+    Send
+  </button>
+</div>
+
   </div>
 
 <!-- Chatbot Script -->
 <script>
-  async function sendMessage() {
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
-    if (!message) return;
+async function sendMessage() {
+  const input = document.getElementById("user-input");
+  const message = input.value.trim();
+  if (!message) return;
 
-    const chatBox = document.getElementById("chat-box");
+  const chatBox = document.getElementById("chat-box");
 
-    // ---- User Message ----
+  // Add user message
+  chatBox.innerHTML += `
+    <div class="flex items-start justify-end space-x-3">
+      <div class="bg-indigo-500 text-white p-4 rounded-xl shadow-md max-w-md">
+        ${message}
+      </div>
+      <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold">
+        U
+      </div>
+    </div>
+  `;
+  chatBox.scrollTop = chatBox.scrollHeight;
+  input.value = "";
+
+  try {
+    const response = await fetch("/admin/questions1/message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await response.json();
+
+    // Bot message
     chatBox.innerHTML += `
-      <div class="flex items-start justify-end space-x-3">
-        <div class="bg-indigo-500 text-white p-4 rounded-xl shadow-md max-w-md">
-          ${message}
+      <div class="flex items-start space-x-3">
+        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold">
+          A
         </div>
-        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold">
-          U
+        <div class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4 rounded-xl shadow-md max-w-md">
+          ${data.reply}
         </div>
       </div>
     `;
     chatBox.scrollTop = chatBox.scrollHeight;
-    input.value = "";
 
-    try {
-      const response = await fetch("/admin/questions1/message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      });
-
-      const data = await response.json();
-
-      // ---- Bot Message ----
-      chatBox.innerHTML += `
-        <div class="flex items-start space-x-3">
-          <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold">
-            A
-          </div>
-          <div class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4 rounded-xl shadow-md max-w-md">
-            ${data.reply}
-          </div>
-        </div>
-      `;
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-    } catch (err) {
-      chatBox.innerHTML += `
-        <div class="text-red-500">Error connecting to server</div>
-      `;
-    }
+  } catch (err) {
+    chatBox.innerHTML += `
+      <div class="text-red-500">Error connecting to server</div>
+    `;
   }
+}
 </script>
 
 
+
 {% endblock %}
+
 
 
 
