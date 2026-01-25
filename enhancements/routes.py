@@ -60,6 +60,40 @@ def generate_ai_answer(question):
     except (KeyError, IndexError):
         return "⚠️ Unexpected response format from OpenRouter."
 
+
+def chat_with_ai(user_message, role="student"):
+    system_prompt = (
+        "You are an admin assistant helping with students, placements, reports."
+        if role == "admin"
+        else
+        "You are a student placement assistant helping with careers and interviews."
+    )
+
+    payload = {
+        "model": "mistralai/mistral-7b-instruct",
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message}
+        ]
+    }
+
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "HTTP-Referer": "https://placement-management-system",
+        "X-Title": "Placement Management System",
+        "Content-Type": "application/json"
+    }
+
+    r = requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers=headers,
+        json=payload,
+        timeout=30
+    )
+    r.raise_for_status()
+    return r.json()["choices"][0]["message"]["content"]
+
+
 HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 HF_MODEL = "google/flan-t5-base"
 
@@ -1563,40 +1597,18 @@ def admin_questions1():
 
 @enhancements_bp.route("/admin/questions1/message", methods=["POST"])
 def admin_questions1_message():
+    if "user_id" not in session or session.get("role") != "admin":
+        return jsonify({"error": "Unauthorized"}), 401
+
     data = request.json
     user_message = data.get("message")
 
-    # Example logic (replace with AI / DB later)
-    reply = f"You asked about: {user_message}. Backend logic will be added."
+    from enhancements.chatbot import chat_with_ai
+    reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
