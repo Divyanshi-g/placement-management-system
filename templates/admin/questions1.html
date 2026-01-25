@@ -2,63 +2,49 @@
 {% block title %}Admin Chatbot{% endblock %}
 
 {% block content %}
-<div class="flex flex-col items-center mb-10 px-6 animate__animated animate__fadeIn">
+<div class="max-w-4xl mx-auto mt-10 bg-white rounded-2xl shadow-xl flex flex-col h-[70vh]">
 
-  <!-- Page Heading -->
-  <h1 class="text-3xl font-bold text-white mb-6 cursor-pointer transition transform hover:underline hover:scale-105">
-    🤖 Admin Chatbot Assistant
-  </h1>
-  <p class="text-gray-200 mb-10 text-lg text-center max-w-2xl">
-    Ask questions related to <span class="font-semibold">students, placements, applications, or reports</span>.  
-    The chatbot will assist you with professional insights and quick responses.
-  </p>
+  <!-- Header -->
+  <div class="p-4 bg-indigo-600 text-white rounded-t-2xl">
+    <h2 class="text-xl font-bold">🤖 Admin Chatbot</h2>
+    <p class="text-sm opacity-90">Ask about students, placements, reports</p>
+  </div>
 
-  <!-- Chat Container -->
-  <div class="w-full max-w-4xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden flex flex-col h-[70vh] sm:h-[75vh] md:h-[600px]
-">
+  <!-- Messages -->
+  <div id="chat-box" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50"></div>
 
-    <!-- Chat Messages -->
-    <div id="chat-box" class="flex-1 p-6 space-y-4 overflow-y-auto">
-      <!-- Example Messages -->
-      <div class="flex items-start space-x-3">
-        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold">
-          A
-        </div>
-        <div class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4 rounded-xl shadow-md max-w-[85%] sm:max-w-md">
-          Hello Admin! 👋 How can I help you today?
-        </div>
-      </div>
-    </div>
+  <!-- Input -->
+  <div class="p-4 border-t flex gap-3">
+    <input
+      id="user-input"
+      type="text"
+      placeholder="Type a message..."
+      class="flex-1 border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500"
+    />
+    <button
+      id="send-btn"
+      class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+      Send
+    </button>
+  </div>
 
-    <div class="p-3 sm:p-4 bg-gray-100 dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 flex items-center space-x-3">
-  <input id="user-input" type="text" placeholder="Type your question..."
-         class="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:outline-none dark:bg-gray-800 dark:text-gray-100">
-  <button type="button" onclick="sendMessage()" 
-          class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-lg shadow-md hover:scale-105 transition">
-    Send
-  </button>
 </div>
 
-  </div>
-<script>
-  // Send message on button click
-  async function sendMessage() {
-    console.log("SEND BUTTON CLICKED");
+<script >
+  document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("user-input");
+  const chatBox = document.getElementById("chat-box");
+  const sendBtn = document.getElementById("send-btn");
 
-    const input = document.getElementById("user-input");
+  async function sendMessage() {
     const message = input.value.trim();
     if (!message) return;
 
-    const chatBox = document.getElementById("chat-box");
-
-    // User message
+    // Show user message
     chatBox.innerHTML += `
-      <div class="flex items-start justify-end space-x-3">
-        <div class="bg-indigo-500 text-white p-4 rounded-xl shadow-md max-w-md">
+      <div class="text-right">
+        <div class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg">
           ${message}
-        </div>
-        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold">
-          U
         </div>
       </div>
     `;
@@ -66,60 +52,36 @@
     input.value = "";
 
     try {
-      console.log("Sending message to backend:", message);
-
       const response = await fetch("/admin/questions1/message", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
       });
 
-      console.log("Response status:", response.status);
-
       const data = await response.json();
-      console.log("Backend response:", data);
 
-      // Bot reply
+      // Show bot reply
       chatBox.innerHTML += `
-        <div class="flex items-start space-x-3">
-          <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold">
-            A
-          </div>
-          <div class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 p-4 rounded-xl shadow-md max-w-md">
+        <div class="text-left">
+          <div class="inline-block bg-gray-200 text-gray-900 px-4 py-2 rounded-lg">
             ${data.reply}
           </div>
         </div>
       `;
       chatBox.scrollTop = chatBox.scrollHeight;
 
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
       chatBox.innerHTML += `
-        <div class="text-red-500">❌ Error connecting to server</div>
+        <div class="text-red-500">Server error</div>
       `;
     }
   }
 
-  // Send message on Enter key
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("user-input").addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
+  sendBtn.addEventListener("click", sendMessage);
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") sendMessage();
   });
+});
+
 </script>
-
-
-
 {% endblock %}
-
-
-
-
-
-
-
