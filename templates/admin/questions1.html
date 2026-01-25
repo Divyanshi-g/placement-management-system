@@ -44,6 +44,13 @@
 <!-- Chatbot Script -->
 <script>
 async function sendMessage() {
+  document.getElementById("user-input").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
   const input = document.getElementById("user-input");
   const message = input.value.trim();
   if (!message) return;
@@ -97,6 +104,7 @@ async function sendMessage() {
 
 
 {% endblock %}
+
 
 
 
