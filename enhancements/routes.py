@@ -61,6 +61,11 @@ def generate_ai_answer(question):
         return "⚠️ Unexpected response format from OpenRouter."
 
 
+import requests
+import os
+
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
 def chat_with_ai(user_message, role="student"):
     system_prompt = (
         "You are an admin assistant helping with students, placements, reports."
@@ -90,6 +95,7 @@ def chat_with_ai(user_message, role="student"):
         json=payload,
         timeout=30
     )
+
     r.raise_for_status()
     return r.json()["choices"][0]["message"]["content"]
 
@@ -1591,11 +1597,10 @@ def admin_questions1_message():
 
     data = request.get_json()
     user_message = data.get("message")
-
-    from enhancements.chatbot import chat_with_ai
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
