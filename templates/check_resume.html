@@ -11,7 +11,12 @@
   </h2>
 
   <!-- Form -->
-  <form id="resume-form" enctype="multipart/form-data" class="space-y-6">
+ <form id="resume-form"
+      method="POST"
+      action="/check_resume"
+      enctype="multipart/form-data"
+      class="space-y-6">
+
     <input type="hidden" name="user_id" value="{{ session.get('user_id', '') }}">
 
     <!-- File upload -->
