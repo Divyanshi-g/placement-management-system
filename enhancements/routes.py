@@ -82,6 +82,9 @@ def call_huggingface(prompt):
     if isinstance(data, list):
         return data[0].get("generated_text", "")
     return "Unable to analyze resume."
+@enhancements_bp.route("/resume_checker", methods=["GET"])
+def resume_checker_page():
+    return render_template("resume_checker.html")
 
 @enhancements_bp.route("/check_resume", methods=["POST"])
 def check_resume():
@@ -1569,6 +1572,7 @@ def admin_questions1_message():
     return jsonify({"reply": reply})
 
     
+
 
 
 
