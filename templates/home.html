@@ -15,13 +15,10 @@
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
   <style>
-    /* Modern system font (enterprise-safe, widely used) */
     body {
       font-family: ui-sans-serif, system-ui, -apple-system,
                    BlinkMacSystemFont, "Segoe UI",
-                   Roboto, "Helvetica Neue", Arial, "Noto Sans",
-                   "Apple Color Emoji", "Segoe UI Emoji",
-                   "Segoe UI Symbol", "Noto Color Emoji";
+                   Roboto, "Helvetica Neue", Arial, "Noto Sans";
     }
 
     @keyframes floatSoft {
@@ -32,99 +29,86 @@
 
     @media (max-width: 480px) {
       h1 {
-        font-size: 2.4rem;
+        font-size: 2.6rem;
         line-height: 1.2;
-      }
-      main {
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
       }
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col
-             bg-slate-50 text-gray-900 transition-colors">
+<body class="min-h-screen flex flex-col bg-slate-50 text-gray-900">
 
   <!-- NAVBAR -->
-  <nav class="fixed top-0 w-full z-50
-              bg-white/80 backdrop-blur-md border-b border-gray-200">
+  <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
-    <div class="max-w-7xl mx-auto px-6 py-3
-                flex items-center justify-between">
-
-      <!-- Logo -->
-      <div class="flex items-center gap-3 cursor-pointer">
-        <div
-          class="w-10 h-10 rounded-full
-                 bg-blue-600 text-white font-bold
-                 flex items-center justify-center
-                 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold
+                    flex items-center justify-center shadow-sm">
           H
         </div>
-
-        <span class="text-2xl font-extrabold text-gray-900">
-          HireHub
-        </span>
+        <span class="text-2xl font-extrabold text-gray-900">HireHub</span>
       </div>
 
-      <div class="flex items-center gap-6 text-sm font-medium text-gray-600">
-        <!-- intentionally empty -->
-      </div>
+      <div class="text-sm text-gray-600"></div>
     </div>
   </nav>
 
   <!-- MAIN -->
-  <main class="flex-1 pt-24">
+  <main class="flex-1 pt-24 relative overflow-hidden">
 
-    <!-- SINGLE CLEAN HERO -->
-    <section class="relative">
-      <div class="max-w-7xl mx-auto px-8 py-20">
+    <!-- BACKGROUND DEPTH (NOT A CARD) -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute -top-32 -right-32 w-[420px] h-[420px]
+                  bg-blue-200/40 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 -left-40 w-[480px] h-[480px]
+                  bg-sky-200/40 rounded-full blur-3xl"></div>
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <!-- HERO -->
+    <section class="max-w-7xl mx-auto px-8 py-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
 
-          <!-- Text -->
-          <div class="space-y-6 animate__animated animate__fadeInLeft">
-            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900">
-              Smarter Campus Placements,<br>
-              <span class="text-blue-600">
-                Built for Real Outcomes
-              </span>
-            </h1>
+        <!-- TEXT -->
+        <div class="space-y-7 animate__animated animate__fadeInLeft">
+          <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+            Smarter Campus Placements,<br>
+            <span class="text-blue-600">
+              Built for Real Outcomes
+            </span>
+          </h1>
 
-            <p class="text-lg text-gray-600 max-w-lg">
-              HireHub centralizes placement listings, applications,
-              and student progress into one secure, structured,
-              and easy-to-use system.
-            </p>
+          <p class="text-lg text-gray-600 max-w-lg">
+            HireHub is a centralized placement management system that
+            simplifies listings, applications, and student progress
+            with clarity, structure, and control.
+          </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 pt-4">
-              <a href="{{ url_for('enhancements.register') }}"
-                 class="px-8 py-3 rounded-xl font-semibold
-                        bg-blue-600 hover:bg-blue-700
-                        text-white shadow-sm
-                        transition hover:-translate-y-0.5">
-                Get Started
-              </a>
+          <div class="flex flex-col sm:flex-row gap-4 pt-3">
+            <a href="{{ url_for('enhancements.register') }}"
+               class="px-8 py-3 rounded-xl font-semibold
+                      bg-blue-600 hover:bg-blue-700
+                      text-white shadow-md
+                      transition hover:-translate-y-0.5">
+              Get Started
+            </a>
 
-              <a href="{{ url_for('enhancements.login') }}"
-                 class="px-8 py-3 rounded-xl font-semibold
-                        bg-white border border-gray-200
-                        text-gray-800 hover:bg-gray-50
-                        shadow-sm transition">
-                Login
-              </a>
-            </div>
+            <a href="{{ url_for('enhancements.login') }}"
+               class="px-8 py-3 rounded-xl font-semibold
+                      bg-white border border-gray-300
+                      text-gray-800 hover:bg-gray-50
+                      shadow-sm transition">
+              Login
+            </a>
           </div>
+        </div>
 
-          <!-- Image -->
-          <div class="relative flex justify-center items-center animate__animated animate__fadeInRight">
-            <img src="{{ url_for('static', filename='images/placement.png') }}"
-                 alt="Placement Dashboard"
-                 class="w-full max-w-xl drop-shadow-xl"
-                 style="animation: floatSoft 6s ease-in-out infinite;">
-          </div>
-
+        <!-- IMAGE -->
+        <div class="flex justify-center animate__animated animate__fadeInRight">
+          <img src="{{ url_for('static', filename='images/placement.png') }}"
+               alt="Placement Dashboard"
+               class="w-full max-w-xl drop-shadow-2xl"
+               style="animation: floatSoft 6s ease-in-out infinite;">
         </div>
 
       </div>
