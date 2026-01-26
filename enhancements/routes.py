@@ -448,6 +448,471 @@ def app_chat():
     })
 
 # --------------------
+# THEME TOGGLE
+# --------------------
+@enhancements_bp.route("/toggle-theme", methods=["POST"])
+def toggle_theme():
+    if "user_id" not in session:
+        return jsonify({"status": "error"})
+
+    user_id = session["user_id"]
+    theme = request.json.get("theme")  # "light" or "dark"
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET theme=? WHERE id=?", (theme, user_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success"})
+
+import io
+import os
+import json
+import csv
+import uuid
+import sqlite3
+import requests
+import random, smtplib
+from extensions import mail
+from flask_mail import Message
+from datetime import datetime, timedelta
+from openai import OpenAI
+from flask import (
+    Blueprint, request, jsonify, render_template, make_response,
+    redirect, url_for, session, flash, current_app, send_from_directory, abort
+)
+from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from .resume_checker import analyze_resume
+from .db import get_db_conn  # ✅ central db helpers
+enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
+# ----------------- AI Function -----------------
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # Load once globally
+
+def generate_ai_answer(question):
+    if not OPENROUTER_API_KEY:
+        return "⚠️ OpenRouter API key is not set."
+
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://your-deployed-site.com",  # 🔴 change this
+        "X-Title": "Placement Management System"
+    }
+
+    payload = {
+        "model": "openai/gpt-4o-mini",   # ✅ FIXED MODEL
+        "messages": [
+            {"role": "system", "content": "You are a helpful college placement assistant."},
+            {"role": "user", "content": question}
+        ],
+        "max_tokens": 300,
+        "temperature": 0.7
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=15)
+
+        # 🔍 DEBUG (important)
+        if response.status_code != 200:
+            return f"⚠️ OpenRouter Error {response.status_code}: {response.text}"
+
+        data = response.json()
+        return data["choices"][0]["message"]["content"].strip()
+
+    except requests.exceptions.RequestException as e:
+        return f"⚠️ Network error: {str(e)}"
+    except (KeyError, IndexError):
+        return "⚠️ Unexpected response format from OpenRouter."
+
+
+import requests
+import os
+
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+def chat_with_ai(user_message, role="student"):
+    system_prompt = (
+        "You are an admin assistant helping with students, placements, reports."
+        if role == "admin"
+        else
+        "You are a student placement assistant helping with careers and interviews."
+    )
+
+    payload = {
+        "model": "mistralai/mistral-7b-instruct",
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_message}
+        ]
+    }
+
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "HTTP-Referer": "https://placement-management-system",
+        "X-Title": "Placement Management System",
+        "Content-Type": "application/json"
+    }
+
+    r = requests.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers=headers,
+        json=payload,
+        timeout=30
+    )
+
+    r.raise_for_status()
+    return r.json()["choices"][0]["message"]["content"]
+
+
+HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+HF_MODEL = "google/flan-t5-base"
+
+def call_huggingface(prompt):
+    url = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
+    headers = {
+        "Authorization": f"Bearer {HUGGINGFACE_API_KEY}"
+    }
+    payload = {
+        "inputs": prompt,
+        "parameters": {
+            "max_new_tokens": 300
+        }
+    }
+
+    r = requests.post(url, headers=headers, json=payload, timeout=30)
+    r.raise_for_status()
+    data = r.json()
+
+    if isinstance(data, list):
+        return data[0].get("generated_text", "")
+    return "Unable to analyze resume."
+
+@enhancements_bp.route("/check_resume", methods=["POST"])
+def check_resume():
+    try:
+        if "resume" not in request.files:
+            return jsonify({"error": "No resume uploaded"}), 400
+
+        user_id = session.get("user_id")
+        if not user_id:
+            return jsonify({"error": "Login required"}), 401
+
+        file = request.files["resume"]
+        filename = secure_filename(file.filename)
+
+        save_path = os.path.join(
+            get_upload_folder(),
+            f"{int(datetime.utcnow().timestamp())}_{filename}"
+        )
+        file.save(save_path)
+
+        # ---- BASIC LOCAL ANALYSIS ----
+        from enhancements.resume_checker import analyze_resume
+        local_result = analyze_resume(save_path)
+
+        # ---- HUGGINGFACE ATS ----
+        hf_feedback = "AI feedback unavailable."
+        if HUGGINGFACE_API_KEY:
+            prompt = f"""
+You are an ATS resume checker.
+Give feedback in bullet points and improvement suggestions.
+
+Resume analysis:
+{json.dumps(local_result)}
+"""
+            try:
+                hf_feedback = call_huggingface(prompt)
+            except Exception:
+                pass  # silently fail AI, do NOT break UI
+
+        # ---- SAVE TO DB ----
+        conn = get_db_conn()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO resumes (user_id, filename, storage_path, verdict, details)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                filename,
+                save_path,
+                local_result.get("verdict"),
+                json.dumps({
+                    "basic": local_result,
+                    "hf_feedback": hf_feedback
+                })
+            )
+        )
+        conn.commit()
+        conn.close()
+
+        # ---- RESPONSE MATCHES JS ----
+        return jsonify({
+            "result": f"""
+ATS Verdict: {local_result.get("verdict")}
+
+Score: {local_result.get("score_percent", "N/A")}%
+
+AI Feedback:
+{hf_feedback}
+"""
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ------------------ Auth pages ------------------
+@enhancements_bp.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password", "")
+        role = request.form.get("role", "student")
+        admin_code = request.form.get("admin_code", "").strip()
+
+        # 1️⃣ Basic validation
+        if not username or not email or not password or not role:
+            flash("All fields are required.", "warning")
+            return redirect(url_for("enhancements.register"))
+
+        # 2️⃣ Password strength validation
+        if (
+            len(password) < 8
+            or not any(c.islower() for c in password)
+            or not any(c.isupper() for c in password)
+            or not any(c.isdigit() for c in password)
+            or not any(c in "!@#$%^&*()-_+=<>?/{}[]" for c in password)
+        ):
+            flash(
+                "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+                "error",
+            )
+            return redirect(url_for("enhancements.register"))
+
+        # 3️⃣ Admin verification
+        if role == "admin":
+            ADMIN_SECRET_CODE = "ADMIN2026"  # change anytime
+
+            if not admin_code:
+                flash("Admin verification code is required.", "error")
+                return redirect(url_for("enhancements.register"))
+
+            if admin_code != ADMIN_SECRET_CODE:
+                flash("Invalid admin verification code.", "error")
+                return redirect(url_for("enhancements.register"))
+
+        # 4️⃣ Hash password
+        hashed_password = generate_password_hash(password)
+
+        conn = get_db_conn()
+        cur = conn.cursor()
+
+        try:
+            cur.execute(
+                """
+                INSERT INTO users (username, email, password, role)
+                VALUES (?, ?, ?, ?)
+                """,
+                (username, email, hashed_password, role),
+            )
+            conn.commit()
+
+            flash("Registration successful! Please log in.", "success")
+            return redirect(url_for("enhancements.login"))
+
+        except sqlite3.IntegrityError:
+            flash("Username or email already exists.", "error")
+            return redirect(url_for("enhancements.register"))
+
+    # 5️⃣ GET request — layout variables for base.html
+    return render_template(
+        "register.html",
+        show_nav_options=False,  # hide dashboard links
+        is_admin=False,          # safe default
+        home_url=None,           # not needed here
+        current_year=2026
+    )
+
+@enhancements_bp.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        login_id = request.form.get("email", "").strip()
+        password = request.form.get("password", "").strip()
+
+        # 1️⃣ Basic validation
+        if not login_id or not password:
+            flash("All fields are required.", "warning")
+            return redirect(url_for("enhancements.login"))
+
+        conn = get_db_conn()
+        cur = conn.cursor()
+
+        cur.execute(
+            """
+            SELECT id, username, email, password, role
+            FROM users
+            WHERE email = ? OR username = ?
+            """,
+            (login_id, login_id),
+        )
+
+        user = cur.fetchone()
+
+        # 2️⃣ User exists + password correct
+        if user:
+            if check_password_hash(user["password"], password):
+                session.clear()
+
+                session["user_id"] = user["id"]
+                session["username"] = user["username"]
+                session["role"] = user["role"]
+                if user["role"] == "admin":
+                    return redirect(url_for("enhancements.admin_dashboard"))
+                else:
+                    return redirect(url_for("enhancements.student_dashboard"))
+            else:
+                flash("Incorrect password.", "error")
+                return redirect(url_for("enhancements.login"))
+
+        # 3️⃣ User not found
+        flash("User does not exist. Please register first.", "error")
+        return redirect(url_for("enhancements.login"))
+
+    # 4️⃣ GET request — hide navbar options
+    return render_template(
+        "login.html",
+        show_nav_options=False,
+        is_admin=False,
+        home_url=None,
+        current_year=2026
+    )
+
+# ------------------ Student Dashboard ------------------
+
+@enhancements_bp.route("/student_dashboard")
+def student_dashboard():
+    # User must be logged in
+    if "user_id" not in session:
+        return redirect(url_for("enhancements.login"))
+
+    # Only students allowed
+    if session.get("role") != "student":
+        return redirect(url_for("enhancements.login"))
+
+    return render_template(
+        "student_dashboard.html",
+        username=session.get("username"),
+        role=session.get("role"),
+
+        # Navbar control (VERY IMPORTANT)
+        show_nav_options=True,
+        is_admin=False,
+        home_url=url_for("enhancements.student_dashboard")
+    )
+
+@enhancements_bp.route("/app-chat", methods=["POST"])
+def app_chat():
+    if "user_id" not in session:
+        return jsonify({
+            "reply": "Please login first so I can help you properly 🙂"
+        })
+
+    data = request.get_json(silent=True) or {}
+    user_message = data.get("message", "").lower().strip()
+
+    if not user_message:
+        return jsonify({"reply": "I’m listening 😊 Tell me what you need help with."})
+
+    greetings = ["hi", "hello", "hey", "good morning", "good evening"]
+    if any(word in user_message for word in greetings):
+        return jsonify({
+            "reply": f"Hi {session.get('username')} 👋 How can I help you today?"
+        })
+
+    if "login" in user_message:
+        return jsonify({
+            "reply": (
+                "Having trouble logging in?\n\n"
+                "✔ Make sure your email or username is correct\n"
+                "✔ Check your password carefully\n"
+                "✔ Try refreshing once\n\n"
+                "If it still doesn’t work, tell me what error you see."
+            )
+        })
+
+    if "register" in user_message or "signup" in user_message:
+        return jsonify({
+            "reply": (
+                "For registration:\n\n"
+                "• Username & email must be unique\n"
+                "• Password should be strong\n"
+                "• Admin users need a valid admin code\n\n"
+                "Let me know what issue you’re facing."
+            )
+        })
+
+    if "placement" in user_message:
+        return jsonify({
+            "reply": (
+                "To access placements:\n\n"
+                "📌 Login as student\n"
+                "📌 Open Placements from dashboard\n"
+                "📌 Click on a company to view details\n\n"
+                "Is the placements page not opening?"
+            )
+        })
+
+    if "navbar" in user_message or "menu" in user_message:
+        return jsonify({
+            "reply": (
+                "Navbar appears only after login.\n\n"
+                "If you can’t see it:\n"
+                "• Refresh the page\n"
+                "• Make sure you logged in successfully\n\n"
+                "Tell me which page you’re on."
+            )
+        })
+
+    if "image" in user_message or "photo" in user_message:
+        return jsonify({
+            "reply": (
+                "If images aren’t showing:\n\n"
+                "• Refresh the page\n"
+                "• Check internet connection\n"
+                "• Clear browser cache\n\n"
+                "Does it happen on all pages or only one?"
+            )
+        })
+
+    if "who are you" in user_message or "what can you do" in user_message:
+        return jsonify({
+            "reply": (
+                "I’m your application assistant 🤖\n\n"
+                "I can help you with:\n"
+                "• Login & registration issues\n"
+                "• Dashboard navigation\n"
+                "• Placements help\n"
+                "• App-related problems"
+            )
+        })
+
+    return jsonify({
+        "reply": (
+            "I didn’t fully understand that 🤔\n\n"
+            "You can ask me about:\n"
+            "• Login problems\n"
+            "• Registration issues\n"
+            "• Placements\n"
+            "• App navigation\n\n"
+            "Try rephrasing your question."
+        )
+    })
+
+# --------------------
 # CHANGE PASSWORD
 # --------------------
 @enhancements_bp.route("/change-password", methods=["POST"])
@@ -504,97 +969,128 @@ def toggle_theme():
     conn.close()
     return jsonify({"status": "success"})
 
-# --------------------
-# OTP storage (in-memory, for demonstration)
-# --------------------
-otp_store = {}  # {user_email: {"otp": 123456, "expires": datetime, "attempts": 3}}
+@enhancements_bp.route("/verify-old-password", methods=["POST"])
+def verify_old_password():
+    if "user_id" not in session:
+        return jsonify({"success": False, "message": "Login required"})
 
-# --------------------
-# FORGOT PASSWORD: Send OTP
-# --------------------
-@enhancements_bp.route("/forgot-password/send-otp", methods=["POST"])
+    data = request.get_json(silent=True) or {}
+    old_password = data.get("old_password", "").strip()
+
+    if not old_password:
+        return jsonify({"success": False, "message": "Old password required"})
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT password FROM users WHERE id=?", (session["user_id"],))
+    user = cur.fetchone()
+    conn.close()
+
+    if not user or not check_password_hash(user["password"], old_password):
+        return jsonify({"success": False, "message": "Incorrect old password"})
+
+    return jsonify({"success": True})
+@enhancements_bp.route("/send-otp", methods=["POST"])
 def send_otp():
-    email = request.json.get("email")
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip()
+
+    if not email:
+        return jsonify({"success": False, "message": "Email required"})
+
     conn = get_db_conn()
     cur = conn.cursor()
     cur.execute("SELECT id FROM users WHERE email=?", (email,))
     user = cur.fetchone()
+    conn.close()
+
     if not user:
-        return jsonify({"status": "error", "msg": "Email not registered"})
+        return jsonify({"success": False, "message": "Email not registered"})
 
     otp = random.randint(100000, 999999)
-    expires = datetime.now() + timedelta(minutes=5)
-    otp_store[email] = {"otp": otp, "expires": expires, "attempts": 3}
+    otp_store[email] = {
+        "otp": str(otp),
+        "expires": datetime.now() + timedelta(minutes=5),
+        "attempts": 3
+    }
 
-    # Send email using Flask-Mail
-    msg = Message("Your HireHub OTP", sender=app.config['MAIL_USERNAME'], recipients=[email])
-    msg.body = f"Your OTP for HireHub password reset is: {otp}. It expires in 5 minutes."
+    msg = Message(
+        "HireHub Password Reset OTP",
+        recipients=[email]
+    )
+    msg.body = f"Your OTP is {otp}. It is valid for 5 minutes."
+
     try:
         mail.send(msg)
-    except Exception as e:
-        return jsonify({"status": "error", "msg": f"Failed to send OTP: {str(e)}"})
+    except Exception:
+        return jsonify({"success": False, "message": "Failed to send OTP"})
 
-    return jsonify({"status": "success", "msg": "OTP sent to email"})
-
-# --------------------
-# VERIFY OTP
-# --------------------
-@enhancements_bp.route("/forgot-password/verify-otp", methods=["POST"])
+    return jsonify({"success": True})
+@enhancements_bp.route("/verify-otp", methods=["POST"])
 def verify_otp():
-    email = request.json.get("email")
-    otp_input = request.json.get("otp")
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip()
+    otp_input = data.get("otp", "").strip()
 
     if email not in otp_store:
-        return jsonify({"status": "error", "msg": "No OTP requested for this email"})
+        return jsonify({"success": False, "message": "OTP expired"})
 
     record = otp_store[email]
+
     if datetime.now() > record["expires"]:
         del otp_store[email]
-        return jsonify({"status": "error", "msg": "OTP expired"})
+        return jsonify({"success": False, "message": "OTP expired"})
 
     if record["attempts"] <= 0:
         del otp_store[email]
-        return jsonify({"status": "error", "msg": "OTP attempts exceeded"})
+        return jsonify({"success": False, "message": "Too many attempts"})
 
-    if str(record["otp"]) != str(otp_input):
+    if record["otp"] != otp_input:
         record["attempts"] -= 1
-        return jsonify({"status": "error", "msg": f"Incorrect OTP, {record['attempts']} attempts left"})
+        return jsonify({
+            "success": False,
+            "message": f"Incorrect OTP ({record['attempts']} left)"
+        })
 
-    # OTP correct
-    return jsonify({"status": "success", "msg": "OTP verified"})
-
-# --------------------
-# RESET PASSWORD AFTER OTP
-# --------------------
-@enhancements_bp.route("/forgot-password/reset", methods=["POST"])
-def reset_password_otp():
-    email = request.json.get("email")
-    new_password = request.json.get("new_password")
-    confirm_password = request.json.get("confirm_password")
+    return jsonify({"success": True})
+@enhancements_bp.route("/update-password", methods=["POST"])
+def update_password():
+    data = request.get_json(silent=True) or {}
+    email = data.get("email", "").strip()
+    new_password = data.get("new_password", "")
+    confirm_password = data.get("confirm_password", "")
 
     if new_password != confirm_password:
-        return jsonify({"status": "error", "msg": "Passwords do not match"})
+        return jsonify({"success": False, "message": "Passwords do not match"})
+
+    import re
+    pwd_regex = re.compile(
+        r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+    )
+
+    if not pwd_regex.match(new_password):
+        return jsonify({
+            "success": False,
+            "message": "Password too weak"
+        })
 
     if email not in otp_store:
-        return jsonify({"status": "error", "msg": "OTP session expired"})
+        return jsonify({"success": False, "message": "OTP session expired"})
 
-    # Password validation (8 chars, 1 capital, 1 number, 1 special)
-    import re
-    pwd_regex = re.compile(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")
-    if not pwd_regex.match(new_password):
-        return jsonify({"status": "error", "msg": "Password must be 8+ chars, 1 uppercase, 1 number, 1 special char"})
+    hashed = generate_password_hash(new_password)
 
     conn = get_db_conn()
     cur = conn.cursor()
-    hashed = generate_password_hash(new_password)
-    cur.execute("UPDATE users SET password=? WHERE email=?", (hashed, email))
+    cur.execute(
+        "UPDATE users SET password=? WHERE email=?",
+        (hashed, email)
+    )
     conn.commit()
     conn.close()
 
     del otp_store[email]
 
-    return jsonify({"status": "success", "msg": "Password changed successfully"})
-
+    return jsonify({"success": True})
 
 # ------------------ Placement search & apply ------------------
 @enhancements_bp.route("/placements")
@@ -1703,6 +2199,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
