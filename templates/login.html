@@ -17,9 +17,14 @@
                class="w-full px-4 py-3 rounded-lg border border-gray-300
                       focus:ring-2 focus:ring-emerald-400 outline-none">
 
-        <input type="password" name="password" placeholder="Password" required
-               class="w-full px-4 py-3 rounded-lg border border-gray-300
-                      focus:ring-2 focus:ring-emerald-400 outline-none">
+        <!-- Password with Eye Icon -->
+        <div class="relative">
+          <input type="password" name="password" id="passwordField" placeholder="Password" required
+                 class="w-full px-4 py-3 rounded-lg border border-gray-300
+                        focus:ring-2 focus:ring-emerald-400 outline-none pr-10">
+          <i class="fa-solid fa-eye eye-icon absolute right-3 top-3 text-gray-500 cursor-pointer"
+             onclick="togglePassword('passwordField', this)"></i>
+        </div>
 
         <button type="submit" 
                 class="w-full py-3 bg-emerald-600 hover:bg-emerald-700
@@ -50,13 +55,20 @@
   </div>
 </div>
 
+<!-- Password Toggle Script -->
+<script>
+  function togglePassword(fieldId, icon){
+    const field = document.getElementById(fieldId);
+    if(field.type === 'password'){
+      field.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      field.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  }
+</script>
+
 {% endblock %}
-
-
-
-
-
-
-
-
-
