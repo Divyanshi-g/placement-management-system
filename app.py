@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template
 from dotenv import load_dotenv
-from flask_mail import Mail
+from extensions import mail
 
 # Load environment variables from .env (if present)
 load_dotenv()
@@ -30,16 +30,15 @@ def create_app():
 
     app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024  # 5 MB limit
 
-    # ---------------- Mail Config ----------------
-    app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
+    # Mail config (must exist)
+    app.config["MAIL_SERVER"] = os.environ.get("MAIL_SERVER")
     app.config["MAIL_PORT"] = int(os.environ.get("MAIL_PORT", 587))
     app.config["MAIL_USE_TLS"] = True
     app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
     app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
-    app.config["MAIL_DEFAULT_SENDER"] = app.config["MAIL_USERNAME"]
+    app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("MAIL_USERNAME")
 
-    # Initialize Mail
-    mail.init_app(app)
+    mail.init_app(app)   # ✅ THIS IS THE KEY LINE
 
     # ---------------- Ensure folders exist ----------------
     os.makedirs(app.config["UPLOAD_FOLDER_RESUMES"], exist_ok=True)
@@ -70,3 +69,4 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
