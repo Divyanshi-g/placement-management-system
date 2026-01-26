@@ -1,5 +1,6 @@
 # Core
 Flask
+Flask-Mail
 Flask-Login
 Flask-WTF
 Werkzeug
@@ -16,6 +17,7 @@ requests
 
 # Deployment
 gunicorn
+
 
 
 
