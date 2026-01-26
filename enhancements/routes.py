@@ -7,6 +7,7 @@ import uuid
 import sqlite3
 import requests
 import random, smtplib
+from app import mail
 from datetime import datetime, timedelta
 from openai import OpenAI
 from flask_mail import Mail, Message
@@ -1715,6 +1716,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
