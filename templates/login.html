@@ -2,42 +2,70 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+<a href="{{ url_for('enhancements.register') }}"
+   class="flex items-center gap-2 text-sm font-semibold text-gray-900
+          border border-gray-900 px-3 py-1 rounded-md
+          transition-transform transform hover:scale-105 hover:bg-gray-100">
+  <i class="fa-solid fa-arrow-left"></i>
+  Back
+</a>
 
 <div class="flex flex-col items-center justify-start min-h-[auto] md:min-h-[50vh] px-3 pt-2 pb-4">
 
-  <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-4xl rounded-2xl shadow-xl
-             bg-white animate__animated animate__fadeInLeft">
+  <div class="grid grid-cols-1 md:grid-cols-2 w-full max-w-4xl rounded-2xl shadow-2xl
+             bg-[#faf7fb] border-2 border-rose-400
+             animate__animated animate__fadeInLeft">
     
     <!-- Left: Login Form -->
-    <div class="p-8 flex flex-col justify-center">
-      <h2 class="text-3xl font-bold mb-6 text-center">Login</h2>
+    <div class="p-8 flex flex-col justify-center
+                bg-gradient-to-br from-[#fff0f6] to-[#fff7fb]">
+      
+      <h2 class="text-3xl font-extrabold mb-6 text-center text-indigo-900">
+        Login
+      </h2>
 
-      <form method="POST" action="{{ url_for('enhancements.login') }}" class="space-y-4">
+      <form method="POST"
+            action="{{ url_for('enhancements.login') }}"
+            class="space-y-4">
+
         <input type="email" name="email" placeholder="Email" required
-               class="w-full px-4 py-3 rounded-lg border border-gray-300
-                      focus:ring-2 focus:ring-emerald-400 outline-none">
+               class="w-full px-4 py-3 rounded-lg
+                      bg-white
+                      border-2 border-purple-300
+                      focus:border-rose-500
+                      outline-none">
 
-        <!-- Password with Eye Icon -->
+        <!-- PASSWORD WITH EYE ICON -->
         <div class="relative">
-          <input type="password" name="password" id="passwordField" placeholder="Password" required
-                 class="w-full px-4 py-3 rounded-lg border border-gray-300
-                        focus:ring-2 focus:ring-emerald-400 outline-none pr-10">
-          <i class="fa-solid fa-eye eye-icon absolute right-3 top-3 text-gray-500 cursor-pointer"
-             onclick="togglePassword('passwordField', this)"></i>
+          <input type="password" id="loginPassword" name="password"
+                 placeholder="Password" required
+                 class="w-full px-4 py-3 rounded-lg
+                        bg-white
+                        border-2 border-purple-300
+                        focus:border-rose-500
+                        outline-none pr-12">
+
+          <span onclick="togglePassword()"
+                class="absolute right-4 top-1/2 -translate-y-1/2
+                       cursor-pointer text-rose-500 hover:text-rose-700">
+            👁
+          </span>
         </div>
 
-        <button type="submit" 
-                class="w-full py-3 bg-emerald-600 hover:bg-emerald-700
-                       text-white rounded-lg shadow-md
-                       transform transition hover:scale-105">
+        <button type="submit"
+                class="w-full py-3 rounded-lg
+                       font-semibold text-white
+                       bg-rose-600 hover:bg-rose-700
+                       shadow-md
+                       transform transition hover:scale-[1.03]">
           Login
         </button>
       </form>
 
-      <p class="text-sm mt-4 text-center">
+      <p class="text-sm mt-4 text-center text-slate-700">
         Don’t have an account?
         <a href="{{ url_for('enhancements.register') }}"
-           class="text-emerald-600 hover:underline">
+           class="text-rose-600 font-medium hover:underline">
           Register
         </a>
       </p>
@@ -45,7 +73,7 @@
 
     <!-- Right: Illustration -->
     <div class="hidden md:flex items-center justify-center p-6
-                bg-gradient-to-br from-emerald-500/30 to-teal-500/30
+                bg-gradient-to-br from-rose-200 to-pink-200
                 rounded-r-2xl">
       <img src="{{ url_for('static', filename='images/login.jpg') }}"
            alt="Login Illustration"
@@ -55,19 +83,11 @@
   </div>
 </div>
 
-<!-- Password Toggle Script -->
+<!-- PASSWORD TOGGLE -->
 <script>
-  function togglePassword(fieldId, icon){
-    const field = document.getElementById(fieldId);
-    if(field.type === 'password'){
-      field.type = 'text';
-      icon.classList.remove('fa-eye');
-      icon.classList.add('fa-eye-slash');
-    } else {
-      field.type = 'password';
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
-    }
+  function togglePassword() {
+    const pwd = document.getElementById("loginPassword");
+    pwd.type = pwd.type === "password" ? "text" : "password";
   }
 </script>
 
