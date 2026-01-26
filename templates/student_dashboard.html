@@ -4,19 +4,13 @@
 {% block content %}
 
 <!-- HEADER -->
-{% extends "base.html" %}
-{% block title %}Student Dashboard{% endblock %}
-
-{% block content %}
-
-<!-- HEADER -->
 <div class="flex items-center justify-between pb-10 animate__animated animate__bounceInDown">
 
   <!-- Back Button -->
   <a href="{{ url_for('enhancements.login') }}"
      class="flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition">
     <i class="fa-solid fa-arrow-left"></i>
-    Back to Login
+    Back
   </a>
 
   <!-- Welcome -->
@@ -224,6 +218,7 @@
 
 
 {% endblock %}
+
 
 
 
