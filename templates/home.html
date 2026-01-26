@@ -69,7 +69,8 @@
   </nav>
 
   <!-- MAIN -->
-  <main class="flex-1 pt-20 relative overflow-hidden">
+  <main class="flex-1 pt-16 relative overflow-hidden">
+    <!-- ↑ reduced spacing here -->
 
     <!-- BACKGROUND DEPTH -->
     <div class="absolute inset-0 -z-10">
@@ -80,8 +81,8 @@
     </div>
 
     <!-- HERO -->
-    <section class="max-w-7xl mx-auto px-8 py-16">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+    <section class="max-w-7xl mx-auto px-8 py-14">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
         <!-- TEXT -->
         <div class="space-y-6 animate__animated animate__fadeInLeft">
@@ -117,33 +118,48 @@
             </a>
           </div>
 
-          <!-- FEATURE INFO STRIP (HEADING + DESCRIPTION) -->
-          <div class="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-xl">
+          <!-- FEATURE CARDS -->
+          <div class="pt-8 grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-xl">
 
-            <div>
+            <div class="bg-white rounded-xl p-5
+                        shadow-sm border border-gray-200
+                        transition-all duration-300
+                        hover:-translate-y-1
+                        hover:shadow-lg
+                        hover:shadow-blue-100">
               <h4 class="text-sm font-semibold text-blue-700 mb-1">
                 Centralized Placements
               </h4>
               <p class="text-sm text-gray-600 leading-relaxed">
-                All opportunities managed in one structured system.
+                All placement opportunities managed in one place.
               </p>
             </div>
 
-            <div>
+            <div class="bg-white rounded-xl p-5
+                        shadow-sm border border-gray-200
+                        transition-all duration-300
+                        hover:-translate-y-1
+                        hover:shadow-lg
+                        hover:shadow-sky-100">
               <h4 class="text-sm font-semibold text-blue-700 mb-1">
                 Application Tracking
               </h4>
               <p class="text-sm text-gray-600 leading-relaxed">
-                Monitor applications, resumes, and statuses clearly.
+                Track applications, resumes, and status updates easily.
               </p>
             </div>
 
-            <div>
+            <div class="bg-white rounded-xl p-5
+                        shadow-sm border border-gray-200
+                        transition-all duration-300
+                        hover:-translate-y-1
+                        hover:shadow-lg
+                        hover:shadow-indigo-100">
               <h4 class="text-sm font-semibold text-blue-700 mb-1">
                 Secure Admin Control
               </h4>
               <p class="text-sm text-gray-600 leading-relaxed">
-                Full administrative oversight with role-based access.
+                Role-based admin tools for full system control.
               </p>
             </div>
 
