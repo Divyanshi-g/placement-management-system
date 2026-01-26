@@ -62,8 +62,10 @@
             <i class="fa-solid fa-gear"></i> Settings
           </button>
 
-          <!-- SETTINGS PANEL -->
-          <div id="settingsPanel" class="hidden-panel absolute right-0 mt-3 w-64 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
+          <!-- SETTINGS PANEL --><div id="settingsPanel"
+     onclick="event.stopPropagation()"
+     class="hidden-panel absolute right-0 mt-3 w-64 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
+
 
             <!-- CHANGE PASSWORD STEP 1 -->
             <div id="stepOldPassword" class="px-4 py-3 border-b border-gray-200">
@@ -312,3 +314,4 @@
   </script>
 </body>
 </html>
+
