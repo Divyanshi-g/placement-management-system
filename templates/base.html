@@ -302,22 +302,22 @@
       });
     }
 
-    // Close panel if clicked outside
-    document.addEventListener('click', function(e){
-      const panels = ['settingsPanel'];
-      let clickedPanel = false;
-      panels.forEach(id => {
-        const panel = document.getElementById(id);
-        if(panel && (panel.contains(e.target) || e.target.closest('#'+id))) clickedPanel=true;
-      });
-      if(!clickedPanel && openPanel) {
-        document.getElementById(openPanel).classList.add('hidden-panel');
-        openPanel = null;
-      }
-    });
+    document.addEventListener('click', function (e) {
+  if (!openPanel) return;
+
+  const panel = document.getElementById(openPanel);
+  const buttonClicked = e.target.closest('button');
+
+  if (!panel.contains(e.target) && !buttonClicked) {
+    panel.classList.add('hidden-panel');
+    openPanel = null;
+  }
+});
+
   </script>
 </body>
 </html>
+
 
 
 
