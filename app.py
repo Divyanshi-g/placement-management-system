@@ -10,9 +10,6 @@ load_dotenv()
 from enhancements import init_app as init_enhancements
 from enhancements.db import close_db, init_db
 
-# ---------------- Mail Extension ----------------
-mail = Mail()
-
 
 def create_app():
     app = Flask(__name__, static_folder="static", template_folder="templates")
@@ -69,4 +66,5 @@ app = create_app()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
