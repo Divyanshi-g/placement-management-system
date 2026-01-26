@@ -149,7 +149,7 @@
     </div>
 
     <!-- MOBILE MENU -->
-    <div id="mobileMenu" class="hidden md:hidden bg-white/80 backdrop-blur-md shadow-lg">
+   <div id="mobileMenu" class="hidden-panel md:hidden bg-white/80 backdrop-blur-md shadow-lg">
       <div class="flex flex-col px-6 py-4 gap-4 text-gray-900 font-medium">
         <a href="{{ home_url }}">Home</a>
         <a href="/about">About</a>
@@ -179,15 +179,19 @@
   <script>
     let openPanel = null;
 
-    function togglePanel(id){
-      if(openPanel && openPanel !== id){
-        document.getElementById(openPanel).classList.add('hidden-panel');
-      }
-      const panel = document.getElementById(id);
-      panel.classList.toggle('hidden-panel');
-      openPanel = panel.classList.contains('hidden-panel') ? null : id;
+    function togglePanel(id) {
+    const panel = document.getElementById(id);
+
+    // Close previously open panel
+    if (openPanel && openPanel !== id) {
+      document.getElementById(openPanel).classList.add('hidden-panel');
     }
 
+    // Toggle current panel
+    panel.classList.toggle('hidden-panel');
+
+    openPanel = panel.classList.contains('hidden-panel') ? null : id;
+  }
     function togglePassword(fieldId, icon){
       const field = document.getElementById(fieldId);
       if(field.type === 'password'){
@@ -314,6 +318,7 @@
   </script>
 </body>
 </html>
+
 
 
 
