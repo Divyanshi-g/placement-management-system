@@ -6,7 +6,162 @@
   <title>Home | HireHub</title>
 
   <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.c<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home | HireHub</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Animate.css -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <style>
+    /* Modern professional font (Inter-style) */
+    body {
+      font-family: "Inter", ui-sans-serif, system-ui, -apple-system,
+                   BlinkMacSystemFont, "Segoe UI",
+                   Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    @keyframes floatSoft {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.6rem;
+        line-height: 1.2;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-slate-50 text-gray-900">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 w-full z-50
+              bg-white/80 backdrop-blur-md
+              border-b border-gray-200
+              transition-shadow hover:shadow-sm">
+
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3 cursor-pointer group">
+        <div class="w-10 h-10 rounded-full
+                    bg-blue-600 text-white font-bold
+                    flex items-center justify-center
+                    shadow-sm
+                    transition-transform group-hover:scale-105">
+          H
+        </div>
+
+        <span class="text-2xl font-extrabold text-gray-900
+                     transition-colors group-hover:text-blue-600">
+          HireHub
+        </span>
+      </div>
+
+      <!-- Placeholder nav -->
+      <div class="text-sm text-gray-600"></div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="flex-1 pt-20 relative overflow-hidden">
+
+    <!-- BACKGROUND DEPTH -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute -top-32 -right-32 w-[420px] h-[420px]
+                  bg-blue-200/40 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 -left-40 w-[480px] h-[480px]
+                  bg-sky-200/40 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- HERO -->
+    <section class="max-w-7xl mx-auto px-8 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+
+        <!-- TEXT -->
+        <div class="space-y-6 animate__animated animate__fadeInLeft">
+          <h1 class="text-5xl md:text-6xl font-extrabold leading-tight">
+            Smarter Campus Placements,<br>
+            <span class="text-blue-600">
+              Built for Real Outcomes
+            </span>
+          </h1>
+
+          <p class="text-lg text-gray-600 max-w-lg">
+            HireHub is a centralized placement management system that
+            simplifies listings, applications, and student progress
+            with clarity, structure, and control.
+          </p>
+
+          <!-- ACTIONS -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-2">
+            <a href="{{ url_for('enhancements.register') }}"
+               class="px-8 py-3 rounded-xl font-semibold
+                      bg-blue-600 hover:bg-blue-700
+                      text-white shadow-md
+                      transition hover:-translate-y-0.5">
+              Get Started
+            </a>
+
+            <a href="{{ url_for('enhancements.login') }}"
+               class="px-8 py-3 rounded-xl font-semibold
+                      bg-white border border-gray-300
+                      text-gray-800 hover:bg-gray-50
+                      shadow-sm transition">
+              Login
+            </a>
+          </div>
+
+          <!-- INLINE FEATURE STRIP (REPLACES CARDS) -->
+          <div class="pt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm text-gray-600">
+            <span class="flex items-center gap-2 hover:text-blue-600 transition">
+              ✔ Centralized Placements
+            </span>
+            <span class="flex items-center gap-2 hover:text-blue-600 transition">
+              ✔ Application Tracking
+            </span>
+            <span class="flex items-center gap-2 hover:text-blue-600 transition">
+              ✔ Secure Admin Control
+            </span>
+          </div>
+        </div>
+
+        <!-- IMAGE -->
+        <div class="flex justify-center animate__animated animate__fadeInRight">
+          <img src="{{ url_for('static', filename='images/placement.png') }}"
+               alt="Placement Dashboard"
+               class="w-full max-w-xl drop-shadow-2xl
+                      transition-transform hover:scale-[1.02]"
+               style="animation: floatSoft 6s ease-in-out infinite;">
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-gray-200
+                 text-center py-6 text-gray-600 text-sm">
+    © 2026 HireHub · Placement Management System
+  </footer>
+
+</body>
+</html>
+om"></script>
 
   <!-- Animate.css -->
   <link rel="stylesheet"
