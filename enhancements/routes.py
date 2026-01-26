@@ -6,9 +6,10 @@ import csv
 import uuid
 import sqlite3
 import requests
-from datetime import datetime
+import random, smtplib
+from datetime import datetime, timedelta
 from openai import OpenAI
-from datetime import datetime
+from flask_mail import Mail, Message
 from flask import (
     Blueprint, request, jsonify, render_template, make_response,
     redirect, url_for, session, flash, current_app, send_from_directory, abort
@@ -19,6 +20,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
+
+# --------------------
+# Flask-Mail setup
+# --------------------
+mail = Mail(app)  # ensure you have MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD configured
+
 
 # ----------------- AI Function -----------------
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # Load once globally
@@ -446,6 +453,9 @@ def app_chat():
         )
     })
 
+# --------------------
+# CHANGE PASSWORD
+# --------------------
 @enhancements_bp.route("/change-password", methods=["POST"])
 def change_password():
     if "user_id" not in session:
@@ -483,6 +493,9 @@ def change_password():
     flash("✅ Password changed successfully!", "success")
     return redirect(request.referrer)
 
+# --------------------
+# THEME TOGGLE
+# --------------------
 @enhancements_bp.route("/toggle-theme", methods=["POST"])
 def toggle_theme():
     if "user_id" not in session:
@@ -496,6 +509,98 @@ def toggle_theme():
     conn.commit()
     conn.close()
     return jsonify({"status": "success"})
+
+# --------------------
+# OTP storage (in-memory, for demonstration)
+# --------------------
+otp_store = {}  # {user_email: {"otp": 123456, "expires": datetime, "attempts": 3}}
+
+# --------------------
+# FORGOT PASSWORD: Send OTP
+# --------------------
+@enhancements_bp.route("/forgot-password/send-otp", methods=["POST"])
+def send_otp():
+    email = request.json.get("email")
+    conn = get_db_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM users WHERE email=?", (email,))
+    user = cur.fetchone()
+    if not user:
+        return jsonify({"status": "error", "msg": "Email not registered"})
+
+    otp = random.randint(100000, 999999)
+    expires = datetime.now() + timedelta(minutes=5)
+    otp_store[email] = {"otp": otp, "expires": expires, "attempts": 3}
+
+    # Send email using Flask-Mail
+    msg = Message("Your HireHub OTP", sender=app.config['MAIL_USERNAME'], recipients=[email])
+    msg.body = f"Your OTP for HireHub password reset is: {otp}. It expires in 5 minutes."
+    try:
+        mail.send(msg)
+    except Exception as e:
+        return jsonify({"status": "error", "msg": f"Failed to send OTP: {str(e)}"})
+
+    return jsonify({"status": "success", "msg": "OTP sent to email"})
+
+# --------------------
+# VERIFY OTP
+# --------------------
+@enhancements_bp.route("/forgot-password/verify-otp", methods=["POST"])
+def verify_otp():
+    email = request.json.get("email")
+    otp_input = request.json.get("otp")
+
+    if email not in otp_store:
+        return jsonify({"status": "error", "msg": "No OTP requested for this email"})
+
+    record = otp_store[email]
+    if datetime.now() > record["expires"]:
+        del otp_store[email]
+        return jsonify({"status": "error", "msg": "OTP expired"})
+
+    if record["attempts"] <= 0:
+        del otp_store[email]
+        return jsonify({"status": "error", "msg": "OTP attempts exceeded"})
+
+    if str(record["otp"]) != str(otp_input):
+        record["attempts"] -= 1
+        return jsonify({"status": "error", "msg": f"Incorrect OTP, {record['attempts']} attempts left"})
+
+    # OTP correct
+    return jsonify({"status": "success", "msg": "OTP verified"})
+
+# --------------------
+# RESET PASSWORD AFTER OTP
+# --------------------
+@enhancements_bp.route("/forgot-password/reset", methods=["POST"])
+def reset_password_otp():
+    email = request.json.get("email")
+    new_password = request.json.get("new_password")
+    confirm_password = request.json.get("confirm_password")
+
+    if new_password != confirm_password:
+        return jsonify({"status": "error", "msg": "Passwords do not match"})
+
+    if email not in otp_store:
+        return jsonify({"status": "error", "msg": "OTP session expired"})
+
+    # Password validation (8 chars, 1 capital, 1 number, 1 special)
+    import re
+    pwd_regex = re.compile(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$")
+    if not pwd_regex.match(new_password):
+        return jsonify({"status": "error", "msg": "Password must be 8+ chars, 1 uppercase, 1 number, 1 special char"})
+
+    conn = get_db_conn()
+    cur = conn.cursor()
+    hashed = generate_password_hash(new_password)
+    cur.execute("UPDATE users SET password=? WHERE email=?", (hashed, email))
+    conn.commit()
+    conn.close()
+
+    del otp_store[email]
+
+    return jsonify({"status": "success", "msg": "Password changed successfully"})
+
 
 # ------------------ Placement search & apply ------------------
 @enhancements_bp.route("/placements")
@@ -1604,6 +1709,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
