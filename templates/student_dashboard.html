@@ -4,6 +4,12 @@
 {% block content %}
 
 <!-- HEADER -->
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
 <div class="flex items-center justify-between pb-10 animate__animated animate__bounceInDown">
 
   <!-- Back Button -->
@@ -31,69 +37,74 @@
   <!-- LEFT -->
   <div class="grid grid-cols-1 gap-10">
 
-    <!-- CARD -->
-    <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm
+    <!-- CARD 1 -->
+    <div class="bg-blue-600 border border-blue-700 p-6 rounded-2xl shadow-sm
                 transform transition hover:scale-105 hover:shadow-lg
                 animate__animated animate__zoomIn">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">👤 Profile & Resume</h2>
-      <p class="text-sm text-gray-600">Update your profile and upload resumes.</p>
+      <h2 class="text-2xl font-bold text-white mb-2">👤 Profile & Resume</h2>
+      <p class="text-sm text-white/90">Update your profile and upload resumes.</p>
       <a href="{{ url_for('enhancements.profile') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
         Edit
       </a>
     </div>
 
-    <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm
+    <!-- CARD 2 -->
+    <div class="bg-blue-600 border border-blue-700 p-6 rounded-2xl shadow-sm
                 transform transition hover:scale-105 hover:shadow-lg
                 animate__animated animate__zoomIn animate__delay-1s">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">💼 Available Placements</h2>
-      <p class="text-sm text-gray-600">Explore the latest job postings.</p>
+      <h2 class="text-2xl font-bold text-white mb-2">💼 Available Placements</h2>
+      <p class="text-sm text-white/90">Explore the latest job postings.</p>
       <a href="{{ url_for('enhancements.placements') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
         View
       </a>
     </div>
 
-    <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm
+    <!-- CARD 3 -->
+    <div class="bg-blue-600 border border-blue-700 p-6 rounded-2xl shadow-sm
                 transform transition hover:scale-105 hover:shadow-lg
                 animate__animated animate__zoomIn animate__delay-2s">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">📌 Application Status</h2>
-      <p class="text-sm text-gray-600">Track your applied opportunities.</p>
+      <h2 class="text-2xl font-bold text-white mb-2">📌 Application Status</h2>
+      <p class="text-sm text-white/90">Track your applied opportunities.</p>
       <a href="{{ url_for('enhancements.status') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
         Check
       </a>
     </div>
 
-    <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm
+    <!-- CARD 4 -->
+    <div class="bg-blue-600 border border-blue-700 p-6 rounded-2xl shadow-sm
                 transform transition hover:scale-105 hover:shadow-lg
                 animate__animated animate__zoomIn animate__delay-3s">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">💬 Gain Knowledge</h2>
-      <p class="text-sm text-gray-600">Ask questions & clear doubts.</p>
+      <h2 class="text-2xl font-bold text-white mb-2">💬 Gain Knowledge</h2>
+      <p class="text-sm text-white/90">Ask questions & clear doubts.</p>
       <a href="{{ url_for('enhancements.ask') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
         Go to Chat
       </a>
     </div>
 
-    <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm
+    <!-- CARD 5 -->
+    <div class="bg-blue-600 border border-blue-700 p-6 rounded-2xl shadow-sm
                 transform transition hover:scale-105 hover:shadow-lg
                 animate__animated animate__zoomIn animate__delay-4s">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">📄 Resume ATS Checker</h2>
-      <p class="text-sm text-gray-600">Analyze your resume with ATS.</p>
+      <h2 class="text-2xl font-bold text-white mb-2">📄 Resume ATS Checker</h2>
+      <p class="text-sm text-white/90">Analyze your resume with ATS.</p>
       <a href="{{ url_for('enhancements.check_resume') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
         Check
       </a>
     </div>
 
-    <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm
+    <!-- CARD 6 -->
+    <div class="bg-blue-600 border border-blue-700 p-6 rounded-2xl shadow-sm
                 transform transition hover:scale-105 hover:shadow-lg
                 animate__animated animate__zoomIn animate__delay-5s">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">📝 Practice</h2>
-      <p class="text-sm text-gray-600">Practice tests & quizzes.</p>
+      <h2 class="text-2xl font-bold text-white mb-2">📝 Practice</h2>
+      <p class="text-sm text-white/90">Practice tests & quizzes.</p>
       <a href="{{ url_for('enhancements.practice') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
         Quiz & Practice
       </a>
     </div>
@@ -102,7 +113,7 @@
 
   <!-- RIGHT SIDE IMAGES (UNCHANGED) -->
   <div class="flex flex-col justify-center space-y-10">
-    <img id="slideshow1" class="w-4/5 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100"
+    <img id="slideshow1" class="w-4/5 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100" 
          src="{{ url_for('static', filename='images/student_dashboard.jpg') }}">
     <img id="slideshow2" class="w-4/5 rounded-xl shadow-lg transition-opacity duration-1000 opacity-100"
          src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
@@ -213,6 +224,7 @@
 
 
 {% endblock %}
+
 
 
 
