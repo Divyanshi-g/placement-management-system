@@ -2,6 +2,13 @@
 {% block title %}Register | HireHub{% endblock %}
 
 {% block content %}
+<a href="{{ url_for('app.home') }}"
+   class="flex items-center gap-2 text-sm font-semibold text-gray-900
+          border border-gray-900 px-3 py-1 rounded-md
+          transition-transform transform hover:scale-105 hover:bg-gray-100">
+  <i class="fa-solid fa-arrow-left"></i>
+  Back
+</a>
 
 <!-- PAGE CONTENT ONLY (BASE HANDLES NAV, BACK, FOOTER) -->
 <section class="w-full flex flex-col md:flex-row items-center md:items-start justify-center px-5 md:px-5 pt-4 md:pt-2 pb-4 md:pb-6 min-h-[auto] md:min-h-screen">
@@ -141,3 +148,4 @@
 </script>
 
 {% endblock %}
+
