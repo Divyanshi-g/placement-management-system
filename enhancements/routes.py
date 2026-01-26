@@ -21,10 +21,16 @@ from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
 
-# --------------------
-# Flask-Mail setup
-# --------------------
-mail = Mail(app)  # ensure you have MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD configured
+mail = current_app.extensions["mail"]
+
+msg = Message(
+    subject="HireHub OTP",
+    recipients=[email],
+    body=f"Your OTP is {otp}. Valid for 5 minutes."
+)
+
+mail.send(msg)
+
 
 
 # ----------------- AI Function -----------------
@@ -1709,6 +1715,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
