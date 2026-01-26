@@ -15,180 +15,155 @@
   <!-- Font Awesome -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <!-- Google Font: DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .hidden-panel { display: none; }
+    .eye-icon { cursor: pointer; }
+  </style>
 </head>
 
-<body class="min-h-screen flex flex-col text-slate-900
-             transition-colors duration-300"
-      style="
-        background:
-          radial-gradient(at 88% 82%, rgba(220,160,40,0.85) 0px, transparent 52%),
-          radial-gradient(at 12% 18%, rgba(220,70,120,0.85) 0px, transparent 52%),
-          radial-gradient(at 82% 20%, rgba(70,110,220,0.6) 0px, transparent 55%),
-          radial-gradient(at 28% 75%, rgba(110,80,200,0.75) 0px, transparent 55%);
-        background-color: #14162a;
-      ">
+<body class="min-h-screen flex flex-col bg-slate-50 text-gray-900">
 
   <!-- NAVBAR -->
-  <nav class="fixed top-0 w-full z-50 bg-white/45 backdrop-blur-xl shadow-sm">
+  <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
-      <!-- LOGO -->
+      <!-- Logo -->
       <div class="group flex items-center gap-3 cursor-pointer">
         <div class="w-10 h-10 rounded-full
-                    bg-gradient-to-br from-purple-700 to-indigo-700
-                    text-white font-bold flex items-center justify-center
-                    transition-all duration-500
-                    group-hover:scale-110">
+                    bg-blue-600 text-white font-bold
+                    flex items-center justify-center
+                    transition-transform group-hover:scale-105">
           H
         </div>
-        <span class="max-w-0 overflow-hidden whitespace-nowrap
-                     text-3xl font-extrabold text-indigo-900
-                     transition-all duration-500
-                     group-hover:max-w-xs group-hover:ml-2">
+        <span class="text-2xl font-extrabold text-gray-900
+                     transition-colors group-hover:text-blue-600">
           HireHub
         </span>
       </div>
 
       {% if show_nav_options %}
-      <!-- DESKTOP NAV -->
-      <div class="hidden md:flex items-center gap-6 text-1x1 font-medium text-slate-900 relative">
+      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-900 relative">
 
-        <a href="{{ home_url }}"
-           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
-          Home
-        </a>
-        <a href="/about"
-           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
-          About
-        </a>
-        <a href="/rate"
-           class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition">
-          Rate
-        </a>
+        <a href="{{ home_url }}" class="px-2 py-1 border-b-2 border-transparent hover:border-blue-600 transition">Home</a>
+        <a href="/about" class="px-2 py-1 border-b-2 border-transparent hover:border-blue-600 transition">About</a>
+        <a href="/rate" class="px-2 py-1 border-b-2 border-transparent hover:border-blue-600 transition">Rate</a>
 
-        <!-- SETTINGS -->
+        <!-- SETTINGS DROPDOWN -->
         <div class="relative">
-          <button onclick="toggleSettings()"
-                  class="px-2 py-1 border-b-2 border-transparent hover:border-indigo-700 transition flex items-center gap-1">
+          <button onclick="togglePanel('settingsPanel')"
+                  class="px-2 py-1 border-b-2 border-transparent hover:border-blue-600 flex items-center gap-1">
             <i class="fa-solid fa-gear"></i> Settings
           </button>
 
-          <div id="settingsMenu"
-               class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
+          <!-- SETTINGS PANEL -->
+          <div id="settingsPanel" class="hidden-panel absolute right-0 mt-3 w-64 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
 
-            <!-- Change Password -->
-            <button onclick="toggleChangePassword()"
-                    class="w-full text-left px-4 py-3 text-sm hover:bg-slate-100 flex items-center gap-2">
-              <i class="fa-solid fa-key"></i> Change Password
-            </button>
+            <!-- CHANGE PASSWORD STEP 1 -->
+            <div id="stepOldPassword" class="px-4 py-3 border-b border-gray-200">
+              <label class="block text-sm font-medium mb-1">Old Password</label>
+              <div class="relative">
+                <input type="password" id="oldPassword" class="w-full border rounded px-3 py-2 pr-10" placeholder="Enter old password">
+                <i class="fa-solid fa-eye eye-icon absolute right-3 top-2.5 text-gray-500"
+                   onclick="togglePassword('oldPassword', this)"></i>
+              </div>
+              <button onclick="verifyOldPassword()"
+                      class="mt-3 w-full px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                Change Password
+              </button>
+              <p class="text-sm text-red-600 mt-1 hidden" id="oldPasswordError">Old password incorrect</p>
+              <a href="#" class="text-sm text-blue-600 mt-2 inline-block" onclick="showForgotPassword()">Forgot password?</a>
+            </div>
 
-            <!-- Theme Switch -->
-            <div class="flex items-center justify-between px-4 py-3 hover:bg-slate-100 cursor-pointer">
-              <span><i class="fa-solid fa-moon mr-2"></i> Theme</span>
+            <!-- FORGOT PASSWORD -->
+            <div id="forgotPassword" class="hidden-panel px-4 py-3 border-b border-gray-200">
+              <label class="block text-sm font-medium mb-1">Email</label>
+              <input type="email" id="forgotEmail" class="w-full border rounded px-3 py-2" placeholder="Enter your registered email">
+              <button onclick="sendOTP()" class="mt-2 w-full px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Send OTP</button>
+              <p class="text-sm text-red-600 mt-1 hidden" id="forgotEmailError">Email not found</p>
+            </div>
+
+            <!-- OTP STEP -->
+            <div id="otpStep" class="hidden-panel px-4 py-3 border-b border-gray-200">
+              <label class="block text-sm font-medium mb-1">Enter OTP</label>
+              <input type="text" id="otpInput" class="w-full border rounded px-3 py-2" placeholder="Enter OTP">
+              <div class="flex justify-between mt-1 text-sm">
+                <span id="otpTimer">05:00</span>
+                <span id="otpAttempts">3 attempts left</span>
+              </div>
+              <button onclick="verifyOTP()" class="mt-2 w-full px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Verify OTP</button>
+              <p class="text-sm text-red-600 mt-1 hidden" id="otpError">OTP incorrect or expired</p>
+            </div>
+
+            <!-- NEW PASSWORD STEP -->
+            <div id="stepNewPassword" class="hidden-panel px-4 py-3">
+              <label class="block text-sm font-medium mb-1">New Password</label>
+              <div class="relative">
+                <input type="password" id="newPassword" class="w-full border rounded px-3 py-2 pr-10" placeholder="Enter new password">
+                <i class="fa-solid fa-eye eye-icon absolute right-3 top-2.5 text-gray-500"
+                   onclick="togglePassword('newPassword', this)"></i>
+              </div>
+
+              <label class="block text-sm font-medium mt-3 mb-1">Confirm Password</label>
+              <div class="relative">
+                <input type="password" id="confirmPassword" class="w-full border rounded px-3 py-2 pr-10" placeholder="Confirm new password">
+                <i class="fa-solid fa-eye eye-icon absolute right-3 top-2.5 text-gray-500"
+                   onclick="togglePassword('confirmPassword', this)"></i>
+              </div>
+
+              <button onclick="submitNewPassword()"
+                      class="mt-3 w-full px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                Submit
+              </button>
+              <p class="text-sm text-red-600 mt-1 hidden" id="newPasswordError"></p>
+              <p class="text-sm text-green-600 mt-1 hidden" id="newPasswordSuccess"></p>
+            </div>
+
+            <!-- THEME TOGGLE -->
+            <div id="themeStep" class="hidden-panel px-4 py-3 border-t border-gray-200 flex items-center justify-between">
+              <span>Dark Theme</span>
               <label class="inline-flex relative items-center cursor-pointer">
-                <input type="checkbox" class="sr-only peer" id="themeSwitch">
-                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600
-                            peer-focus:ring-2 peer-focus:ring-indigo-300 transition-all"></div>
-                <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full
-                            peer-checked:translate-x-5 transition-all"></div>
+                <input type="checkbox" class="sr-only" id="themeSwitch">
+                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 transition-all"></div>
+                <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-all"></div>
               </label>
             </div>
 
-            <!-- Assistant -->
-            <button onclick="toggleChat()" class="w-full text-left px-4 py-3 text-sm hover:bg-slate-100 flex items-center gap-2">
-              <i class="fa-solid fa-robot"></i> HireHub Helper
-            </button>
-
-            <!-- Logout -->
-            <a href="{{ url_for('enhancements.logout') }}"
-               class="block px-4 py-3 text-sm text-red-600 hover:bg-red-50">
-              <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
-            </a>
           </div>
         </div>
       </div>
 
       <!-- MOBILE MENU BUTTON -->
-      <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-slate-900">
+      <button onclick="togglePanel('mobileMenu')" class="md:hidden text-2xl text-gray-900">
         <i class="fa-solid fa-bars"></i>
       </button>
       {% endif %}
     </div>
 
     <!-- MOBILE MENU -->
-    <div id="mobileMenu" class="hidden md:hidden bg-white/80 backdrop-blur-xl shadow-lg">
-      <div class="flex flex-col px-6 py-4 gap-4 text-slate-900 font-medium">
-
+    <div id="mobileMenu" class="hidden md:hidden bg-white/80 backdrop-blur-md shadow-lg">
+      <div class="flex flex-col px-6 py-4 gap-4 text-gray-900 font-medium">
         <a href="{{ home_url }}">Home</a>
         <a href="/about">About</a>
         <a href="/rate">Rate</a>
-
-        <hr>
-
-        <button onclick="toggleSettingsMobile()" class="flex items-center gap-2">
-          <i class="fa-solid fa-gear"></i> Settings
-        </button>
-
-        <div id="settingsMenuMobile" class="hidden pl-4 flex flex-col gap-2">
-          <button onclick="toggleChangePassword()" class="text-sm flex items-center gap-2">
-            <i class="fa-solid fa-key"></i> Change Password
-          </button>
-
-          <!-- Theme Switch -->
-          <div class="flex items-center justify-between text-sm">
-            <span>Theme</span>
-            <label class="inline-flex relative items-center cursor-pointer">
-              <input type="checkbox" class="sr-only peer" id="themeSwitchMobile">
-              <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 transition-all"></div>
-              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-all"></div>
-            </label>
-          </div>
-
-          <!-- Assistant -->
-          <button onclick="toggleChat()" class="text-sm flex items-center gap-2">
-            <i class="fa-solid fa-robot"></i> HireHub Helper
-          </button>
-
-          <a href="{{ url_for('enhancements.logout') }}" class="text-sm text-red-600">Logout</a>
-        </div>
+        <button onclick="togglePanel('settingsPanel')">Settings</button>
       </div>
     </div>
   </nav>
 
-  <!-- BACK BUTTON -->
-  <div class="pt-16 md:pt-20 pl-6">
-    <button onclick="history.back()"
-            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-md
-                   border-2 border-black/50 text-sm font-medium text-slate-900
-                   hover:bg-black/10 transition-all duration-200">
-      <span class="text-lg">←</span>
-      <span class="hidden md:inline">Back</span>
-    </button>
-  </div>
-
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div class="max-w-4xl mx-auto px-4">
-      {% for category, message in messages %}
-        <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium
-          {% if category == 'success' %} bg-green-100 text-green-800
-          {% elif category == 'error' %} bg-red-100 text-red-800
-          {% elif category == 'warning' %} bg-yellow-100 text-yellow-800
-          {% else %} bg-blue-100 text-blue-800 {% endif %}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-  {% endwith %}
-
   <!-- MAIN CONTENT -->
-  <main class="flex-1 max-w-7xl mx-auto px-6">
+  <main class="flex-1 max-w-7xl mx-auto px-6 mt-20">
     {% block content %}{% endblock %}
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-white/30 backdrop-blur-md text-black text-center py-6">
+  <footer class="bg-white text-gray-900 text-center py-6 mt-12 border-t border-gray-200">
     <div class="flex justify-center gap-6 mb-3 text-2xl">
       <a href="#" class="hover:text-blue-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
       <a href="#" class="hover:text-pink-600 transition"><i class="fa-brands fa-instagram"></i></a>
@@ -198,116 +173,142 @@
     © 2026 HireHub · Placement Management System
   </footer>
 
-  <!-- CHANGE PASSWORD MODAL -->
-  <div id="changePasswordPanel" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-        bg-white rounded-xl shadow-2xl p-6 w-80 md:w-96 z-50">
-    <h2 class="text-xl font-bold mb-4">Change Password</h2>
-    <form id="changePasswordForm">
-      <div class="mb-3">
-        <label class="block text-sm font-medium mb-1">Old Password</label>
-        <input type="password" name="old_password" class="w-full border rounded px-3 py-2" required>
-      </div>
-      <div class="mb-3">
-        <label class="block text-sm font-medium mb-1">New Password</label>
-        <input type="password" name="new_password" class="w-full border rounded px-3 py-2" required>
-      </div>
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1">Confirm New Password</label>
-        <input type="password" name="confirm_password" class="w-full border rounded px-3 py-2" required>
-      </div>
-      <div class="flex justify-end gap-2">
-        <button type="button" onclick="toggleChangePassword()" class="px-4 py-2 rounded bg-gray-300">Cancel</button>
-        <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white">Change</button>
-      </div>
-    </form>
-  </div>
-
-  <!-- ASSISTANT PANEL -->
-  <div id="chatbot"
-       class="hidden fixed bottom-20 right-10 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50">
-    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 font-bold">
-      HireHub Helper
-    </div>
-    <div class="h-64 p-4 overflow-y-auto text-sm" id="chat-content">
-      <p class="text-gray-500">👋 Hi! Ask me about the app.</p>
-    </div>
-    <div class="flex border-t">
-      <input id="chat-input" type="text"
-             class="flex-1 px-3 py-2 focus:outline-none">
-      <button onclick="sendMessage()"
-              class="px-4 text-indigo-500 font-bold hover:text-indigo-700">➤</button>
-    </div>
-  </div>
-
   <!-- SCRIPTS -->
   <script>
-    // Settings toggles
-    function toggleSettings() { document.getElementById("settingsMenu").classList.toggle("hidden"); }
-    function toggleMobileMenu() { document.getElementById("mobileMenu").classList.toggle("hidden"); }
-    function toggleSettingsMobile() { document.getElementById("settingsMenuMobile").classList.toggle("hidden"); }
-    function toggleChangePassword() { document.getElementById("changePasswordPanel").classList.toggle("hidden"); }
+    let openPanel = null;
 
-    // Theme toggle
-    function toggleTheme() {
-      document.body.classList.toggle("bg-black");
-      document.body.classList.toggle("text-white");
-    }
-    const themeSwitch = document.getElementById('themeSwitch');
-    if(themeSwitch) themeSwitch.addEventListener('change', toggleTheme);
-    const themeSwitchMobile = document.getElementById('themeSwitchMobile');
-    if(themeSwitchMobile) themeSwitchMobile.addEventListener('change', toggleTheme);
-
-    // Assistant toggle
-    function toggleChat() {
-      const chat = document.getElementById("chatbot");
-      if(chat) chat.classList.toggle("hidden");
+    function togglePanel(id){
+      if(openPanel && openPanel !== id){
+        document.getElementById(openPanel).classList.add('hidden-panel');
+      }
+      const panel = document.getElementById(id);
+      panel.classList.toggle('hidden-panel');
+      openPanel = panel.classList.contains('hidden-panel') ? null : id;
     }
 
-    // Chat logic
-    async function sendMessage() {
-      const input = document.getElementById("chat-input");
-      const content = document.getElementById("chat-content");
-      if(!input || !content) return;
-
-      const text = input.value.trim();
-      if(text==="") return;
-
-      const userMsg = document.createElement("div");
-      userMsg.className = "text-right mb-2";
-      userMsg.innerHTML = `<span class="inline-block bg-rose-100 text-gray-800 px-3 py-2 rounded-lg">🧑 ${text}</span>`;
-      content.appendChild(userMsg);
-      input.value = "";
-      content.scrollTop = content.scrollHeight;
-
-      const typingMsg = document.createElement("div");
-      typingMsg.className = "text-left mb-2 text-sm text-gray-500";
-      typingMsg.textContent = "🤖 typing...";
-      content.appendChild(typingMsg);
-      content.scrollTop = content.scrollHeight;
-
-      try {
-        const response = await fetch("/app-chat", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({ message: text })
-        });
-        const data = await response.json();
-        typingMsg.remove();
-        const botMsg = document.createElement("div");
-        botMsg.className = "text-left mb-2";
-        botMsg.innerHTML = `<span class="inline-block bg-indigo-100 text-gray-800 px-3 py-2 rounded-lg">🤖 ${data.reply}</span>`;
-        content.appendChild(botMsg);
-        content.scrollTop = content.scrollHeight;
-      } catch(e){
-        typingMsg.remove();
-        const errMsg = document.createElement("p");
-        errMsg.className = "text-red-500 text-sm";
-        errMsg.textContent = "🤖 Sorry, I couldn't connect right now.";
-        content.appendChild(errMsg);
+    function togglePassword(fieldId, icon){
+      const field = document.getElementById(fieldId);
+      if(field.type === 'password'){
+        field.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        field.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
       }
     }
-  </script>
 
+    // ----------------------
+    // CHANGE PASSWORD LOGIC
+    // ----------------------
+    function verifyOldPassword(){
+      const oldPwd = document.getElementById('oldPassword').value;
+      // Make AJAX POST to /change-password-check or use fetch (old password validation)
+      // For demonstration, using fake validation here
+      if(oldPwd === "correctOldPassword"){ // replace with backend check
+        document.getElementById('stepOldPassword').classList.add('hidden-panel');
+        document.getElementById('stepNewPassword').classList.remove('hidden-panel');
+      } else {
+        document.getElementById('oldPasswordError').classList.remove('hidden');
+      }
+    }
+
+    function showForgotPassword(){
+      document.getElementById('stepOldPassword').classList.add('hidden-panel');
+      document.getElementById('forgotPassword').classList.remove('hidden-panel');
+    }
+
+    function sendOTP(){
+      // AJAX call to generate OTP and send email
+      document.getElementById('forgotPassword').classList.add('hidden-panel');
+      document.getElementById('otpStep').classList.remove('hidden-panel');
+      startOTPTimer(300); // 5 minutes countdown
+    }
+
+    let otpTimeRemaining;
+    let otpInterval;
+    function startOTPTimer(seconds){
+      otpTimeRemaining = seconds;
+      const timerElem = document.getElementById('otpTimer');
+      otpInterval = setInterval(()=>{
+        const min = Math.floor(otpTimeRemaining/60).toString().padStart(2,'0');
+        const sec = (otpTimeRemaining%60).toString().padStart(2,'0');
+        timerElem.textContent = `${min}:${sec}`;
+        otpTimeRemaining--;
+        if(otpTimeRemaining<0){
+          clearInterval(otpInterval);
+          document.getElementById('otpError').textContent = "OTP expired";
+          document.getElementById('otpError').classList.remove('hidden');
+        }
+      },1000);
+    }
+
+    function verifyOTP(){
+      const otp = document.getElementById('otpInput').value;
+      // AJAX check otp backend
+      // For demo assuming otp = 123456
+      if(otp === "123456"){ 
+        document.getElementById('otpStep').classList.add('hidden-panel');
+        document.getElementById('stepNewPassword').classList.remove('hidden-panel');
+        clearInterval(otpInterval);
+      } else {
+        document.getElementById('otpError').classList.remove('hidden');
+      }
+    }
+
+    function submitNewPassword(){
+      const newPwd = document.getElementById('newPassword').value;
+      const confirmPwd = document.getElementById('confirmPassword').value;
+      const errorElem = document.getElementById('newPasswordError');
+      const successElem = document.getElementById('newPasswordSuccess');
+
+      const pwdRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if(!pwdRegex.test(newPwd)){
+        errorElem.textContent = "Password must be 8+ chars, 1 uppercase, 1 number, 1 special char";
+        errorElem.classList.remove('hidden');
+        successElem.classList.add('hidden');
+        return;
+      }
+      if(newPwd !== confirmPwd){
+        errorElem.textContent = "Passwords do not match";
+        errorElem.classList.remove('hidden');
+        successElem.classList.add('hidden');
+        return;
+      }
+
+      // AJAX call to /change-password to save in backend
+      successElem.textContent = "Password changed successfully!";
+      successElem.classList.remove('hidden');
+      errorElem.classList.add('hidden');
+    }
+
+    // Theme toggle
+    const themeSwitch = document.getElementById('themeSwitch');
+    if(themeSwitch){
+      themeSwitch.addEventListener('change', function(){
+        if(this.checked){
+          document.body.classList.add('bg-gray-900','text-white');
+        } else {
+          document.body.classList.remove('bg-gray-900','text-white');
+        }
+        // AJAX POST to /toggle-theme to save in DB
+      });
+    }
+
+    // Close panel if clicked outside
+    document.addEventListener('click', function(e){
+      const panels = ['settingsPanel'];
+      let clickedPanel = false;
+      panels.forEach(id => {
+        const panel = document.getElementById(id);
+        if(panel && (panel.contains(e.target) || e.target.closest('#'+id))) clickedPanel=true;
+      });
+      if(!clickedPanel && openPanel) {
+        document.getElementById(openPanel).classList.add('hidden-panel');
+        openPanel = null;
+      }
+    });
+  </script>
 </body>
 </html>
-
