@@ -42,7 +42,7 @@
         HireHub
       </span>
     </div>
-
+{% if show_nav_options %}
     <!-- Desktop Menu -->
     <div class="hidden md:flex gap-6 items-center text-blue-600 font-medium">
 
@@ -89,11 +89,11 @@
         </div>
       </div>
     </div>
-
     <!-- Mobile Menu Button -->
     <button onclick="togglePanel('mobileMenu')" class="md:hidden text-2xl text-blue-600">
       <i class="fa-solid fa-bars"></i>
     </button>
+    {% endif %}
   </div>
 </nav>
 
@@ -108,10 +108,16 @@
   <a href="{{ url_for('enhancements.logout') }}" class="block text-red-600">Logout</a>
 </div>
 
-<!-- ================= BACK BUTTON ================= -->
+{% if show_back_button %}
 <div class="max-w-7xl mx-auto px-6 mt-20">
-    <a href="{{ back_url }}" class="flex items-center gap-2 text-sm font-semibold text-gray-900 border border-gray-900 px-3 py-1 rounded-md transition-transform transform hover:scale-105 hover:bg-gray-100"> <i class="fa-solid fa-arrow-left"></i> Back </a>
+  <a href="{{ back_url }}"
+     class="inline-flex items-center gap-2 text-sm
+            text-blue-600 hover:text-blue-800 font-medium">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back
+  </a>
 </div>
+{% endif %}
 
 <!-- ================= MAIN ================= -->
 <main class="flex-1 max-w-7xl mx-auto px-6 mt-4">
@@ -467,5 +473,6 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
