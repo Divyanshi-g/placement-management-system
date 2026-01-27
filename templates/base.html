@@ -59,19 +59,20 @@
           hover:border-blue-600
           transition-all duration-200">Rate</a>
 
-      <!-- Settings -->
       <div class="relative pb-1
-          border-b-2 border-transparent
-          hover:border-blue-600
-          transition-all duration-200">
-        <button onclick="togglePanel('settingsPanel')"
-        class="flex items-center gap-2">
-  <i class="fa-solid fa-gear"></i> Settings
-</button>
-        <div id="settingsPanel"
-     class="dropdown-panel hidden absolute right-0 mt-3 w-64
-            bg-indigo-200 rounded-xl shadow-xl z-50"
-     onclick="event.stopPropagation()">
+            border-b-2 border-transparent
+            hover:border-blue-600
+            transition-all duration-200">
+
+  <button onclick="event.stopPropagation(); togglePanel('settingsPanel')"
+          class="flex items-center gap-2">
+    <i class="fa-solid fa-gear"></i> Settings
+  </button>
+
+  <div id="settingsPanel"
+       class="dropdown-panel hidden absolute right-0 mt-3 w-64
+              bg-indigo-200 rounded-xl shadow-xl z-50"
+       onclick="event.stopPropagation()">
 
           <!-- Theme -->
           <div class="flex items-center justify-between px-4 py-3 border-b border-indigo-300">
@@ -255,15 +256,13 @@
 /* ------------------------------
    PANEL TOGGLE LOGIC
 --------------------------------*/
-let openPanel = null;
-
 function togglePanel(id){
   const panel = document.getElementById(id);
-  if(!panel) return;
+  if (!panel) return;
 
-  // close other panels
+  // close other dropdowns
   document.querySelectorAll(".dropdown-panel").forEach(p => {
-    if(p !== panel) p.classList.add("hidden");
+    if (p !== panel) p.classList.add("hidden");
   });
 
   panel.classList.toggle("hidden");
@@ -489,6 +488,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
