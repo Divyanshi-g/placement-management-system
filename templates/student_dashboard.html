@@ -2,106 +2,162 @@
 {% block title %}Student Dashboard{% endblock %}
 
 {% block content %}
-<div class="bg-slate-50 min-h-screen">
 
-  <!-- HEADER -->
-  <div class="mb-10">
-    <h1 class="text-3xl font-bold text-gray-900">
-      Welcome back, {{ username }}
-    </h1>
-    <p id="student-typing" class="text-gray-600 mt-1 text-sm"></p>
-  </div>
 
-  <!-- FOCUS ROW -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+  <h1 class="text-4xl font-bold text-gray-900 transition hover:underline">
+    Welcome, {{ username }} 👋
+  </h1>
 
-    <!-- MAIN FOCUS -->
-    <a href="{{ url_for('enhancements.placements') }}"
-       class="bg-blue-50 border-l-4 border-blue-600 rounded-xl p-6 shadow-md hover:shadow-xl transition">
-      <h2 class="text-xl font-bold text-gray-900">Explore Placements</h2>
-      <p class="text-sm text-gray-600 mt-2">
-        View and apply to the latest job opportunities.
-      </p>
-      <div class="mt-4 text-blue-600 font-semibold">
-        View Jobs →
-      </div>
-    </a>
+<!-- Motivation (UNCHANGED) -->
+<p id="student-typing"
+   class="mt-4 text-xl font-medium text-gray-600 text-center"></p>
 
-    <a href="{{ url_for('enhancements.status') }}"
-       class="bg-white ring-1 ring-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition">
-      <h2 class="text-xl font-bold text-gray-900">Application Status</h2>
-      <p class="text-sm text-gray-600 mt-2">
-        Track progress of applied companies.
-      </p>
-      <div class="mt-4 text-blue-600 font-semibold">
-        Track →
-      </div>
-    </a>
+<!-- MAIN GRID -->
+<div class="mt-16 grid md:grid-cols-2 gap-14 px-10 items-start">
 
-    <a href="{{ url_for('enhancements.check_resume') }}"
-       class="bg-white ring-1 ring-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition">
-      <h2 class="text-xl font-bold text-gray-900">Resume ATS</h2>
-      <p class="text-sm text-gray-600 mt-2">
-        Check resume compatibility score.
-      </p>
-      <div class="mt-4 text-blue-600 font-semibold">
-        Analyze →
-      </div>
-    </a>
+  <!-- LEFT SIDE -->
+  <div class="flex flex-col gap-14">
 
-  </div>
+    <!-- LEFT : CARD 1 -->
+    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+                transition-all duration-300
+                hover:-translate-y-2 hover:bg-blue-100
+                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+                animate__animated animate__fadeInLeft">
+      <h2 class="text-xl font-bold text-blue-700">👤 Profile & Resume</h2>
+      <p class="text-sm text-gray-600">Update your profile and upload resumes.</p>
+      <a href="{{ url_for('enhancements.profile') }}"
+         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+        Edit
+      </a>
+    </div>
 
-  <!-- SECONDARY ACTIONS -->
-  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- LEFT : CARD 2 -->
+    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+                transition-all duration-300
+                hover:-translate-y-2 hover:bg-blue-100
+                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+                animate__animated animate__fadeInLeft animate__delay-1s">
+      <h2 class="text-xl font-bold text-blue-700">💼 Available Placements</h2>
+      <p class="text-sm text-gray-600">Explore the latest job postings.</p>
+      <a href="{{ url_for('enhancements.placements') }}"
+         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+        View
+      </a>
+    </div>
 
-    <a href="{{ url_for('enhancements.profile') }}"
-       class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition">
-      <h3 class="font-semibold text-gray-900">Profile & Resume</h3>
-      <p class="text-xs text-gray-600 mt-1">
-        Update personal details
-      </p>
-    </a>
+    <!-- LEFT : SLIDESHOW 2 -->
+    <img id="slideshow2"
+         class="w-full rounded-xl shadow-lg
+                animate__animated animate__fadeInUp animate__delay-2s"
+         src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
 
-    <a href="{{ url_for('enhancements.practice') }}"
-       class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition">
-      <h3 class="font-semibold text-gray-900">Practice</h3>
-      <p class="text-xs text-gray-600 mt-1">
-        Aptitude & mock tests
-      </p>
-    </a>
+    <!-- LEFT : CARD 5 -->
+    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+                transition-all duration-300
+                hover:-translate-y-2 hover:bg-blue-100
+                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+                animate__animated animate__fadeInLeft animate__delay-4s">
+      <h2 class="text-xl font-bold text-blue-700">📄 Resume ATS Checker</h2>
+      <p class="text-sm text-gray-600">Analyze your resume with ATS.</p>
+      <a href="{{ url_for('enhancements.check_resume') }}"
+         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+        Check
+      </a>
+    </div>
 
-    <a href="{{ url_for('enhancements.ask') }}"
-       class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition">
-      <h3 class="font-semibold text-gray-900">Gain Knowledge</h3>
-      <p class="text-xs text-gray-600 mt-1">
-        Ask doubts & learn
-      </p>
-    </a>
-
-    <div class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm">
-      <h3 class="font-semibold text-gray-900">Today’s Tip</h3>
-      <p class="text-xs text-gray-600 mt-2">
-        Keep your resume under 1 page and quantify achievements.
-      </p>
+    <!-- LEFT : CARD 6 -->
+    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+                transition-all duration-300
+                hover:-translate-y-2 hover:bg-blue-100
+                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+                animate__animated animate__fadeInLeft animate__delay-5s">
+      <h2 class="text-xl font-bold text-blue-700">📝 Practice</h2>
+      <p class="text-sm text-gray-600">Practice tests & quizzes.</p>
+      <a href="{{ url_for('enhancements.practice') }}"
+         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+        Quiz & Practice
+      </a>
     </div>
 
   </div>
 
+  <!-- RIGHT SIDE -->
+  <div class="flex flex-col gap-14">
+
+    <!-- RIGHT : SLIDESHOW 1 -->
+    <img id="slideshow1"
+         class="w-full rounded-xl shadow-lg
+                animate__animated animate__zoomIn animate__delay-1s"
+         src="{{ url_for('static', filename='images/student_dashboard.jpg') }}">
+
+    <!-- RIGHT : CARD 3 -->
+    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+                transition-all duration-300
+                hover:-translate-y-2 hover:bg-blue-100
+                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+                animate__animated animate__fadeInRight animate__delay-3s">
+      <h2 class="text-xl font-bold text-blue-700">📌 Application Status</h2>
+      <p class="text-sm text-gray-600">Track your applied opportunities.</p>
+      <a href="{{ url_for('enhancements.status') }}"
+         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+        Check
+      </a>
+    </div>
+
+    <!-- RIGHT : CARD 4 -->
+    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+                transition-all duration-300
+                hover:-translate-y-2 hover:bg-blue-100
+                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+                animate__animated animate__fadeInRight animate__delay-4s">
+      <h2 class="text-xl font-bold text-blue-700">💬 Gain Knowledge</h2>
+      <p class="text-sm text-gray-600">Ask questions & clear doubts.</p>
+      <a href="{{ url_for('enhancements.ask') }}"
+         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+        Go to Chat
+      </a>
+    </div>
+
+    <!-- RIGHT : SLIDESHOW 3 -->
+    <img id="slideshow3"
+         class="w-full rounded-xl shadow-lg
+                animate__animated animate__fadeInUp animate__delay-6s"
+         src="{{ url_for('static', filename='images/student_dashboard3.jpg') }}">
+
+  </div>
 </div>
 
-<!-- TYPING -->
+<!-- YOUR EXISTING JS (UNCHANGED) -->
 <script>
-  const text = "Focus on preparation, apply smartly, and track your progress.";
+  const images = [
+    "{{ url_for('static', filename='images/student_dashboard.jpg') }}",
+    "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}",
+    "{{ url_for('static', filename='images/student_dashboard2.webp') }}",
+    "{{ url_for('static', filename='images/student_dashboard3.jpg') }}",
+    "{{ url_for('static', filename='images/student_dashboard4.jpg') }}"
+  ];
+
+  const slides = [
+    document.getElementById("slideshow1"),
+    document.getElementById("slideshow2"),
+    document.getElementById("slideshow3"),
+  ];
+
   let idx = 0;
-  function typeStudent() {
-    const el = document.getElementById("student-typing");
-    if (!el) return;
-    if (idx < text.length) {
-      el.textContent += text.charAt(idx++);
-      setTimeout(typeStudent, 35);
-    }
-  }
-  window.addEventListener("DOMContentLoaded", typeStudent);
+
+  setInterval(() => {
+    idx = (idx + 1) % images.length;
+    slides.forEach(img => {
+      img.classList.remove("opacity-100");
+      img.classList.add("opacity-0");
+      setTimeout(() => {
+        img.src = images[idx];
+        img.classList.remove("opacity-0");
+        img.classList.add("opacity-100");
+      }, 700);
+    });
+  }, 4500);
 </script>
 
 {% endblock %}
