@@ -30,7 +30,7 @@
 <body class="min-h-screen flex flex-col bg-indigo-50 text-gray-900">
 
 <!-- ================= NAVBAR ================= -->
-<nav class="fixed top-0 w-full z-50 bg-indigo-100/80 backdrop-blur-md border-b border-indigo-200">
+<nav class="fixed top-0 w-full z-60 bg-indigo-100/80 backdrop-blur-md border-b border-indigo-200">
   <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
 
     <!-- Logo -->
@@ -46,20 +46,32 @@
     <!-- Desktop Menu -->
     <div class="hidden md:flex gap-6 items-center text-blue-600 font-medium">
 
-      <a href="{{ home_url }}" class="hover:border-b-2 border-blue-600">Home</a>
-      <a href="/about">About</a>
-      <a href="/rate">Rate</a>
+      <a href="{{ home_url }}" class="relative pb-1
+          border-b-2 border-transparent
+          hover:border-blue-600
+          transition-all duration-200">Home</a>
+      <a href="/about" class="relative pb-1
+          border-b-2 border-transparent
+          hover:border-blue-600
+          transition-all duration-200">About</a>
+      <a href="/rate" class="relative pb-1
+          border-b-2 border-transparent
+          hover:border-blue-600
+          transition-all duration-200">Rate</a>
 
       <!-- Settings -->
-      <div class="relative">
+      <div class="relative pb-1
+          border-b-2 border-transparent
+          hover:border-blue-600
+          transition-all duration-200">
         <button onclick="togglePanel('settingsPanel')"
-                class="flex items-center gap-2">
-          <i class="fa-solid fa-gear"></i> Settings
-        </button>
-
+        class="flex items-center gap-2">
+  <i class="fa-solid fa-gear"></i> Settings
+</button>
         <div id="settingsPanel"
-             class="hidden absolute right-0 mt-3 w-72 bg-indigo-200 rounded-xl shadow-xl z-50"
-             onclick="event.stopPropagation()">
+     class="dropdown-panel hidden absolute right-0 mt-3 w-64
+            bg-indigo-200 rounded-xl shadow-xl z-50"
+     onclick="event.stopPropagation()">
 
           <!-- Theme -->
           <div class="flex items-center justify-between px-4 py-3 border-b border-indigo-300">
@@ -247,22 +259,22 @@ let openPanel = null;
 
 function togglePanel(id){
   const panel = document.getElementById(id);
-  if(openPanel && openPanel !== id){
-    document.getElementById(openPanel)?.classList.add("hidden-panel");
-  }
-  panel.classList.toggle("hidden-panel");
-  openPanel = panel.classList.contains("hidden-panel") ? null : id;
+  if(!panel) return;
+
+  // close other panels
+  document.querySelectorAll(".dropdown-panel").forEach(p => {
+    if(p !== panel) p.classList.add("hidden");
+  });
+
+  panel.classList.toggle("hidden");
 }
 
-document.addEventListener("click", e=>{
-  if(!openPanel) return;
-  const panel = document.getElementById(openPanel);
-  if(!panel.contains(e.target) && !e.target.closest("button")){
-    panel.classList.add("hidden-panel");
-    openPanel = null;
-  }
+// close dropdown when clicking outside
+document.addEventListener("click", function(){
+  document.querySelectorAll(".dropdown-panel").forEach(p => {
+    p.classList.add("hidden");
+  });
 });
-
 /* ------------------------------
    THEME TOGGLE
 --------------------------------*/
@@ -477,6 +489,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
