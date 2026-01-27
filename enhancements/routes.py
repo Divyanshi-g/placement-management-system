@@ -269,7 +269,7 @@ def register():
         show_nav_options=False,  # hide dashboard links
         is_admin=False,          # safe default
         show_back_button=True,
-        back_url=None,
+         back_url=url_for("home"),
         current_year=2026
     )
 
@@ -1797,4 +1797,5 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
