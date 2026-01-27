@@ -3,164 +3,168 @@
 
 {% block content %}
 
-<!-- HERO SECTION -->
-<div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 rounded-b-3xl shadow-lg overflow-hidden p-10 md:p-16">
-  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+<!-- TOP OVERVIEW STRIP -->
+<div class="mb-10">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-    <!-- Left Hero Text -->
-    <div class="flex-1 text-center md:text-left">
-      <h1 class="text-4xl md:text-5xl font-bold text-white drop-shadow-lg animate__animated animate__fadeInDown">
-        Welcome, {{ username }} 👋
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">
+        Hello, {{ username }}
       </h1>
-      <p id="student-typing"
-         class="mt-4 text-xl md:text-2xl font-medium text-white/90 animate__animated animate__fadeIn animate__delay-1s">
-      </p>
+      <p id="student-typing" class="mt-1 text-gray-600 text-sm"></p>
+    </div>
 
-      <!-- Hero Stats -->
-      <div class="mt-8 flex flex-wrap justify-center md:justify-start gap-4">
-        <div class="bg-white/20 backdrop-blur-xl border border-white/30 rounded-xl p-4 w-36 text-center shadow-lg hover:scale-105 transition transform">
-          <p class="text-white text-sm font-semibold">Profile Strength</p>
-          <p class="text-white text-xl font-bold mt-1">78%</p>
+    <div class="text-sm text-gray-500">
+      {{ now().strftime('%A, %d %B %Y') }}
+    </div>
+
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+  <!-- LEFT: ACTIONS -->
+  <div class="lg:col-span-3 grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+
+    <!-- CARD -->
+    <a href="{{ url_for('enhancements.profile') }}"
+       class="group bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Profile & Resume</h2>
+          <p class="text-sm text-gray-600 mt-1">
+            Keep your information up to date.
+          </p>
         </div>
-        <div class="bg-white/20 backdrop-blur-xl border border-white/30 rounded-xl p-4 w-36 text-center shadow-lg hover:scale-105 transition transform">
-          <p class="text-white text-sm font-semibold">Applications</p>
-          <p class="text-white text-xl font-bold mt-1">12</p>
-        </div>
-        <div class="bg-white/20 backdrop-blur-xl border border-white/30 rounded-xl p-4 w-36 text-center shadow-lg hover:scale-105 transition transform">
-          <p class="text-white text-sm font-semibold">Resume Score</p>
-          <p class="text-white text-xl font-bold mt-1">82%</p>
-        </div>
+        <span class="text-blue-600 text-xl">👤</span>
       </div>
-    </div>
+      <p class="mt-4 text-xs text-blue-600 font-medium group-hover:underline">
+        Manage →
+      </p>
+    </a>
 
-    <!-- Right Hero Illustration -->
-    <div class="flex-1 flex justify-center md:justify-end">
-      <img src="{{ url_for('static', filename='images/student_dashboard_hero.png') }}"
-           class="w-4/5 rounded-2xl shadow-xl animate__animated animate__fadeInRight"
-           alt="Student Dashboard Illustration">
+    <a href="{{ url_for('enhancements.placements') }}"
+       class="group bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Available Placements</h2>
+          <p class="text-sm text-gray-600 mt-1">
+            Browse current opportunities.
+          </p>
+        </div>
+        <span class="text-blue-600 text-xl">💼</span>
+      </div>
+      <p class="mt-4 text-xs text-blue-600 font-medium group-hover:underline">
+        Explore →
+      </p>
+    </a>
+
+    <a href="{{ url_for('enhancements.status') }}"
+       class="group bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Application Status</h2>
+          <p class="text-sm text-gray-600 mt-1">
+            Track applied positions.
+          </p>
+        </div>
+        <span class="text-blue-600 text-xl">📌</span>
+      </div>
+      <p class="mt-4 text-xs text-blue-600 font-medium group-hover:underline">
+        View →
+      </p>
+    </a>
+
+    <a href="{{ url_for('enhancements.check_resume') }}"
+       class="group bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Resume ATS Checker</h2>
+          <p class="text-sm text-gray-600 mt-1">
+            Improve resume quality.
+          </p>
+        </div>
+        <span class="text-blue-600 text-xl">📄</span>
+      </div>
+      <p class="mt-4 text-xs text-blue-600 font-medium group-hover:underline">
+        Analyze →
+      </p>
+    </a>
+
+    <a href="{{ url_for('enhancements.practice') }}"
+       class="group bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Practice & Tests</h2>
+          <p class="text-sm text-gray-600 mt-1">
+            Prepare for interviews.
+          </p>
+        </div>
+        <span class="text-blue-600 text-xl">📝</span>
+      </div>
+      <p class="mt-4 text-xs text-blue-600 font-medium group-hover:underline">
+        Start →
+      </p>
+    </a>
+
+    <a href="{{ url_for('enhancements.ask') }}"
+       class="group bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Gain Knowledge</h2>
+          <p class="text-sm text-gray-600 mt-1">
+            Ask doubts and learn.
+          </p>
+        </div>
+        <span class="text-blue-600 text-xl">💬</span>
+      </div>
+      <p class="mt-4 text-xs text-blue-600 font-medium group-hover:underline">
+        Open →
+      </p>
+    </a>
+
+  </div>
+
+  <!-- RIGHT: CONTEXT PANEL -->
+  <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm h-fit">
+    <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">
+      Today’s Focus
+    </h3>
+
+    <ul class="space-y-3 text-sm text-gray-700">
+      <li>✅ Update your resume</li>
+      <li>🔍 Check new placements</li>
+      <li>📊 Track application responses</li>
+      <li>🧠 Practice aptitude questions</li>
+    </ul>
+
+    <div class="mt-6">
+      <img src="{{ url_for('static', filename='images/student_dashboard.jpg') }}"
+           class="rounded-lg w-full opacity-90">
     </div>
   </div>
+
 </div>
 
-<!-- MAIN GRID: CAREER JOURNEY -->
-<div class="max-w-6xl mx-auto mt-16 px-4 md:px-10 grid md:grid-cols-3 gap-10">
-
-  <!-- STEP 1: Prepare -->
-  <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">🎯 Step 1: Prepare</h2>
-
-    <div class="bg-white/20 backdrop-blur-xl border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 transition transform">
-      <h3 class="text-xl font-bold text-gray-900 mb-1">👤 Profile & Resume</h3>
-      <p class="text-gray-700 text-sm mb-2">Update your profile and upload resumes.</p>
-      <a href="{{ url_for('enhancements.profile') }}"
-         class="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-        Edit
-      </a>
-    </div>
-
-    <div class="bg-white/20 backdrop-blur-xl border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 transition transform">
-      <h3 class="text-xl font-bold text-gray-900 mb-1">📄 Resume ATS Checker</h3>
-      <p class="text-gray-700 text-sm mb-2">Analyze your resume with ATS.</p>
-      <a href="{{ url_for('enhancements.check_resume') }}"
-         class="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-        Check
-      </a>
-    </div>
-
-    <div class="bg-white/20 backdrop-blur-xl border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 transition transform">
-      <h3 class="text-xl font-bold text-gray-900 mb-1">📝 Practice</h3>
-      <p class="text-gray-700 text-sm mb-2">Practice tests & quizzes.</p>
-      <a href="{{ url_for('enhancements.practice') }}"
-         class="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-        Quiz & Practice
-      </a>
-    </div>
-  </div>
-
-  <!-- STEP 2: Apply -->
-  <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">🚀 Step 2: Apply</h2>
-
-    <div class="bg-white/20 backdrop-blur-xl border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 transition transform">
-      <h3 class="text-xl font-bold text-gray-900 mb-1">💼 Available Placements</h3>
-      <p class="text-gray-700 text-sm mb-2">Explore the latest job postings.</p>
-      <a href="{{ url_for('enhancements.placements') }}"
-         class="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-        View
-      </a>
-    </div>
-
-    <div class="bg-white/20 backdrop-blur-xl border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 transition transform">
-      <h3 class="text-xl font-bold text-gray-900 mb-1">📌 Application Status</h3>
-      <p class="text-gray-700 text-sm mb-2">Track your applied opportunities.</p>
-      <a href="{{ url_for('enhancements.status') }}"
-         class="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-        Check
-      </a>
-    </div>
-  </div>
-
-  <!-- STEP 3: Grow -->
-  <div class="space-y-6">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">🤝 Step 3: Grow</h2>
-
-    <div class="bg-white/20 backdrop-blur-xl border border-white/30 p-6 rounded-2xl shadow-lg hover:scale-105 transition transform">
-      <h3 class="text-xl font-bold text-gray-900 mb-1">💬 Gain Knowledge</h3>
-      <p class="text-gray-700 text-sm mb-2">Ask questions & clear doubts.</p>
-      <a href="{{ url_for('enhancements.ask') }}"
-         class="inline-block mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-        Go to Chat
-      </a>
-    </div>
-  </div>
-
-</div>
-
-<!-- TYPING EFFECT SCRIPT -->
+<!-- TYPING EFFECT -->
 <script>
   const studentText =
-    "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!";
+    "Everything you need to prepare, apply, and progress — in one place.";
   let typingIndex = 0;
-  let typingStarted = false;
 
   function typeStudent() {
-    const target = document.getElementById("student-typing");
-    if (!target) return;
+    const el = document.getElementById("student-typing");
+    if (!el) return;
 
     if (typingIndex < studentText.length) {
-      target.innerHTML =
-        studentText.substring(0, typingIndex + 1) +
-        '<span class="border-r-2 border-yellow-400 animate-pulse ml-1"></span>';
+      el.textContent = studentText.slice(0, typingIndex + 1);
       typingIndex++;
-      setTimeout(typeStudent, 45);
-    } else {
-      target.innerHTML = studentText; // remove cursor after finish
+      setTimeout(typeStudent, 35);
     }
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
-    if (!typingStarted) {
-      typingStarted = true;
-      typeStudent();
-    }
-  });
+  window.addEventListener("DOMContentLoaded", typeStudent);
 </script>
-
-<style>
-  @media (max-width: 768px) {
-    h1 {
-      font-size: 2rem;
-    }
-    h2 {
-      font-size: 1.5rem;
-    }
-    h3 {
-      font-size: 1.1rem;
-    }
-    p {
-      font-size: 0.875rem;
-    }
-  }
-</style>
 
 {% endblock %}
