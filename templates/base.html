@@ -24,108 +24,94 @@
   <style>
     body { font-family: 'DM Sans', sans-serif; }
     .eye-icon { cursor: pointer; }
-  /* ===============================
-   DARK THEME COLORS ONLY
+/* ===============================
+   DARK NAVY THEME (NOT BLACK)
    =============================== */
 
-.dark-theme {
-  background-color: #0f172a; /* navy */
-  color: #e5e7eb;
+.dark-theme,
+.dark-theme body {
+  background-color: #0b1220;
+  color: #e6e9f0;
+}
+
+/* Force full page background */
+.dark-theme main,
+.dark-theme section,
+.dark-theme .page-wrapper {
+  background-color: #0b1220 !important;
 }
 
 /* Navbar */
 .dark-theme nav {
-  background-color: rgba(15, 23, 42, 0.9);
-  border-color: #334155;
+  background-color: #10192e !important;
+  border-color: #243252;
 }
 
-.dark-theme nav a,
-.dark-theme nav button,
-.dark-theme nav i,
-.dark-theme nav span {
-  color: #e5e7eb;
+/* Footer */
+.dark-theme footer {
+  background-color: #10192e !important;
+  border-color: #243252;
+  color: #c7d2fe;
 }
 
-/* Dropdown panels */
-.dark-theme .dropdown-panel {
-  background-color: #1e293b;
-  color: #e5e7eb;
-}
-
-.dark-theme .dropdown-panel button:hover,
-.dark-theme .dropdown-panel a:hover {
-  background-color: #334155;
-}
-
-/* Cards / panels / modals */
-.dark-theme .bg-white {
-  background-color: #1e293b !important;
-}
-
+/* Cards / containers */
+.dark-theme .bg-white,
+.dark-theme .bg-slate-50,
+.dark-theme .bg-blue-50,
 .dark-theme .bg-indigo-100,
-.dark-theme .bg-indigo-200,
-.dark-theme .bg-blue-50 {
-  background-color: #1e293b !important;
+.dark-theme .bg-indigo-200 {
+  background-color: #162033 !important;
 }
 
-/* Text colors */
+/* Text */
 .dark-theme .text-gray-900,
 .dark-theme .text-gray-800,
+.dark-theme .text-gray-700,
 .dark-theme .text-blue-600,
 .dark-theme .text-indigo-600 {
-  color: #e5e7eb !important;
+  color: #e6e9f0 !important;
 }
 
 .dark-theme .text-gray-600,
 .dark-theme .text-gray-500 {
-  color: #cbd5f5 !important;
+  color: #b8c1ec !important;
 }
 
 /* Borders */
+.dark-theme .border,
+.dark-theme .border-blue-600,
 .dark-theme .border-indigo-200,
-.dark-theme .border-indigo-300,
-.dark-theme .border-blue-600 {
-  border-color: #334155 !important;
+.dark-theme .border-gray-200 {
+  border-color: #243252 !important;
 }
 
 /* Inputs */
 .dark-theme input,
-.dark-theme textarea {
-  background-color: #0f172a;
-  color: #e5e7eb;
-  border-color: #334155;
+.dark-theme textarea,
+.dark-theme select {
+  background-color: #0b1220;
+  color: #e6e9f0;
+  border-color: #243252;
 }
 
 .dark-theme input::placeholder {
   color: #94a3b8;
 }
 
-/* Footer */
-.dark-theme footer {
-  background-color: #0f172a;
-  color: #c7d2fe;
-  border-color: #334155;
+/* Dropdowns */
+.dark-theme .dropdown-panel {
+  background-color: #162033;
+  color: #e6e9f0;
 }
 
-/* Chatbot */
-.dark-theme #chatbot {
-  background-color: #1e293b;
-  color: #e5e7eb;
-}
-
-.dark-theme #chatbot .bg-indigo-600 {
-  background-color: #1d4ed8;
-}
-
-/* Theme switch visual */
+/* Theme switch */
 .dark-theme #themeSwitch {
-  background-color: #2563eb;
+  background-color: #1e40af;
 }
 
 .dark-theme #themeKnob {
   transform: translateX(20px);
 }
-
 
   </style>
 </head>
@@ -596,6 +582,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
