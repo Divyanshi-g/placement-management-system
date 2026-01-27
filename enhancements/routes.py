@@ -451,22 +451,6 @@ def app_chat():
         )
     })
 
-# --------------------
-# THEME TOGGLE
-# --------------------
-@enhancements_bp.route("/toggle-theme", methods=["POST"])
-def toggle_theme():
-    if "user_id" not in session:
-        return jsonify({"status": "error"})
-
-    user_id = session["user_id"]
-    theme = request.json.get("theme")  # "light" or "dark"
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute("UPDATE users SET theme=? WHERE id=?", (theme, user_id))
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "success"})
 
 # --------------------
 # CHANGE PASSWORD
@@ -1797,6 +1781,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
