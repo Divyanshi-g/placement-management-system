@@ -276,13 +276,24 @@ if(themeSwitch){
 }
 
 /* ------------------------------
-   PASSWORD VISIBILITY
+   PASSWORD VISIBILITY (SAFE)
 --------------------------------*/
-function togglePassword(id, icon){
-  const field = document.getElementById(id);
-  field.type = field.type === "password" ? "text" : "password";
-  icon.classList.toggle("fa-eye");
-  icon.classList.toggle("fa-eye-slash");
+function togglePassword(icon){
+  if(!icon) return;
+
+  const wrapper = icon.closest('.relative');
+  if(!wrapper) return;
+
+  const field = wrapper.querySelector('input');
+  if(!field) return;
+
+  if(field.type === "password"){
+    field.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    field.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
 }
 
 /* ------------------------------
@@ -456,4 +467,5 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
