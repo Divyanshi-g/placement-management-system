@@ -50,14 +50,14 @@
 
         <!-- PASSWORD WITH EYE ICON -->
         <div class="relative">
-          <input type="password" name="password" id="passwordField" placeholder="Password" required
+          <input type="password" name="password" id="registerPassword" placeholder="Password" required
             class="w-full px-4 py-3 rounded-lg
                    bg-slate-50
                    border-2 border-gray-200
                    focus:border-blue-600
                    outline-none pr-10">
           <i class="fa-solid fa-eye eye-icon absolute right-3 top-3 text-gray-500 cursor-pointer"
-             onclick="togglePassword('passwordField', this)"></i>
+               data-target="registerPassword" onclick="togglePassword(this)"></i>
         </div>
 
         <!-- ROLE -->
@@ -119,28 +119,36 @@
 
 <!-- ADMIN ROLE TOGGLE -->
 <script>
-  const roleSelect = document.getElementById("roleSelect");
-  const adminCodeField = document.getElementById("adminCodeField");
+function togglePassword(icon){
+  if(!icon) return;
 
-  roleSelect.addEventListener("change", () => {
-    adminCodeField.classList.toggle("hidden", roleSelect.value !== "admin");
-  });
-
-  function togglePassword(fieldId, icon){
-    const field = document.getElementById(fieldId);
-    if(field.type === 'password'){
-      field.type = 'text';
-      icon.classList.remove('fa-eye');
-      icon.classList.add('fa-eye-slash');
-    } else {
-      field.type = 'password';
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
-    }
+  const targetId = icon.dataset.target;
+  if(!targetId) {
+    console.warn("togglePassword: data-target missing");
+    return;
   }
+
+  const field = document.getElementById(targetId);
+  if(!field) {
+    console.warn("togglePassword: input not found", targetId);
+    return;
+  }
+
+  if(field.type === "password"){
+    field.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+  } else {
+    field.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+  }
+}
 </script>
 
+
 {% endblock %}
+
 
 
 
