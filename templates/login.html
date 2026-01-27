@@ -35,7 +35,7 @@
 
         <!-- PASSWORD -->
         <div class="relative">
-         <input type="password"
+         <input type="logpassword"
        name="password"
        class="password-input w-full px-4 py-3 rounded-lg
               bg-slate-50 border-2 border-gray-200
@@ -87,14 +87,14 @@ function togglePassword(icon){
   const wrapper = icon.closest('.relative');
   if(!wrapper) return;
 
-  const field = wrapper.querySelector('input[type="password"], input[type="text"]');
+  const field = wrapper.querySelector('input[type="logpassword"], input[type="text"]');
   if(!field) return;
 
-  if(field.type === "password"){
+  if(field.type === "logpassword"){
     field.type = "text";
     icon.classList.replace("fa-eye", "fa-eye-slash");
   } else {
-    field.type = "password";
+    field.type = "logpassword";
     icon.classList.replace("fa-eye-slash", "fa-eye");
   }
 }
@@ -102,4 +102,5 @@ function togglePassword(icon){
 
 
 {% endblock %}
+
 
