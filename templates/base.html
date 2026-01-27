@@ -25,88 +25,72 @@
     body { font-family: 'DM Sans', sans-serif; }
     .eye-icon { cursor: pointer; }
 /* ===============================
-   DARK NAVY THEME (NOT BLACK)
+   DARK NAVY – SOFT & GLASSY
    =============================== */
 
-.dark-theme,
 .dark-theme body {
-  background-color: #0b1220;
-  color: #e6e9f0;
-}
-
-/* Force full page background */
-.dark-theme main,
-.dark-theme section,
-.dark-theme .page-wrapper {
-  background-color: #0b1220 !important;
+  background-color: #1e293b; /* soft navy */
+  color: #f1f5f9;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Navbar */
 .dark-theme nav {
-  background-color: #10192e !important;
-  border-color: #243252;
+  background-color: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 /* Footer */
 .dark-theme footer {
-  background-color: #10192e !important;
-  border-color: #243252;
-  color: #c7d2fe;
+  background-color: rgba(30, 41, 59, 0.85);
+  border-top: 1px solid rgba(255,255,255,0.12);
+  color: #cbd5f5;
 }
 
-/* Cards / containers */
+/* Glass cards */
 .dark-theme .bg-white,
-.dark-theme .bg-slate-50,
-.dark-theme .bg-blue-50,
-.dark-theme .bg-indigo-100,
-.dark-theme .bg-indigo-200 {
-  background-color: #162033 !important;
+.dark-theme .card,
+.dark-theme .panel {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* Text */
+/* Soft text */
 .dark-theme .text-gray-900,
-.dark-theme .text-gray-800,
-.dark-theme .text-gray-700,
-.dark-theme .text-blue-600,
-.dark-theme .text-indigo-600 {
-  color: #e6e9f0 !important;
+.dark-theme .text-gray-800 {
+  color: #f1f5f9 !important;
 }
 
 .dark-theme .text-gray-600,
 .dark-theme .text-gray-500 {
-  color: #b8c1ec !important;
-}
-
-/* Borders */
-.dark-theme .border,
-.dark-theme .border-blue-600,
-.dark-theme .border-indigo-200,
-.dark-theme .border-gray-200 {
-  border-color: #243252 !important;
+  color: #cbd5f5 !important;
 }
 
 /* Inputs */
 .dark-theme input,
 .dark-theme textarea,
 .dark-theme select {
-  background-color: #0b1220;
-  color: #e6e9f0;
-  border-color: #243252;
+  background: rgba(255,255,255,0.06);
+  color: #f1f5f9;
+  border: 1px solid rgba(255,255,255,0.15);
 }
 
 .dark-theme input::placeholder {
   color: #94a3b8;
 }
 
-/* Dropdowns */
+/* Dropdown */
 .dark-theme .dropdown-panel {
-  background-color: #162033;
-  color: #e6e9f0;
+  background: rgba(30,41,59,0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
 /* Theme switch */
 .dark-theme #themeSwitch {
-  background-color: #1e40af;
+  background-color: #3b82f6;
 }
 
 .dark-theme #themeKnob {
@@ -582,6 +566,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
