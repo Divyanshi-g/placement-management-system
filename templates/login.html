@@ -9,7 +9,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2
               w-full max-w-4xl
-              rounded-4xl shadow-4xl
+              rounded-2xl shadow-2xl
               bg-slate-50
               border-2 border-blue-200
               animate__animated animate__fadeInLeft">
@@ -32,25 +32,27 @@
                       border-2 border-gray-200
                       focus:border-blue-600
                       outline-none">
-<div class="relative">
-  <input type="password"
-         id="loginPassword"
-         name="password"
-         placeholder="Password"
-         required
-         class="w-full px-4 py-3 rounded-lg
-                bg-slate-50
-                border-2 border-gray-200
-                focus:border-blue-600
-                outline-none pr-12">
 
-  <i class="fa-solid fa-eye absolute right-4 top-1/2 -translate-y-1/2
-            cursor-pointer text-gray-500 hover:text-blue-600"
-     data-target="loginPassword"
-     onclick="togglePassword(this)"></i>
-</div>
+        <!-- PASSWORD -->
+        <div class="relative">
+          <input type="password"
+                 id="loginPassword"
+                 name="password"
+                 placeholder="Password"
+                 required
+                 class="w-full px-4 py-3 rounded-lg
+                        bg-slate-50
+                        border-2 border-gray-200
+                        focus:border-blue-600
+                        outline-none pr-12">
 
-  <!-- LOGIN BUTTON -->
+          <i class="fa-solid fa-eye absolute right-4 top-1/2 -translate-y-1/2
+                    cursor-pointer text-gray-500 hover:text-blue-600"
+             data-target="loginPassword"
+             onclick="togglePassword(this)"></i>
+        </div>
+
+        <!-- LOGIN BUTTON -->
         <button type="submit"
                 class="w-full py-3 rounded-lg
                        font-semibold text-white
@@ -80,22 +82,16 @@
 
   </div>
 </div>
-</div>
+
 <script>
- function togglePassword(icon){
+function togglePassword(icon){
   if(!icon) return;
 
   const targetId = icon.dataset.target;
-  if(!targetId) {
-    console.warn("togglePassword: data-target missing", icon);
-    return;
-  }
+  if(!targetId) return;
 
   const field = document.getElementById(targetId);
-  if(!field){
-    console.warn(`togglePassword: No input found with id="${targetId}"`);
-    return;
-  }
+  if(!field) return;
 
   if(field.type === "password"){
     field.type = "text";
@@ -105,17 +101,6 @@
     icon.classList.replace("fa-eye-slash", "fa-eye");
   }
 }
-
 </script>
 
-
 {% endblock %}
-
-
-
-
-
-
-
-
-
