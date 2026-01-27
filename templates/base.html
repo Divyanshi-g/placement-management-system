@@ -183,26 +183,26 @@
               bg-indigo-200 rounded-xl shadow-xl z-50"
        onclick="event.stopPropagation()">
 
-         <div class="flex items-center justify-between px-4 py-2
+    
+<div class="flex items-center justify-between px-4 py-2
             hover:bg-indigo-300 rounded-lg cursor-pointer"
-     onclick="toggleTheme()">
+     onclick="event.stopPropagation(); toggleTheme()">
 
   <div class="flex items-center gap-2">
     <i class="fa-solid fa-palette"></i>
     <span>Theme</span>
   </div>
 
-  <!-- SWITCH -->
   <div class="w-11 h-6 rounded-full bg-gray-300
               relative transition-all duration-300"
        id="themeSwitch">
-
     <span class="absolute left-1 top-1
                  w-4 h-4 bg-white rounded-full
                  transition-all duration-300"
           id="themeKnob"></span>
   </div>
 </div>
+
           <!-- Change Password -->
           <button onclick="openChangePassword()"
                   class="w-full text-left px-4 py-3 hover:bg-indigo-300 flex gap-2">
@@ -602,6 +602,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
