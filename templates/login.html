@@ -35,7 +35,7 @@
 
         <!-- PASSWORD -->
         <div class="relative">
-         <input type="logPassword"
+         <input type="password"
        name="password"
          placeholder="Password"
        class="password-input w-full px-4 py-3 rounded-lg
@@ -45,7 +45,7 @@
 
           <i class="fa-solid fa-eye absolute right-4 top-1/2 -translate-y-1/2
           cursor-pointer text-gray-500 hover:text-blue-600"
-                      data-target="logPassword"
+                      data-target="password"
    onclick="togglePassword(this)"></i>
 
         </div>
@@ -86,27 +86,35 @@
 function togglePassword(icon){
   if(!icon) return;
 
-  // find the closest input inside the same container
-  const wrapper = icon.closest('.relative');
-  if(!wrapper) return;
+  const targetId = icon.dataset.target;
+  if(!targetId) {
+    console.warn("togglePassword: data-target missing");
+    return;
+  }
 
-  const field = wrapper.querySelector('input[type="logpassword"], input[type="text"]');
-  if(!field) return;
+  const field = document.getElementById(targetId);
+  if(!field) {
+    console.warn("togglePassword: input not found", targetId);
+    return;
+  }
 
- if(field.type === "logPassword"){
+  if(field.type === "password"){
     field.type = "text";
     icon.classList.remove("fa-eye");
     icon.classList.add("fa-eye-slash");
   } else {
-    field.type = "logPassword";
+    field.type = "password";
     icon.classList.remove("fa-eye-slash");
     icon.classList.add("fa-eye");
   }
 }
 </script>
 
+</script>
+
 
 {% endblock %}
+
 
 
 
