@@ -109,16 +109,20 @@
 </div>
 
 {% if show_back_button %}
-<div class="max-w-7xl mx-auto px-6 mt-20">
+<div class="w-full max-w-5xl mx-auto mb-4 ">
   <a href="{{ back_url }}"
-     class="inline-flex items-center gap-2 text-sm
-            text-blue-600 hover:text-blue-800 font-medium">
+     class="inline-flex items-center gap-2
+            text-sm font-semibold text-blue-700
+            border border-blue-600
+            px-4 py-1.5 rounded-lg
+            bg-white
+            transition-all duration-200
+            hover:bg-blue-50 hover:scale-[1.03]">
     <i class="fa-solid fa-arrow-left"></i>
     Back
   </a>
 </div>
 {% endif %}
-
 <!-- ================= MAIN ================= -->
 <main class="flex-1 max-w-7xl mx-auto px-6 mt-4">
   {% block content %}{% endblock %}
@@ -473,6 +477,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
