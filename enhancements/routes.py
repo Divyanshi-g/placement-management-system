@@ -268,9 +268,8 @@ def register():
         "register.html",
         show_nav_options=False,  # hide dashboard links
         is_admin=False,          # safe default
-        home_url=None,          # not needed here
         show_back_button=True,
-        back_url=url_for("home"),
+        back_url=None,
         current_year=2026
     )
 
@@ -324,7 +323,6 @@ def login():
         "login.html",
         show_nav_options=False,
         is_admin=False,
-        home_url=None,
         show_back_button=True,
         back_url=url_for("enhancements.register"),
         current_year=2026
@@ -1799,3 +1797,4 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
