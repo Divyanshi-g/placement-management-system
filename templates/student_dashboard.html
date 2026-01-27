@@ -2,126 +2,102 @@
 {% block title %}Student Dashboard{% endblock %}
 
 {% block content %}
-
 <div class="bg-slate-50 min-h-screen">
 
-  <!-- TOP OVERVIEW -->
-  <div class="mb-8">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+  <!-- HEADER -->
+  <div class="mb-10">
+    <h1 class="text-3xl font-bold text-gray-900">
+      Welcome back, {{ username }}
+    </h1>
+    <p id="student-typing" class="text-gray-600 mt-1 text-sm"></p>
+  </div>
 
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900">
-          Hello, {{ username }}
-        </h1>
-        <p id="student-typing" class="text-sm text-gray-600 mt-1"></p>
+  <!-- FOCUS ROW -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+    <!-- MAIN FOCUS -->
+    <a href="{{ url_for('enhancements.placements') }}"
+       class="bg-blue-50 border-l-4 border-blue-600 rounded-xl p-6 shadow-md hover:shadow-xl transition">
+      <h2 class="text-xl font-bold text-gray-900">Explore Placements</h2>
+      <p class="text-sm text-gray-600 mt-2">
+        View and apply to the latest job opportunities.
+      </p>
+      <div class="mt-4 text-blue-600 font-semibold">
+        View Jobs →
       </div>
+    </a>
 
-    </div>
+    <a href="{{ url_for('enhancements.status') }}"
+       class="bg-white ring-1 ring-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition">
+      <h2 class="text-xl font-bold text-gray-900">Application Status</h2>
+      <p class="text-sm text-gray-600 mt-2">
+        Track progress of applied companies.
+      </p>
+      <div class="mt-4 text-blue-600 font-semibold">
+        Track →
+      </div>
+    </a>
+
+    <a href="{{ url_for('enhancements.check_resume') }}"
+       class="bg-white ring-1 ring-gray-200 rounded-xl p-6 shadow-md hover:shadow-xl transition">
+      <h2 class="text-xl font-bold text-gray-900">Resume ATS</h2>
+      <p class="text-sm text-gray-600 mt-2">
+        Check resume compatibility score.
+      </p>
+      <div class="mt-4 text-blue-600 font-semibold">
+        Analyze →
+      </div>
+    </a>
+
   </div>
 
-  <!-- MAIN GRID -->
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <!-- SECONDARY ACTIONS -->
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-    <!-- ACTION CARDS -->
-    <div class="lg:col-span-3 grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+    <a href="{{ url_for('enhancements.profile') }}"
+       class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition">
+      <h3 class="font-semibold text-gray-900">Profile & Resume</h3>
+      <p class="text-xs text-gray-600 mt-1">
+        Update personal details
+      </p>
+    </a>
 
-      <!-- CARD -->
-      <a href="{{ url_for('enhancements.profile') }}"
-         class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-        <h2 class="text-lg font-semibold text-gray-900">Profile & Resume</h2>
-        <p class="text-sm text-gray-600 mt-1">
-          Keep your profile updated.
-        </p>
-        <button class="mt-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-          Manage
-        </button>
-      </a>
+    <a href="{{ url_for('enhancements.practice') }}"
+       class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition">
+      <h3 class="font-semibold text-gray-900">Practice</h3>
+      <p class="text-xs text-gray-600 mt-1">
+        Aptitude & mock tests
+      </p>
+    </a>
 
-      <a href="{{ url_for('enhancements.placements') }}"
-         class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-        <h2 class="text-lg font-semibold text-gray-900">Available Placements</h2>
-        <p class="text-sm text-gray-600 mt-1">
-          Browse current opportunities.
-        </p>
-        <button class="mt-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-          Explore
-        </button>
-      </a>
+    <a href="{{ url_for('enhancements.ask') }}"
+       class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition">
+      <h3 class="font-semibold text-gray-900">Gain Knowledge</h3>
+      <p class="text-xs text-gray-600 mt-1">
+        Ask doubts & learn
+      </p>
+    </a>
 
-      <a href="{{ url_for('enhancements.status') }}"
-         class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-        <h2 class="text-lg font-semibold text-gray-900">Application Status</h2>
-        <p class="text-sm text-gray-600 mt-1">
-          Track applied jobs.
-        </p>
-        <button class="mt-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-          View
-        </button>
-      </a>
-
-      <a href="{{ url_for('enhancements.check_resume') }}"
-         class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-        <h2 class="text-lg font-semibold text-gray-900">Resume ATS Checker</h2>
-        <p class="text-sm text-gray-600 mt-1">
-          Improve resume quality.
-        </p>
-        <button class="mt-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-          Analyze
-        </button>
-      </a>
-
-      <a href="{{ url_for('enhancements.practice') }}"
-         class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-        <h2 class="text-lg font-semibold text-gray-900">Practice</h2>
-        <p class="text-sm text-gray-600 mt-1">
-          Prepare for tests & interviews.
-        </p>
-        <button class="mt-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-          Start
-        </button>
-      </a>
-
-      <a href="{{ url_for('enhancements.ask') }}"
-         class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-        <h2 class="text-lg font-semibold text-gray-900">Gain Knowledge</h2>
-        <p class="text-sm text-gray-600 mt-1">
-          Ask doubts & learn.
-        </p>
-        <button class="mt-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-          Open
-        </button>
-      </a>
-
-    </div>
-
-    <!-- RIGHT PANEL -->
-    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm h-fit">
-      <h3 class="text-sm font-semibold text-gray-900 mb-3">
-        Today’s Focus
-      </h3>
-      <ul class="space-y-2 text-sm text-gray-600">
-        <li>• Update resume</li>
-        <li>• Check new placements</li>
-        <li>• Track applications</li>
-        <li>• Practice aptitude</li>
-      </ul>
+    <div class="bg-white ring-1 ring-gray-200 rounded-xl p-5 shadow-sm">
+      <h3 class="font-semibold text-gray-900">Today’s Tip</h3>
+      <p class="text-xs text-gray-600 mt-2">
+        Keep your resume under 1 page and quantify achievements.
+      </p>
     </div>
 
   </div>
+
 </div>
 
-<!-- TYPING EFFECT -->
+<!-- TYPING -->
 <script>
-  const studentText =
-    "Everything you need to prepare, apply, and progress — in one place.";
-  let i = 0;
-
+  const text = "Focus on preparation, apply smartly, and track your progress.";
+  let idx = 0;
   function typeStudent() {
     const el = document.getElementById("student-typing");
     if (!el) return;
-    if (i < studentText.length) {
-      el.textContent += studentText.charAt(i);
-      i++;
+    if (idx < text.length) {
+      el.textContent += text.charAt(idx++);
       setTimeout(typeStudent, 35);
     }
   }
@@ -129,4 +105,3 @@
 </script>
 
 {% endblock %}
-
