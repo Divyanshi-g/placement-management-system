@@ -82,20 +82,27 @@
 </div>
 </div>
 <script>
-  function togglePassword(icon){
-  const targetId = icon.getAttribute("data-target");
-  const field = document.getElementById(targetId);
+ function togglePassword(icon){
+  if(!icon) return;
 
-  if(!field) return; // prevents crash
+  const targetId = icon.dataset.target;
+  if(!targetId) {
+    console.warn("togglePassword: data-target missing", icon);
+    return;
+  }
+
+  const field = document.getElementById(targetId);
+  if(!field){
+    console.warn(`togglePassword: No input found with id="${targetId}"`);
+    return;
+  }
 
   if(field.type === "password"){
     field.type = "text";
-    icon.classList.remove("fa-eye");
-    icon.classList.add("fa-eye-slash");
+    icon.classList.replace("fa-eye", "fa-eye-slash");
   } else {
     field.type = "password";
-    icon.classList.remove("fa-eye-slash");
-    icon.classList.add("fa-eye");
+    icon.classList.replace("fa-eye-slash", "fa-eye");
   }
 }
 
@@ -103,6 +110,7 @@
 
 
 {% endblock %}
+
 
 
 
