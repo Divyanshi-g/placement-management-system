@@ -3,14 +3,14 @@
 
 {% block content %}
 
-
+<div class="w-24">
   <h1 class="text-4xl font-bold text-gray-900 transition hover:underline">
     Welcome, {{ username }} 👋
   </h1>
-
+</div>
 <!-- Motivation (UNCHANGED) -->
 <p id="student-typing"
-   class="mt-4 text-xl font-medium text-gray-600 text-center"></p>
+   class="mt-4 text-xl font-medium text-black-600 text-center"></p>
 
 <!-- MAIN GRID -->
 <div class="mt-16 grid md:grid-cols-2 gap-14 px-10 items-start">
@@ -19,29 +19,29 @@
   <div class="flex flex-col gap-14">
 
     <!-- LEFT : CARD 1 -->
-    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
                 transition-all duration-300
                 hover:-translate-y-2 hover:bg-blue-100
                 hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
                 animate__animated animate__fadeInLeft">
-      <h2 class="text-xl font-bold text-blue-700">👤 Profile & Resume</h2>
+      <h2 class="text-xl font-bold text-black-700">👤 Profile & Resume</h2>
       <p class="text-sm text-gray-600">Update your profile and upload resumes.</p>
       <a href="{{ url_for('enhancements.profile') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
         Edit
       </a>
     </div>
 
     <!-- LEFT : CARD 2 -->
-    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
                 transition-all duration-300
                 hover:-translate-y-2 hover:bg-blue-100
                 hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
                 animate__animated animate__fadeInLeft animate__delay-1s">
-      <h2 class="text-xl font-bold text-blue-700">💼 Available Placements</h2>
+      <h2 class="text-xl font-bold text-black-700">💼 Available Placements</h2>
       <p class="text-sm text-gray-600">Explore the latest job postings.</p>
       <a href="{{ url_for('enhancements.placements') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
         View
       </a>
     </div>
@@ -53,29 +53,29 @@
          src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
 
     <!-- LEFT : CARD 5 -->
-    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
                 transition-all duration-300
                 hover:-translate-y-2 hover:bg-blue-100
                 hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
                 animate__animated animate__fadeInLeft animate__delay-4s">
-      <h2 class="text-xl font-bold text-blue-700">📄 Resume ATS Checker</h2>
+      <h2 class="text-xl font-bold text-black-700">📄 Resume ATS Checker</h2>
       <p class="text-sm text-gray-600">Analyze your resume with ATS.</p>
       <a href="{{ url_for('enhancements.check_resume') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
         Check
       </a>
     </div>
 
     <!-- LEFT : CARD 6 -->
-    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
                 transition-all duration-300
                 hover:-translate-y-2 hover:bg-blue-100
                 hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
                 animate__animated animate__fadeInLeft animate__delay-5s">
-      <h2 class="text-xl font-bold text-blue-700">📝 Practice</h2>
+      <h2 class="text-xl font-bold text-black-700">📝 Practice</h2>
       <p class="text-sm text-gray-600">Practice tests & quizzes.</p>
       <a href="{{ url_for('enhancements.practice') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
         Quiz & Practice
       </a>
     </div>
@@ -106,15 +106,15 @@
     </div>
 
     <!-- RIGHT : CARD 4 -->
-    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
+    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
                 transition-all duration-300
                 hover:-translate-y-2 hover:bg-blue-100
                 hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
                 animate__animated animate__fadeInRight animate__delay-4s">
-      <h2 class="text-xl font-bold text-blue-700">💬 Gain Knowledge</h2>
+      <h2 class="text-xl font-bold text-black-700">💬 Gain Knowledge</h2>
       <p class="text-sm text-gray-600">Ask questions & clear doubts.</p>
       <a href="{{ url_for('enhancements.ask') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
         Go to Chat
       </a>
     </div>
@@ -160,4 +160,5 @@
 </script>
 
 {% endblock %}
+
 
