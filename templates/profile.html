@@ -171,6 +171,18 @@
             class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow hidden mt-4">
       💾 Save Changes
     </button>
+ <!-- Progress Bar -->
+<div id="saveProgressWrapper" class="hidden mt-4">
+  <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+    <div id="saveProgressBar"
+         class="h-full bg-blue-600 transition-all duration-300 ease-out"
+         style="width: 0%">
+    </div>
+  </div>
+  <p class="text-sm text-gray-600 mt-1 text-center">
+    Updating your profile…
+  </p>
+</div>
 
   </form>
 </div>
@@ -265,7 +277,30 @@ document.getElementById("imageModal").onclick = function () {
   });
 
 });
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("form");
+  const progressWrapper = document.getElementById("saveProgressWrapper");
+  const progressBar = document.getElementById("saveProgressBar");
+
+  if (!form || !progressWrapper || !progressBar) return;
+
+  form.addEventListener("submit", () => {
+    progressWrapper.classList.remove("hidden");
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      if (progress < 90) {
+        progress += 10;
+        progressBar.style.width = progress + "%";
+      } else {
+        clearInterval(interval);
+      }
+    }, 200);
+  });
+});
 </script>
 
 {% endblock %}
+
 
