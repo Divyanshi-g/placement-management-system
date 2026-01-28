@@ -14,7 +14,8 @@
         <!-- Stars -->
         <div class="flex justify-center space-x-2 text-4xl cursor-pointer" id="star-container">
           {% for i in range(1, 5 + 1) %}
-            <span class="star text-gray-300 hover:text-amber-500 transition" data-value="{{ i }}">★</span>
+            <span class="star text-gray-300 dark:text-gray-500 hover:text-amber-500 dark:hover:text-amber-400 transition"
+      data-value="{{ i }}">★</span>
           {% endfor %}
         </div>
 
@@ -97,6 +98,7 @@ stars.forEach(star => {
 });
 </script>
 {% endblock %}
+
 
 
 
