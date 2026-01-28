@@ -60,6 +60,7 @@
           <label class="font-medium">🛠 Skills</label>
           <input type="text"
                  name="skills"
+                  id="skillsInput"
                  list="skillsList"
                  placeholder="Python, SQL, React"
                  class="w-full mt-2 px-4 py-2 border rounded-lg">
@@ -114,7 +115,7 @@
       <div class="mt-6">
         <label class="font-medium">📄 Upload Resume</label>
         <input type="file"
-               id="resume"
+               id="resumeInput"
                name="resume"
                accept=".pdf,.doc,.docx"
                required
@@ -146,24 +147,46 @@ function validateForm() {
   }
 
   // Resume size validation (2 MB)
-  const resumeInput = document.getElementById("resume");
-  const file = resumeInput.files[0];
+  const resumeInput = document.getElementById("resumeInput");
 
   if (!file) {
     alert("Please upload your resume.");
     return false;
   }
 
-  const maxSize = 2 * 1024 * 1024; // 2 MB
-  if (file.size > maxSize) {
-    alert("Resume size is too large. Maximum allowed size is 2 MB.");
-    resumeInput.value = "";
-    return false;
-  }
+  const MAX_RESUME_SIZE = 2 * 1024 * 1024; // 2MB
 
-  return true;
-}
+resumeInput.addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  if (file.size > MAX_RESUME_SIZE) {
+    alert("❌ Resume size is too large. Maximum allowed size is 2 MB.");
+    this.value = ""; // clear file input
+  }
+});
+  const skillsInput = document.getElementById("skillsInput");
+const skillsList = document.getElementById("skillsList");
+
+skillsInput.addEventListener("input", () => {
+  const value = skillsInput.value;
+
+  // If user selected from dropdown (no comma yet)
+  if (skillsList.querySelector(`option[value="${value.trim()}"]`)) {
+    skillsInput.value = value + ", ";
+  }
+});
+
+// Keep dropdown usable after comma
+skillsInput.addEventListener("keydown", (e) => {
+  if (e.key === "," || e.key === " ") {
+    setTimeout(() => {
+      skillsInput.dispatchEvent(new Event("input"));
+    }, 0);
+  }
+});
 </script>
 
 {% endblock %}
+
 
