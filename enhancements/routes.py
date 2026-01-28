@@ -638,7 +638,7 @@ def placements():
 @enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
 def apply(placement_id):
     if "user_id" not in session:
-        return redirect(url_for("login"))
+        return redirect(url_for("enhancements.login"))
 
     user_id = session["user_id"]
     conn = get_db_conn()
@@ -1741,4 +1741,5 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
