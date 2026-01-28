@@ -50,7 +50,7 @@
 
     <!-- SLIDESHOW 2 -->
     <img id="slideshow2"
-         class="w-full rounded-xl shadow-lg animate__animated animate__fadeInUp"
+         class="w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
          src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
 
     <!-- CARD 5 -->
@@ -88,7 +88,7 @@
 
     <!-- SLIDESHOW 1 -->
     <img id="slideshow1"
-         class="w-full rounded-xl shadow-lg animate__animated animate__zoomIn"
+        class="w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
          src="{{ url_for('static', filename='images/student_dashboard.jpg') }}">
 
     <!-- CARD 3 -->
@@ -121,52 +121,54 @@
 
     <!-- SLIDESHOW 3 -->
     <img id="slideshow3"
-         class="w-full rounded-xl shadow-lg animate__animated animate__fadeInUp"
+        class="w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
          src="{{ url_for('static', filename='images/student_dashboard3.jpg') }}">
 
     <!-- SLIDESHOW 4 (FIXED) -->
     <img id="slideshow4"
-         class="hidden"
+         class="hidden w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
          src="{{ url_for('static', filename='images/student_dashboard4.jpg') }}">
   </div>
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const slides1 = [
-      "/static/images/slide1.jpg",
-      "/static/images/slide2.jpg"
-    ];
+  const slides = [
+    "{{ url_for('static', filename='images/student_dashboard.jpg') }}",
+    "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}",
+    "{{ url_for('static', filename='images/student_dashboard2.webp') }}",
+    "{{ url_for('static', filename='images/student_dashboard3.jpg') }}",
+    "{{ url_for('static', filename='images/student_dashboard4.jpg') }}"
+  ];
 
-    const slides2 = [
-      "/static/images/slide3.jpg",
-      "/static/images/slide4.jpg"
-    ];
+  const img1 = document.getElementById("slideshow1");
+  const img2 = document.getElementById("slideshow2");
+  const img3 = document.getElementById("slideshow3");
 
-    const slides3 = [
-      "/static/images/slide5.jpg",
-      "/static/images/slide6.jpg"
-    ];
+  if (!img1 || !img2 || !img3) {
+    console.error("Slideshow image not found");
+    return;
+  }
 
-    let i = 0, j = 0, k = 0;
+  let i = 0, j = 2, k = 4;
 
-    setInterval(() => {
-      i = (i + 1) % slides1.length;
-      document.getElementById("slide1").src = slides1[i];
-    }, 4000);
+  setInterval(() => {
+    i = (i + 1) % slides.length;
+    img1.src = slides[i];
+  }, 4000);
 
-    setInterval(() => {
-      j = (j + 1) % slides2.length;
-      document.getElementById("slide2").src = slides2[j];
-    }, 5500);
+  setInterval(() => {
+    j = (j + 1) % slides.length;
+    img2.src = slides[j];
+  }, 5500);
 
-    setInterval(() => {
-      k = (k + 1) % slides3.length;
-      document.getElementById("slide3").src = slides3[k];
-    }, 4000);
+  setInterval(() => {
+    k = (k + 1) % slides.length;
+    img3.src = slides[k];
+  }, 7000);
 
-  });
+});
   const studentText =
     "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!";
   let typingIndex = 0;
@@ -188,6 +190,7 @@
 </script>
 
 {% endblock %}
+
 
 
 
