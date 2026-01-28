@@ -453,44 +453,8 @@ def app_chat():
 
 
 # --------------------
-# CHANGE PASSWORD
+# VERIFY OLD PASSWORD (Step 1)
 # --------------------
-@enhancements_bp.route("/change-password", methods=["POST"])
-def change_password():
-    if "user_id" not in session:
-        flash("⚠️ Please login first.", "error")
-        return redirect(url_for("enhancements.login"))
-
-    user_id = session["user_id"]
-    old_password = request.form.get("old_password")
-    new_password = request.form.get("new_password")
-    confirm_password = request.form.get("confirm_password")
-
-    if not old_password or not new_password or not confirm_password:
-        flash("⚠️ All fields are required.", "warning")
-        return redirect(request.referrer)
-
-    if new_password != confirm_password:
-        flash("⚠️ New passwords do not match.", "warning")
-        return redirect(request.referrer)
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT password FROM users WHERE id=?", (user_id,))
-    user = cur.fetchone()
-
-    if not user or not check_password_hash(user[0], old_password):
-        flash("⚠️ Old password is incorrect.", "error")
-        conn.close()
-        return redirect(request.referrer)
-
-    hashed = generate_password_hash(new_password)
-    cur.execute("UPDATE users SET password=? WHERE id=?", (hashed, user_id))
-    conn.commit()
-    conn.close()
-
-    flash("✅ Password changed successfully!", "success")
-    return redirect(request.referrer)
 @enhancements_bp.route("/verify-old-password", methods=["POST"])
 def verify_old_password():
     if "user_id" not in session:
@@ -508,10 +472,14 @@ def verify_old_password():
     user = cur.fetchone()
     conn.close()
 
-    if not user or not check_password_hash(user["password"], old_password):
+    if not user or not check_password_hash(user[0], old_password):
         return jsonify({"success": False, "message": "Incorrect old password"})
 
     return jsonify({"success": True})
+
+# --------------------
+# SEND OTP (Forgot Password)
+# --------------------
 @enhancements_bp.route("/send-otp", methods=["POST"])
 def send_otp():
     data = request.get_json(silent=True) or {}
@@ -536,18 +504,16 @@ def send_otp():
         "attempts": 3
     }
 
-    msg = Message(
-        "HireHub Password Reset OTP",
-        recipients=[email]
-    )
-    msg.body = f"Your OTP is {otp}. It is valid for 5 minutes."
-
-    try:
-        mail.send(msg)
-    except Exception:
-        return jsonify({"success": False, "message": "Failed to send OTP"})
+    # optional: send email
+    # msg = Message("HireHub Password Reset OTP", recipients=[email])
+    # msg.body = f"Your OTP is {otp}. It is valid for 5 minutes."
+    # mail.send(msg)
 
     return jsonify({"success": True})
+
+# --------------------
+# VERIFY OTP
+# --------------------
 @enhancements_bp.route("/verify-otp", methods=["POST"])
 def verify_otp():
     data = request.get_json(silent=True) or {}
@@ -575,43 +541,47 @@ def verify_otp():
         })
 
     return jsonify({"success": True})
+
+# --------------------
+# UPDATE PASSWORD (Step 2 / Step 3)
+# --------------------
 @enhancements_bp.route("/update-password", methods=["POST"])
 def update_password():
     data = request.get_json(silent=True) or {}
-    email = data.get("email", "").strip()
-    new_password = data.get("new_password", "")
-    confirm_password = data.get("confirm_password", "")
+    
+    # If logged-in user, email can be ignored
+    user_id = session.get("user_id")
+    email = data.get("email", "").strip()  # for forgot password flow
+    new_password = data.get("password")   # matches JS
+    confirm_password = data.get("confirm_password") or new_password
 
     if new_password != confirm_password:
         return jsonify({"success": False, "message": "Passwords do not match"})
 
+    # Password strength check (same as JS)
     import re
-    pwd_regex = re.compile(
-        r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
-    )
-
+    pwd_regex = re.compile(r"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$")
     if not pwd_regex.match(new_password):
-        return jsonify({
-            "success": False,
-            "message": "Password too weak"
-        })
-
-    if email not in otp_store:
-        return jsonify({"success": False, "message": "OTP session expired"})
+        return jsonify({"success": False, "message": "Password too weak"})
 
     hashed = generate_password_hash(new_password)
 
     conn = get_db_conn()
     cur = conn.cursor()
-    cur.execute(
-        "UPDATE users SET password=? WHERE email=?",
-        (hashed, email)
-    )
+
+    if user_id:
+        # Logged-in user flow
+        cur.execute("UPDATE users SET password=? WHERE id=?", (hashed, user_id))
+    elif email and email in otp_store:
+        # Forgot password flow
+        cur.execute("UPDATE users SET password=? WHERE email=?", (hashed, email))
+        del otp_store[email]
+    else:
+        conn.close()
+        return jsonify({"success": False, "message": "Session expired"})
+
     conn.commit()
     conn.close()
-
-    del otp_store[email]
-
     return jsonify({"success": True})
 
 # ------------------ Placement search & apply ------------------
@@ -1781,6 +1751,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
