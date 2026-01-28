@@ -11,7 +11,7 @@
    class="mt-4 text-xl font-medium text-black-600 text-center"></p>
 
 <!-- MAIN GRID -->
-<div class="mt-10 grid md:grid-cols-2 gap-13 px-10 items-start">
+<div class="mt-10 grid md:grid-cols-2 gap-14 px-12 items-start">
 
   <!-- LEFT SIDE -->
   <div class="flex flex-col gap-14">
@@ -128,10 +128,21 @@
 
 <!-- YOUR EXISTING JS (UNCHANGED) -->
 <script>
-  const images = [ "{{ url_for('static', filename='images/student_dashboard.jpg') }}", "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}", "{{ url_for('static', filename='images/student_dashboard2.webp') }}", "{{ url_for('static', filename='images/student_dashboard3.jpg') }}", "{{ url_for('static', filename='images/student_dashboard4.jpg') }}" ]; let index1 = 0; let index2 = 1; let index3 = 2; let index4 = 3; const img1 = document.getElementById("slideshow1"); const img2 = document.getElementById("slideshow2"); const img3 = document.getElementById("slideshow3"); const img4 = document.getElementById("slideshow4"); function fadeSwap(img, nextSrc) { img.classList.remove("opacity-100"); img.classList.add("opacity-0"); setTimeout(() => { img.src = nextSrc; img.classList.remove("opacity-0"); img.classList.add("opacity-100"); }, 700); } setInterval(() => { index1 = (index1 + 1) % images.length; index2 = (index2 + 1) % images.length; index3 = (index3 + 1) % images.length; index4 = (index4 + 1) % images.length; fadeSwap(img1, images[index1]); fadeSwap(img2, images[index2]); fadeSwap(img3, images[index3]); fadeSwap(img4, images[index4]); }, 4500); /* ------------------------------- TYPING EFFECT (RUN ONCE) -------------------------------- */ const studentText = "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!"; let typingIndex = 0; let typingStarted = false; function typeStudent() { const target = document.getElementById("student-typing"); if (!target) return; if (typingIndex < studentText.length) { target.innerHTML = studentText.substring(0, typingIndex + 1) + '<span class="border-r-2 border-yellow-400 animate-pulse ml-1"></span>'; typingIndex++; setTimeout(typeStudent, 45); } else { target.innerHTML = studentText; // remove cursor after finish } } window.addEventListener("DOMContentLoaded", () => { if (!typingStarted) { typingStarted = true; typeStudent(); } });
+  const images = [ "{{ url_for('static', filename='images/student_dashboard.jpg') }}", "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}", "{{ url_for('static', filename='images/student_dashboard2.webp') }}", "{{ url_for('static', filename='images/student_dashboard3.jpg') }}", 
+                  "{{ url_for('static', filename='images/student_dashboard4.jpg') }}" ]; let index1 = 0; let index2 = 1; let index3 = 2; let index4 = 3; 
+  const img1 = document.getElementById("slideshow1"); const img2 = document.getElementById("slideshow2"); 
+  const img3 = document.getElementById("slideshow3"); const img4 = document.getElementById("slideshow4"); 
+  function fadeSwap(img, nextSrc) { img.classList.remove("opacity-100"); img.classList.add("opacity-0"); 
+                                   setTimeout(() => { img.src = nextSrc; img.classList.remove("opacity-0"); img.classList.add("opacity-100"); }, 700); } setInterval(() => { index1 = (index1 + 1) % images.length; index2 = (index2 + 1) % images.length; index3 = (index3 + 1) % images.length; index4 = (index4 + 1) % images.length; fadeSwap(img1, images[index1]); fadeSwap(img2, images[index2]); fadeSwap(img3, images[index3]); fadeSwap(img4, images[index4]); }, 4500);
+  /* ------------------------------- TYPING EFFECT (RUN ONCE) -------------------------------- */
+  const studentText = "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!"; 
+  let typingIndex = 0; let typingStarted = false; 
+  function typeStudent() { const target = document.getElementById("student-typing"); 
+                          if (!target) return; if (typingIndex < studentText.length) { target.innerHTML = studentText.substring(0, typingIndex + 1) + '<span class="border-r-2 border-yellow-400 animate-pulse ml-1"></span>'; typingIndex++; setTimeout(typeStudent, 45); } else { target.innerHTML = studentText; // remove cursor after finish } } window.addEventListener("DOMContentLoaded", () => { if (!typingStarted) { typingStarted = true; typeStudent(); } });
 </script>
 
 {% endblock %}
+
 
 
 
