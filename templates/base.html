@@ -510,20 +510,39 @@ async function updatePassword(){
     return;
   }
 
-  const res = await fetch("/update-password",{
+  const res = await fetch("/enhancements/update-password",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({password:newPwd})
+   body: JSON.stringify({new_password: newPwd, confirm_password: confirmPwd})
   });
 
   const data = await res.json();
+
   if(data.success){
-    success.textContent = "Password changed successfully";
-    success.classList.remove("hidden");
+    // ✅ Close the change password panel
+    document.getElementById("changePasswordPanel").classList.add("hidden");
+
+    // ✅ Show a temporary global message
+    showGlobalMessage("✅ Password changed successfully!", "success");
   }else{
-    err.textContent = "Update failed";
+    err.textContent = data.message || "Update failed";
     err.classList.remove("hidden");
   }
+}
+
+  function showGlobalMessage(msg, type="info") {
+  // Create message element
+  const div = document.createElement("div");
+  div.textContent = msg;
+  div.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded shadow-lg text-white ${
+    type === "success" ? "bg-green-600" :
+    type === "error" ? "bg-red-600" :
+    "bg-blue-600"
+  }`;
+  document.body.appendChild(div);
+
+  // Remove after 3 seconds
+  setTimeout(()=> div.remove(), 3000);
 }
 
 /* ===============================
@@ -651,6 +670,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
