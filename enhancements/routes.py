@@ -583,71 +583,58 @@ def update_password():
     conn.close()
     return jsonify({"success": True})
 
-# ------------------ Placement search & apply ------------------
 @enhancements_bp.route("/placements")
 def placements():
     if "user_id" not in session:
         return redirect(url_for("enhancements.login"))
 
+    user_id = session["user_id"]   # ✅ ADD THIS LINE
+
     conn = get_db_conn()
     cur = conn.cursor()
 
-    # ---------------- FILTER INPUTS ----------------
     q = request.args.get("q", "").strip()
     location = request.args.get("location", "").strip()
     job_type = request.args.get("job_type", "").strip()
 
-    # ---------------- BASE QUERY ----------------
     sql = """
         SELECT p.*,
         (
-            SELECT COUNT(*) FROM applications a
+            SELECT COUNT(*)
+            FROM applications a
             WHERE a.user_id = ? AND a.placement_id = p.id
         ) AS applied
         FROM placements p
         WHERE 1 = 1
     """
-    params = [session["user_id"]]
 
-    # ---------------- SEARCH FILTER ----------------
+    params = [user_id]
+
     if q:
         sql += " AND (p.company LIKE ? OR p.role LIKE ?)"
         params.extend([f"%{q}%", f"%{q}%"])
 
-    # ---------------- LOCATION FILTER ----------------
     if location:
         sql += " AND p.location LIKE ?"
         params.append(f"%{location}%")
 
-    # ---------------- JOB TYPE FILTER ----------------
     if job_type:
         sql += " AND p.job_type LIKE ?"
         params.append(f"%{job_type}%")
 
-    # ---------------- EXECUTE ----------------
     cur.execute(sql, params)
     jobs = cur.fetchall()
-
-    # ---------------- APPLIED PLACEMENTS (IMPORTANT PART) ----------------
-    cur.execute(
-        "SELECT placement_id FROM applications WHERE user_id = ?",
-        (user_id,)
-    )
-    applied_ids = {row[0] for row in cur.fetchall()}
-
-    conn.close()
 
     return render_template(
         "placements.html",
         jobs=jobs,
-        status="success",
-        applied=applied_ids,
         show_nav_options=True,
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard"),
         show_back_button=True,
         back_url=url_for("enhancements.student_dashboard")
     )
+
 @enhancements_bp.route("/apply/<int:placement_id>", methods=["GET", "POST"])
 def apply(placement_id):
     if "user_id" not in session:
@@ -1754,3 +1741,4 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
