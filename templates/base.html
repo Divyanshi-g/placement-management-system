@@ -413,7 +413,9 @@ body.dark-theme .bg-white * {
 
 <!-- ================= CHATBOT ================= -->
 <div id="chatbot"
-     class="hidden fixed bottom-20 right-10 w-80 bg-white rounded-xl shadow-2xl z-50 overflow-hidden">
+     onclick="event.stopPropagation()"
+     class="hidden fixed bottom-20 right-10 w-80 bg-white rounded-xl shadow-2xl z-50">
+
 
   <div class="bg-indigo-600 text-white px-4 py-2 font-bold">
     HireHub Helper
@@ -659,36 +661,55 @@ function showStep(step) {
   if (active) active.classList.remove("hidden");
 }
 
-/* ------------------------------
-   CHATBOT
---------------------------------*/
 async function sendMessage(){
   const input = document.getElementById("chat-input");
   const content = document.getElementById("chat-content");
-  if(!input.value.trim()) return;
 
-  content.innerHTML += `<div class="text-right">🧑 ${input.value}</div>`;
-  const msg = input.value;
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  content.innerHTML += `<div class="text-right mb-2">🧑 ${msg}</div>`;
   input.value = "";
 
-  const res = await fetch("/enhancements/app-chat",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({message:msg})
-  });
+  try{
+    const res = await fetch("/enhancements/app-chat",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ message: msg })
+    });
 
-  const data = await res.json();
-  content.innerHTML += `<div>🤖 ${data.reply}</div>`;
+    if(!res.ok){
+      throw new Error("Server error");
+    }
+
+    const data = await res.json();
+    content.innerHTML += `<div class="mb-2">🤖 ${data.reply}</div>`;
+    content.scrollTop = content.scrollHeight;
+
+  }catch(err){
+    content.innerHTML += `<div class="text-red-500">🤖 Something went wrong</div>`;
+  }
+}
+document.addEventListener("click", () => {
+  const chatbot = document.getElementById("chatbot");
+  chatbot.classList.add("hidden");
+});
+function toggleChat(e){
+  e.stopPropagation();
+  const bot = document.getElementById("chatbot");
+
+  if(bot.classList.contains("hidden")){
+    resetChat();
+    bot.classList.remove("hidden");
+  }else{
+    bot.classList.add("hidden");
+  }
 }
 
-  setTimeout(() => {
-  const flashes = document.querySelectorAll(".flash-message");
-
-  flashes.forEach(flash => {
-    flash.classList.add("opacity-0", "translate-x-10");
-    setTimeout(() => flash.remove(), 500);
-  });
-}, 4000);
+function resetChat(){
+  const content = document.getElementById("chat-content");
+  content.innerHTML = `<p class="text-gray-500">👋 Hi! Ask me about the app.</p>`;
+}
 
   function toggleChat(){
   const chatbot = document.getElementById("chatbot");
@@ -705,6 +726,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
