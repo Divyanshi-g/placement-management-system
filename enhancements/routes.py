@@ -65,10 +65,6 @@ def generate_ai_answer(question):
         return "⚠️ Unexpected response format from OpenRouter."
 
 
-import requests
-import os
-
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 def chat_with_ai(user_message, role="student"):
     system_prompt = (
@@ -1758,14 +1754,3 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
-
-
-
-
-
-
-
-
-
-
-
