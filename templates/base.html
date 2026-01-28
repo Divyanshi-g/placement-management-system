@@ -100,6 +100,40 @@ body.dark-theme {
   background-color: rgba(30,41,59,0.88) !important;
   backdrop-filter: blur(12px);
 }
+  /* ===============================
+   INPUTS (ONLY INSIDE DARK UI)
+   =============================== */
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select {
+  background-color: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.dark-theme input::placeholder {
+  color: #64748b;
+}
+
+/* ===============================
+   DROPDOWN (UNCHANGED LOOK)
+   =============================== */
+.dark-theme .dropdown-panel {
+  background: rgba(30,41,59,0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ===============================
+   THEME SWITCH
+   =============================== */
+.dark-theme #themeSwitch {
+  background-color: #2563eb;
+}
+
+.dark-theme #themeKnob {
+  transform: translateX(20px);
+}
 
 </style>
 
@@ -571,6 +605,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
