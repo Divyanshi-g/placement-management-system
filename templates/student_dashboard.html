@@ -3,77 +3,84 @@
 
 {% block content %}
 
-<div class="flex items-center justify-between pb-10 animate__animated animate__bounceInDown"> 
-  <!-- Welcome --> <h1 class="text-4xl font-bold text-gray-900 cursor-pointer transition transform hover:underline hover:scale-[1.03]">
-    Welcome, {{ username }} 👋 </h1> <div class="w-24"></div> </div>
-<!-- Motivation (UNCHANGED) -->
+<!-- HEADER -->
+<div class="flex justify-center pb-6 animate__animated animate__bounceInDown">
+  <h1 class="text-4xl font-bold text-gray-900 transition hover:underline hover:scale-[1.03]">
+    Welcome, {{ username }} 👋
+  </h1>
+</div>
+
+<!-- Motivation -->
 <p id="student-typing"
-   class="mt-4 text-xl font-medium text-black-600 text-center"></p>
+   class="mt-2 text-xl font-medium text-gray-700 text-center"></p>
 
 <!-- MAIN GRID -->
-<div class="mt-10 grid md:grid-cols-2 gap-14 px-12 items-start">
+<div class="mt-10 grid md:grid-cols-2 gap-12 px-12 items-start">
 
   <!-- LEFT SIDE -->
-  <div class="flex flex-col gap-14">
+  <div class="flex flex-col gap-8">
 
-    <!-- LEFT : CARD 1 -->
-    <div class="bg-blue-600 border border-blue-200 p-6 rounded-2xl
-                transition-all duration-300
-                hover:-translate-y-2 hover:bg-blue-700
-                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+    <!-- CARD 1 -->
+    <div class="bg-blue-600 p-6 rounded-2xl text-white
+                transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:scale-[1.02]
+                hover:shadow-[0_25px_45px_rgba(37,99,235,0.45)]
                 animate__animated animate__fadeInLeft">
-      <h2 class="text-2xl font-bold text-black">👤 Profile & Resume</h2>
-      <p class="text-m text-white">Update your profile and upload resumes.</p>
+      <h2 class="text-2xl font-bold">👤 Profile & Resume</h2>
+      <p class="text-sm text-white/90">Update your profile and upload resumes.</p>
       <a href="{{ url_for('enhancements.profile') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white text-black rounded-lg font-semibold hover:bg-blue transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
+                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
         Edit
       </a>
     </div>
 
-    <!-- LEFT : CARD 2 -->
-    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
-                transition-all duration-300
-                hover:-translate-y-2 hover:bg-blue-100
-                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
+    <!-- CARD 2 -->
+    <div class="bg-blue-600 p-6 rounded-2xl text-white
+                transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:scale-[1.02]
+                hover:shadow-[0_25px_45px_rgba(37,99,235,0.45)]
                 animate__animated animate__fadeInLeft animate__delay-1s">
-      <h2 class="text-xl font-bold text-black-700">💼 Available Placements</h2>
-      <p class="text-sm text-gray-600">Explore the latest job postings.</p>
+      <h2 class="text-2xl font-bold">💼 Available Placements</h2>
+      <p class="text-sm text-white/90">Explore the latest job postings.</p>
       <a href="{{ url_for('enhancements.placements') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
+                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
         View
       </a>
     </div>
 
-    <!-- LEFT : SLIDESHOW 2 -->
+    <!-- SLIDESHOW 2 -->
     <img id="slideshow2"
-         class="w-full rounded-xl shadow-lg
-                animate__animated animate__fadeInUp animate__delay-2s"
+         class="w-full rounded-xl shadow-lg animate__animated animate__fadeInUp"
          src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
 
-    <!-- LEFT : CARD 5 -->
-    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
-                transition-all duration-300
-                hover:-translate-y-2 hover:bg-blue-100
-                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
-                animate__animated animate__fadeInLeft animate__delay-4s">
-      <h2 class="text-xl font-bold text-black-700">📄 Resume ATS Checker</h2>
-      <p class="text-sm text-gray-600">Analyze your resume with ATS.</p>
+    <!-- CARD 5 -->
+    <div class="bg-blue-600 p-6 rounded-2xl text-white
+                transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:scale-[1.02]
+                hover:shadow-[0_25px_45px_rgba(37,99,235,0.45)]
+                animate__animated animate__fadeInLeft">
+      <h2 class="text-2xl font-bold">📄 Resume ATS Checker</h2>
+      <p class="text-sm text-white/90">Analyze your resume with ATS.</p>
       <a href="{{ url_for('enhancements.check_resume') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
+                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
         Check
       </a>
     </div>
 
-    <!-- LEFT : CARD 6 -->
-    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
-                transition-all duration-300
-                hover:-translate-y-2 hover:bg-blue-100
-                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
-                animate__animated animate__fadeInLeft animate__delay-5s">
-      <h2 class="text-xl font-bold text-black-700">📝 Practice</h2>
-      <p class="text-sm text-gray-600">Practice tests & quizzes.</p>
+    <!-- CARD 6 -->
+    <div class="bg-blue-600 p-6 rounded-2xl text-white
+                transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:scale-[1.02]
+                hover:shadow-[0_25px_45px_rgba(37,99,235,0.45)]
+                animate__animated animate__fadeInLeft">
+      <h2 class="text-2xl font-bold">📝 Practice</h2>
+      <p class="text-sm text-white/90">Practice tests & quizzes.</p>
       <a href="{{ url_for('enhancements.practice') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
+                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
         Quiz & Practice
       </a>
     </div>
@@ -81,69 +88,101 @@
   </div>
 
   <!-- RIGHT SIDE -->
-  <div class="flex flex-col gap-14">
+  <div class="flex flex-col gap-10">
 
-    <!-- RIGHT : SLIDESHOW 1 -->
+    <!-- SLIDESHOW 1 -->
     <img id="slideshow1"
-         class="w-full rounded-xl shadow-lg
-                animate__animated animate__zoomIn animate__delay-1s"
+         class="w-full rounded-xl shadow-lg animate__animated animate__zoomIn"
          src="{{ url_for('static', filename='images/student_dashboard.jpg') }}">
 
-    <!-- RIGHT : CARD 3 -->
-    <div class="bg-blue-50 border border-blue-200 p-6 rounded-2xl
-                transition-all duration-300
-                hover:-translate-y-2 hover:bg-blue-100
-                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
-                animate__animated animate__fadeInRight animate__delay-3s">
-      <h2 class="text-xl font-bold text-blue-700">📌 Application Status</h2>
-      <p class="text-sm text-gray-600">Track your applied opportunities.</p>
+    <!-- CARD 3 -->
+    <div class="bg-blue-600 p-6 rounded-2xl text-white
+                transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:scale-[1.02]
+                hover:shadow-[0_25px_45px_rgba(37,99,235,0.45)]
+                animate__animated animate__fadeInRight">
+      <h2 class="text-2xl font-bold">📌 Application Status</h2>
+      <p class="text-sm text-white/90">Track your applied opportunities.</p>
       <a href="{{ url_for('enhancements.status') }}"
-         class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
+                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
         Check
       </a>
     </div>
 
-    <!-- RIGHT : CARD 4 -->
-    <div class="bg-blue-500 border border-blue-200 p-6 rounded-2xl
-                transition-all duration-300
-                hover:-translate-y-2 hover:bg-blue-100
-                hover:shadow-[0_20px_35px_rgba(37,99,235,0.25)]
-                animate__animated animate__fadeInRight animate__delay-4s">
-      <h2 class="text-xl font-bold text-black-700">💬 Gain Knowledge</h2>
-      <p class="text-sm text-gray-600">Ask questions & clear doubts.</p>
+    <!-- CARD 4 -->
+    <div class="bg-blue-600 p-6 rounded-2xl text-white
+                transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:scale-[1.02]
+                hover:shadow-[0_25px_45px_rgba(37,99,235,0.45)]
+                animate__animated animate__fadeInRight">
+      <h2 class="text-2xl font-bold">💬 Gain Knowledge</h2>
+      <p class="text-sm text-white/90">Ask questions & clear doubts.</p>
       <a href="{{ url_for('enhancements.ask') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white-600 text-black rounded-lg font-semibold hover:bg-blue-700 transition">
+         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
+                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
         Go to Chat
       </a>
     </div>
 
-    <!-- RIGHT : SLIDESHOW 3 -->
+    <!-- SLIDESHOW 3 -->
     <img id="slideshow3"
-         class="w-full rounded-xl shadow-lg
-                animate__animated animate__fadeInUp animate__delay-6s"
+         class="w-full rounded-xl shadow-lg animate__animated animate__fadeInUp"
          src="{{ url_for('static', filename='images/student_dashboard3.jpg') }}">
 
+    <!-- SLIDESHOW 4 (FIXED) -->
+    <img id="slideshow4"
+         class="hidden"
+         src="{{ url_for('static', filename='images/student_dashboard4.jpg') }}">
   </div>
 </div>
 
-<!-- YOUR EXISTING JS (UNCHANGED) -->
 <script>
-  const images = [ "{{ url_for('static', filename='images/student_dashboard.jpg') }}", "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}", "{{ url_for('static', filename='images/student_dashboard2.webp') }}", "{{ url_for('static', filename='images/student_dashboard3.jpg') }}", 
-                  "{{ url_for('static', filename='images/student_dashboard4.jpg') }}" ]; let index1 = 0; let index2 = 1; let index3 = 2; let index4 = 3; 
-  const img1 = document.getElementById("slideshow1"); const img2 = document.getElementById("slideshow2"); 
-  const img3 = document.getElementById("slideshow3"); const img4 = document.getElementById("slideshow4"); 
-  function fadeSwap(img, nextSrc) { img.classList.remove("opacity-100"); img.classList.add("opacity-0"); 
-                                   setTimeout(() => { img.src = nextSrc; img.classList.remove("opacity-0"); img.classList.add("opacity-100"); }, 700); } setInterval(() => { index1 = (index1 + 1) % images.length; index2 = (index2 + 1) % images.length; index3 = (index3 + 1) % images.length; index4 = (index4 + 1) % images.length; fadeSwap(img1, images[index1]); fadeSwap(img2, images[index2]); fadeSwap(img3, images[index3]); fadeSwap(img4, images[index4]); }, 4500);
-  /* ------------------------------- TYPING EFFECT (RUN ONCE) -------------------------------- */
-  const studentText = "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!"; 
-  let typingIndex = 0; let typingStarted = false; 
-  function typeStudent() { const target = document.getElementById("student-typing"); 
-                          if (!target) return; if (typingIndex < studentText.length) { target.innerHTML = studentText.substring(0, typingIndex + 1) + '<span class="border-r-2 border-yellow-400 animate-pulse ml-1"></span>'; typingIndex++; setTimeout(typeStudent, 45); } else { target.innerHTML = studentText; // remove cursor after finish } } window.addEventListener("DOMContentLoaded", () => { if (!typingStarted) { typingStarted = true; typeStudent(); } });
+  const images = [
+    "{{ url_for('static', filename='images/student_dashboard.jpg') }}",
+    "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}",
+    "{{ url_for('static', filename='images/student_dashboard2.webp') }}",
+    "{{ url_for('static', filename='images/student_dashboard3.jpg') }}",
+    "{{ url_for('static', filename='images/student_dashboard4.jpg') }}"
+  ];
+
+  const slides = [
+    document.getElementById("slideshow1"),
+    document.getElementById("slideshow2"),
+    document.getElementById("slideshow3")
+  ];
+
+  let index = 0;
+
+  setInterval(() => {
+    index = (index + 1) % images.length;
+    slides.forEach(img => {
+      img.classList.add("opacity-0");
+      setTimeout(() => {
+        img.src = images[index];
+        img.classList.remove("opacity-0");
+      }, 600);
+    });
+  }, 4000);
+
+  const studentText =
+    "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!";
+  let typingIndex = 0;
+
+  function typeStudent() {
+    const target = document.getElementById("student-typing");
+    if (typingIndex < studentText.length) {
+      target.innerHTML =
+        studentText.substring(0, typingIndex + 1) +
+        '<span class="border-r-2 border-blue-600 animate-pulse ml-1"></span>';
+      typingIndex++;
+      setTimeout(typeStudent, 40);
+    } else {
+      target.innerHTML = studentText;
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", typeStudent);
 </script>
 
 {% endblock %}
-
-
-
-
-
