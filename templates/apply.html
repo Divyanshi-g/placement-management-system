@@ -148,12 +148,6 @@ function validateForm() {
 
   // Resume size validation (2 MB)
   const resumeInput = document.getElementById("resumeInput");
-
-  if (!file) {
-    alert("Please upload your resume.");
-    return false;
-  }
-
   const MAX_RESUME_SIZE = 2 * 1024 * 1024; // 2MB
 
 resumeInput.addEventListener("change", function () {
@@ -188,5 +182,6 @@ skillsInput.addEventListener("keydown", (e) => {
 </script>
 
 {% endblock %}
+
 
 
