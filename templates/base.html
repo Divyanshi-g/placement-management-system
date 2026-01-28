@@ -31,84 +31,76 @@ body {
 
 .eye-icon { cursor: pointer; }
 
-/* ===============================
-   DARK NAVY – SOFT & CLEAN
+//* ===============================
+   DARK THEME – FORCE OVERRIDE
    =============================== */
 
-/* BODY BACKGROUND (SOFTER NAVY) */
 body.dark-theme {
-  background-color: #334155; /* soft slate navy (lighter than before) */
-  color: #f1f5f9;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: #334155; /* soft navy */
+  color: #e5e7eb;
 }
 
+/* FORCE BODY BACKGROUND */
+html.dark-theme,
+body.dark-theme {
+  background-color: #334155 !important;
+}
 
 /* ===============================
-   CARDS → WHITE IN DARK MODE
+   CARDS (bg-white → white but visible)
    =============================== */
-.dark-theme .bg-white,
-.dark-theme .card,
-.dark-theme .panel {
+.dark-theme .bg-white {
   background-color: #ffffff !important;
-  color: #0f172a !important; /* black text */
-  backdrop-filter: none;
-  border: 1px solid #e5e7eb;
+  color: #0f172a !important;
 }
 
-/* Card text stays black */
-.dark-theme .card *,
-.dark-theme .panel * {
+/* Card text */
+.dark-theme .bg-white h1,
+.dark-theme .bg-white h2,
+.dark-theme .bg-white h3,
+.dark-theme .bg-white p,
+.dark-theme .bg-white span,
+.dark-theme .bg-white label {
   color: #0f172a !important;
 }
 
 /* ===============================
-   CARD BUTTONS → BLUE
+   BUTTONS (REAL BACKGROUND CHANGE)
    =============================== */
-.dark-theme .card button,
-.dark-theme .panel button {
-  background-color: #2563eb; /* blue-600 */
+.dark-theme .bg-blue-600 {
+  background-color: #2563eb !important;
+}
+
+.dark-theme .bg-blue-500 {
+  background-color: #3b82f6 !important;
+}
+
+/* Button text */
+.dark-theme button {
   color: #ffffff !important;
 }
 
-.dark-theme .card button:hover,
-.dark-theme .panel button:hover {
-  background-color: #1d4ed8;
+/* ===============================
+   TEXT UTILITIES OVERRIDE
+   =============================== */
+.dark-theme .text-gray-900,
+.dark-theme .text-gray-800 {
+  color: #0f172a !important;
+}
+
+.dark-theme .text-gray-700,
+.dark-theme .text-gray-600 {
+  color: #334155 !important;
 }
 
 /* ===============================
-   INPUTS (ONLY INSIDE DARK UI)
+   NAVBAR & FOOTER
    =============================== */
-.dark-theme input,
-.dark-theme textarea,
-.dark-theme select {
-  background-color: #f8fafc;
-  color: #0f172a;
-  border: 1px solid #cbd5e1;
-}
-
-.dark-theme input::placeholder {
-  color: #64748b;
-}
-
-/* ===============================
-   DROPDOWN (UNCHANGED LOOK)
-   =============================== */
-.dark-theme .dropdown-panel {
-  background: rgba(30,41,59,0.95);
+.dark-theme footer {
+  background-color: rgba(30,41,59,0.88) !important;
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* ===============================
-   THEME SWITCH
-   =============================== */
-.dark-theme #themeSwitch {
-  background-color: #2563eb;
-}
-
-.dark-theme #themeKnob {
-  transform: translateX(20px);
-}
 </style>
 
 </head>
@@ -579,6 +571,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
