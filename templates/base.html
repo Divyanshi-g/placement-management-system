@@ -31,7 +31,7 @@ body {
 
 .eye-icon { cursor: pointer; }
 
-//* ===============================
+/* ===============================
    DARK THEME – FORCE OVERRIDE
    =============================== */
 
@@ -138,8 +138,8 @@ body.dark-theme {
 <body class="min-h-screen flex flex-col bg-indigo-50 text-gray-900">
 
 <!-- ================= NAVBAR ================= -->
-<nav class="fixed top-0 w-full z-60 bg-indigo-100/80 backdrop-blur-md border-b border-indigo-200">
-  <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+<nav class="fixed top-0 w-full z-60 h-16 bg-indigo-100/80 backdrop-blur-md border-b border-indigo-200">
+  <div class="max-w-7xl mx-auto px-6 h-full flex justify-between items-center">
 
     <!-- Logo -->
     <div class="flex items-center gap-3 group cursor-pointer">
@@ -242,7 +242,7 @@ body.dark-theme {
 </div>
 
 {% if show_back_button %}
-<div class="w-full px-6 mt-20">
+<div class="w-full px-6 pt-4">
   <a href="{{ back_url }}"
      class="inline-flex items-center gap-2
             text-sm font-semibold text-blue-700
@@ -278,7 +278,7 @@ body.dark-theme {
 {% endwith %}
 
 <!-- ================= MAIN ================= -->
-<main class="flex-1 max-w-7xl mx-auto px-6 pt-24">
+<main class="flex-1 max-w-7xl mx-auto px-6 pt-16">
   {% block content %}{% endblock %}
 </main>
 
@@ -298,82 +298,93 @@ body.dark-theme {
     </h3>
 
     <!-- STEP 1: OLD PASSWORD -->
-    <div id="stepOld">
-      <label class="text-sm">Old Password</label>
-      <div class="relative">
-        <input id="oldPwd" type="password"
+    <div id="cp-step-old">
+      <label class="text-sm font-medium">Old Password</label>
+      <div class="relative mt-1">
+        <input id="cp-old"
+               type="password"
                class="w-full border rounded px-3 py-2 pr-10">
         <i class="fa-solid fa-eye eye-icon absolute right-3 top-2.5"
-           onclick="togglePassword('oldPwd', this)"></i>
+           onclick="togglePassword(this)"></i>
       </div>
 
-      <button onclick="verifyOldPassword()"
-              class="w-full mt-3 bg-blue-600 text-white py-2 rounded">
+      <p id="cp-old-error" class="text-xs text-red-600 mt-1 hidden"></p>
+
+      <button onclick="checkOldPassword()"
+              class="w-full mt-4 bg-blue-600 text-white py-2 rounded">
         Check Password
       </button>
 
-      <button onclick="openForgot()"
-              class="block text-sm text-blue-600 mt-2">
+      <button onclick="openForgotPassword()"
+              class="block text-sm text-blue-600 mt-3">
         Forgot password?
       </button>
     </div>
 
     <!-- STEP 2: NEW PASSWORD -->
-    <div id="stepNew" class="hidden">
-      <label class="text-sm">New Password</label>
-      <div class="relative">
-        <input id="newPwd" type="password"
+    <div id="cp-step-new" class="hidden">
+      <label class="text-sm font-medium">New Password</label>
+      <div class="relative mt-1">
+        <input id="cp-new"
+               type="password"
                class="w-full border rounded px-3 py-2 pr-10">
         <i class="fa-solid fa-eye eye-icon absolute right-3 top-2.5"
-           onclick="togglePassword('newPwd', this)"></i>
+           onclick="togglePassword(this)"></i>
       </div>
 
-      <label class="text-sm mt-2 block">Confirm Password</label>
-      <div class="relative">
-        <input id="confirmPwd" type="password"
+      <label class="text-sm font-medium mt-3 block">Confirm Password</label>
+      <div class="relative mt-1">
+        <input id="cp-confirm"
+               type="password"
                class="w-full border rounded px-3 py-2 pr-10">
         <i class="fa-solid fa-eye eye-icon absolute right-3 top-2.5"
-           onclick="togglePassword('confirmPwd', this)"></i>
+           onclick="togglePassword(this)"></i>
       </div>
 
-      <button onclick="changePassword()"
+      <p id="cp-new-error" class="text-xs text-red-600 mt-1 hidden"></p>
+      <p id="cp-new-success" class="text-xs text-green-600 mt-1 hidden"></p>
+
+      <button onclick="updatePassword()"
               class="w-full mt-4 bg-blue-600 text-white py-2 rounded">
         Change Password
       </button>
     </div>
 
     <!-- STEP 3: FORGOT PASSWORD -->
-    <div id="stepForgot" class="hidden">
-      <label class="text-sm">Registered Email</label>
-      <input id="fpEmail"
-             class="w-full border rounded px-3 py-2">
+    <div id="cp-step-forgot" class="hidden">
+      <label class="text-sm font-medium">Registered Email</label>
+      <input id="cp-email"
+             class="w-full border rounded px-3 py-2 mt-1">
+
+      <p id="cp-email-error" class="text-xs text-red-600 mt-1 hidden"></p>
 
       <button onclick="sendOTP()"
               class="w-full mt-3 bg-blue-600 text-white py-2 rounded">
         Send OTP
       </button>
 
-      <div id="otpSection" class="hidden mt-3">
-        <input id="otpInput"
+      <div id="cp-otp-section" class="hidden mt-4">
+        <input id="cp-otp"
                class="w-full border rounded px-3 py-2"
                placeholder="Enter OTP">
 
-        <p id="otpTimer" class="text-xs mt-1 text-gray-500"></p>
-        <p id="otpAttempts" class="text-xs text-red-500"></p>
+        <p id="cp-otp-timer" class="text-xs mt-1 text-gray-500"></p>
+        <p id="cp-otp-error" class="text-xs text-red-600 mt-1 hidden"></p>
 
         <button onclick="verifyOTP()"
                 class="w-full mt-3 bg-green-600 text-white py-2 rounded">
-          Confirm OTP
+          Verify OTP
         </button>
       </div>
     </div>
 
     <button onclick="closeChangePassword()"
-            class="w-full mt-4 text-gray-500">
+            class="w-full mt-5 text-gray-500">
       Close
     </button>
   </div>
 </div>
+
 
 <!-- ================= CHATBOT ================= -->
 <div id="chatbot"
@@ -455,27 +466,21 @@ function togglePassword(icon){
    OLD PASSWORD VERIFY
 --------------------------------*/
 async function checkOldPassword(){
-  const pwd = document.getElementById("oldPasswordInput").value;
-  const err = document.getElementById("oldPasswordWarning");
-
+  const pwd = document.getElementById("cp-old").value;
+  const err = document.getElementById("cp-old-error");
   err.classList.add("hidden");
 
-  try{
-    const res = await fetch("/check-old-password",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({password: pwd})
-    });
-    const data = await res.json();
+  const res = await fetch("/check-old-password",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({password:pwd})
+  });
 
-    if(data.success){
-      document.getElementById("newPasswordSection").classList.remove("hidden");
-    }else{
-      err.textContent = "Old password incorrect";
-      err.classList.remove("hidden");
-    }
-  }catch{
-    err.textContent = "Server error";
+  const data = await res.json();
+  if(data.success){
+    showStep("new");
+  }else{
+    err.textContent = "Old password incorrect";
     err.classList.remove("hidden");
   }
 }
@@ -484,25 +489,17 @@ async function checkOldPassword(){
    UPDATE PASSWORD
 --------------------------------*/
 async function updatePassword(){
-  const newPwd = document.getElementById("newPasswordInput").value;
-  const confirmPwd = document.getElementById("confirmPasswordInput").value;
-  const warn = document.getElementById("newPasswordWarning");
-  const success = document.getElementById("newPasswordSuccess");
+  const newPwd = document.getElementById("cp-new").value;
+  const confirmPwd = document.getElementById("cp-confirm").value;
+  const err = document.getElementById("cp-new-error");
+  const success = document.getElementById("cp-new-success");
 
-  warn.classList.add("hidden");
+  err.classList.add("hidden");
   success.classList.add("hidden");
 
-  const rule = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-
-  if(!rule.test(newPwd)){
-    warn.textContent = "Weak password";
-    warn.classList.remove("hidden");
-    return;
-  }
-
   if(newPwd !== confirmPwd){
-    warn.textContent = "Passwords do not match";
-    warn.classList.remove("hidden");
+    err.textContent = "Passwords do not match";
+    err.classList.remove("hidden");
     return;
   }
 
@@ -514,25 +511,27 @@ async function updatePassword(){
 
   const data = await res.json();
   if(data.success){
-    success.textContent = "Password updated successfully";
+    success.textContent = "Password changed successfully";
     success.classList.remove("hidden");
   }else{
-    warn.textContent = "Update failed";
-    warn.classList.remove("hidden");
+    err.textContent = "Update failed";
+    err.classList.remove("hidden");
   }
 }
 
-/* ------------------------------
+/* ===============================
    FORGOT PASSWORD + OTP
---------------------------------*/
-let otpAttempts = 4;
+================================ */
 let otpTimer = null;
 
-async function sendOTP(){
-  const email = document.getElementById("forgotEmail").value;
-  const error = document.getElementById("forgotEmailError");
+function openForgotPassword(){
+  showStep("forgot");
+}
 
-  error.classList.add("hidden");
+async function sendOTP(){
+  const email = document.getElementById("cp-email").value;
+  const err = document.getElementById("cp-email-error");
+  err.classList.add("hidden");
 
   const res = await fetch("/send-otp",{
     method:"POST",
@@ -542,41 +541,28 @@ async function sendOTP(){
 
   const data = await res.json();
   if(data.success){
-    document.getElementById("forgotPassword").classList.add("hidden-panel");
-    document.getElementById("otpStep").classList.remove("hidden-panel");
+    document.getElementById("cp-otp-section").classList.remove("hidden");
     startOTPTimer(300);
   }else{
-    error.textContent = data.msg || "Email not found";
-    error.classList.remove("hidden");
+    err.textContent = data.msg || "Email not found";
+    err.classList.remove("hidden");
   }
 }
 
 function startOTPTimer(seconds){
-  otpAttempts = 4;
   clearInterval(otpTimer);
-
   otpTimer = setInterval(()=>{
-    document.getElementById("otpTimer").textContent =
-      `${String(Math.floor(seconds/60)).padStart(2,"0")}:${String(seconds%60).padStart(2,"0")}`;
-    document.getElementById("otpAttempts").textContent =
-      `${otpAttempts} attempts left`;
-
+    document.getElementById("cp-otp-timer").textContent =
+      `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,"0")}`;
     seconds--;
     if(seconds < 0) clearInterval(otpTimer);
   },1000);
 }
 
 async function verifyOTP(){
-  const otp = document.getElementById("otpInput").value;
-  const error = document.getElementById("otpError");
-
-  error.classList.add("hidden");
-
-  if(otpAttempts <= 0){
-    error.textContent = "Attempts exceeded";
-    error.classList.remove("hidden");
-    return;
-  }
+  const otp = document.getElementById("cp-otp").value;
+  const err = document.getElementById("cp-otp-error");
+  err.classList.add("hidden");
 
   const res = await fetch("/verify-otp",{
     method:"POST",
@@ -586,16 +572,13 @@ async function verifyOTP(){
 
   const data = await res.json();
   if(data.success){
-    document.getElementById("otpStep").classList.add("hidden-panel");
-    document.getElementById("newPasswordSection").classList.remove("hidden");
     clearInterval(otpTimer);
+    showStep("new");
   }else{
-    otpAttempts--;
-    error.textContent = "Wrong OTP";
-    error.classList.remove("hidden");
+    err.textContent = "Invalid OTP";
+    err.classList.remove("hidden");
   }
 }
-
 /* ------------------------------
    CHATBOT
 --------------------------------*/
@@ -631,6 +614,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
