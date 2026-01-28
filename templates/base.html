@@ -578,6 +578,36 @@ async function verifyOTP(){
     err.classList.remove("hidden");
   }
 }
+
+  /* ------------------------------
+   OPEN CHANGE PASSWORD PANEL
+--------------------------------*/
+function openChangePassword() {
+  document.getElementById("changePasswordPanel")
+          .classList.remove("hidden");
+
+  // reset to first step every time
+  showStep("old");
+}
+
+/* ------------------------------
+   CLOSE CHANGE PASSWORD PANEL
+--------------------------------*/
+function closeChangePassword() {
+  document.getElementById("changePasswordPanel")
+          .classList.add("hidden");
+}
+function showStep(step) {
+  const steps = ["old", "new", "forgot"];
+  steps.forEach(s => {
+    const el = document.getElementById(`cp-step-${s}`);
+    if (el) el.classList.add("hidden");
+  });
+
+  const active = document.getElementById(`cp-step-${step}`);
+  if (active) active.classList.remove("hidden");
+}
+
 /* ------------------------------
    CHATBOT
 --------------------------------*/
@@ -613,6 +643,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
