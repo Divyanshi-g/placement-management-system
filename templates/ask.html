@@ -19,125 +19,18 @@
   </div>
 </div>
 
-<div class="fixed right-4 top-20 md:top-22 lg:top-24 bg-blue-600 text-white w-12 h-12 md:w-14 md:h-14 lg:w-14 lg:h-14 rounded-full flex items-center justify-center text-lg md:text-xl lg:text-xl cursor-pointer z-50 shadow-lg" onclick="toggleDrawer()">📜</div>
+<div class="right-4 top-19 md:top-22 lg:top-24 bg-blue-600 text-white w-12 h-12 md:w-14 md:h-14 lg:w-14 lg:h-14 rounded-full flex items-center justify-center text-lg md:text-xl lg:text-xl cursor-pointer z-50 shadow-lg" onclick="toggleDrawer()">📜</div>
 
-<div id="historyDrawer" class="fixed top-0 right-[-100%] w-full md:w-80 h-screen bg-white shadow-lg transition-all duration-300 z-40 p-4 overflow-y-auto">
+<div id="historyDrawer" class="history-drawer top-0 right-[-100%] w-full md:w-80 h-screen bg-white shadow-lg transition-all duration-300 z-40 p-4 overflow-y-auto">
   <h2 class="font-bold text-xl mb-3">Chat History</h2>
   <div id="historyContent">Loading...</div>
 </div>
 
-<script>
-let currentConversationId = null;
-
-/* ================= TOGGLE HISTORY ================= */
-function toggleDrawer() {
-  document.getElementById("historyDrawer")
-    .classList.toggle("history-open");
-  loadHistory();
-}
-
-/* ================= NEW CHAT ================= */
-function newChat() {
-  currentConversationId = null;
-  document.getElementById("chat-window").innerHTML =
-    `<p class="text-gray-400 text-center">💬 Start your new chat...</p>`;
-}
-
-/* ================= SEND CHAT ================= */
-async function sendChat() {
-  const input = document.getElementById("chat-input");
-  const msg = input.value.trim();
-  if (!msg) return;
-
-  const win = document.getElementById("chat-window");
-
-  win.innerHTML += `<div class="chat-user"><b>You:</b> ${msg}</div>`;
-  input.value = "";
-
-  const loadingId = "loading-" + Date.now();
-  win.innerHTML += `<div id="${loadingId}" class="chat-bot">Bot: typing...</div>`;
-  win.scrollTop = win.scrollHeight;
-
-  try {
-    const res = await fetch("/ask/message", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: msg,
-        conversation_id: currentConversationId
-      })
-    });
-
-    const data = await res.json();
-    document.getElementById(loadingId).innerHTML =
-      `<b>Bot:</b> ${data.answer}`;
-
-    currentConversationId = data.conversation_id;
-
-  } catch {
-    document.getElementById(loadingId).innerHTML =
-      "⚠️ Server error";
-  }
-}
-
-/* ================= LOAD HISTORY ================= */
-async function loadHistory() {
-  const box = document.getElementById("historyContent");
-  box.innerHTML = "";
-
-  try {
-    const res = await fetch("/chat/history");
-    const data = await res.json();
-
-    data.forEach(c => {
-      box.innerHTML += `
-        <div class="history-item"
-             onclick="loadConversation('${c.conversation_id}')">
-          ${c.preview}
-        </div>`;
-    });
-
-  } catch {
-    box.innerHTML = "⚠️ Cannot load history";
-  }
-}
-
-/* ================= LOAD CONVERSATION ================= */
-async function loadConversation(conversationId) {
-  currentConversationId = conversationId;
-  const win = document.getElementById("chat-window");
-  win.innerHTML = "Loading...";
-
-  try {
-    const res = await fetch(`/chat/history/${conversationId}`);
-    const data = await res.json();
-
-    win.innerHTML = "";
-    data.forEach(m => {
-      const cls = m.role === "user" ? "chat-user" : "chat-bot";
-      const name = m.role === "user" ? "You" : "Bot";
-      win.innerHTML += `
-        <div class="${cls}">
-          <b>${name}:</b> ${m.content}
-        </div>`;
-    });
-
-  } catch {
-    win.innerHTML = "⚠️ Cannot load conversation";
-  }
-}
-
-/* ================= ENTER KEY ================= */
-document.getElementById("chat-input")
-  .addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendChat();
-    }
-  });
+<script> let currentConversationId = null; /* ================= TOGGLE HISTORY ================= */ function toggleDrawer() { document.getElementById("historyDrawer") .classList.toggle("history-open"); loadHistory(); } /* ================= NEW CHAT ================= */ function newChat() { currentConversationId = null; document.getElementById("chat-window").innerHTML = <p class="text-gray-400 text-center">💬 Start your new chat...</p>; } /* ================= SEND CHAT ================= */ async function sendChat() { const input = document.getElementById("chat-input"); const msg = input.value.trim(); if (!msg) return; const win = document.getElementById("chat-window"); win.innerHTML += <div class="chat-user"><b>You:</b> ${msg}</div>; input.value = ""; const loadingId = "loading-" + Date.now(); win.innerHTML += <div id="${loadingId}" class="chat-bot">Bot: typing...</div>; win.scrollTop = win.scrollHeight; try { const res = await fetch("/ask/message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: msg, conversation_id: currentConversationId }) }); const data = await res.json(); document.getElementById(loadingId).innerHTML = <b>Bot:</b> ${data.answer}; currentConversationId = data.conversation_id; } catch { document.getElementById(loadingId).innerHTML = "⚠️ Server error"; } } /* ================= LOAD HISTORY ================= */ async function loadHistory() { const box = document.getElementById("historyContent"); box.innerHTML = ""; try { const res = await fetch("/chat/history"); const data = await res.json(); data.forEach(c => { box.innerHTML += <div class="history-item" onclick="loadConversation('${c.conversation_id}')"> ${c.preview} </div>; }); } catch { box.innerHTML = "⚠️ Cannot load history"; } } /* ================= LOAD CONVERSATION ================= */ async function loadConversation(conversationId) { currentConversationId = conversationId; const win = document.getElementById("chat-window"); win.innerHTML = "Loading..."; try { const res = await fetch(/chat/history/${conversationId}); const data = await res.json(); win.innerHTML = ""; data.forEach(m => { const cls = m.role === "user" ? "chat-user" : "chat-bot"; const name = m.role === "user" ? "You" : "Bot"; win.innerHTML += <div class="${cls}"> <b>${name}:</b> ${m.content} </div>; }); } catch { win.innerHTML = "⚠️ Cannot load conversation"; } } /* ================= ENTER KEY ================= */ document.getElementById("chat-input") .addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); sendChat(); } });
 </script>
 
 {% endblock %}
+
 
 
 
