@@ -82,7 +82,9 @@
                    focus:border-blue-600
                    outline-none pr-10">
           <i class="fa-solid fa-eye eye-icon absolute right-3 top-3 text-gray-500 cursor-pointer"
-             onclick="togglePassword('adminCodeFieldInput', this)"></i>
+   data-target="adminCodeFieldInput"
+   onclick="togglePassword(this)"></i>
+
         </div>
 
         <!-- BUTTON -->
@@ -144,10 +146,21 @@ function togglePassword(icon){
     icon.classList.add("fa-eye");
   }
 }
+  const roleSelect = document.getElementById("roleSelect");
+const adminCodeField = document.getElementById("adminCodeField");
+
+roleSelect.addEventListener("change", function () {
+  if (this.value === "admin") {
+    adminCodeField.classList.remove("hidden");
+  } else {
+    adminCodeField.classList.add("hidden");
+  }
+});
 </script>
 
 
 {% endblock %}
+
 
 
 
