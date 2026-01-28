@@ -57,7 +57,7 @@
     <div class="bg-blue-600 p-6 rounded-2xl text-white
                 transition-all duration-300 ease-out
                 hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated animate__fadeInLeft">
+                animate__animated">
       <h2 class="text-2xl font-bold">📄 Resume ATS Checker</h2>
       <p class="text-sm text-white/90">Analyze your resume with ATS.</p>
       <a href="{{ url_for('enhancements.check_resume') }}"
@@ -71,7 +71,7 @@
     <div class="bg-blue-600 p-6 rounded-2xl text-white
                 transition-all duration-300 ease-out
                hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated animate__fadeInLeft">
+                animate__animated ">
       <h2 class="text-2xl font-bold">📝 Practice</h2>
       <p class="text-sm text-white/90">Practice tests & quizzes.</p>
       <a href="{{ url_for('enhancements.practice') }}"
@@ -95,7 +95,7 @@
     <div class="bg-blue-600 p-6 rounded-2xl text-white
                 transition-all duration-300 ease-out
                 hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated animate__fadeInRight">
+                animate__animated ">
       <h2 class="text-2xl font-bold">📌 Application Status</h2>
       <p class="text-sm text-white/90">Track your applied opportunities.</p>
       <a href="{{ url_for('enhancements.status') }}"
@@ -109,7 +109,7 @@
     <div class="bg-blue-600 p-6 rounded-2xl text-white
                 transition-all duration-300 ease-out
                 hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated animate__fadeInRight">
+                animate__animated ">
       <h2 class="text-2xl font-bold">💬 Gain Knowledge</h2>
       <p class="text-sm text-white/90">Ask questions & clear doubts.</p>
       <a href="{{ url_for('enhancements.ask') }}"
@@ -128,6 +128,10 @@
     <img id="slideshow4"
          class="hidden w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
          src="{{ url_for('static', filename='images/student_dashboard4.jpg') }}">
+     <!-- SLIDESHOW 5 (FIXED) -->
+    <img id="slideshow5"
+         class="hidden w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
+         src="{{ url_for('static', filename='images/student_dashboard2.webp') }}">
   </div>
 </div>
 
@@ -190,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 {% endblock %}
+
 
 
 
