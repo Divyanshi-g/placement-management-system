@@ -4,7 +4,7 @@
 {% block content %}
 
 <!-- HEADER -->
-<div class="flex justify-center pb-4 animate__animated animate__bounceInDown">
+<div class="flex justify-center pb-4 animate__animated ">
   <h1 class="text-4xl font-bold text-gray-900 transition hover:underline hover:scale-[1.03]">
     Welcome, {{ username }} 👋
   </h1>
@@ -18,7 +18,7 @@
 <div class="mt-10 grid md:grid-cols-2 gap-12 px-12 items-start">
 
   <!-- LEFT SIDE -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+ <div class="flex flex-col gap-8">
 
     <!-- CARD 1 -->
     <div class="bg-blue-600 p-6 rounded-2xl text-white
@@ -188,6 +188,7 @@
 </script>
 
 {% endblock %}
+
 
 
 
