@@ -540,7 +540,7 @@ async function sendOTP(){
   const err = document.getElementById("cp-email-error");
   err.classList.add("hidden");
 
-  const res = await fetch("/send-otp",{
+  const res = await fetch("/enhancements/send-otp",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({email})
@@ -551,7 +551,7 @@ async function sendOTP(){
     document.getElementById("cp-otp-section").classList.remove("hidden");
     startOTPTimer(300);
   }else{
-    err.textContent = data.msg || "Email not found";
+    err.textContent = data.message || "Email not register";
     err.classList.remove("hidden");
   }
 }
@@ -571,7 +571,7 @@ async function verifyOTP(){
   const err = document.getElementById("cp-otp-error");
   err.classList.add("hidden");
 
-  const res = await fetch("/verify-otp",{
+  const res = await fetch("/enhancements/verify-otp",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({otp})
@@ -651,6 +651,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
