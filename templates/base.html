@@ -462,24 +462,30 @@ function togglePassword(icon){
 }
 
 /* ------------------------------
-   OLD PASSWORD VERIFY
+   OLD PASSWORD VERIFY (FIXED)
 --------------------------------*/
 async function checkOldPassword(){
   const pwd = document.getElementById("cp-old").value;
   const err = document.getElementById("cp-old-error");
+
   err.classList.add("hidden");
 
-  const res = await fetch("/check-old-password",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({password:pwd})
+  const res = await fetch("/verify-old-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      old_password: pwd
+    })
   });
 
   const data = await res.json();
-  if(data.success){
+
+  if (data.success) {
     showStep("new");
-  }else{
-    err.textContent = "Old password incorrect";
+  } else {
+    err.textContent = data.message || "Old password incorrect";
     err.classList.remove("hidden");
   }
 }
@@ -643,6 +649,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
