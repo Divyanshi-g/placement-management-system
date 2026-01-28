@@ -986,10 +986,7 @@ def status():
 def logout():
     session.clear()
     flash("You have been logged out.", "info")
-    return redirect(url_for("enhancements.login"),
-                   show_back_button=True,
-                   back_url=url_for("enhancements.register")
-                   )
+    return redirect(url_for("enhancements.login"))
 
 #---------about--------
 @enhancements_bp.route("/about")
@@ -1751,6 +1748,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
