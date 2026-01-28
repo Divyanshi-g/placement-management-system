@@ -131,7 +131,31 @@ body.dark-theme {
 .dark-theme #themeKnob {
   transform: translateX(20px);
 }
+* ===============================
+   DARK THEME – MAIN TEXT FORCE
+   =============================== */
 
+/* Default text becomes light */
+body.dark-theme {
+  color: #f8fafc; /* slate-50 (soft white) */
+}
+
+/* Override common Tailwind text colors globally */
+body.dark-theme .text-gray-900,
+body.dark-theme .text-gray-800,
+body.dark-theme .text-gray-700,
+body.dark-theme .text-gray-600,
+body.dark-theme .text-indigo-600,
+body.dark-theme .text-blue-600,
+body.dark-theme .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+/* EXCEPTION: cards stay dark */
+body.dark-theme .bg-white,
+body.dark-theme .bg-white * {
+  color: #0f172a !important;
+}
 </style>
 
 </head>
@@ -261,7 +285,7 @@ body.dark-theme {
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     <div id="flash-container"
-        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 space-y-3">">
+        class="fixed top-20 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 space-y-3">">
       {% for category, message in messages %}
         <div class="flash-message
           px-5 py-3 rounded-xl shadow-lg font-medium
@@ -670,6 +694,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
