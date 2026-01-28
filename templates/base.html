@@ -689,10 +689,22 @@ async function sendMessage(){
     setTimeout(() => flash.remove(), 500);
   });
 }, 4000);
+
+  function toggleChat(){
+  const chatbot = document.getElementById("chatbot");
+
+  if(chatbot.classList.contains("hidden")){
+    chatbot.classList.remove("hidden");
+    chatbot.classList.add("animate__animated", "animate__fadeInUp");
+  }else{
+    chatbot.classList.add("hidden");
+  }
+}
 </script>
 
   
 </body>
 </html>
+
 
 
