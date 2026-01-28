@@ -632,13 +632,20 @@ def placements():
     cur.execute(sql, params)
     jobs = cur.fetchall()
 
-    # ❌ Do NOT close connection here if you still use DB later
-    # conn.close()
+    # ---------------- APPLIED PLACEMENTS (IMPORTANT PART) ----------------
+    cur.execute(
+        "SELECT placement_id FROM applications WHERE user_id = ?",
+        (user_id,)
+    )
+    applied_ids = {row["placement_id"] for row in cur.fetchall()}
+
+    conn.close()
 
     return render_template(
         "placements.html",
         jobs=jobs,
         status="success",
+        applied=applied_ids,
         show_nav_options=True,
         is_admin=False,
         home_url=url_for("enhancements.student_dashboard"),
@@ -1751,6 +1758,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
