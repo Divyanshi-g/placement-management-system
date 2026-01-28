@@ -639,7 +639,7 @@ def placements():
     )
     applied_ids = {row["placement_id"] for row in cur.fetchall()}
 
-    conn.close()
+    #conn.close()
 
     return render_template(
         "placements.html",
@@ -1758,6 +1758,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
