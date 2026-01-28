@@ -138,33 +138,38 @@
 </div>
 
 <script>
-  const images = [
-    "{{ url_for('static', filename='images/student_dashboard.jpg') }}",
-    "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}",
-    "{{ url_for('static', filename='images/student_dashboard2.webp') }}",
-    "{{ url_for('static', filename='images/student_dashboard3.jpg') }}",
-    "{{ url_for('static', filename='images/student_dashboard4.jpg') }}"
+
+  const slides1 = [
+    "/static/images/slide1.jpg",
+    "/static/images/slide2.jpg"
   ];
 
-  const slides = [
-    document.getElementById("slideshow1"),
-    document.getElementById("slideshow2"),
-    document.getElementById("slideshow3")
+  const slides2 = [
+    "/static/images/slide3.jpg",
+    "/static/images/slide4.jpg"
   ];
 
-  let index = 0;
+  const slides3 = [
+    "/static/images/slide5.jpg",
+    "/static/images/slide6.jpg"
+  ];
+
+  let i = 0, j = 0, k = 0;
 
   setInterval(() => {
-    index = (index + 1) % images.length;
-    slides.forEach(img => {
-      img.classList.add("opacity-0");
-      setTimeout(() => {
-        img.src = images[index];
-        img.classList.remove("opacity-0");
-      }, 600);
-    });
-  }, 4000);
+    i = (i + 1) % slides1.length;
+    document.getElementById("slide1").src = slides1[i];
+  }, 4000); // 4 sec
 
+  setInterval(() => {
+    j = (j + 1) % slides2.length;
+    document.getElementById("slide2").src = slides2[j];
+  }, 5500); // 5.5 sec
+
+  setInterval(() => {
+    k = (k + 1) % slides3.length;
+    document.getElementById("slide3").src = slides3[k];
+  }, 7000); // 7 sec
   const studentText =
     "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!";
   let typingIndex = 0;
@@ -186,4 +191,5 @@
 </script>
 
 {% endblock %}
+
 
