@@ -22,13 +22,20 @@
             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
         </div>
 
-        <!-- Phone -->
+       <!-- Phone -->
         <div>
           <label class="font-medium">📞 Phone Number</label>
-          <input type="text" name="phone" required
-            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+          <input type="text"
+                 name="phone"
+                 required
+                 pattern="[0-9]{10}"
+                 maxlength="10"
+                 placeholder="10-digit mobile number"
+                 class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+          <p class="text-sm text-gray-500 mt-1">
+            Enter exactly 10 digits (numbers only)
+          </p>
         </div>
-
         <!-- Course (Dropdown + Type) -->
         <div>
           <label class="font-medium">🎓 Course</label>
@@ -49,12 +56,13 @@
           </datalist>
         </div>
 
-        <!-- Skills (Multi + Type + Dropdown) -->
-        <div>
+      <div>
           <label class="font-medium">🛠 Skills</label>
-          <input type="text" name="skills" list="skillsList"
-            placeholder="Python, SQL, React (type or select multiple)"
-            class="w-full mt-2 px-4 py-2 border rounded-lg">
+          <input type="text"
+                 name="skills"
+                 list="skillsList"
+                 placeholder="Python, SQL, React"
+                 class="w-full mt-2 px-4 py-2 border rounded-lg">
 
           <datalist id="skillsList">
             <option value="Python">
@@ -75,10 +83,11 @@
             <option value="Git">
             <option value="Communication">
             <option value="Leadership">
+            <option value="Problem-Solving">
           </datalist>
 
-          <p class="text-sm text-gray-500 mt-1">
-            Separate multiple skills with commas
+         <p class="text-sm text-gray-500 mt-1">
+            You can select or type multiple skills, separated by commas
           </p>
         </div>
 
@@ -101,12 +110,19 @@
         </datalist>
       </div>
 
-      <!-- Resume Upload -->
+     <!-- Resume Upload -->
       <div class="mt-6">
         <label class="font-medium">📄 Upload Resume</label>
-        <input type="file" name="resume" accept=".pdf,.doc,.docx" required
-          class="w-full mt-2 px-4 py-2 border rounded-lg bg-white">
-        <p class="text-sm text-gray-500 mt-1">PDF / DOC / DOCX only</p>
+        <input type="file"
+               id="resume"
+               name="resume"
+               accept=".pdf,.doc,.docx"
+               required
+               class="w-full mt-2 px-4 py-2 border rounded-lg bg-white">
+
+        <p class="text-sm text-gray-500 mt-1">
+          Allowed formats: PDF / DOC / DOCX · Max size: 2 MB
+        </p>
       </div>
 
       <!-- Submit -->
@@ -119,4 +135,35 @@
   </div>
 
 </div>
+<script>
+function validateForm() {
+
+  // Phone validation
+  const phone = document.querySelector('input[name="phone"]').value;
+  if (!/^\d{10}$/.test(phone)) {
+    alert("Phone number must be exactly 10 digits.");
+    return false;
+  }
+
+  // Resume size validation (2 MB)
+  const resumeInput = document.getElementById("resume");
+  const file = resumeInput.files[0];
+
+  if (!file) {
+    alert("Please upload your resume.");
+    return false;
+  }
+
+  const maxSize = 2 * 1024 * 1024; // 2 MB
+  if (file.size > maxSize) {
+    alert("Resume size is too large. Maximum allowed size is 2 MB.");
+    resumeInput.value = "";
+    return false;
+  }
+
+  return true;
+}
+</script>
+
 {% endblock %}
+
