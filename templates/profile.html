@@ -3,15 +3,15 @@
 
 {% block content %}
 
-<div class="max-w-5xl mx-auto mb-10 p-8 bg-gradient-to-r from-green-400 to-teal-500 rounded-2xl shadow-2xl animate__animated animate__fadeInUp relative">
+<div class="max-w-5xl mx-auto mb-10 p-8 bg-white rounded-2xl shadow-lg animate__animated animate__fadeInUp relative">
 
   <!-- Top Heading + Edit Button -->
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-3xl font-bold text-white">👤 Profile & Resume</h2>
+    <h2 class="text-3xl font-bold text-gray-900">👤 Profile & Resume</h2>
 
     <button id="editBtn"
             onclick="enableEdit()"
-            class="bg-white text-green-600 px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition">
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:bg-blue-700 hover:scale-105 transition">
       ✏️ Edit Profile
     </button>
   </div>
@@ -22,11 +22,10 @@
     <!-- Profile Picture -->
     <div class="flex flex-col items-center">
       <img src="{% if user.profile_pic %}{{ url_for('static', filename='uploads/profile_pics/'~ user.profile_pic) }}{% else %}  {{ url_for('static', filename='uploads/profile_pics/default-avatar.png') }}{% endif %}"
-           class="w-28 h-28 rounded-full border-4 border-green-400 shadow-lg mb-2"
-           style="cursor:pointer;"
+           class="w-28 h-28 rounded-full border-4 border-blue-600 shadow-lg mb-2 cursor-pointer"
            onclick="openImageModal(this.src)">
 
-      <p class="text-gray-700 font-semibold text-center">{{ user.username }}</p>
+      <p class="text-gray-900 font-semibold text-center">{{ user.username }}</p>
 
       <!-- Editable input -->
       <input type="file" name="profile_pic" class="text-sm mt-2 hidden editableField">
@@ -35,39 +34,43 @@
     <!-- Username + Email -->
     <div class="grid grid-cols-2 gap-6">
       <div>
-        <label class="font-semibold">Username</label>
+        <label class="font-semibold text-gray-900">Username</label>
         <input type="text" value="{{ user.username }}" disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500">
+               class="w-full px-4 py-2 rounded-lg border border-gray-200 text-gray-900">
       </div>
 
       <div>
-        <label class="font-semibold">Email</label>
+        <label class="font-semibold text-gray-900">Email</label>
         <input type="email" value="{{ user.email }}" disabled
-               class="w-full px-4 py-2 rounded-lg border border-gray-500">
+               class="w-full px-4 py-2 rounded-lg border border-gray-200 text-gray-900">
       </div>
     </div>
 
     <!-- Phone + Gender -->
     <div class="grid grid-cols-2 gap-6">
       <div>
-        <label class="font-semibold">Phone</label>
+        <label class="font-semibold text-gray-900">Phone</label>
         <input type="text" name="phone" value="{{ user.phone or '' }}"
-               disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+               disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900"
+               pattern="[0-9]{10}" title="Enter 10 digit phone number">
       </div>
 
       <div>
-        <label class="font-semibold">Gender</label>
-        <input type="text" name="gender" value="{{ user.gender or '' }}"
-               disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+        <label class="font-semibold text-gray-900">Gender</label>
+        <select name="gender" disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">
+          <option value="">Select Gender</option>
+          <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+          <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+        </select>
       </div>
     </div>
 
   <!-- Course + Branch -->
 <div class="grid grid-cols-2 gap-6">
   <div>
-    <label class="font-semibold">Course</label>
+    <label class="font-semibold text-gray-900">Course</label>
     <input list="courseOptions" name="course" value="{{ user.course or '' }}"
-           disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+           disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">
     <datalist id="courseOptions">
       <option value="B.Tech">
       <option value="M.Tech">
@@ -80,9 +83,9 @@
   </div>
 
   <div>
-    <label class="font-semibold">Branch</label>
+    <label class="font-semibold text-gray-900">Branch</label>
     <input list="branchOptions" name="branch" value="{{ user.branch or '' }}"
-           disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+           disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">
     <datalist id="branchOptions">
       <option value="Computer Science">
       <option value="Electrical">
@@ -99,15 +102,15 @@
 <!-- Passing Year + CGPA -->
 <div class="grid grid-cols-2 gap-6">
   <div>
-    <label class="font-semibold">Passing Year</label>
+    <label class="font-semibold text-gray-900">Passing Year</label>
     <input type="date" name="passing_year" value="{{ user.passing_year or '' }}"
-           disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+           disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">
   </div>
 
   <div>
-    <label class="font-semibold">CGPA / %</label>
+    <label class="font-semibold text-gray-900">CGPA / %</label>
     <input list="cgpaOptions" name="cgpa" value="{{ user.cgpa or '' }}"
-           disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+           disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">
     <datalist id="cgpaOptions">
       <option value="10.0">
       <option value="9.0+">
@@ -120,51 +123,52 @@
 
     <!-- Bio -->
     <div>
-      <label class="font-semibold">Short Bio</label>
+      <label class="font-semibold text-gray-900">Short Bio</label>
       <textarea name="bio" rows="2"
-                disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">{{ user.bio or '' }}</textarea>
+                disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">{{ user.bio or '' }}</textarea>
     </div>
 
     <!-- Skills -->
     <div>
-      <label class="font-semibold">Skills</label>
+      <label class="font-semibold text-gray-900">Skills</label>
       <textarea name="skills" rows="3"
-                disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">{{ user.skills or '' }}</textarea>
+                disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">{{ user.skills or '' }}</textarea>
     </div>
 
     <!-- Certifications -->
     <div>
-      <label class="font-semibold">Certifications</label>
+      <label class="font-semibold text-gray-900">Certifications</label>
       <textarea name="certifications" rows="3"
-                disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">{{ user.certifications or '' }}</textarea>
+                disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">{{ user.certifications or '' }}</textarea>
     </div>
 
 <!-- LinkedIn + GitHub -->
     <div class="grid grid-cols-2 gap-6"> 
       <div>
-        <label class="font-semibold">LinkedIn</label> 
-        <input type="text" name="linkedin" value="{{ user.linkedin or '' }}" disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+        <label class="font-semibold text-gray-900">LinkedIn</label> 
+        <input type="text" name="linkedin" value="{{ user.linkedin or '' }}" disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">
       </div> 
       <div> 
-        <label class="font-semibold">GitHub</label> 
-        <input type="text" name="github" value="{{ user.github or '' }}" disabled class="w-full px-4 py-2 rounded-lg border border-gray-500 editableField">
+        <label class="font-semibold text-gray-900">GitHub</label> 
+        <input type="text" name="github" value="{{ user.github or '' }}" disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 editableField text-gray-900">
       </div> 
     </div> 
+
     <!-- Resume --> 
     <div> 
-      <label class="font-semibold">Upload Resume</label>
-      <div class="border-2 border-dashed border-gray-500 rounded-lg p-4 text-center hidden editableField"> 
-        <input type="file" name="resume" class="mx-auto"> 
-        <p class="text-sm text-gray-600 mt-1">PDF / DOC allowed</p>
+      <label class="font-semibold text-gray-900">Upload Resume</label>
+      <div class="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center hidden editableField">
+        <input type="file" name="resume" class="mx-auto">
+        <p class="text-sm text-gray-600 mt-2">Upload your resume (PDF/DOC)</p>
       </div> 
       {% if user.resume %} 
-      <p class="mt-2 text-sm"> 📄 Current Resume: <a href="{{ url_for('static', filename='uploads/resumes/'+user.resume) }}" class="text-green-600 underline" target="_blank"> {{ user.resume }} </a> </p>
+      <p class="mt-2 text-sm text-gray-900"> 📄 Current Resume: <a href="{{ url_for('static', filename='uploads/resumes/'+user.resume) }}" class="text-blue-600 underline" target="_blank"> {{ user.resume }} </a> </p>
       {% endif %}
     </div>
 
     <!-- Save -->
     <button id="saveBtn" type="submit"
-            class="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-bold shadow hidden mt-4">
+            class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow hidden mt-4">
       💾 Save Changes
     </button>
 
@@ -178,8 +182,9 @@
             justify-content:center; align-items:center; z-index:9999;">
     <img id="modalImg" style="max-width:70%; max-height:80%; border-radius:12px;">
 </div>
+
 <style>
-  /* Profile pic smaller on tiny phones */
+/* Profile pic smaller on tiny phones */
 @media (max-width: 360px) {
   .profile-pic {
     width: 5rem;
@@ -209,6 +214,7 @@
   }
 }
 </style>
+
 <script>
 function enableEdit() {
   document.querySelectorAll(".editableField").forEach(el => {
@@ -229,8 +235,3 @@ document.getElementById("imageModal").onclick = function () {
 </script>
 
 {% endblock %}
-
-
-
-
-
