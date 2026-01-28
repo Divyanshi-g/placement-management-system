@@ -4,82 +4,56 @@
 {% block content %}
 
 <!-- HEADER -->
-<div class="flex justify-center pb-4 animate__animated ">
-  <h1 class="text-4xl font-bold text-gray-900 transition hover:underline hover:scale-[1.03]">
+<div class="flex justify-center pb-4 animate__animated animate__fadeInUp">
+  <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 transition hover:underline hover:scale-[1.03]">
     Welcome, {{ username }} 👋
   </h1>
 </div>
 
 <!-- Motivation -->
 <p id="student-typing"
-   class="mt-1 text-xl font-medium text-black text-center"></p>
+   class="mt-1 text-xl font-medium text-gray-800 dark:text-gray-200 text-center"></p>
 
 <!-- MAIN GRID -->
 <div class="mt-10 grid md:grid-cols-2 gap-12 px-12 items-start">
 
   <!-- LEFT SIDE -->
- <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-8">
 
-    <!-- CARD 1 -->
-    <div class="bg-blue-600 p-6 rounded-2xl text-white
-                transition-all duration-300 ease-out
-                hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__fadeInLeft">
-      <h2 class="text-2xl font-bold">👤 Profile & Resume</h2>
-      <p class="text-sm text-white/90">Update your profile and upload resumes.</p>
-      <a href="{{ url_for('enhancements.profile') }}"
+    <!-- CARD TEMPLATE -->
+    {% macro card(title, desc, link, btn) %}
+    <div class="backdrop-blur-xl bg-blue-600/90 p-6 rounded-2xl text-white
+                shadow-xl transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:shadow-blue-400/40 hover:shadow-2xl
+                animate__animated animate__fadeInLeft">
+      <h2 class="text-2xl font-bold">{{ title }}</h2>
+      <p class="text-sm text-white/90">{{ desc }}</p>
+      <a href="{{ link }}"
          class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
                 transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
-        Edit
+        {{ btn }}
       </a>
     </div>
+    {% endmacro %}
 
-    <!-- CARD 2 -->
-    <div class="bg-blue-600 p-6 rounded-2xl text-white
-                transition-all duration-300 ease-out
-                hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated animate__fadeInLeft animate__delay-1s">
-      <h2 class="text-2xl font-bold">💼 Available Placements</h2>
-      <p class="text-sm text-white/90">Explore the latest job postings.</p>
-      <a href="{{ url_for('enhancements.placements') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
-                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
-        View
-      </a>
-    </div>
+    {{ card("👤 Profile & Resume", "Update your profile and upload resumes.",
+      url_for('enhancements.profile'), "Edit") }}
+
+    {{ card("💼 Available Placements", "Explore the latest job postings.",
+      url_for('enhancements.placements'), "View") }}
 
     <!-- SLIDESHOW 2 -->
-    <img id="slideshow2"
-         class="w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
-         src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
-
-    <!-- CARD 5 -->
-    <div class="bg-blue-600 p-6 rounded-2xl text-white
-                transition-all duration-300 ease-out
-                hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated">
-      <h2 class="text-2xl font-bold">📄 Resume ATS Checker</h2>
-      <p class="text-sm text-white/90">Analyze your resume with ATS.</p>
-      <a href="{{ url_for('enhancements.check_resume') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
-                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
-        Check
-      </a>
+    <div class="slideshow-frame">
+      <img id="slideshow2" loading="lazy"
+           class="slideshow-img animate__animated animate__fadeIn"
+           src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
     </div>
 
-    <!-- CARD 6 -->
-    <div class="bg-blue-600 p-6 rounded-2xl text-white
-                transition-all duration-300 ease-out
-               hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated ">
-      <h2 class="text-2xl font-bold">📝 Practice</h2>
-      <p class="text-sm text-white/90">Practice tests & quizzes.</p>
-      <a href="{{ url_for('enhancements.practice') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
-                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
-        Quiz & Practice
-      </a>
-    </div>
+    {{ card("📄 Resume ATS Checker", "Analyze your resume with ATS.",
+      url_for('enhancements.check_resume'), "Check") }}
+
+    {{ card("📝 Practice", "Practice tests & quizzes.",
+      url_for('enhancements.practice'), "Quiz & Practice") }}
 
   </div>
 
@@ -87,57 +61,50 @@
   <div class="flex flex-col gap-10">
 
     <!-- SLIDESHOW 1 -->
-    <img id="slideshow1"
-        class="w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
-         src="{{ url_for('static', filename='images/student_dashboard.jpg') }}">
-
-    <!-- CARD 3 -->
-    <div class="bg-blue-600 p-6 rounded-2xl text-white
-                transition-all duration-300 ease-out
-                hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated ">
-      <h2 class="text-2xl font-bold">📌 Application Status</h2>
-      <p class="text-sm text-white/90">Track your applied opportunities.</p>
-      <a href="{{ url_for('enhancements.status') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
-                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
-        Check
-      </a>
+    <div class="slideshow-frame">
+      <img id="slideshow1" loading="lazy"
+           class="slideshow-img animate__animated animate__fadeIn"
+           src="{{ url_for('static', filename='images/student_dashboard.jpg') }}">
     </div>
 
-    <!-- CARD 4 -->
-    <div class="bg-blue-600 p-6 rounded-2xl text-white
-                transition-all duration-300 ease-out
-                hover:-translate-y-2 transition-all duration-300 shadow-lg
-                animate__animated ">
-      <h2 class="text-2xl font-bold">💬 Gain Knowledge</h2>
-      <p class="text-sm text-white/90">Ask questions & clear doubts.</p>
-      <a href="{{ url_for('enhancements.ask') }}"
-         class="inline-block mt-4 px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold
-                transition-all hover:bg-gray-100 hover:-translate-y-0.5 hover:shadow-md">
-        Go to Chat
-      </a>
-    </div>
+    {{ card("📌 Application Status", "Track your applied opportunities.",
+      url_for('enhancements.status'), "Check") }}
+
+    {{ card("💬 Gain Knowledge", "Ask questions & clear doubts.",
+      url_for('enhancements.ask'), "Go to Chat") }}
 
     <!-- SLIDESHOW 3 -->
-    <img id="slideshow3"
-        class="w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
-         src="{{ url_for('static', filename='images/student_dashboard3.jpg') }}">
+    <div class="slideshow-frame">
+      <img id="slideshow3" loading="lazy"
+           class="slideshow-img animate__animated animate__fadeIn"
+           src="{{ url_for('static', filename='images/student_dashboard3.jpg') }}">
+    </div>
 
-    <!-- SLIDESHOW 4 (FIXED) -->
-    <img id="slideshow4"
-         class="hidden w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
-         src="{{ url_for('static', filename='images/student_dashboard4.jpg') }}">
-     <!-- SLIDESHOW 5 (FIXED) -->
-    <img id="slideshow5"
-         class="hidden w-full h-64 object-cover rounded-xl shadow-lg animate__animated "
-         src="{{ url_for('static', filename='images/student_dashboard2.webp') }}">
   </div>
 </div>
+
+<!-- FIXED SIZE + NO JUMP -->
+<style>
+.slideshow-frame {
+  width: 100%;
+  height: 16rem; /* FIXED HEIGHT */
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,.15);
+}
+
+.slideshow-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* prevents resizing */
+  transition: opacity .5s ease-in-out;
+}
+</style>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* ---------- SLIDESHOW ---------- */
   const slides = [
     "{{ url_for('static', filename='images/student_dashboard.jpg') }}",
     "{{ url_for('static', filename='images/student_dashboard1.jpeg') }}",
@@ -150,58 +117,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const img2 = document.getElementById("slideshow2");
   const img3 = document.getElementById("slideshow3");
 
-  if (!img1 || !img2 || !img3) {
-    console.error("Slideshow image not found");
-    return;
-  }
-
   let i = 0, j = 2, k = 4;
 
-  setInterval(() => {
-    i = (i + 1) % slides.length;
-    img1.src = slides[i];
-  }, 4000);
+  const swap = (img, idx) => {
+    img.classList.add("opacity-0");
+    setTimeout(() => {
+      img.src = slides[idx % slides.length];
+      img.classList.remove("opacity-0");
+    }, 400);
+  };
 
-  setInterval(() => {
-    j = (j + 1) % slides.length;
-    img2.src = slides[j];
-  }, 5500);
+  setInterval(() => swap(img1, ++i), 4000);
+  setInterval(() => swap(img2, ++j), 5500);
+  setInterval(() => swap(img3, ++k), 7000);
 
-  setInterval(() => {
-    k = (k + 1) % slides.length;
-    img3.src = slides[k];
-  }, 7000);
-
-});
-  const studentText =
+  /* ---------- TYPING TEXT ---------- */
+  const text =
     "Your journey towards success starts here — explore opportunities, prepare well, and achieve big!";
-  let typingIndex = 0;
+  let idx = 0;
+  const target = document.getElementById("student-typing");
 
-  function typeStudent() {
-    const target = document.getElementById("student-typing");
-    if (typingIndex < studentText.length) {
+  function type() {
+    if (idx < text.length) {
       target.innerHTML =
-        studentText.substring(0, typingIndex + 1) +
+        text.substring(0, idx + 1) +
         '<span class="border-r-2 border-blue-600 animate-pulse ml-1"></span>';
-      typingIndex++;
-      setTimeout(typeStudent, 40);
+      idx++;
+      setTimeout(type, 40);
     } else {
-      target.innerHTML = studentText;
+      target.innerHTML = text;
     }
   }
 
-  window.addEventListener("DOMContentLoaded", typeStudent);
+  type();
+});
 </script>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
