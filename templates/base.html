@@ -177,7 +177,9 @@ body.dark-theme {
             transition-all duration-200">
 
   <button onclick="event.stopPropagation(); togglePanel('settingsPanel')"
-          class="flex items-center gap-2">
+          class="flex items-center gap-2 border-b-2 border-transparent
+            hover:border-blue-600
+            transition-all duration-200">
     <i class="fa-solid fa-gear"></i> Settings
   </button>
 
@@ -266,7 +268,7 @@ body.dark-theme {
 </main>
 
 <!-- ================= FOOTER ================= -->
-<footer class="bg-indigo-100 text-indigo-600 text-center py-6 border-t border-indigo-300">
+<footer class="bg-indigo-100 text-indigo-600 text-center mt-10 py-6 border-t border-indigo-300">
   © 2026 HireHub · Placement Management System
 </footer>
 
@@ -605,6 +607,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
