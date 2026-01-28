@@ -108,17 +108,35 @@ async function loadHistory() {
     const data = await res.json();
 
     data.forEach(c => {
+      // take first 2–3 words only
+      const shortText = c.preview
+        .split(" ")
+        .slice(0, 3)
+        .join(" ");
+
       box.innerHTML += `
-        <div class="history-item"
-             onclick="loadConversation('${c.conversation_id}')">
-          ${c.preview}
+        <div
+          onclick="loadConversation('${c.conversation_id}')"
+          class="mb-3 p-3 rounded-xl cursor-pointer
+                 bg-slate-100 hover:bg-blue-100
+                 border border-gray-200
+                 transition-all duration-200"
+        >
+          <div class="text-sm font-semibold text-gray-900">
+            ${shortText}${c.preview.split(" ").length > 3 ? "..." : ""}
+          </div>
+          <div class="text-xs text-gray-500 mt-1">
+            Click to open chat
+          </div>
         </div>
       `;
     });
+
   } catch {
     box.innerHTML = "⚠️ Cannot load history";
   }
 }
+
 
 /* ================= LOAD CONVERSATION ================= */
 async function loadConversation(conversationId) {
@@ -159,17 +177,5 @@ document
 
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
