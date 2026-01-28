@@ -82,11 +82,25 @@
       <p class="text-gray-700">📍 <strong>Location:</strong> {{ j.location }}</p>
       <p class="text-gray-700">💰 <strong>Salary:</strong> {{ j.salary }}</p>
 
-      <button
-        onclick="document.getElementById('panel-{{ j.id }}').classList.remove('hidden')"
-        class="mt-6 w-full py-2 bg-blue-800 text-white rounded-lg hover:bg-slate-800">
-        📄 Show Details
-      </button>
+      {% if j.applied %}
+  <!-- Already Applied (NON-clickable) -->
+  <div
+    class="mt-6 w-full py-2 text-center
+           bg-green-100 text-green-700
+           border border-green-400
+           rounded-lg font-semibold cursor-not-allowed">
+    ✅ Already Applied
+  </div>
+{% else %}
+  <!-- Not Applied -->
+  <button
+    onclick="document.getElementById('panel-{{ j.id }}').classList.remove('hidden')"
+    class="mt-6 w-full py-2 bg-blue-800 text-white rounded-lg
+           hover:bg-slate-800 transition">
+    📄 Show Details
+  </button>
+{% endif %}
+
     </div>
 
     <!-- Slide Panel -->
@@ -135,17 +149,10 @@
   ✔ Application submitted successfully!
 </div>
 {% endif %}
-
-        {% if j.id in applied %}
-<button class="bg-green-600 text-white px-4 py-2 rounded cursor-not-allowed">
-  ✅ Already Applied
-</button>
-{% else %}
 <a href="{{ url_for('enhancements.apply', placement_id=j.id) }}"
    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
   Apply Now 🚀
 </a>
-{% endif %}
 
         </div>
       </div>
@@ -205,5 +212,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 {% endblock %}         
+
 
 
