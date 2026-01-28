@@ -510,7 +510,7 @@ async function updatePassword(){
     return;
   }
 
-  const res = await fetch("/enhancements/update-password",{
+  const res = await fetch("/update-password",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
    body: JSON.stringify({new_password: newPwd, confirm_password: confirmPwd})
@@ -670,6 +670,7 @@ async function sendMessage(){
   
 </body>
 </html>
+
 
 
 
