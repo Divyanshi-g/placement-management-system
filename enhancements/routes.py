@@ -795,7 +795,7 @@ def profile():
         if profile_exists:
             cur.execute("""
                 UPDATE profiles
-                SET full_name = COALESCE(NULLIF(?, ''), username),
+                SET full_name = COALESCE(NULLIF(?, ''), full_name),
                     phone = COALESCE(NULLIF(?, ''), phone),
                     gender = COALESCE(NULLIF(?, ''), gender),
                     course = COALESCE(NULLIF(?, ''), course),
@@ -1748,6 +1748,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
