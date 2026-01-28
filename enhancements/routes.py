@@ -21,6 +21,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .resume_checker import analyze_resume
 from .db import get_db_conn  # ✅ central db helpers
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
+
+otp_store = {}
+
 # ----------------- AI Function -----------------
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # Load once globally
 
@@ -1748,6 +1751,7 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": reply})
+
 
 
 
