@@ -14,7 +14,7 @@
   </h1>
 
   <!-- Search Section -->
-  <form method="GET" class="flex flex-col md:flex-row gap-4 justify-center mb-12">
+  <form method="GET" id="searchForm" class="flex flex-col md:flex-row gap-4 justify-center mb-12">
 
     <input type="text" name="q"
       value="{{ request.args.get('q','') }}"
@@ -161,6 +161,18 @@
   {% endif %}
 
 </div>
+<!-- Loader Overlay -->
+<div id="searchLoader"
+     class="fixed inset-0 bg-white/80 backdrop-blur-sm z-50 hidden
+            flex flex-col items-center justify-center">
+
+  <div class="animate-spin rounded-full h-14 w-14 border-4
+              border-indigo-600 border-t-transparent"></div>
+
+  <p class="mt-4 text-lg font-semibold text-indigo-700">
+    Searching placements...
+  </p>
+</div>
 
 <!-- Slide animation -->
 <style>
@@ -172,5 +184,26 @@
   animation: slideUp 0.4s ease-out;
 }
 </style>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("searchForm");
+  const loader = document.getElementById("searchLoader");
+
+  if (!form || !loader) return;
+
+  form.addEventListener("submit", () => {
+    loader.classList.remove("hidden");
+
+    // Optional: disable button to prevent double submit
+    const btn = form.querySelector("button[type='submit']");
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add("opacity-70", "cursor-not-allowed");
+    }
+  });
+});
+</script>
+
 {% endblock %}         
+
 
