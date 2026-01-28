@@ -13,13 +13,17 @@
     <div class="grid md:grid-cols-2 gap-8">
 
       {% for app in applications %}
-      <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-lg transition hover:scale-105">
+     <div class="
+  bg-white dark:bg-white/10
+  border border-gray-200 dark:border-white/20
+  backdrop-blur-md
+  rounded-2xl p-6 shadow-lg transition hover:scale-105">
         
         <!-- Top Row: Company & Role -->
         <div class="flex justify-between items-center mb-4">
           <div>
-            <h3 class="text-2xl font-bold text-indigo-300">{{ app.placement.company }}</h3>
-            <p class="text-lg font-semibold text-gray-200">{{ app.placement.role }}</p>
+            <h3 class="text-2xl font-bold text-indigo-700 dark:text-indigo-3000">{{ app.placement.company }}</h3>
+            <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ app.placement.role }}</p>
           </div>
           <!-- Status Badge -->
           <div class="text-right">
@@ -36,7 +40,8 @@
         </div>
 
         <!-- Placement Details Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-gray-100">
+        <div class= grid grid-cols-1 md:grid-cols-2 gap-4 mb-4
+  text-gray-700 dark:text-gray-100">
           <div><b>Location:</b> {{ app.placement.location }}</div>
           <div><b>Salary:</b> {{ app.placement.salary }}</div>
           <div><b>Job Type:</b> {{ app.placement.job_type }}</div>
@@ -46,7 +51,7 @@
         </div>
 
         <!-- Student Info -->
-        <div class="text-gray-200 mb-4">
+        <div class="text-gray-700 dark:text-gray-200 mb-4">
           <p><b>Skills:</b> {{ app.skills or "Not Provided" }}</p>
           <p><b>Experience:</b> {{ app.experience or "Not Provided" }}</p>
         </div>
@@ -75,7 +80,7 @@
 
     </div>
   {% else %}
-    <p class="text-center text-gray-300 text-lg mt-10">You haven't applied anywhere yet.</p>
+    <p class="text-center text-gray-600 dark:text-gray-300 text-lg mt-10">You haven't applied anywhere yet.</p>
   {% endif %}
 
 </div>
@@ -117,4 +122,5 @@
 </script>
 
 {% endblock %}
+
 
