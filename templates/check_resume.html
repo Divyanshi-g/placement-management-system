@@ -16,11 +16,12 @@
   </h2>
 
   <!-- Form -->
-  <form id="resume-form"
-        method="post"
-        enctype="multipart/form-data"
-        action="{{ url_for('check_resume') }}"
-        class="space-y-6">
+ <form id="resume-form"
+      action="{{ url_for('enhancements.check_resume') }}"
+      method="post"
+      enctype="multipart/form-data"
+      class="space-y-6"
+      onsubmit="return false;">
 
     <input type="hidden" name="user_id" value="{{ session.get('user_id', '') }}">
 
@@ -50,7 +51,7 @@
 
     <!-- Submit button -->
     <div class="flex justify-center">
-      <button type="submit"
+      <button type="button"
               class="bg-orange-500 hover:bg-orange-600
                      text-white font-semibold
                      px-6 py-3 rounded-lg
