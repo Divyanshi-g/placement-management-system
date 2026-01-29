@@ -17,7 +17,7 @@
 
   <!-- Form -->
 <form id="resume-form"
-      action="javascript:void(0)"
+      action="/enhancements/check_resume"
       method="post"
       enctype="multipart/form-data">
 
@@ -49,11 +49,11 @@
 
     <!-- Submit button -->
     <div class="flex justify-center">
-      <button type="button"
-              class="bg-orange-500 hover:bg-orange-600
-                     text-white font-semibold
-                     px-6 py-3 rounded-lg
-                     transition duration-200 shadow-md" onclick="document.getElementById('resume-form').dispatchEvent(new Event('submit'))">
+    <button type="submit"
+        class="bg-orange-500 hover:bg-orange-600
+               text-white font-semibold
+               px-6 py-3 rounded-lg
+               transition duration-200 shadow-md">
   Check Resume
 </button>
     </div>
