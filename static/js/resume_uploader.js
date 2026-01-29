@@ -8,13 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
     resultBox.classList.remove("hidden");
 
     const formData = new FormData(form);
+    console.log("FORM ACTION:", form.action);
+console.log("Submitting to URL:", "/enhancements/check_resume");
+console.log("Method: POST");
 
     try {
       const response = await fetch("/enhancements/check_resume", {
-        method: "POST",
-        body: formData
-      });
-
+  method: "POST",
+  body: formData
+});
       const data = await response.json();
 
       if (data.error) {
@@ -34,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
 
