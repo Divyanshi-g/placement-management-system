@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch("/enhancements/check_resume", {
+      const response = await fetch("/check_resume", {
         method: "POST",
         body: formData
       });
@@ -22,7 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         resultBox.innerHTML = `
           <h3 class="text-lg font-semibold mb-2">ATS Feedback:</h3>
-          <div class="bg-gray-100 p-3 rounded text-sm whitespace-pre-wrap">${data.result}</div>
+          <div class="bg-gray-100 dark:bg-slate-800 
+             text-gray-800 dark:text-gray-200
+             p-3 rounded text-sm whitespace-pre-wrap">
+   ${data.result}
+</div>
         `;
       }
     } catch (err) {
@@ -30,4 +34,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
