@@ -16,12 +16,10 @@
   </h2>
 
   <!-- Form -->
- <form id="resume-form"
-      action="{{ url_for('enhancements.check_resume') }}"
+<form id="resume-form"
+      action="javascript:void(0)"
       method="post"
-      enctype="multipart/form-data"
-      class="space-y-6"
-      onsubmit="return false;">
+      enctype="multipart/form-data">
 
     <input type="hidden" name="user_id" value="{{ session.get('user_id', '') }}">
 
@@ -55,9 +53,9 @@
               class="bg-orange-500 hover:bg-orange-600
                      text-white font-semibold
                      px-6 py-3 rounded-lg
-                     transition duration-200 shadow-md">
-        Check Resume
-      </button>
+                     transition duration-200 shadow-md" onclick="document.getElementById('resume-form').dispatchEvent(new Event('submit'))">
+  Check Resume
+</button>
     </div>
   </form>
 
