@@ -32,6 +32,24 @@
     <h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
     <div id="practiceContainer" class="space-y-4 max-h-[420px] overflow-y-auto pr-2"></div>
   </div>
+<!-- COURSES SECTION -->
+<div id="coursesSection" class="hidden mt-8">
+  <div class="bg-white shadow-xl rounded-xl p-6 border min-h-[300px]">
+
+    <h3 class="text-xl font-bold mb-4">
+      🎓 Best Courses Video Suggestions
+    </h3>
+
+    <div id="courseButtons" class="flex flex-wrap gap-4 mb-6">
+      <!-- Course buttons injected by JS -->
+    </div>
+
+    <div id="videoList" class="space-y-3">
+      <!-- Video links injected by JS -->
+    </div>
+
+  </div>
+</div>
 
   <!-- QUIZ SECTION -->
   <div id="quizSection" class="hidden mt-8">
@@ -144,6 +162,7 @@ padding:8px;border-radius:6px;
 <script src="{{ url_for('static', filename='js/practice.js') }}"></script>
 
 {% endblock %}
+
 
 
 
