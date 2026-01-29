@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch("/check_resume", {
+      const response = await fetch("/enhancements/check_resume", {
         method: "POST",
         body: formData
       });
@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
 
