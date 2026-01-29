@@ -1,5 +1,18 @@
 
 "use strict";
+const coursesData = {
+  python: [
+    { title: "Python Full Course – Beginner to Advanced", link: "https://www.youtube.com/watch?v=rfscVS0vtbw" },
+    { title: "Python OOP Concepts", link: "https://www.youtube.com/watch?v=Ej_02ICOIgs" }
+  ],
+  dsa: [
+    { title: "DSA Full Course", link: "https://www.youtube.com/watch?v=8hly31xKli0" },
+    { title: "DSA with Python", link: "https://www.youtube.com/watch?v=pkYVOmU3MgA" }
+  ],
+  web: [
+    { title: "Full Stack Web Development", link: "https://www.youtube.com/watch?v=nu_pCVPKzTk" }
+  ]
+};
 
 /* PRACTICE QUESTIONS */
 const practiceData = {
@@ -739,9 +752,9 @@ coding:[
     answer: "Abstraction"
   },
   {
-    q: "Which tag is used for a hyperlink?",
-    options: ["<link>", "<a>", "<href>", "<url>"],
-    answer: "<a>"
+    q: "What is the correct example of framework?",
+    options: ["Html", "Django", "Java", "Flask"],
+    answer: "Django"
   },
   {
     q: "What does DBMS stand for?",
@@ -753,64 +766,22 @@ coding:[
     ],
     answer: "Data Base Management System"
   },
-   {
-    q: "What is a Framework?",
-    a: "A framework provides structure and ready-made features for building applications.",
-    e: "Examples: Django, React, Angular, Spring."
-  },
-  {
-    q: "What is Responsive Web Design?",
-    a: "Designing websites that adjust layout for different screen sizes.",
-    e: "Helps websites work well on mobiles, tablets, and desktops."
-  },
-   {
-    q: "What is Debugging?",
-    a: "Debugging is the process of finding and fixing errors in code.",
-    e: "Important to ensure program runs correctly."
-  },
-  {
-    q: "What is Open Source Software?",
-    a: "Software whose source code is publicly available.",
-    e: "Developers can use, modify, and distribute it."
-  },
-  {
-    q: "What is Cloud Computing?",
-    a: "Using online servers for storage and computing instead of local machines.",
-    e: "Examples: AWS, Azure, Google Cloud."
-  }
+  
 ],
 
 aptitude:[
  {q:"What is Aptitude in placements?",options:["Subject Knowledge","Natural Ability to Solve Problems","Communication Skill","Programming Skill"],correct:1},
-{q:"Why do companies test aptitude?",options:["Check your marks","Check attitude only","Check thinking, speed & accuracy","Time pass"],correct:2},
 {q:"Which topic checks business understanding?",options:["Profit & Loss","Shapes","GK","Chemistry"],correct:0},
 {q:"Why is Percentage important?",options:["Used in daily life decisions","Only for exams","Only for shops","Not important"],correct:0},
-{q:"Aptitude mainly improves?",options:["Memory","Decision Making","Singing","Drawing"],correct:1},
 {q:"Difference between aptitude & reasoning?",options:["Both same","Aptitude = Maths + Logic, Reasoning = Logical Thinking","Reasoning = Only Maths","No difference"],correct:1},
-{q:"Why Time & Work is important?",options:["Helps in games","Helps in understanding efficiency & productivity","Only exam topic","Not useful"],correct:1},
 {q:"Data Interpretation is used in?",options:["Cooking","Business Reports & Analytics","Dancing","Driving"],correct:1},
-{q:"Aptitude helps mostly in?",options:["Only engineering","All job roles","Only IT","Only government exams"],correct:1},
-{q:"Logical aptitude checks?",options:["Memory","IQ & Thinking Pattern","Sports skill","Communication"],correct:1},
-{q:"Which aptitude topic helps in budgeting?",options:["Ratio & Proportion","Calendar","Clock","Cube"],correct:0},
-{q:"Why companies love aptitude?",options:["Fast decision makers","Slow thinkers","Only toppers","Only coders"],correct:0},
-{q:"Verbal aptitude improves?",options:["Speaking Speed","Understanding & Clear Meaning","Dancing","Maths"],correct:1},
 {q:"Reason companies avoid only marks?",options:["Marks don't show thinking ability","Marks are everything","Marks show talent fully","They don’t check thinking"],correct:0},
 {q:"If salary increases from 20k to 25k, what skill required?",options:["Coding","Percentage","Chemistry","History"],correct:1},
 {q:"Time-Speed-Distance helps in?",options:["Travelling decisions","Sleeping schedule","Food","Nothing"],correct:0},
-{q:"Aptitude builds confidence because?",options:["We guess answers","We understand concepts logically","We cheat better","We speak fast"],correct:1},
-{q:"Why shortcuts & tricks are used?",options:["Look smart","Reduce solving time","Avoid questions","Show off"],correct:1},
 {q:"Logical puzzles improve?",options:["Humor","Brain processing power","Typing","Drawing"],correct:1},
-{q:"Which aptitude helps in market comparison?",options:["Simple Interest & Compound Interest","Clock","Cube","Coding"],correct:0},
 {q:"Companies want aptitude because employee must?",options:["Work without thinking","Take quick right decisions","Just follow orders","Only code"],correct:1},
-{q:"Aptitude also tests?",options:["Patience & focus","Height","Weight","Voice"],correct:0},
 {q:"Data Interpretation mainly requires?",options:["Guessing","Observation & logic","Speaking","Acting"],correct:1},
-{q:"Aptitude questions are usually?",options:["Impossible","Tricky but logical","Random","Pure luck"],correct:1},
-{q:"Why practice aptitude daily?",options:["Brain becomes smarter & faster","Timepass","Show off","Teachers force"],correct:0},
-{q:"Aptitude + Reasoning together help in?",options:["Only study","Real life & job situations","Only exams","Nothing"],correct:1},
 {q:"Which improves exam time management?",options:["Watching movies","Aptitude solving","Sleeping","Gaming"],correct:1},
-{q:"Aptitude mainly tests?",options:["Knowledge only","Accuracy + Speed + Logic","Luck","Memory only"],correct:1},
-{q:"In group discussions, aptitude helps because?",options:["We talk louder","We understand logically","We joke better","We read fast"],correct:1},
-{q:"Which is best way to master aptitude?",options:["Mug up formulas only","Understand concept + practice","Never practice","Skip"],correct:1},
   {
     q: "If the cost price of a pen is ₹50 and it is sold for ₹75, what is the profit percentage?",
     options: ["25%", "30%", "40%", "50%"],
@@ -946,10 +917,7 @@ aptitude:[
     options: ["5", "8", "10", "15"],
     answer: "10"
   },
-{q:"Aptitude prepares us for?",options:["Only jobs","Competitive exams + Jobs + Real life decisions","Only government exams","Only school"],correct:1},
 {q:"Why ratio & proportion are useful?",options:["In recipes, salary splits, comparisons","Only exams","Nothing","Only maths class"],correct:0},
-{q:"Aptitude reflects?",options:["Your degree","Your smartness & thinking approach","Your handwriting","Your clothes"],correct:1},
-{q:"Final meaning of Aptitude?",options:["Knowledge storage","Ability to think, analyze & solve effectively","Only maths","Only logic"],correct:1}
 ],
 
 reasoning:[
@@ -2282,4 +2250,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+/* ================= COURSES BUTTON HANDLING ================= */
+const coursesSection = document.getElementById("coursesSection");
+const courseButtonsBox = document.getElementById("courseButtons");
+const videoListBox = document.getElementById("videoList");
 
+document.querySelectorAll(".topicBtn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const topic = btn.dataset.topic;
+
+    // Hide other sections
+    document.getElementById("practiceSection").classList.add("hidden");
+    document.getElementById("quizSection").classList.add("hidden");
+
+    if (topic === "courses") {
+      coursesSection.classList.remove("hidden");
+      loadCourses();
+    }
+  });
+});
+
+/* ================= LOAD COURSES ================= */
+function loadCourses() {
+  courseButtonsBox.innerHTML = "";
+  videoListBox.innerHTML = "<p class='text-gray-500'>Select a course to see videos</p>";
+
+  Object.keys(coursesData).forEach(course => {
+    const btn = document.createElement("button");
+    btn.className = "topicBtn bg-blue-600";
+    btn.textContent = course.toUpperCase();
+
+    btn.onclick = () => loadVideos(course);
+    courseButtonsBox.appendChild(btn);
+  });
+}
+
+/* ================= LOAD VIDEOS ================= */
+function loadVideos(course) {
+  videoListBox.innerHTML = "";
+
+  coursesData[course].forEach(video => {
+    const div = document.createElement("div");
+    div.className = "bg-gray-50 p-3 rounded-lg shadow hover:bg-blue-50 transition cursor-pointer";
+    div.innerHTML = `<strong>▶ ${video.title}</strong>`;
+
+    div.onclick = () => window.open(video.link, "_blank");
+    videoListBox.appendChild(div);
+  });
+}
