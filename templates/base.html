@@ -672,7 +672,7 @@ async function sendMessage(){
   input.value = "";
 
   try{
-    const res = await fetch("/enhancements/app-chat",{
+    const res = await fetch("/app-chat",{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({ message: msg })
@@ -726,6 +726,7 @@ function resetChat(){
   
 </body>
 </html>
+
 
 
 
