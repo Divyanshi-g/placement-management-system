@@ -1,3 +1,4 @@
+
 # enhancements/__init__.py
 from .routes import enhancements_bp
 from .db import close_db
