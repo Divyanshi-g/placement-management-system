@@ -3,35 +3,40 @@
 
 {% block content %}
 <div class="mb-8 text-center animate__animated animate__fadeInUp">
-  <!-- Welcome Message -->
-  <h1 class="text-4xl font-bold cursor-pointer transition transform hover:underline hover:scale-103">
-    Welcome back, {{ username }} 👋
-  </h1>
 
-  <!-- Motivation Message (typing loop) -->
-  <p id="admin-typing" class="mt-4 text-xl font-medium text-gray-100"></p>
+<!-- HEADER -->
+    <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 transition hover:underline hover:scale-[1.03]">
+    Welcome, {{ username }} 👋
+  </h1>
+<!-- Motivation -->
+<p id="admin-typing"
+   class="mt-1 text-xl font-medium text-blue-800 dark:text-gray-200 text-center"></p>
 
   <!-- Stats Grid -->
   <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 px-4 max-w-6xl mx-auto">
+
     <!-- Students -->
-    <a href="/admin/students" 
-       class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-xl shadow-lg hover:scale-105 transition block">
+    <a href="/admin/students"
+       class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white
+              p-6 rounded-xl shadow-lg hover:scale-105 transition block animate__animated animate__fadeInLeft">
       <h3 class="text-lg font-bold">🎓 Students Records</h3>
       <p class="text-2xl font-extrabold mt-2">{{ counts.students }}</p>
       <p class="mt-1 text-sm opacity-80">Total registered students</p>
     </a>
 
     <!-- Placements -->
-    <a href="/admin/placements" 
-       class="bg-gradient-to-r from-green-600 to-emerald-700 text-white p-6 rounded-xl shadow-lg hover:scale-105 transition block">
-      <h3 class="text-lg font-bold">📊 Placements Details </h3>
+    <a href="/admin/placements"
+       class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white
+              p-6 rounded-xl shadow-lg hover:scale-105 transition block animate__animated animate__fadeInLeft">
+      <h3 class="text-lg font-bold">📊 Placements Details</h3>
       <p class="text-2xl font-extrabold mt-2">{{ counts.placements }}</p>
       <p class="mt-1 text-sm opacity-80">Total Placements</p>
     </a>
 
     <!-- Applications -->
-    <a href="/admin/applications" 
-       class="bg-gradient-to-r from-purple-600 to-pink-700 text-white p-6 rounded-xl shadow-lg hover:scale-105 transition block">
+    <a href="/admin/applications"
+       class="bg-gradient-to-r from-indigo-600 to-blue-700 text-white
+              p-6 rounded-xl shadow-lg hover:scale-105 transition block animate__animated animate__fadeInRight">
       <h3 class="text-lg font-bold">📝 Applications Status</h3>
       <p class="text-2xl font-extrabold mt-2">{{ counts.applications }}</p>
       <p class="mt-1 text-sm opacity-80">Track student applications</p>
@@ -40,32 +45,60 @@
 
   <!-- Management Grid -->
   <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-6xl mx-auto">
-<div class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-6 rounded-2xl shadow-lg transform transition hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp">
+
+    <!-- Manage Students -->
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white
+                p-6 rounded-2xl shadow-lg transform transition
+                hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp">
       <h2 class="text-2xl font-bold mb-2">🧑‍🎓 Manage Students</h2>
-      <p class="text-sm">View, add, and manage student records efficiently.</p>
-      <a href="/manage_students" class="inline-block mt-4 px-4 py-2 bg-white text-indigo-600 rounded-lg font-semibold hover:bg-gray-100 transition">Go</a>
+      <p class="text-sm opacity-90">View, add, and manage student records efficiently.</p>
+      <a href="/manage_students"
+         class="inline-block mt-4 px-4 py-2 bg-white text-indigo-600
+                rounded-lg font-semibold hover:bg-gray-100 transition">
+        Go
+      </a>
     </div>
-    
-    <!-- Ask a Question -->
-    <div class="bg-gradient-to-r from-yellow-500 to-orange-600 text-white p-6 rounded-2xl shadow-lg transform transition hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp animate__delay-1s">
+
+    <!-- Assistant -->
+    <div class="bg-gradient-to-r from-indigo-600 to-blue-700 text-white
+                p-6 rounded-2xl shadow-lg transform transition
+                hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp animate__delay-1s">
       <h2 class="text-2xl font-bold mb-1">🤖 Assistant Suggestions</h2>
-      <p class="text-sm">Have queries about reports or management? Use our chatbot.</p>
-      <a href="/admin/questions1" class="inline-block mt-4 px-4 py-2 bg-white text-yellow-600 rounded-lg font-semibold hover:bg-gray-100 transition">Chat</a>
+      <p class="text-sm opacity-90">Get insights on reports and admin decisions.</p>
+      <a href="/admin/questions1"
+         class="inline-block mt-4 px-4 py-2 bg-white text-indigo-600
+                rounded-lg font-semibold hover:bg-gray-100 transition">
+        Chat
+      </a>
     </div>
 
     <!-- Manage Placements -->
-    <div class="bg-gradient-to-r from-pink-500 to-rose-600 text-white p-6 rounded-2xl shadow-lg transform transition hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp animate__delay-2s">
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white
+                p-6 rounded-2xl shadow-lg transform transition
+                hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp animate__delay-2s">
       <h2 class="text-2xl font-bold mb-2">🏢 Manage Placements</h2>
-      <p class="text-sm">Add and oversee company job postings.</p>
-      <a href="/manage_placements" class="inline-block mt-4 px-4 py-2 bg-white text-pink-600 rounded-lg font-semibold hover:bg-gray-100 transition">Go</a>
+      <p class="text-sm opacity-90">Add and oversee company job postings.</p>
+      <a href="/manage_placements"
+         class="inline-block mt-4 px-4 py-2 bg-white text-emerald-600
+                rounded-lg font-semibold hover:bg-gray-100 transition">
+        Go
+      </a>
     </div>
 
     <!-- Reports -->
-    <div class="bg-gradient-to-r from-teal-500 to-emerald-600 text-white p-6 rounded-2xl shadow-lg transform transition hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp animate__delay-3s">
+    <div class="bg-gradient-to-r from-teal-600 to-emerald-700 text-white
+                p-6 rounded-2xl shadow-lg transform transition
+                hover:scale-105 hover:shadow-2xl animate__animated animate__fadeInUp animate__delay-3s">
       <h2 class="text-2xl font-bold mb-3">📈 Reports & Analytics</h2>
-      <p class="text-sm">Generate placement and student performance reports.</p>
-      <a href="/reports" class="inline-block mt-4 px-4 py-2 bg-white text-teal-600 rounded-lg font-semibold hover:bg-gray-100 transition">View</a>
-    </div>              
+      <p class="text-sm opacity-90">Generate insights and performance reports.</p>
+      <a href="/reports"
+         class="inline-block mt-4 px-4 py-2 bg-white text-emerald-600
+                rounded-lg font-semibold hover:bg-gray-100 transition">
+        View
+      </a>
+    </div>
+
+  </div>
 
 </div>
 
@@ -77,20 +110,24 @@
     "Guiding students towards success."
   ];
   let i = 0, j = 0;
+
   function typeAdmin() {
     if (j < adminText[i].length) {
       document.getElementById("admin-typing").innerHTML =
-        adminText[i].substring(0, j + 1) + '<span class="border-r-2 border-yellow-400 animate-pulse"></span>';
+        adminText[i].substring(0, j + 1) +
+        '<span class="border-r-2 border-blue-400 animate-pulse"></span>';
       j++;
       setTimeout(typeAdmin, 60);
     } else {
       setTimeout(() => eraseAdmin(), 1500);
     }
   }
+
   function eraseAdmin() {
     if (j > 0) {
       document.getElementById("admin-typing").innerHTML =
-        adminText[i].substring(0, j - 1) + '<span class="border-r-2 border-yellow-400 animate-pulse"></span>';
+        adminText[i].substring(0, j - 1) +
+        '<span class="border-r-2 border-blue-400 animate-pulse"></span>';
       j--;
       setTimeout(eraseAdmin, 40);
     } else {
@@ -98,10 +135,10 @@
       setTimeout(typeAdmin, 500);
     }
   }
+
   window.onload = typeAdmin;
 </script>
 {% endblock %}
-
 
 
 
