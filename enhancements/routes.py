@@ -1621,5 +1621,6 @@ def admin_questions1_message():
     user_message = data.get("message")
     reply = chat_with_ai(user_message, role="admin")
 
-    return jsonify({"reply": repl
+    return jsonify({"reply": reply})
+
 
