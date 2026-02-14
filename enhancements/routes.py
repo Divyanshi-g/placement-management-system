@@ -387,6 +387,8 @@ def update_password():
 
     if new_password != confirm_password:
         return jsonify({"success": False, "message": "Passwords do not match"})
+    if not new_password:
+        return jsonify({"success": False, "message": "Password required"})
 
     # Password strength check (same as JS)
     import re
@@ -403,7 +405,14 @@ def update_password():
         # Logged-in user flow
         cur.execute("UPDATE users SET password=? WHERE id=?", (hashed, user_id))
     elif email:
-        # Forgot password flow
+    # check if email exists
+        cur.execute("SELECT id FROM users WHERE email=?", (email,))
+        user = cur.fetchone()
+
+        if not user:
+           conn.close()
+           return jsonify({"success": False, "message": "Invalid email"})
+    
         cur.execute("UPDATE users SET password=? WHERE email=?", (hashed, email))
     else:
         conn.close()
@@ -1613,3 +1622,4 @@ def admin_questions1_message():
     reply = chat_with_ai(user_message, role="admin")
 
     return jsonify({"reply": repl
+
