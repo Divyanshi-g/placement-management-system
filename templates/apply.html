@@ -17,14 +17,14 @@
 
         <!-- Name -->
         <div>
-          <label class="font-medium">👤 Full Name</label>
+          <label class="font-medium dark:text-black">👤 Full Name</label>
           <input type="text" name="student_name" required
-            class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+            class="w-full mt-2 px-4 py-2 border rounded-lg  dark:text-black focus:ring-2 focus:ring-indigo-600">
         </div>
 
        <!-- Phone -->
-        <div>
-          <label class="font-medium">📞 Phone Number</label>
+        <div class="dark:text-black">
+          <label class="font-medium ">📞 Phone Number</label>
           <input type="text"
                  name="phone"
                  required
@@ -37,8 +37,8 @@
           </p>
         </div>
         <!-- Course (Dropdown + Type) -->
-        <div>
-          <label class="font-medium">🎓 Course</label>
+        <div class="dark:text-black">
+          <label class="font-medium ">🎓 Course</label>
           <input type="text" name="course" list="courseList" required
             placeholder="Select or type your course"
             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600">
@@ -56,47 +56,34 @@
           </datalist>
         </div>
 
-      <div>
-          <label class="font-medium">🛠 Skills</label>
-          <input type="text"
-                 name="skills"
-                  id="skillsInput"
-                 list="skillsList"
-                 placeholder="Python, SQL, React"
-                 class="w-full mt-2 px-4 py-2 border rounded-lg">
+     <div class="mt-2 relative dark:text-black">
+       <label class="font-medium">🛠 Skills</label>
+  <input
+    type="text"
+    id="skillsInput"
+    placeholder="Type or select skills"
+    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-600"
+    autocomplete="off"
+  >
 
-          <datalist id="skillsList">
-            <option value="Python">
-            <option value="Java">
-            <option value="C++">
-            <option value="SQL">
-            <option value="HTML">
-            <option value="CSS">
-            <option value="JavaScript">
-            <option value="React">
-            <option value="Node.js">
-            <option value="Flask">
-            <option value="Django">
-            <option value="Machine Learning">
-            <option value="Data Analysis">
-            <option value="AWS">
-            <option value="Docker">
-            <option value="Git">
-            <option value="Communication">
-            <option value="Leadership">
-            <option value="Problem-Solving">
-          </datalist>
+  <!-- Dropdown -->
+  <div id="skillsDropdown"
+       class="absolute z-10 mt-1 w-full bg-white border rounded-lg shadow hidden dark:text-black max-h-40 overflow-y-auto">
+  </div>
 
-         <p class="text-sm text-gray-500 mt-1">
-            You can select or type multiple skills, separated by commas
-          </p>
-        </div>
+  <!-- Selected skills -->
+  <div id="skillsContainer" class="flex flex-wrap gap-2 mt-3"></div>
+
+  <!-- Hidden input (sent to backend) -->
+  <input type="hidden" name="skills" id="skillsHidden">
+</div>
+
 
       </div>
 
       <!-- Experience (Dropdown + Optional typing) -->
-      <div class="mt-6">
-        <label class="font-medium">💼 Experience</label>
+      <div class="mt-6 dark:text-black">
+        <label class="font-medium ">💼 Experience</label>
         <input type="text" name="experience" list="expList"
           placeholder="Select or describe your experience"
           class="w-full mt-2 px-4 py-2 border rounded-lg">
@@ -112,7 +99,7 @@
       </div>
 
      <!-- Resume Upload -->
-      <div class="mt-6">
+      <div class="mt-6 dark:text-black">
         <label class="font-medium">📄 Upload Resume</label>
         <input type="file"
                id="resumeInput"
@@ -137,51 +124,127 @@
 
 </div>
 <script>
-function validateForm() {
+/* ===============================
+   PHONE NUMBER VALIDATION
+================================ */
+const phoneInput = document.querySelector('input[name="phone"]');
 
-  // Phone validation
-  const phone = document.querySelector('input[name="phone"]').value;
-  if (!/^\d{10}$/.test(phone)) {
-    alert("Phone number must be exactly 10 digits.");
-    return false;
-  }
+phoneInput.addEventListener("input", () => {
+  phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 10);
+});
 
-  // Resume size validation (2 MB)
-  const resumeInput = document.getElementById("resumeInput");
-  const MAX_RESUME_SIZE = 2 * 1024 * 1024; // 2MB
+
+/* ===============================
+   RESUME SIZE VALIDATION (2MB)
+================================ */
+const resumeInput = document.getElementById("resumeInput");
+const MAX_RESUME_SIZE = 2 * 1024 * 1024; // 2MB
 
 resumeInput.addEventListener("change", function () {
   const file = this.files[0];
   if (!file) return;
 
   if (file.size > MAX_RESUME_SIZE) {
-    alert("❌ Resume size is too large. Maximum allowed size is 2 MB.");
-    this.value = ""; // clear file input
-  }
-});
-  const skillsInput = document.getElementById("skillsInput");
-const skillsList = document.getElementById("skillsList");
-
-skillsInput.addEventListener("input", () => {
-  const value = skillsInput.value;
-
-  // If user selected from dropdown (no comma yet)
-  if (skillsList.querySelector(`option[value="${value.trim()}"]`)) {
-    skillsInput.value = value + ", ";
+    alert("❌ Resume size must be under 2 MB");
+    this.value = "";
   }
 });
 
-// Keep dropdown usable after comma
-skillsInput.addEventListener("keydown", (e) => {
-  if (e.key === "," || e.key === " ") {
-    setTimeout(() => {
-      skillsInput.dispatchEvent(new Event("input"));
-    }, 0);
+
+/* ===============================
+   SKILLS MULTI-SELECT DROPDOWN
+================================ */
+const skills = [
+  "Python", "Java", "C++", "SQL", "HTML", "CSS",
+  "JavaScript", "React", "Node.js", "Flask", "Django",
+  "Machine Learning", "AWS", "Docker", "Git",
+  "Communication", "Leadership", "Problem-Solving"
+];
+
+const input = document.getElementById("skillsInput");
+const dropdown = document.getElementById("skillsDropdown");
+const container = document.getElementById("skillsContainer");
+const hiddenInput = document.getElementById("skillsHidden");
+
+let selectedSkills = [];
+
+/* Show dropdown ALWAYS */
+input.addEventListener("focus", showDropdown);
+input.addEventListener("click", showDropdown);
+input.addEventListener("input", showDropdown);
+
+/* Render dropdown */
+function showDropdown() {
+  const value = input.value.toLowerCase();
+  dropdown.innerHTML = "";
+
+  skills
+    .filter(skill => skill.toLowerCase().includes(value))
+    .forEach(skill => {
+      const item = document.createElement("div");
+      item.textContent = skill;
+      item.className = "px-4 py-2 cursor-pointer hover:bg-indigo-100";
+
+      item.addEventListener("click", () => addSkill(skill));
+      dropdown.appendChild(item);
+    });
+
+  dropdown.classList.remove("hidden");
+}
+
+/* Add skill */
+function addSkill(skill) {
+  if (selectedSkills.includes(skill)) return;
+
+  selectedSkills.push(skill);
+  updateSkillsUI();
+
+  input.value = "";
+  input.focus();
+}
+
+/* Remove skill */
+function removeSkill(skill) {
+  selectedSkills = selectedSkills.filter(s => s !== skill);
+  updateSkillsUI();
+}
+
+/* Update UI + hidden input */
+function updateSkillsUI() {
+  container.innerHTML = "";
+
+  selectedSkills.forEach(skill => {
+    const tag = document.createElement("span");
+    tag.className =
+      "bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center gap-2";
+
+    tag.innerHTML = `
+      ${skill}
+      <button type="button" class="font-bold hover:text-red-600">×</button>
+    `;
+
+    tag.querySelector("button").onclick = () => removeSkill(skill);
+    container.appendChild(tag);
+  });
+
+  hiddenInput.value = selectedSkills.join(", ");
+}
+
+/* Close dropdown ONLY when clicking outside skills box */
+document.addEventListener("click", e => {
+  if (!e.target.closest("#skillsInput") &&
+      !e.target.closest("#skillsDropdown")) {
+    dropdown.classList.add("hidden");
   }
 });
 </script>
 
 {% endblock %}
+
+
+
+
+
 
 
 
