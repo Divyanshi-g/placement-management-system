@@ -1,4 +1,3 @@
-
 # enhancements/routes.py
 import io
 import os
@@ -7,9 +6,6 @@ import csv
 import uuid
 import sqlite3
 import requests
-import random, smtplib
-from extensions import mail
-from flask_mail import Message
 from datetime import datetime, timedelta
 from openai import OpenAI
 from flask import (
@@ -22,7 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .db import get_db_conn  # ✅ central db helpers
 enhancements_bp = Blueprint("enhancements", __name__, template_folder="../templates")
 
-otp_store = {}
+captcha_store = {}
 
 # ----------------- AI Function -----------------
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")  # Load once globally
@@ -376,82 +372,6 @@ def verify_old_password():
         return jsonify({"success": False, "message": "Incorrect old password"})
 
     return jsonify({"success": True})
-
-# --------------------
-# SEND OTP (Forgot Password)
-# --------------------
-@enhancements_bp.route("/send-otp", methods=["POST"])
-def send_otp():
-    data = request.get_json(silent=True) or {}
-    email = data.get("email", "").strip()
-
-    if not email:
-        return jsonify({"success": False, "message": "Email required"})
-
-    conn = get_db_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT id FROM users WHERE email=?", (email,))
-    user = cur.fetchone()
-    conn.close()
-
-    if not user:
-        return jsonify({"success": False, "message": "Email not registered"})
-
-    otp = random.randint(100000, 999999)
-    otp_store[email] = {
-        "otp": str(otp),
-        "expires": datetime.now() + timedelta(minutes=5),
-        "attempts": 3
-    }
-
-    # ✅ SEND OTP EMAIL
-    try:
-        msg = Message(
-            "HireHub Password Reset OTP",
-            recipients=[email]
-        )
-        msg.body = f"Your OTP is {otp}"
-        mail.send(msg)
-    except Exception as e:
-        print("❌ EMAIL FAILED:", e)
-        return jsonify({
-            "success": False,
-            "message": "Failed to send OTP email"
-        })
-
-    return jsonify({"success": True})
-
-# --------------------
-# VERIFY OTP
-# --------------------
-@enhancements_bp.route("/verify-otp", methods=["POST"])
-def verify_otp():
-    data = request.get_json(silent=True) or {}
-    email = data.get("email", "").strip()
-    otp_input = data.get("otp", "").strip()
-
-    if email not in otp_store:
-        return jsonify({"success": False, "message": "OTP expired"})
-
-    record = otp_store[email]
-
-    if datetime.now() > record["expires"]:
-        del otp_store[email]
-        return jsonify({"success": False, "message": "OTP expired"})
-
-    if record["attempts"] <= 0:
-        del otp_store[email]
-        return jsonify({"success": False, "message": "Too many attempts"})
-
-    if record["otp"] != otp_input:
-        record["attempts"] -= 1
-        return jsonify({
-            "success": False,
-            "message": f"Incorrect OTP ({record['attempts']} left)"
-        })
-
-    return jsonify({"success": True})
-
 # --------------------
 # UPDATE PASSWORD (Step 2 / Step 3)
 # --------------------
@@ -482,10 +402,9 @@ def update_password():
     if user_id:
         # Logged-in user flow
         cur.execute("UPDATE users SET password=? WHERE id=?", (hashed, user_id))
-    elif email and email in otp_store:
+    elif email:
         # Forgot password flow
         cur.execute("UPDATE users SET password=? WHERE email=?", (hashed, email))
-        del otp_store[email]
     else:
         conn.close()
         return jsonify({"success": False, "message": "Session expired"})
@@ -493,6 +412,38 @@ def update_password():
     conn.commit()
     conn.close()
     return jsonify({"success": True})
+
+@enhancements_bp.route("/generate-captcha", methods=["GET"])
+def generate_captcha():
+    import string
+    captcha_text = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+
+    captcha_id = str(uuid.uuid4())
+    captcha_store[captcha_id] = captcha_text
+
+    return jsonify({
+        "captcha_id": captcha_id,
+        "captcha_text": captcha_text   # we will show this directly (simple version)
+    })
+
+@enhancements_bp.route("/verify-captcha", methods=["POST"])
+def verify_captcha():
+    data = request.get_json(silent=True) or {}
+
+    captcha_id = data.get("captcha_id")
+    user_input = data.get("captcha_input", "").strip().upper()
+
+    real = captcha_store.get(captcha_id)
+
+    if not real:
+        return jsonify({"success": False, "message": "Captcha expired"})
+
+    if user_input != real:
+        return jsonify({"success": False, "message": "Incorrect captcha"})
+
+    del captcha_store[captcha_id]
+    return jsonify({"success": True})
+
 
 @enhancements_bp.route("/placements")
 def placements():
@@ -1661,5 +1612,4 @@ def admin_questions1_message():
     user_message = data.get("message")
     reply = chat_with_ai(user_message, role="admin")
 
-    return jsonify({"reply": reply})
-
+    return jsonify({"reply": repl
