@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+{% block title %}Courses & Videos{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 mb-10">
+  <!-- Heading -->
+  <h1 class="text-4xl font-bold text-emerald-700 dark:text-white text-center mb-4 animate__animated animate__fadeInUp">
+    🎓 Courses & Video Suggestions
+  </h1>
+  <p class="text-gray-800 dark:text-gray-200 text-center mb-8 animate__animated animate__fadeInUp animate__delay-1s">
+    Explore courses related to your degree and skillset. Click on a course to view curated high-quality video tutorials from top creators.
+  </p>
+
+  <!-- Search Box -->
+  <div class="flex justify-center mb-6">
+    <input type="text" id="courseSearch" placeholder="Search Course..." 
+           class="px-4 py-2 rounded-l-xl border border-emerald-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none dark:bg-gray-700 dark:text-white">
+    <button id="searchBtn" 
+            class="px-6 py-2 bg-emerald-600 text-white rounded-r-xl hover:bg-emerald-700 transition">Search</button>
+  </div>
+
+  <!-- Loader -->
+  <div id="loader" class="hidden flex justify-center my-4">
+    <svg class="animate-spin h-8 w-8 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+  </div>
+
+  <!-- Courses Grid -->
+  <div id="coursesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Course Cards will be populated here by JS -->
+  </div>
+</div>
+
+<script>
+const courses = [
+ {
+  name: "Communication Skills",
+  videos: [
+    { title: "Effective Communication Skills - Full Course", link: "https://www.youtube.com/watch?v=Ht-N7t_gRAc" }, // MindTools
+    { title: "Communication Skills for Beginners", link: "https://www.youtube.com/watch?v=HAnw168huqA" }, // Skillopedia
+    { title: "Professional Communication Tips", link: "https://www.youtube.com/watch?v=fJ2oVt2A89E" } // Project Better Self
+  ]
+},
+{
+  name: "Body Language & Personality",
+  videos: [
+    { title: "Body Language in Communication", link: "https://www.youtube.com/watch?v=4Z6ZR1mpnqM" }, // Practical Psychology
+    { title: "Powerful Body Language in Interviews", link: "https://www.youtube.com/watch?v=0nKMjjoPvO0" }, // Charisma on Command
+    { title: "Build Confidence & Personality", link: "https://www.youtube.com/watch?v=8PzU8HzHhVg" } // Improvement Pill
+  ]
+},
+{
+  name: "Interview Preparation",
+  videos: [
+    { title: "Top 50 HR Interview Questions & Answers", link: "https://www.youtube.com/watch?v=KxBSvYSoaV8" }, // Intellipaat
+    { title: "Technical Interview Strategy", link: "https://www.youtube.com/watch?v=nuD05qPzuLM" }, // TechLead
+    { title: "How to Crack an Interview (Skillopedia)", link: "https://www.youtube.com/watch?v=Q79zRkdbZgA" } // Skillopedia
+  ]
+},
+{
+  name: "Aptitude (All Types)",
+  videos: [
+    { title: "Aptitude Full Course for Placements", link: "https://www.youtube.com/watch?v=pN0Sq0SM3Mk" }, // Apna College
+    { title: "Quantitative Aptitude Mastery", link: "https://www.youtube.com/watch?v=Qc9ZV_PO1uk" }, // Tamil Tech
+    { title: "Verbal Aptitude Practice Tests", link: "https://www.youtube.com/watch?v=E5kJKD2w5qQ" } // Career Ride
+  ]
+},
+{
+  name: "Reasoning Skills",
+  videos: [
+    { title: "Logical Reasoning Full Course", link: "https://www.youtube.com/watch?v=Js5hzk6Vd5g" }, // Unacademy
+    { title: "Analytical Reasoning Tricks", link: "https://www.youtube.com/watch?v=Pe6EjtStcj4" }, // Adda247
+    { title: "Critical Thinking Explained", link: "https://www.youtube.com/watch?v=75MQ2M2fG9Y" } // Sprouts
+  ]
+},
+{
+  name: "Python Programming",
+  videos: [
+    { title: "Python Programming Full Course", link: "https://www.youtube.com/watch?v=rfscVS0vtbw" }, // freeCodeCamp
+    { title: "Python for Absolute Beginners", link: "https://www.youtube.com/watch?v=_uQrJ0TkZlc" }, // freeCodeCamp.org
+    { title: "Build Projects with Python", link: "https://www.youtube.com/watch?v=WGJJIrtnfpk" } // Tech With Tim
+  ]
+},
+{
+  name: "SQL & Databases",
+  videos: [
+    { title: "SQL Full Course - Beginners", link: "https://www.youtube.com/watch?v=HXV3zeQKqGY" }, // freeCodeCamp
+    { title: "Advanced SQL Tutorial", link: "https://www.youtube.com/watch?v=9Pzj7Aj25lw" }, // Traversy Media
+    { title: "Database Design & Normalization", link: "https://www.youtube.com/watch?v=ztHopE5Wnpc" } // freeCodeCamp
+  ]
+},
+{
+  name: "Web Development Fundamentals",
+  videos: [
+    { title: "HTML & CSS Crash Course", link: "https://www.youtube.com/watch?v=UB1O30fR-EE" }, // Traversy Media
+    { title: "JavaScript Basics Full Course", link: "https://www.youtube.com/watch?v=PkZNo7MFNFg" }, // freeCodeCamp.org
+    { title: "Responsive Web Design Tutorial", link: "https://www.youtube.com/watch?v=srvUrASNj0s" } // Traversy Media
+  ]
+},
+  {
+  name: "Data Structures & Algorithms",
+  videos: [
+    { title: "DSA Full Course (Beginner to Advanced)", link: "https://www.youtube.com/watch?v=8hly31xKli0" },
+    { title: "Arrays, Strings & Recursion", link: "https://www.youtube.com/watch?v=BBpAmxU_NQo" },
+    { title: "Trees, Graphs & DP Explained", link: "https://www.youtube.com/watch?v=RBSGKlAvoiM" }
+  ]
+},
+{
+  name: "Operating Systems",
+  videos: [
+    { title: "Operating Systems Full Course", link: "https://www.youtube.com/watch?v=26QPDBe-NB8" },
+    { title: "Processes, Threads & Scheduling", link: "https://www.youtube.com/watch?v=UkJrSk6P2dA" },
+    { title: "Memory Management & Deadlocks", link: "https://www.youtube.com/watch?v=EavkQZdnD8I" }
+  ]
+},
+{
+  name: "Computer Networks",
+  videos: [
+    { title: "Computer Networking Full Course", link: "https://www.youtube.com/watch?v=qiQR5rTSshw" },
+    { title: "TCP/IP & OSI Model Explained", link: "https://www.youtube.com/watch?v=IPvYjXCsTg8" },
+    { title: "Networking Interview Questions", link: "https://www.youtube.com/watch?v=3QhU9jd03a0" }
+  ]
+},
+{
+  name: "Database Management Systems (DBMS)",
+  videos: [
+    { title: "DBMS Complete Course", link: "https://www.youtube.com/watch?v=HXV3zeQKqGY" },
+    { title: "Normalization & Transactions", link: "https://www.youtube.com/watch?v=ztHopE5Wnpc" },
+    { title: "DBMS Interview Questions", link: "https://www.youtube.com/watch?v=9yeOJ0ZMUYw" }
+  ]
+},
+{
+  name: "Object Oriented Programming (OOP)",
+  videos: [
+    { title: "OOP Concepts in Depth", link: "https://www.youtube.com/watch?v=pTB0EiLXUC8" },
+    { title: "OOP Using Java", link: "https://www.youtube.com/watch?v=6T_HgnjoYwM" },
+    { title: "OOP Interview Questions", link: "https://www.youtube.com/watch?v=SiBw7os-_zI" }
+  ]
+},
+{
+  name: "Git & GitHub",
+  videos: [
+    { title: "Git & GitHub Full Course", link: "https://www.youtube.com/watch?v=RGOj5yH7evk" },
+    { title: "Branching & Pull Requests", link: "https://www.youtube.com/watch?v=oFYyTZwMyAg" },
+    { title: "GitHub for Placements", link: "https://www.youtube.com/watch?v=apGV9Kg7ics" }
+  ]
+},
+{
+  name: "Backend Development (Flask & Django)",
+  videos: [
+    { title: "Flask Full Course", link: "https://www.youtube.com/watch?v=Z1RJmh_OqeA" },
+    { title: "Django Full Course", link: "https://www.youtube.com/watch?v=F5mRW0jo-U4" },
+    { title: "REST APIs with Python", link: "https://www.youtube.com/watch?v=GMppyAPbLYk" }
+  ]
+},
+{
+  name: "System Design (Beginner Level)",
+  videos: [
+    { title: "System Design Basics", link: "https://www.youtube.com/watch?v=MbjObHmDbZo" },
+    { title: "Scalability & Load Balancing", link: "https://www.youtube.com/watch?v=UzLMhqg3_Wc" },
+    { title: "System Design Interview Tips", link: "https://www.youtube.com/watch?v=REB_eGHK_P4" }
+  ]
+},
+{
+  name: "Cloud Computing (AWS Basics)",
+  videos: [
+    { title: "AWS Cloud Practitioner Full Course", link: "https://www.youtube.com/watch?v=3hLmDS179YE" },
+    { title: "EC2, S3 & IAM Explained", link: "https://www.youtube.com/watch?v=ulprqHHWlng" },
+    { title: "Cloud Computing Interview Questions", link: "https://www.youtube.com/watch?v=YvZ8PZ-l3b8" }
+  ]
+},
+{
+  name: "Resume & Placement Preparation",
+  videos: [
+    { title: "How to Build a Strong Resume", link: "https://www.youtube.com/watch?v=Y8FJ6c5Z8zM" },
+    { title: "Placement Preparation Strategy", link: "https://www.youtube.com/watch?v=4ni5y6RrxpM" },
+    { title: "HR Interview Preparation", link: "https://www.youtube.com/watch?v=Od0l0xN3rG0" }
+  ]
+}
+
+];
+
+// Render courses
+function showCourses(list) {
+  const container = document.getElementById("coursesContainer");
+  container.innerHTML = "";
+
+  list.forEach(course => {
+    const card = document.createElement("div");
+    card.className =
+      "bg-white dark:bg-gray-800 border border-emerald-300 dark:border-gray-600 rounded-xl shadow-lg p-4 cursor-pointer transition hover:shadow-2xl hover:bg-emerald-50 dark:hover:bg-emerald-700";
+
+    card.innerHTML = `
+      <h2 class="text-xl font-bold text-emerald-700 dark:text-white mb-2">
+        ${course.name}
+      </h2>
+
+      <div class="videoList hidden mt-2 space-y-2">
+        ${course.videos
+          .map(
+            v => `
+          <a href="${v.link}" target="_blank"
+            class="flex items-center gap-2 px-3 py-1 bg-emerald-100 dark:bg-gray-700 dark:text-white rounded-lg hover:bg-emerald-200 dark:hover:bg-emerald-600 transition">
+            <span>🎥</span>
+            ${v.title}
+          </a>`
+          )
+          .join("")}
+      </div>
+    `;
+
+  card.addEventListener("click", () => {
+  // Close all other open video lists
+  document.querySelectorAll(".videoList").forEach(list => {
+    if (list !== card.querySelector(".videoList")) {
+      list.classList.add("hidden");
+    }
+  });
+
+  // Toggle only the clicked one
+  card.querySelector(".videoList").classList.toggle("hidden");
+});
+
+    container.appendChild(card);
+  });
+}
+
+// Initial load
+showCourses(courses);
+
+// Search with loader
+document.getElementById("searchBtn").addEventListener("click", () => {
+  const query = document.getElementById("courseSearch").value.toLowerCase();
+  const loader = document.getElementById("loader");
+  loader.classList.remove("hidden");
+
+  setTimeout(() => {
+    loader.classList.add("hidden");
+    const filtered = courses.filter(c =>
+      c.name.toLowerCase().includes(query)
+    );
+    showCourses(filtered.length ? filtered : courses);
+  }, 700);
+});
+</script>
+
+{% endblock %}
