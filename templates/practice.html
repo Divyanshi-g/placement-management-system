@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% block content %}
 <div class="max-w-7xl mx-auto p-6 mb-8 rounded-xl shadow-xl bg-gradient-to-r 
@@ -11,13 +12,11 @@
   <div class="flex justify-center gap-6 mb-8">
     <button id="modePractice" class="modeBtn bg-blue-600">📚 Practice</button>
     <button id="modeQuiz" class="modeBtn bg-yellow-600">🎯 Quiz</button>
-    <button class="topicBtn bg-indigo-600" data-topic="courses">🎓 Courses</button>
-
   </div>
 
   <!-- TOPIC BOX -->
   <div id="topicBox" class="hidden text-center mb-8">
-    <h3 class="text-xl font-semibold mb-4">Choose Topic</h3>
+    <h3 class="text-xl font-semibold mb-4 dark:text-black">Choose Topic</h3>
     <div class="flex justify-center flex-wrap gap-4">
       <button class="topicBtn bg-blue-600" data-topic="coding">💻 Coding</button>
       <button class="topicBtn bg-green-600" data-topic="aptitude">🔢 Aptitude</button>
@@ -29,27 +28,9 @@
 
   <!-- PRACTICE SECTION -->
   <div id="practiceSection" class="hidden">
-    <h3 class="text-xl font-semibold mb-4">📚 Practice Questions</h3>
+    <h3 class="text-xl font-semibold mb-4 dark:text-black">📚 Practice Questions</h3>
     <div id="practiceContainer" class="space-y-4 max-h-[420px] overflow-y-auto pr-2"></div>
   </div>
-<!-- COURSES SECTION -->
-<div id="coursesSection" class="hidden mt-8">
-  <div class="bg-white shadow-xl rounded-xl p-6 border min-h-[300px]">
-
-    <h3 class="text-xl font-bold mb-4">
-      🎓 Best Courses Video Suggestions
-    </h3>
-
-    <div id="courseButtons" class="flex flex-wrap gap-4 mb-6">
-      <!-- Course buttons injected by JS -->
-    </div>
-
-    <div id="videoList" class="space-y-3">
-      <!-- Video links injected by JS -->
-    </div>
-
-  </div>
-</div>
 
   <!-- QUIZ SECTION -->
   <div id="quizSection" class="hidden mt-8">
@@ -60,14 +41,14 @@
         📁 History
     </button>
 
-    <h3 class="text-xl font-semibold mb-4">🎯 Quiz Test</h3>
+    <h3 class="text-xl font-semibold mb-4 dark:text-black">🎯 Quiz Test</h3>
 
     <!-- QUIZ CARD -->
     <div class="bg-white shadow-xl rounded-xl p-5 border
                 min-h-[380px] flex flex-col justify-between">
 
       <!-- QUESTIONS CONTAINER -->
-      <form id="quizForm" class="space-y-4 overflow-y-auto max-h-[600px] pr-2"></form>
+      <form id="quizForm" class="space-y-4 overflow-y-auto max-h-[600px] pr-2 dark:text-black "></form>
 
       <!-- SUBMIT BUTTON -->
       <button id="submitQuiz"
@@ -82,7 +63,7 @@
     <div id="quizResult"
         class="hidden mt-6 bg-gray-50 p-5 rounded-xl shadow text-center">
 
-      <h2 class="text-2xl font-bold mb-2">🎉 Result Summary</h2>
+      <h2 class="text-2xl font-bold mb-2 dark:text-black">🎉 Result Summary</h2>
 
       <p class="text-lg font-semibold text-green-700">
           Correct Answers: <span id="correctCount">0</span>
@@ -92,7 +73,7 @@
           Wrong Answers: <span id="wrongCount">0</span>
       </p>
 
-      <p class="text-lg font-semibold text-gray-700">
+      <p class="text-lg font-semibold text-gray-700 dark:text-black">
           Not Attempted: <span id="notAttempt">0</span>
       </p>
 
@@ -102,17 +83,13 @@
     <!-- HISTORY PANEL (Slide-in from Right) -->
     <div id="historyPanel" class="fixed right-0 top-0 h-full w-96 bg-white shadow-xl p-4 overflow-y-auto hidden z-50">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold">📊 Previous Attempts</h3>
+        <h3 class="text-xl font-bold dark:text-black">📊 Previous Attempts</h3>
         <button id="closeHistory" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Close</button>
       </div>
       <div id="historyList" class="space-y-2 text-sm">
   {% for attempt in attempts %}
-    <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
+    <div class="flex justify-between items-center bg-gray-100 p-2 rounded dark:text-black">
       <span>Score: {{ attempt.score }} | Date: {{ attempt.date }}</span>
-      <button class="deleteAttempt px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-              data-id="{{ attempt.id }}">
-        Delete
-      </button>
     </div>
   {% else %}
     No previous attempts yet...
