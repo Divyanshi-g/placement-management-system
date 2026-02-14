@@ -1,19 +1,6 @@
 
-"use strict";
-const coursesData = {
-  python: [
-    { title: "Python Full Course – Beginner to Advanced", link: "https://www.youtube.com/watch?v=rfscVS0vtbw" },
-    { title: "Python OOP Concepts", link: "https://www.youtube.com/watch?v=Ej_02ICOIgs" }
-  ],
-  dsa: [
-    { title: "DSA Full Course", link: "https://www.youtube.com/watch?v=8hly31xKli0" },
-    { title: "DSA with Python", link: "https://www.youtube.com/watch?v=pkYVOmU3MgA" }
-  ],
-  web: [
-    { title: "Full Stack Web Development", link: "https://www.youtube.com/watch?v=nu_pCVPKzTk" }
-  ]
-};
 
+"use strict";
 /* PRACTICE QUESTIONS */
 const practiceData = {
 coding:[
@@ -922,7 +909,7 @@ aptitude:[
 
 reasoning:[
  {
-    question: "1. What is reasoning and why is it important in competitive exams?",
+    question: " What is reasoning and why is it important in competitive exams?",
     options: [
       "It tests physical strength only",
       "It helps measure logical thinking and problem-solving ability",
@@ -932,62 +919,62 @@ reasoning:[
     answer: "It helps measure logical thinking and problem-solving ability"
   },
   {
-    question: "2. If A is the brother of B, B is the sister of C, and C is the father of D, what is A to D?",
+    question: " If A is the brother of B, B is the sister of C, and C is the father of D, what is A to D?",
     options: ["Uncle", "Father", "Brother", "Cousin"],
     answer: "Uncle"
   },
   {
-    question: "3. Find the odd one out: Apple, Mango, Banana, Carrot",
+    question: " Find the odd one out: Apple, Mango, Banana, Carrot",
     options: ["Apple", "Mango", "Banana", "Carrot"],
     answer: "Carrot"
   },
   {
-    question: "4. Which direction will a person face if they turn right from East and then left?",
+    question: " Which direction will a person face if they turn right from East and then left?",
     options: ["North", "South", "East", "West"],
     answer: "South"
   },
   {
-    question: "5. Complete the series: A, C, E, G, ?",
+    question: " Complete the series: A, C, E, G, ?",
     options: ["H", "I", "J", "K"],
     answer: "I"
   },
   {
-    question: "6. If CAT is coded as DBU, how will DOG be coded?",
+    question: " If CAT is coded as DBU, how will DOG be coded?",
     options: ["EPH", "EOG", "FPG", "EOF"],
     answer: "EPH"
   },
   {
-    question: "7. What does logical reasoning mainly test?",
+    question: " What does logical reasoning mainly test?",
     options: ["Guessing ability", "Logical and analytical skills", "Speaking skills", "Memory only"],
     answer: "Logical and analytical skills"
   },
   {
-    question: "8. If P is mother of Q and Q is father of R, what is P to R?",
+    question: " If P is mother of Q and Q is father of R, what is P to R?",
     options: ["Mother", "Grandmother", "Aunt", "Sister"],
     answer: "Grandmother"
   },
   {
-    question: "9. Choose the correct analogy: Bird : Nest :: Lion : ?",
+    question: " Choose the correct analogy: Bird : Nest :: Lion : ?",
     options: ["Cave", "Forest", "Zoo", "Den"],
     answer: "Den"
   },
   {
-    question: "10. Which one does not belong to the group? Circle, Square, Triangle, Cube",
+    question: " Which one does not belong to the group? Circle, Square, Triangle, Cube",
     options: ["Circle", "Square", "Triangle", "Cube"],
     answer: "Cube"
   },
   {
-    question: "11. A person walks 5 km North, then 3 km East. Which direction is he from starting point?",
+    question: " A person walks 5 km North, then 3 km East. Which direction is he from starting point?",
     options: ["North-East", "South-East", "North-West", "West"],
     answer: "North-East"
   },
   {
-    question: "12. If ALL = BMM, then YES will be coded as?",
+    question: " If ALL = BMM, then YES will be coded as?",
     options: ["ZFT", "ZFR", "ZES", "ZFS"],
     answer: "ZFT"
   },
   {
-    question: "13. Which type of questions measure decision-making ability?",
+    question: " Which type of questions measure decision-making ability?",
     options: [
       "Blood relation questions",
       "Direction sense questions",
@@ -997,17 +984,17 @@ reasoning:[
     answer: "Logical assumption questions"
   },
   {
-    question: "14. In a row of students, A is 7th from left and 10th from right. How many students are there?",
+    question: " In a row of students, A is 7th from left and 10th from right. How many students are there?",
     options: ["15", "16", "17", "18"],
     answer: "16"
   },
   {
-    question: "15. Find the odd one out: Pen, Pencil, Eraser, Paper, Computer",
+    question: " Find the odd one out: Pen, Pencil, Eraser, Paper, Computer",
     options: ["Pen", "Pencil", "Paper", "Computer"],
     answer: "Computer"
   },
   {
-    question: "16. If 'FLOWER' is written as 'FKPVFQ', what is the pattern?",
+    question: " If 'FLOWER' is written as 'FKPVFQ', what is the pattern?",
     options: [
       "Each letter +2",
       "Each letter -2",
@@ -1017,7 +1004,7 @@ reasoning:[
     answer: "Each letter -1"
   },
   {
-    question: "17. Syllogism tests mainly help in understanding what?",
+    question: " Syllogism tests mainly help in understanding what?",
     options: [
       "Verbal speaking",
       "Logical conclusion from given statements",
@@ -1027,7 +1014,7 @@ reasoning:[
     answer: "Logical conclusion from given statements"
   },
   {
-    question: "18. If all squares are rectangles and all rectangles are shapes, then what is true?",
+    question: " If all squares are rectangles and all rectangles are shapes, then what is true?",
     options: [
       "All shapes are squares",
       "All squares are shapes",
@@ -1037,7 +1024,7 @@ reasoning:[
     answer: "All squares are shapes"
   },
   {
-    question: "19. Which skill improves the most through reasoning practice?",
+    question: " Which skill improves the most through reasoning practice?",
     options: [
       "Physical skill",
       "Emotional strength",
@@ -1047,7 +1034,7 @@ reasoning:[
     answer: "Logical thinking and accuracy"
   },
   {
-    question: "20. Why do companies test reasoning in interviews?",
+    question: " Why do companies test reasoning in interviews?",
     options: [
       "To check English fluency",
       "To check academic marks",
@@ -1057,7 +1044,7 @@ reasoning:[
     answer: "To test real-time problem solving"
   }, 
   {
-    question: "21. Which of the following best defines Non-Verbal Reasoning?",
+    question: " Which of the following best defines Non-Verbal Reasoning?",
     options: [
       "Reasoning based on spoken language",
       "Reasoning without using numbers",
@@ -1067,22 +1054,22 @@ reasoning:[
     answer: "Reasoning based on figures, patterns, and visuals"
   },
   {
-    question: "22. If TODAY is coded as UPEBZ, how is INDIA coded?",
+    question: " If TODAY is coded as UPEBZ, how is INDIA coded?",
     options: ["JOEJB", "JOEIB", "HMCJZ", "JNEJB"],
     answer: "JOEJB"
   },
   {
-    question: "23. Find the odd one out: Dog, Tiger, Lion, Cow",
+    question: " Find the odd one out: Dog, Tiger, Lion, Cow",
     options: ["Dog", "Tiger", "Lion", "Cow"],
     answer: "Dog"
   },
   {
-    question: "24. In a certain language, SCHOOL is written as OCHSLO. How is COLLEGE written?",
+    question: " In a certain language, SCHOOL is written as OCHSLO. How is COLLEGE written?",
     options: ["OCLLEGE", "ELLOGEC", "OCLEGEL", "EGCOLLO"],
     answer: "OCLEGEL"
   },
   {
-    question: "25. Which of these topics mainly checks common-sense decision ability?",
+    question: " Which of these topics mainly checks common-sense decision ability?",
     options: [
       "Blood Relations",
       "Logical Assumptions",
@@ -1092,17 +1079,17 @@ reasoning:[
     answer: "Logical Assumptions"
   },
   {
-    question: "26. A person travels 4 km North, then 4 km West, then 4 km South. Where is he from the starting point?",
+    question: " A person travels 4 km North, then 4 km West, then 4 km South. Where is he from the starting point?",
     options: ["Back to start", "4 km East", "4 km West", "4 km North"],
     answer: "4 km West"
   },
   {
-    question: "27. Find the analogy: Hand : Glove :: Foot : ?",
+    question: " Find the analogy: Hand : Glove :: Foot : ?",
     options: ["Shoe", "Socks", "Leg", "Boot"],
     answer: "Shoe"
   },
   {
-    question: "28. Which reasoning topic helps in solving corporate case studies?",
+    question: " Which reasoning topic helps in solving corporate case studies?",
     options: [
       "Alphabet Reasoning",
       "Syllogism",
@@ -1112,7 +1099,7 @@ reasoning:[
     answer: "Statement and Conclusion"
   },
   {
-    question: "29. Which of the following improves by practicing reasoning regularly?",
+    question: " Which of the following improves by practicing reasoning regularly?",
     options: [
       "Only memory",
       "Only vocabulary",
@@ -1122,7 +1109,7 @@ reasoning:[
     answer: "Logical thinking and accuracy"
   },
   {
-    question: "30. Why do exams include reasoning questions?",
+    question: " Why do exams include reasoning questions?",
     options: [
       "To increase exam length",
       "To judge logical ability and decision-making",
@@ -1132,7 +1119,7 @@ reasoning:[
     answer: "To judge logical ability and decision-making"
   },
 {
-  question: "31. Which reasoning topic mainly helps in real-life judgment and decision making?",
+  question: " Which reasoning topic mainly helps in real-life judgment and decision making?",
   options: [
     "Coding-Decoding",
     "Blood Relation",
@@ -1142,17 +1129,17 @@ reasoning:[
   answer: "Statement–Assumption"
 },
 {
-  question: "32. If CAT = DBU, DOG = EPH then FISH = ?",
+  question: " If CAT = DBU, DOG = EPH then FISH = ?",
   options: ["GJTI", "GJTI", "GJSI", "GJUI"],
   answer: "GJTI"
 },
 {
-  question: "33. In a class, Riya is 10th from the top and 15th from the bottom. How many students are in the class?",
+  question: " In a class, Riya is 10th from the top and 15th from the bottom. How many students are in the class?",
   options: ["23", "24", "25", "26"],
   answer: "24"
 },
 {
-  question: "34. Which topic checks whether a conclusion logically follows from given facts?",
+  question: " Which topic checks whether a conclusion logically follows from given facts?",
   options: [
     "Direction Sense",
     "Blood Relations",
@@ -1162,12 +1149,12 @@ reasoning:[
   answer: "Syllogism"
 },
 {
-  question: "35. Find the odd one out: Circle, Square, Triangle, Cube",
+  question: " Find the odd one out: Circle, Square, Triangle, Cube",
   options: ["Circle", "Square", "Triangle", "Cube"],
   answer: "Cube"
 },
 {
-  question: "36. Which reasoning topic improves quick thinking during interviews and GD?",
+  question: " Which reasoning topic improves quick thinking during interviews and GD?",
   options: [
     "Logical Reasoning",
     "Mathematics",
@@ -1177,12 +1164,12 @@ reasoning:[
   answer: "Logical Reasoning"
 },
 {
-  question: "37. If NORTH is coded as MROQS, how is SOUTH coded?",
+  question: " If NORTH is coded as MROQS, how is SOUTH coded?",
   options: ["QNRGT", "QNRHT", "QNRFT", "QNRGS"],
   answer: "QNRGS"
 },
 {
-  question: "38. Which reasoning area deals with directions like left, right, east, west?",
+  question: " Which reasoning area deals with directions like left, right, east, west?",
   options: [
     "Blood Relation",
     "Direction Sense",
@@ -1192,7 +1179,7 @@ reasoning:[
   answer: "Direction Sense"
 },
 {
-  question: "39. Reasoning in exams mainly tests:",
+  question: " Reasoning in exams mainly tests:",
   options: [
     "Grammar knowledge",
     "Physical ability",
@@ -1202,7 +1189,7 @@ reasoning:[
   answer: "Logical and analytical skills"
 },
 {
-  question: "40. Why is reasoning important in placements?",
+  question: " Why is reasoning important in placements?",
   options: [
     "It helps only in exams",
     "It improves logical problem solving in real work",
@@ -1215,7 +1202,7 @@ reasoning:[
 
 interview:[
   {
-question: "1. What is the primary purpose of an interview in placements?",
+question: " What is the primary purpose of an interview in placements?",
 options: [
 "To check coding only",
 "To judge personality, skills and suitability",
@@ -1225,7 +1212,7 @@ options: [
 answer: "To judge personality, skills and suitability"
 },
 {
-question: "2. What should be your first response when interviewer says 'Tell me about yourself'?",
+question: " What should be your first response when interviewer says 'Tell me about yourself'?",
 options: [
 "Start with family background",
 "Start with school memories",
@@ -1235,7 +1222,7 @@ options: [
 answer: "Start with professional/academic profile"
 },
 {
-question: "3. Which of the following creates the FIRST impression in interview?",
+question: " Which of the following creates the FIRST impression in interview?",
 options: [
 "Resume",
 "Handshake",
@@ -1245,7 +1232,7 @@ options: [
 answer: "Resume"
 },
 {
-question: "4. What should you avoid while answering questions?",
+question: " What should you avoid while answering questions?",
 options: [
 "Clear explanation",
 "Confidence",
@@ -1255,7 +1242,7 @@ options: [
 answer: "Over exaggeration and lying"
 },
 {
-question: "5. What is HR round mainly for?",
+question: " What is HR round mainly for?",
 options: [
 "Technical skills",
 "Behavior, attitude and communication",
@@ -1265,7 +1252,7 @@ options: [
 answer: "Behavior, attitude and communication"
 },
 {
-question: "6. Which dress code is ideal for interviews?",
+question: " Which dress code is ideal for interviews?",
 options: [
 "Casual wear",
 "Party wear",
@@ -1275,7 +1262,7 @@ options: [
 answer: "Formal wear"
 },
 {
-question: "7. What should you do if you don’t know an answer?",
+question: " What should you do if you don’t know an answer?",
 options: [
 "Guess randomly",
 "Stay silent",
@@ -1285,7 +1272,7 @@ options: [
 answer: "Accept calmly and explain willingness to learn"
 },
 {
-question: "8. What is the best tone while answering?",
+question: " What is the best tone while answering?",
 options: [
 "Aggressive",
 "Too soft",
@@ -1295,7 +1282,7 @@ options: [
 answer: "Confident and polite"
 },
 {
-question: "9. Which skill is MOST evaluated?",
+question: " Which skill is MOST evaluated?",
 options: [
 "Communication",
 "Attitude",
@@ -1305,7 +1292,7 @@ options: [
 answer: "All of the above"
 },
 {
-question: "10. Which round checks technical knowledge?",
+question: " Which round checks technical knowledge?",
 options: [
 "HR round",
 "Managerial round",
@@ -1315,12 +1302,12 @@ options: [
 answer: "Technical round"
 },
 {
-question: "11. What should be the ideal resume length for freshers?",
+question: " What should be the ideal resume length for freshers?",
 options: ["1 page", "3 pages", "5 pages", "No limit"],
 answer: "1 page"
 },
 {
-question: "12. What should you do before attending interview?",
+question: " What should you do before attending interview?",
 options: [
 "Nothing",
 "Memorize answers only",
@@ -1330,7 +1317,7 @@ options: [
 answer: "Research about company and role"
 },
 {
-question: "13. Which is most important in introduction?",
+question: " Which is most important in introduction?",
 options: [
 "Family details",
 "Marks only",
@@ -1340,7 +1327,7 @@ options: [
 answer: "Skills + Strength + Career goal"
 },
 {
-question: "14. What is STAR method used for?",
+question: " What is STAR method used for?",
 options: [
 "Technical solving",
 "Story telling",
@@ -1350,7 +1337,7 @@ options: [
 answer: "Answering behavioral questions"
 },
 {
-question: "15. What shows professionalism?",
+question: " What shows professionalism?",
 options: [
 "Arriving late",
 "Not maintaining eye contact",
@@ -1360,7 +1347,7 @@ options: [
 answer: "Proper posture and discipline"
 },
 {
-question: "16. What does Group Discussion mainly test?",
+question: " What does Group Discussion mainly test?",
 options: [
 "Shouting ability",
 "English fluency only",
@@ -1370,7 +1357,7 @@ options: [
 answer: "Leadership, clarity and teamwork"
 },
 {
-question: "17. What is the best way to end an interview?",
+question: " What is the best way to end an interview?",
 options: [
 "Leave silently",
 "Say thank you confidently",
@@ -1380,7 +1367,7 @@ options: [
 answer: "Say thank you confidently"
 },
 {
-question: "18. What is most important in HR answers?",
+question: " What is most important in HR answers?",
 options: [
 "Lengthy answers",
 "Truthfulness and clarity",
@@ -1390,7 +1377,7 @@ options: [
 answer: "Truthfulness and clarity"
 },
 {
-question: "19. What should you NOT mention as weakness?",
+question: " What should you NOT mention as weakness?",
 options: [
 "Overthinking sometimes",
 "Public speaking fear",
@@ -1400,7 +1387,7 @@ options: [
 answer: "Negative attitude or laziness"
 },
 {
-question: "20. If interviewer asks salary expectation?",
+question: " If interviewer asks salary expectation?",
 options: [
 "Demand highest amount",
 "Say no idea",
@@ -1410,7 +1397,7 @@ options: [
 answer: "Ask for company standard range"
 },
 {
-question: "21. Eye contact in interview should be?",
+question: " Eye contact in interview should be?",
 options: [
 "None",
 "Staring continuously",
@@ -1420,7 +1407,7 @@ options: [
 answer: "Balanced and natural"
 },
 {
-question: "22. What should your body language show?",
+question: " What should your body language show?",
 options: [
 "Nervousness",
 "Arrogance",
@@ -1430,7 +1417,7 @@ options: [
 answer: "Confidence and calmness"
 },
 {
-question: "23. Why do interviewers ask 'Why this company?'",
+question: " Why do interviewers ask 'Why this company?'",
 options: [
 "To test luck",
 "Time pass",
@@ -1440,7 +1427,7 @@ options: [
 answer: "To test interest and motivation"
 },
 {
-question: "24. What should be your tone while disagreeing?",
+question: " What should be your tone while disagreeing?",
 options: [
 "Rude",
 "Aggressive",
@@ -1450,7 +1437,7 @@ options: [
 answer: "Respectful and logical"
 },
 {
-question: "25. What must a fresher highlight the most?",
+question: " What must a fresher highlight the most?",
 options: [
 "Past jobs",
 "Family background",
@@ -1460,7 +1447,7 @@ options: [
 answer: "Skills, projects, internships"
 },
 {
-question: "26. What should you do if interviewer interrupts?",
+question: "What should you do if interviewer interrupts?",
 options: [
 "Keep talking",
 "Argue",
@@ -1470,7 +1457,7 @@ options: [
 answer: "Listen patiently and respond"
 },
 {
-question: "27. When asked 'Where do you see yourself in 5 years?'",
+question: " When asked 'Where do you see yourself in 5 years?'",
 options: [
 "Say CEO",
 "Say no idea",
@@ -1480,7 +1467,7 @@ options: [
 answer: "Show growth mindset and learning goal"
 },
 {
-question: "28. What should be honest always?",
+question: " What should be honest always?",
 options: [
 "Marks",
 "Skills",
@@ -1490,7 +1477,7 @@ options: [
 answer: "All of these"
 },
 {
-question: "29. What is most important in virtual interview?",
+question: " What is most important in virtual interview?",
 options: [
 "Noise background",
 "Unstable internet",
@@ -1500,7 +1487,7 @@ options: [
 answer: "Good lighting + internet + posture"
 },
 {
-question: "30. What helps reduce nervousness?",
+question: " What helps reduce nervousness?",
 options: [
 "Panicking",
 "No preparation",
@@ -1510,7 +1497,7 @@ options: [
 answer: "Practicing mock interviews"
 },
 {
-question: "31. What should you highlight when asked strengths?",
+question: "What should you highlight when asked strengths?",
 options: [
 "Negative habits",
 "Non relevant things",
@@ -1520,7 +1507,7 @@ options: [
 answer: "Skills relevant to job"
 },
 {
-question: "32. Why do companies ask behavioral questions?",
+question: " Why do companies ask behavioral questions?",
 options: [
 "Fun only",
 "Time pass",
@@ -1530,7 +1517,7 @@ options: [
 answer: "To test real-life handling ability"
 },
 {
-question: "33. What should be avoided in resume?",
+question: " What should be avoided in resume?",
 options: [
 "Achievements",
 "Accurate skills",
@@ -1540,7 +1527,7 @@ options: [
 answer: "Fake information"
 },
 {
-question: "34. Which of these is GOOD to ask in interview?",
+question: " Which of these is GOOD to ask in interview?",
 options: [
 "Salary first",
 "Personal life questions",
@@ -1550,7 +1537,7 @@ options: [
 answer: "Growth opportunities and role details"
 },
 {
-question: "35. What shows lack of confidence?",
+question: "What shows lack of confidence?",
 options: [
 "Straight sitting",
 "Clear voice",
@@ -1560,7 +1547,7 @@ options: [
 answer: "Continuous shaking and fumbling"
 },
 {
-question: "36. What is the best attitude in interviews?",
+question: " What is the best attitude in interviews?",
 options: [
 "Over confident",
 "Fearful",
@@ -1570,7 +1557,7 @@ options: [
 answer: "Humble and confident"
 },
 {
-question: "37. What does interviewer check in communication?",
+question: " What does interviewer check in communication?",
 options: [
 "Grammar only",
 "Accent only",
@@ -1580,7 +1567,7 @@ options: [
 answer: "Clarity, confidence and understanding"
 },
 {
-question: "38. What should you do after interview?",
+question: " What should you do after interview?",
 options: [
 "Forget it",
 "Complain",
@@ -1590,7 +1577,7 @@ options: [
 answer: "Send a thank you message/email"
 },
 {
-question: "39. Which is MOST important quality?",
+question: " Which is MOST important quality?",
 options: [
 "Arrogance",
 "Learning attitude",
@@ -1600,7 +1587,7 @@ options: [
 answer: "Learning attitude"
 },
 {
-question: "40. Why are interviews important?",
+question: " Why are interviews important?",
 options: [
 "Just formality",
 "Only for marks",
@@ -1613,7 +1600,7 @@ answer: "They help select best suitable candidates"
 
 gd:[
   {
-question: "1. What is the main purpose of Group Discussion in placements?",
+question: " What is the main purpose of Group Discussion in placements?",
 options: [
 "To fight and win",
 "To judge communication and teamwork",
@@ -1623,7 +1610,7 @@ options: [
 answer: "To judge communication and teamwork"
 },
 {
-question: "2. GD mainly evaluates?",
+question: " GD mainly evaluates?",
 options: [
 "Voice loudness",
 "Marks and CGPA",
@@ -1633,7 +1620,7 @@ options: [
 answer: "Communication, confidence, thinking ability"
 },
 {
-question: "3. What is the ideal way to start a GD?",
+question: " What is the ideal way to start a GD?",
 options: [
 "Shout to dominate",
 "Stay silent",
@@ -1643,7 +1630,7 @@ options: [
 answer: "Give a structured opening with clear understanding"
 },
 {
-question: "4. What is MOST important in GD?",
+question: " What is MOST important in GD?",
 options: [
 "Talking continuously",
 "Listening and speaking logically",
@@ -1653,7 +1640,7 @@ options: [
 answer: "Listening and speaking logically"
 },
 {
-question: "5. What should you do if others are not allowing you to speak?",
+question: " What should you do if others are not allowing you to speak?",
 options: [
 "Shout louder",
 "Get angry",
@@ -1663,7 +1650,7 @@ options: [
 answer: "Wait for pause and politely enter"
 },
 {
-question: "6. What should NOT be done in GD?",
+question: " What should NOT be done in GD?",
 options: [
 "Respecting views",
 "Maintaining calm tone",
@@ -1673,7 +1660,7 @@ options: [
 answer: "Personal attacks"
 },
 {
-question: "7. Which of the following helps to score better in GD?",
+question: " Which of the following helps to score better in GD?",
 options: [
 "Reading newspapers",
 "Staying silent",
@@ -1683,7 +1670,7 @@ options: [
 answer: "Reading newspapers"
 },
 {
-question: "8. What shows leadership in GD?",
+question: " What shows leadership in GD?",
 options: [
 "Dominating",
 "Helping group reach conclusion",
@@ -1693,7 +1680,7 @@ options: [
 answer: "Helping group reach conclusion"
 },
 {
-question: "9. What is the best posture in GD?",
+question: " What is the best posture in GD?",
 options: [
 "Sleeping posture",
 "Arms folded angrily",
@@ -1703,7 +1690,7 @@ options: [
 answer: "Straight, confident and active"
 },
 {
-question: "10. If topic is unknown, what should you do?",
+question: " If topic is unknown, what should you do?",
 options: [
 "Stay silent completely",
 "Give wrong facts confidently",
@@ -1713,7 +1700,7 @@ options: [
 answer: "Listen first then contribute logically"
 },
 {
-question: "11. What is most valued in GD?",
+question: " What is most valued in GD?",
 options: [
 "Facts and clarity",
 "Background music",
@@ -1723,7 +1710,7 @@ options: [
 answer: "Facts and clarity"
 },
 {
-question: "12. Good participant should be?",
+question: " Good participant should be?",
 options: [
 "Silent",
 "Aggressive",
@@ -1733,7 +1720,7 @@ options: [
 answer: "Balanced speaker & listener"
 },
 {
-question: "13. What is the role of examples in GD?",
+question: "What is the role of examples in GD?",
 options: [
 "Confuse others",
 "Make topic funny",
@@ -1743,7 +1730,7 @@ options: [
 answer: "Support and strengthen points"
 },
 {
-question: "14. What should be avoided completely?",
+question: " What should be avoided completely?",
 options: [
 "Eye contact",
 "Confidence",
@@ -1753,7 +1740,7 @@ options: [
 answer: "Rude behavior"
 },
 {
-question: "15. What should body language show?",
+question: " What should body language show?",
 options: [
 "Fear",
 "Ego",
@@ -1763,7 +1750,7 @@ options: [
 answer: "Confidence and openness"
 },
 {
-question: "16. What is MOST dangerous mistake in GD?",
+question: "What is MOST dangerous mistake in GD?",
 options: [
 "Speaking clearly",
 "Disagreeing politely",
@@ -1773,7 +1760,7 @@ options: [
 answer: "Wrong facts & rude tone"
 },
 {
-question: "17. What helps to contribute better?",
+question: " What helps to contribute better?",
 options: [
 "Talking nonstop",
 "Only disagreeing",
@@ -1783,7 +1770,7 @@ options: [
 answer: "Listening and analysing first"
 },
 {
-question: "18. What is the ideal speech style in GD?",
+question: " What is the ideal speech style in GD?",
 options: [
 "Fast and unclear",
 "Slow and boring",
@@ -1793,7 +1780,7 @@ options: [
 answer: "Clear, confident and meaningful"
 },
 {
-question: "19. What do evaluators observe the MOST?",
+question: " What do evaluators observe the MOST?",
 options: [
 "Clothes only",
 "English accent only",
@@ -1803,7 +1790,7 @@ options: [
 answer: "Overall thinking + communication + attitude"
 },
 {
-question: "20. What should you do if GD becomes heated?",
+question: " What should you do if GD becomes heated?",
 options: [
 "Fight",
 "Enjoy chaos",
@@ -1813,7 +1800,7 @@ options: [
 answer: "Calm everyone and bring discussion back"
 },
 {
-question: "21. A good GD participant is?",
+question: " A good GD participant is?",
 options: [
 "Aggressive",
 "Silent watcher",
@@ -1823,7 +1810,7 @@ options: [
 answer: "Supportive and logical speaker"
 },
 {
-question: "22. What should opening speaker do?",
+question: " What should opening speaker do?",
 options: [
 "Give conclusion",
 "Talk randomly",
@@ -1833,7 +1820,7 @@ options: [
 answer: "Set direction and define topic"
 },
 {
-question: "23. What is important in conclusion?",
+question: " What is important in conclusion?",
 options: [
 "Fight summary",
 "Personal opinions only",
@@ -1843,7 +1830,7 @@ options: [
 answer: "Summarize key points logically"
 },
 {
-question: "24. What helps improve GD performance?",
+question: " What helps improve GD performance?",
 options: [
 "Watching movies",
 "Random talking",
@@ -1853,7 +1840,7 @@ options: [
 answer: "Regular practice and reading"
 },
 {
-question: "25. Which attitude is best in GD?",
+question: " Which attitude is best in GD?",
 options: [
 "Egoistic",
 "Aggressive",
@@ -1863,7 +1850,7 @@ options: [
 answer: "Respectful and confident"
 },
 {
-question: "26. Why do companies conduct GD?",
+question: " Why do companies conduct GD?",
 options: [
 "Time pass",
 "For fun",
@@ -1873,7 +1860,7 @@ options: [
 answer: "To check real-world communication skills"
 },
 {
-question: "27. What should you maintain throughout GD?",
+question: " What should you maintain throughout GD?",
 options: [
 "Anger",
 "Silence",
@@ -1883,7 +1870,7 @@ options: [
 answer: "Positive & professional attitude"
 },
 {
-question: "28. Which of these weakens your point?",
+question: "Which of these weakens your point?",
 options: [
 "Facts",
 "Proper examples",
@@ -1893,7 +1880,7 @@ options: [
 answer: "Emotional shouting"
 },
 {
-question: "29. What must be avoided while interrupting?",
+question: " What must be avoided while interrupting?",
 options: [
 "Polite entry",
 "Using excuse me",
@@ -1903,7 +1890,7 @@ options: [
 answer: "Cutting mid-sentence aggressively"
 },
 {
-question: "30. What should be done if topic is controversial?",
+question: " What should be done if topic is controversial?",
 options: [
 "Fight",
 "Take extreme sides",
@@ -1913,7 +1900,7 @@ options: [
 answer: "Speak balanced and mature"
 },
 {
-question: "31. What shows leadership quality?",
+question: " What shows leadership quality?",
 options: [
 "Insulting others",
 "Taking control forcefully",
@@ -1923,7 +1910,7 @@ options: [
 answer: "Helping group reach meaningful decision"
 },
 {
-question: "32. Which skill is MOST checked?",
+question: " Which skill is MOST checked?",
 options: [
 "Memory",
 "Drawing",
@@ -1933,7 +1920,7 @@ options: [
 answer: "Critical thinking and clarity"
 },
 {
-question: "33. What should hand movement be?",
+question: " What should hand movement be?",
 options: [
 "Too much waving",
 "No movement at all",
@@ -1943,7 +1930,7 @@ options: [
 answer: "Natural and controlled"
 },
 {
-question: "34. What helps you stand out?",
+question: " What helps you stand out?",
 options: [
 "Shouting",
 "Repeating others",
@@ -1953,7 +1940,7 @@ options: [
 answer: "Unique logical inputs"
 },
 {
-question: "35. What happens if you speak too much?",
+question: " What happens if you speak too much?",
 options: [
 "Positive impression",
 "Shows domination",
@@ -1963,7 +1950,7 @@ options: [
 answer: "Wastes time and reduces impact"
 },
 {
-question: "36. What is best use of data or facts?",
+question: " What is best use of data or facts?",
 options: [
 "To insult others",
 "To confuse group",
@@ -1973,7 +1960,7 @@ options: [
 answer: "To support points strongly"
 },
 {
-question: "37. What should be your reaction if someone disagrees?",
+question: " What should be your reaction if someone disagrees?",
 options: [
 "Fight back",
 "Ignore",
@@ -1983,7 +1970,7 @@ options: [
 answer: "Respectfully counter with logic"
 },
 {
-question: "38. GD gives companies idea about?",
+question: "GD gives companies idea about?",
 options: [
 "Marks only",
 "Family background",
@@ -1993,7 +1980,7 @@ options: [
 answer: "Professional behavior and mindset"
 },
 {
-question: "39. When is silence acceptable?",
+question: " When is silence acceptable?",
 options: [
 "Full GD",
 "Never speak",
@@ -2003,7 +1990,7 @@ options: [
 answer: "When thinking / giving others chance"
 },
 {
-question: "40. What is the final success key in GD?",
+question: " What is the final success key in GD?",
 options: [
 "Loud voice",
 "Aggression",
@@ -2040,14 +2027,22 @@ document.getElementById("modeQuiz").onclick = () => {
  practiceSection.classList.add("hidden");
 };
 
+document.querySelectorAll(".topicBtn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const topic = btn.dataset.topic;
 
-/* TOPIC SELECT */
-document.querySelectorAll(".topicBtn").forEach(btn=>{
- btn.addEventListener("click",()=>{
- let topic = btn.dataset.topic;
- renderPractice(topic);
- startQuiz(topic);
- });
+    // detect active mode
+    const isPractice = !practiceSection.classList.contains("hidden");
+    const isQuiz = !quizSection.classList.contains("hidden");
+
+    if (isPractice) {
+      renderPractice(topic);
+    }
+
+    if (isQuiz) {
+      startQuiz(topic);
+    }
+  });
 });
 
 
@@ -2250,51 +2245,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-/* ================= COURSES BUTTON HANDLING ================= */
-const coursesSection = document.getElementById("coursesSection");
-const courseButtonsBox = document.getElementById("courseButtons");
-const videoListBox = document.getElementById("videoList");
-
-document.querySelectorAll(".topicBtn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const topic = btn.dataset.topic;
-
-    // Hide other sections
-    document.getElementById("practiceSection").classList.add("hidden");
-    document.getElementById("quizSection").classList.add("hidden");
-
-    if (topic === "courses") {
-      coursesSection.classList.remove("hidden");
-      loadCourses();
-    }
-  });
-});
-
-/* ================= LOAD COURSES ================= */
-function loadCourses() {
-  courseButtonsBox.innerHTML = "";
-  videoListBox.innerHTML = "<p class='text-gray-500'>Select a course to see videos</p>";
-
-  Object.keys(coursesData).forEach(course => {
-    const btn = document.createElement("button");
-    btn.className = "topicBtn bg-blue-600";
-    btn.textContent = course.toUpperCase();
-
-    btn.onclick = () => loadVideos(course);
-    courseButtonsBox.appendChild(btn);
-  });
-}
-
-/* ================= LOAD VIDEOS ================= */
-function loadVideos(course) {
-  videoListBox.innerHTML = "";
-
-  coursesData[course].forEach(video => {
-    const div = document.createElement("div");
-    div.className = "bg-gray-50 p-3 rounded-lg shadow hover:bg-blue-50 transition cursor-pointer";
-    div.innerHTML = `<strong>▶ ${video.title}</strong>`;
-
-    div.onclick = () => window.open(video.link, "_blank");
-    videoListBox.appendChild(div);
-  });
-}
