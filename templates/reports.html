@@ -2,47 +2,76 @@
 {% block title %}Reports{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto mt-5 mb-10">
-  <h1 class="text-4xl font-bold text-indigo-600 text-center mb-8">📊 Reports & Analytics</h1>
+<div class="max-w-6xl mx-auto mt-5 mb-10 px-4">
+
+  <!-- Page Title -->
+  <h1 class="text-4xl font-bold text-center mb-8
+             text-indigo-600 dark:text-indigo-400">
+    📊 Reports & Analytics
+  </h1>
 
   <!-- Summary Cards -->
   <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
-    <div class="bg-indigo-100 p-6 rounded-xl shadow">
+
+    <div class="bg-indigo-100 dark:bg-indigo-900/40
+                text-indigo-800 dark:text-indigo-200
+                p-6 rounded-xl shadow">
       <h2 class="text-xl font-bold">Students</h2>
       <p class="text-2xl">{{ total_students }}</p>
     </div>
-    <div class="bg-green-100 p-6 rounded-xl shadow">
+
+    <div class="bg-green-100 dark:bg-green-900/40
+                text-green-800 dark:text-green-200
+                p-6 rounded-xl shadow">
       <h2 class="text-xl font-bold">Placements</h2>
       <p class="text-2xl">{{ total_placements }}</p>
     </div>
-    <div class="bg-purple-100 p-6 rounded-xl shadow">
+
+    <div class="bg-purple-100 dark:bg-purple-900/40
+                text-purple-800 dark:text-purple-200
+                p-6 rounded-xl shadow">
       <h2 class="text-xl font-bold">Applications</h2>
       <p class="text-2xl">{{ total_applications }}</p>
     </div>
-    <div class="bg-yellow-100 p-6 rounded-xl shadow">
+
+    <div class="bg-yellow-100 dark:bg-yellow-900/40
+                text-yellow-800 dark:text-yellow-200
+                p-6 rounded-xl shadow">
       <h2 class="text-xl font-bold">Success Rate</h2>
       <p class="text-2xl">{{ success_rate }}%</p>
     </div>
+
   </div>
 
   <!-- Charts -->
   <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-lg font-semibold mb-4">Applications by Status</h3>
+
+    <div class="bg-white dark:bg-gray-900
+                text-gray-800 dark:text-gray-200
+                p-6 rounded-xl shadow">
+      <h3 class="text-lg font-semibold mb-4">
+        Applications by Status
+      </h3>
       <canvas id="statusChart"></canvas>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-lg font-semibold mb-4">Placements vs Students</h3>
+
+    <div class="bg-white dark:bg-gray-900
+                text-gray-800 dark:text-gray-200
+                p-6 rounded-xl shadow">
+      <h3 class="text-lg font-semibold mb-4">
+        Placements vs Students
+      </h3>
       <canvas id="placementChart"></canvas>
     </div>
+
   </div>
 </div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Status breakdown chart
   const statusData = {{ status_counts | tojson }};
+
   new Chart(document.getElementById("statusChart"), {
     type: "bar",
     data: {
@@ -50,12 +79,24 @@
       datasets: [{
         label: "Applications",
         data: Object.values(statusData),
-        backgroundColor: ["#4f46e5", "#10b981", "#f59e0b", "#ef4444"]
+        backgroundColor: ["#6366f1", "#22c55e", "#f59e0b", "#ef4444"]
       }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: "#9ca3af"
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: "#9ca3af" } },
+        y: { ticks: { color: "#9ca3af" } }
+      }
     }
   });
 
-  // Placements vs Students
   new Chart(document.getElementById("placementChart"), {
     type: "pie",
     data: {
@@ -64,8 +105,16 @@
         data: [{{ total_students }}, {{ total_placements }}],
         backgroundColor: ["#6366f1", "#22c55e"]
       }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: "#9ca3af"
+          }
+        }
+      }
     }
   });
 </script>
 {% endblock %}
-
