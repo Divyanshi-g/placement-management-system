@@ -519,7 +519,12 @@ async function updatePassword(){
   const res = await fetch("/update-password",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-   body: JSON.stringify({new_password: newPwd, confirm_password: confirmPwd})
+   body: JSON.stringify({
+  email: document.getElementById("cp-email").value,
+  new_password: newPwd,
+  confirm_password: confirmPwd
+})
+
   });
 
   const data = await res.json();
@@ -681,3 +686,4 @@ function resetChat(){
   
 </body>
 </html>
+
