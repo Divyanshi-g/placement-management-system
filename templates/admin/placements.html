@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% block title %}Placement Records{% endblock %}
 {% block content %}
@@ -24,8 +25,8 @@
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
-    table thead th:nth-child(4), /* Location */
-    table thead th:nth-child(5), /* Salary */
+    table thead th:nth-child(4),
+    table thead th:nth-child(5),
     table tbody td:nth-child(4),
     table tbody td:nth-child(5) {
       display: none;
@@ -44,22 +45,29 @@
 <div class="max-w-8xl mx-auto px-2 sm:px-4 md:px-6 mb-10 fade-in">
 
   <div class="text-center">
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-emerald-400">
+    <h1 class="text-3xl sm:text-4xl font-extrabold
+               text-emerald-600 dark:text-emerald-400">
       🏢 Placement Opportunities
     </h1>
-    <p class="mt-2 sm:mt-3 text-gray-300 text-sm sm:text-base">
+    <p class="mt-2 sm:mt-3 text-sm sm:text-base
+              text-gray-600 dark:text-gray-300">
       Admin overview of all companies & roles.
       Total:
-      <span class="font-semibold text-amber-300">
+      <span class="font-semibold
+                   text-amber-500 dark:text-amber-300">
         {{ placements|length }}
       </span>
     </p>
   </div>
 
-  <div class="mt-6 overflow-x-auto bg-white/15 rounded-2xl shadow-xl backdrop-blur fade-in">
-    <table class="w-full text-left text-gray-100 table-auto">
+  <div class="mt-6 overflow-x-auto rounded-2xl shadow-xl backdrop-blur fade-in
+              bg-white dark:bg-white/15">
+
+    <table class="w-full text-left table-auto
+                 text-gray-800 dark:text-gray-100">
       <thead>
-        <tr class="bg-gradient-to-r from-emerald-600 to-indigo-600 text-white text-xs sm:text-sm uppercase tracking-wider">
+        <tr class="bg-gradient-to-r from-emerald-600 to-indigo-600
+                   text-white text-xs sm:text-sm uppercase tracking-wider">
           <th class="px-2 sm:px-5 py-2">No.</th>
           <th class="px-2 sm:px-5 py-2">Company</th>
           <th class="px-2 sm:px-5 py-2">Role</th>
@@ -71,27 +79,53 @@
 
       <tbody>
         {% for p in placements %}
-        <tr class="border-b border-white/10 row-hover text-xs sm:text-sm">
-          <td class="px-2 sm:px-5 py-2 font-semibold text-emerald-300">{{ loop.index }}</td>
-          <td class="px-2 sm:px-5 py-2 font-medium text-gray-100">{{ p.company or '—' }}</td>
-          <td class="px-2 sm:px-5 py-2 text-indigo-200">{{ p.role or '—' }}</td>
-          <td class="px-2 sm:px-5 py-2 text-gray-300">{{ p.location or '—' }}</td>
-          <td class="px-2 sm:px-5 py-2 text-amber-200">{{ p.salary or '—' }}</td>
+        <tr class="border-b row-hover text-xs sm:text-sm
+                   border-gray-200 dark:border-white/10">
+
+          <td class="px-2 sm:px-5 py-2 font-semibold
+                     text-emerald-600 dark:text-emerald-300">
+            {{ loop.index }}
+          </td>
+
+          <td class="px-2 sm:px-5 py-2 font-medium
+                     text-gray-800 dark:text-gray-100">
+            {{ p.company or '—' }}
+          </td>
+
+          <td class="px-2 sm:px-5 py-2
+                     text-indigo-600 dark:text-indigo-200">
+            {{ p.role or '—' }}
+          </td>
+
+          <td class="px-2 sm:px-5 py-2
+                     text-gray-600 dark:text-gray-300">
+            {{ p.location or '—' }}
+          </td>
+
+          <td class="px-2 sm:px-5 py-2
+                     text-amber-600 dark:text-amber-200">
+            {{ p.salary or '—' }}
+          </td>
+
           <td class="px-2 sm:px-5 py-2 text-center">
-            <a href="{{ url_for('enhancements.placement_details', id=p.id) }}" class="btn-details">
+            <a href="{{ url_for('enhancements.placement_details', id=p.id) }}"
+               class="btn-details">
                Details
             </a>
           </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="6" class="px-2 sm:px-5 py-4 text-center text-gray-400">
+          <td colspan="6"
+              class="px-2 sm:px-5 py-4 text-center
+                     text-gray-500 dark:text-gray-400">
             No placement postings available.
           </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+
   </div>
 </div>
 
