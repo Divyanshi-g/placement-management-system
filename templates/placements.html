@@ -19,7 +19,7 @@
     <input type="text" name="q"
       value="{{ request.args.get('q','') }}"
       placeholder="🔍 Company, role or skill"
-      class="w-full md:w-72 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+      class="w-full md:w-72 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600 dark:text-black">
 
       <!-- Location Dropdown + Typing -->
     <input type="text"
@@ -27,7 +27,7 @@
            list="locations"
            value="{{ request.args.get('location','') }}"
            placeholder="📍 Location (select or type)"
-           class="w-full md:w-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+           class="w-full md:w-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600 dark:text-black">
 
     <!-- Location Options -->
     <datalist id="locations">
@@ -46,7 +46,7 @@
 
 
     <select name="job_type"
-      class="w-full md:w-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600">
+      class="w-full md:w-64 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-600 dark:text-black">
       <option value="">🧩 Job Type</option>
       <option value="Full-time">💼 Full-time</option>
       <option value="Internship">🎓 Internship</option>
@@ -74,7 +74,7 @@
           class="w-16 h-16 object-contain rounded">
 
         <div>
-          <h3 class="text-xl font-bold">🏢 {{ j.company }}</h3>
+          <h3 class="text-xl font-bold dark:text-black">🏢 {{ j.company }}</h3>
           <p class="text-gray-600">👨‍💻 {{ j.role }}</p>
         </div>
       </div>
@@ -120,22 +120,22 @@
           <img
             src="{{ url_for('static', filename='uploads/logos/' ~ (j.logo or 'default.png')) }}"
             class="w-20 h-20 object-contain">
-          <h2 class="text-2xl font-bold">🏢 {{ j.company }}</h2>
+          <h2 class="text-2xl font-bold dark:text-black">🏢 {{ j.company }}</h2>
         </div>
 
-        <p>👨‍💻 <strong>Role:</strong> {{ j.role }}</p>
-        <p>📍 <strong>Location:</strong> {{ j.location }}</p>
-        <p>🧩 <strong>Job Type:</strong> {{ j.job_type }}</p>
-        <p>⏳ <strong>Duration:</strong> {{ j.duration }}</p>
-        <p>💰 <strong>Salary:</strong> {{ j.salary }}</p>
+        <p class="dark:text-black">👨‍💻 <strong>Role:</strong> {{ j.role }}</p>
+        <p class="dark:text-black">📍 <strong>Location:</strong> {{ j.location }}</p>
+        <p class="dark:text-black">🧩 <strong>Job Type:</strong> {{ j.job_type }}</p>
+        <p class="dark:text-black">⏳ <strong>Duration:</strong> {{ j.duration }}</p>
+        <p class="dark:text-black">💰 <strong>Salary:</strong> {{ j.salary }}</p>
 
-        <p class="mt-4">
+        <p class="mt-4 dark:text-black">
           📝 <strong>Description:</strong><br>
           {{ j.description }}
         </p>
 
-        <p class="mt-2">✅ <strong>Eligibility:</strong> {{ j.eligibility }}</p>
-        <p class="mt-2">📅 <strong>Deadline:</strong> {{ j.deadline }}</p>
+        <p class="mt-2 dark:text-black">✅ <strong>Eligibility:</strong> {{ j.eligibility }}</p>
+        <p class="mt-2 dark:text-black">📅 <strong>Deadline:</strong> {{ j.deadline }}</p>
 
         <div class="flex gap-4 mt-8">
           {% if j.link %}
@@ -162,7 +162,7 @@
   </div>
 
   {% else %}
-  <p class="text-center text-gray-500 text-lg mt-20">
+  <p class="text-center text-gray-500 text-lg mt-20 dark:text-black">
     🚫 No placements available for your search.
   </p>
   {% endif %}
