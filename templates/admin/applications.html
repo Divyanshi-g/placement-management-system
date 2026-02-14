@@ -1,195 +1,179 @@
+
 {% extends "base.html" %}
 {% block content %}
 
-<style>
-  /* ================= HEADING ================= */
-  .glass-heading {
-    font-weight: 900;
-    letter-spacing: 2px;
-    font-size: 2.8rem; /* BIG heading */
-    transition: color .3s ease;
-  }
+<div class="w-full px-3 md:px-6 mt-4">
 
-  .glass-heading:hover {
-    color: #0d6efd;
-  }
-
-  /* ================= BUTTON STYLES ================= */
-
-  /* Download Resume Button */
-  .resume-btn {
-    background-color: #0d6efd;
-    color: #fff;
-    border: 2px solid #0a58ca;
-    border-radius: 999px;
-    padding: 6px 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-
-  .resume-btn:hover {
-    background-color: #0a58ca;
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(13,110,253,0.45);
-  }
-
-  /* Update Button */
-  .update-btn {
-    background-color: #198754;
-    color: #fff;
-    border: 2px solid #146c43;
-    border-radius: 999px;
-    padding: 6px 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-  }
-
-  .update-btn:hover {
-    background-color: #146c43;
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(25,135,84,0.45);
-  }
-
-  /* ================= TABLE ================= */
-  .glass-table {
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(10px);
-  }
-
-  table th, table td {
-    padding: 14px 12px;
-    vertical-align: middle;
-  }
-
-  /* ================= MOBILE STACKED VIEW ================= */
-  @media (max-width: 768px) {
-
-    table thead {
-      display: none;
-    }
-
-    table tbody tr {
-      display: block;
-      margin-bottom: 1rem;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-      padding: 12px;
-    }
-
-    table tbody td {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 6px;
-      border: none;
-      font-size: 14px;
-    }
-
-    table tbody td::before {
-      content: attr(data-label);
-      font-weight: 600;
-      color: #555;
-    }
-
-    table tbody td:first-child {
-      display: none;
-    }
-
-    table tbody td form {
-      width: 100%;
-    }
-  }
-</style>
-
-<div class="container-fluid px-3 px-md-4 mt-4">
-
-  <!-- Heading -->
-  <h2 class="text-center mb-4 glass-heading">
+  <!-- ================= HEADING ================= -->
+  <h2 class="text-center mb-6 font-black tracking-widest text-[2.5rem]
+             transition-colors duration-300 hover:text-blue-600">
     STUDENT APPLICATIONS
   </h2>
 
-  <!-- Table Wrapper -->
-  <div class="table-responsive shadow-lg rounded-3 glass-table">
+  <!-- ================= TABLE WRAPPER ================= -->
+  <div class="overflow-x-auto rounded-2xl shadow-2xl
+              bg-white/25 backdrop-blur-lg">
 
-    <table class="table table-bordered table-striped align-middle mb-0 text-nowrap">
-      <thead class="table-dark text-center">
+    <table class="w-full text-sm md:text-base text-nowrap">
+
+      <!-- ================= TABLE HEAD ================= -->
+      <thead class=" text-white text-center hidden md:table-header-group">
         <tr>
-          <th>#</th>
-          <th>Student</th>
-          <th>Company</th>
-          <th>Role</th>
-          <th>Experience</th>
-          <th>Skills</th>
-          <th>Resume</th>
-          <th>Status</th>
-          <th>Applied On</th>
+          <th class="p-4 ">#</th>
+          <th class="p-4 ">Student</th>
+          <th class="p-4 ">Company</th>
+          <th class="p-4">Role</th>
+          <th class="p-4 ">Experience</th>
+          <th class="p-4 ">Skills</th>
+          <th class="p-4 ">Resume</th>
+          <th class="p-4 ">Status</th>
+          <th class="p-4 ">Applied On</th>
         </tr>
       </thead>
 
+      <!-- ================= TABLE BODY ================= -->
       <tbody>
+
         {% for app in applications %}
-        <tr>
+        <tr class="hidden md:table-row border-b">
 
-          <td class="fw-semibold text-center">{{ loop.index }}</td>
-
-          <td data-label="Student">
-            <strong>{{ app[1] }}</strong><br>
-            <small class="text-muted">{{ app[2] }}</small>
+          <!-- Index -->
+          <td class="p-4 text-center font-semibold border">
+            {{ loop.index }}
           </td>
 
-          <td data-label="Company">{{ app[3] }}</td>
-          <td data-label="Role">{{ app[4] }}</td>
+          <!-- Student -->
+          <td class="p-4 border">
+            <strong>{{ app[1] }}</strong><br>
+            <span class="text-gray-500 text-sm">{{ app[2] }}</span>
+          </td>
 
-          <td data-label="Experience">
+          <td class="p-4 border">{{ app[3] }}</td>
+          <td class="p-4 border">{{ app[4] }}</td>
+
+          <td class="p-4 border">
             {{ app[5] or "Not Provided" }}
           </td>
 
-          <td data-label="Skills">
-            <span class="d-inline-block text-truncate w-100">
-              {{ app[6] or "Not Provided" }}
-            </span>
+          <td class="p-4 border truncate max-w-xs">
+            {{ app[6] or "Not Provided" }}
           </td>
 
-          <td data-label="Resume" class="text-center">
+          <!-- Resume -->
+          <td class="p-4 text-center border">
             {% if app[7] %}
               <a href="{{ url_for('static', filename='uploads/resumes/' + app[7]) }}"
-                 class="resume-btn text-decoration-none">
+                 class="inline-block bg-blue-600 text-white font-semibold
+                        px-4 py-1 rounded-full border-2 border-blue-700
+                        transition-all duration-300
+                        hover:bg-blue-700 hover:scale-110 hover:shadow-lg">
                 Download
               </a>
             {% else %}
-              <span class="text-muted">No Resume</span>
+              <span class="text-gray-400">No Resume</span>
             {% endif %}
           </td>
 
-          <td data-label="Status">
+          <!-- Status -->
+          <td class="p-4 border">
             <form action="/admin/application/status/{{ app[0] }}"
                   method="POST"
-                  class="d-flex flex-column gap-2">
+                  class="flex flex-col gap-2">
 
-              <select name="status" class="form-select form-select-sm">
+              <select name="status"
+                      class="border rounded-md p-1 text-sm focus:outline-none dark:bg-black">
                 <option value="Applied" {% if app[8]=='Applied' %}selected{% endif %}>Applied</option>
                 <option value="Shortlisted" {% if app[8]=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
                 <option value="Selected" {% if app[8]=='Selected' %}selected{% endif %}>Selected</option>
                 <option value="Rejected" {% if app[8]=='Rejected' %}selected{% endif %}>Rejected</option>
               </select>
 
-              <button type="submit" class="update-btn w-100">
+              <button type="submit"
+                      class="bg-emerald-600 text-white font-semibold
+                             px-4 py-1 rounded-full border-2 border-emerald-700
+                             transition-all duration-300
+                             hover:bg-emerald-700 hover:scale-110 hover:shadow-lg">
                 Update
               </button>
             </form>
           </td>
 
-          <td data-label="Applied On" class="text-center">
+          <td class="p-4 text-center border">
             {{ app[9] }}
+          </td>
+        </tr>
+
+        <!-- ================= MOBILE STACKED CARD ================= -->
+        <tr class="block md:hidden mb-4 rounded-2xl bg-white shadow-xl p-4">
+
+          <td class="flex justify-between py-1">
+            <span class="font-semibold">Student</span>
+            <span>{{ app[1] }}</span>
+          </td>
+
+          <td class="flex justify-between py-1">
+            <span class="font-semibold">Company</span>
+            <span>{{ app[3] }}</span>
+          </td>
+
+          <td class="flex justify-between py-1">
+            <span class="font-semibold">Role</span>
+            <span>{{ app[4] }}</span>
+          </td>
+
+          <td class="flex justify-between py-1">
+            <span class="font-semibold">Experience</span>
+            <span>{{ app[5] or "Not Provided" }}</span>
+          </td>
+
+          <td class="flex justify-between py-1">
+            <span class="font-semibold">Skills</span>
+            <span class="truncate max-w-[60%]">
+              {{ app[6] or "Not Provided" }}
+            </span>
+          </td>
+
+          <td class="flex justify-between py-2">
+            <span class="font-semibold">Resume</span>
+            {% if app[7] %}
+              <a href="{{ url_for('static', filename='uploads/resumes/' + app[7]) }}"
+                 class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm">
+                Download
+              </a>
+            {% else %}
+              <span class="text-gray-400">No Resume</span>
+            {% endif %}
+          </td>
+
+          <td class="pt-3 dark:bg-green">
+            <form action="/admin/application/status/{{ app[0] }}"
+                  method="POST"
+                  class="flex flex-col gap-2">
+
+              <select name="status"
+                      class="border rounded-md p-2 text-sm">
+                <option value="Applied" {% if app[8]=='Applied' %}selected{% endif %}>Applied</option>
+                <option value="Shortlisted" {% if app[8]=='Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                <option value="Selected" {% if app[8]=='Selected' %}selected{% endif %}>Selected</option>
+                <option value="Rejected" {% if app[8]=='Rejected' %}selected{% endif %}>Rejected</option>
+              </select>
+
+              <button type="submit"
+                      class="bg-emerald-600 text-white font-semibold
+                             px-4 py-2 rounded-full">
+                Update Status
+              </button>
+            </form>
           </td>
 
         </tr>
         {% endfor %}
+
       </tbody>
     </table>
-
   </div>
 </div>
 
 {% endblock %}
+
+
