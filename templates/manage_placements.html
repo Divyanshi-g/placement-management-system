@@ -5,81 +5,81 @@
 
   <!-- Top Header Row -->
   <div class="max-w-6xl mx-auto flex justify-between items-center mb-6 px-5">
-    <h2 class="text-3xl font-extrabold text-black">
+    <h2 class="text-3xl font-extrabold text-black dark:text-gray-100">
       📌 Manage Placements
     </h2>
 
-    <!-- Add New Company Button -->
     <a href="{{ url_for('enhancements.add_placement') }}"
        class="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
       <span class="text-lg">➕</span>
       <span class="hidden sm:inline font-semibold">Add New Company</span>
     </a>
   </div>
+
   <!-- 🔍 Search Filters -->
-<div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 px-2">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4 px-2">
 
-  <!-- Company (input + datalist) -->
-  <input list="companyOptions" id="searchCompany" placeholder="Company" class="p-3 border rounded-lg">
-  <datalist id="companyOptions">
-    <option value="Google">
-    <option value="Microsoft">
-    <option value="Amazon">
-    <option value="Facebook">
-    <option value="Apple">
-    <option value="Infosys">
-    <option value="TCS">
-    <option value="Wipro">
-  </datalist>
+    {% set input_classes = "p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white/40 dark:bg-gray-800/80 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 backdrop-blur-sm caret-gray-900 dark:caret-gray-100 dark:[color-scheme:dark]" %}
 
-  <!-- Role / Job Type (input + datalist) -->
-  <input list="roleOptions" id="searchRole" placeholder="Role / Job Type" class="p-3 border rounded-lg">
-  <datalist id="roleOptions">
-    <option value="Internship">
-    <option value="Full-time">
-    <option value="Part-time">
-    <option value="Contract">
-  </datalist>
+    <input list="companyOptions" id="searchCompany" placeholder="Company" class="{{ input_classes }}">
+    <datalist id="companyOptions">
+      <option value="Google">
+      <option value="Microsoft">
+      <option value="Amazon">
+      <option value="Facebook">
+      <option value="Apple">
+      <option value="Infosys">
+      <option value="TCS">
+      <option value="Wipro">
+    </datalist>
 
-  <!-- Location (input + datalist) -->
-  <input list="locationOptions" id="searchLocation" placeholder="Location" class="p-3 border rounded-lg">
-  <datalist id="locationOptions">
-    <option value="Pune">
-    <option value="Kolkata">
-    <option value="Noida">
-    <option value="Bangalore">
-    <option value="Hyderabad">
-    <option value="Delhi">
-    <option value="Mumbai">
-    <option value="Chennai">
-  </datalist>
+    <input list="roleOptions" id="searchRole" placeholder="Role / Job Type" class="{{ input_classes }}">
+    <datalist id="roleOptions">
+      <option value="Internship">
+      <option value="Full-time">
+      <option value="Part-time">
+      <option value="Contract">
+    </datalist>
 
-  <!-- Eligibility (input + datalist) -->
-  <input list="eligibilityOptions" id="searchEligibility" placeholder="Eligibility" class="p-3 border rounded-lg">
-  <datalist id="eligibilityOptions">
-    <option value="BCA">
-    <option value="MCA">
-    <option value="B.Tech">
-    <option value="MBA">
-    <option value="Any">
-  </datalist>
+    <input list="locationOptions" id="searchLocation" placeholder="Location" class="{{ input_classes }}">
+    <datalist id="locationOptions">
+      <option value="Pune">
+      <option value="Kolkata">
+      <option value="Noida">
+      <option value="Bangalore">
+      <option value="Hyderabad">
+      <option value="Delhi">
+      <option value="Mumbai">
+      <option value="Chennai">
+    </datalist>
 
-  <!-- Salary / Stipend (free text) -->
-  <input id="searchSalary" placeholder="Salary / Stipend" class="p-3 border rounded-lg">
+    <input list="eligibilityOptions" id="searchEligibility" placeholder="Eligibility" class="{{ input_classes }}">
+    <datalist id="eligibilityOptions">
+      <option value="BCA">
+      <option value="MCA">
+      <option value="B.Tech">
+      <option value="MBA">
+      <option value="Any">
+    </datalist>
 
-  <!-- Deadline (date picker) -->
-  <input id="searchDeadline" type="date" class="p-3 border rounded-lg">
+    <input id="searchSalary" placeholder="Salary / Stipend" class="{{ input_classes }}">
 
-</div>
+    <input id="searchDeadline" type="date" class="{{ input_classes }}">
 
+  </div>
+
+  <!-- Loader -->
+  <div id="loader" class="hidden flex justify-center my-6">
+    <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
 
   <!-- 📦 Placement Cards -->
   <div class="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto px-2" id="placementsContainer">
-
     {% for p in placements %}
     {% set logo_file = p.company|lower|replace(' ', '') ~ '.png' %}
 
-    <div class="placement-card bg-white p-6 rounded-2xl shadow-lg transition"
+    <div class="placement-card bg-white/40 dark:bg-gray-800/80 backdrop-blur-sm border border-white/30 dark:border-gray-600 p-6 rounded-2xl shadow-lg transition
+                text-gray-700 dark:text-gray-100"
          data-company="{{ p.company|lower }}"
          data-role="{{ p.role|lower }}"
          data-location="{{ p.location|lower }}"
@@ -93,32 +93,31 @@
              class="w-14 h-14 object-contain rounded-md border bg-white">
 
         <div>
-          <h3 class="font-bold text-lg text-indigo-700">{{ p.company }}</h3>
-          <p class="text-sm text-gray-600">{{ p.role }}</p>
+          <h3 class="font-bold text-lg text-indigo-700 dark:text-indigo-400">{{ p.company }}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300">{{ p.role }}</p>
         </div>
       </div>
 
-      <p class="text-sm text-gray-500">📍 {{ p.location }}</p>
-      <p class="text-sm text-gray-500">💰 {{ p.salary or "Not disclosed" }}</p>
-      <p class="text-sm text-gray-500">📅 {{ p.deadline or "N/A" }}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300">📍 {{ p.location }}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300">💰 {{ p.salary or "Not disclosed" }}</p>
+      <p class="text-sm text-gray-600 dark:text-gray-300">📅 {{ p.deadline or "N/A" }}</p>
 
-      <p class="text-gray-600 mt-2">
+      <p class="mt-2 text-gray-700 dark:text-gray-100">
         {{ p.description[:120] }}{% if p.description and p.description|length > 120 %}...{% endif %}
       </p>
 
-      <p class="mt-2 text-sm">
+      <p class="mt-2 text-sm text-gray-700 dark:text-gray-100">
         <span class="font-semibold">Eligibility:</span>
         {{ p.eligibility or "Not specified" }}
       </p>
 
-      <!-- Actions -->
       <form method="POST"
             action="{{ url_for('enhancements.delete_placement', pid=p.id) }}"
-            onsubmit="return confirm('Delete this placement?')"
+            onsubmit="return confirmDelete(this)"
             class="mt-4">
         <button type="submit"
-                class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">
-          🗑 Delete
+                class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition">
+          🗑 Trash
         </button>
       </form>
 
@@ -128,21 +127,34 @@
 </div>
 
 <script>
+const loader = document.getElementById("loader");
+const inputs = document.querySelectorAll("input");
+const placements = document.querySelectorAll(".placement-card");
+
 function filterPlacements(){
-  const inputs = document.querySelectorAll("input");
-  document.querySelectorAll(".placement-card").forEach(card=>{
-    let visible = true;
-    inputs.forEach(input=>{
-      if (input.value && !card.dataset[input.id.replace("search","").toLowerCase()].includes(input.value.toLowerCase())){
-        visible = false;
-      }
+  loader.classList.remove("hidden");
+  setTimeout(() => {
+    placements.forEach(card => {
+      let visible = true;
+      inputs.forEach(input => {
+        const key = input.id.replace("search","").toLowerCase();
+        const val = card.dataset[key] || "";
+        if(input.value && !val.includes(input.value.toLowerCase())){
+          visible = false;
+        }
+      });
+      card.style.display = visible ? "block" : "none";
     });
-    card.style.display = visible ? "block" : "none";
-  });
+    loader.classList.add("hidden");
+  }, 500);
 }
-document.querySelectorAll("input").forEach(i=>i.addEventListener("input", filterPlacements));
+
+inputs.forEach(i => i.addEventListener("input", filterPlacements));
+
+function confirmDelete(form){
+  loader.classList.remove("hidden");
+  setTimeout(() => loader.classList.add("hidden"), 500);
+  return confirm('Delete this placement?');
+}
 </script>
 {% endblock %}
-
-
-
