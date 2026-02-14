@@ -57,8 +57,8 @@
            src="{{ url_for('static', filename='images/student_dashboard1.jpeg') }}">
     </div>
 
-    {{ card("📄 Resume ATS Checker", "Analyze your resume with ATS.",
-      url_for('enhancements.check_resume'), "Check") }}
+    {{ card("🧭 Skill Guidance Center", " Curated video courses to master skills, aptitude, communication, and job-ready technologies.",
+      url_for('enhancements.courses'), "See") }}
 
     {{ card("📝 Practice", "Practice tests & quizzes.",
       url_for('enhancements.practice'), "Quiz & Practice") }}
@@ -169,3 +169,5 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 {% endblock %}
+
+
