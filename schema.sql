@@ -5,11 +5,6 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     role TEXT CHECK(role IN ('student','admin')) NOT NULL DEFAULT 'student',
-
-    phone TEXT,
-    skills TEXT,
-    profile_pic TEXT,
-    resume TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS placements (
@@ -107,6 +102,7 @@ CREATE TABLE IF NOT EXISTS chat_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
 
 
 
